@@ -46,4 +46,15 @@ module.exports = [
       name: 'static/media/[name].[ext]',
     },
   },
+  {
+    test: /\.ttf$/,
+    use: [
+      {
+        loader: 'ttf-loader',
+        options: {
+          name: './font/[hash].[ext]',
+        },
+      },
+    ]
+  }
 ];
