@@ -140,7 +140,7 @@
     "react-infinite-scroll-component": "^5.0.5",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
@@ -152,5 +152,11 @@
     "styled-components": "^5.1.1",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "no-unused-vars": "off"
+    }
   }
 }
