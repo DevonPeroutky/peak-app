@@ -12,9 +12,11 @@
     "resolveJsonModule": true,
     "paths": {
       "*": ["node_modules/*"]
-    }
+    },
+    "jsx": "react"
   },
   "include": [
     "electron/**/*"
-  ]
+  ],
+  "extends": "./node_modules/electron-webpack/tsconfig-base.json"
 }
