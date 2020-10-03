@@ -52,7 +52,7 @@
               "entryPoints": [
                 {
                   "html": "./public/index.html",
-                  "js": "./electron/renderer.ts",
+                  "js": "./electron/renderer.tsx",
                   "name": "main_window"
                 }
               ]
@@ -150,6 +150,7 @@
     "slate-hyperscript": "^0.58.3",
     "slate-react": "^0.58.3",
     "styled-components": "^5.1.1",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "webpack-manifest-plugin": "^2.2.0"
   }
 }

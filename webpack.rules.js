@@ -39,7 +39,7 @@ module.exports = [
     ],
   },
   {
-    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
+    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/, /\.woff$/, /\.woff2$/],
     loader: require.resolve('url-loader'),
     options: {
       limit: imageInlineSizeLimit,
@@ -47,7 +47,7 @@ module.exports = [
     },
   },
   {
-    test: /\.ttf$/,
+    test: [/\.ttf$/, /\.woff$/],
     use: [
       {
         loader: 'ttf-loader',

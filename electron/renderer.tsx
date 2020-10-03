@@ -26,6 +26,15 @@
  * ```
  */
 
+import ReactDOM from "react-dom";
+import React from "react";
 import '../src/index.scss';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+export function HelloWorld() {
+    return (
+        <div>HELLO!</div>
+    );
+}
+
+ReactDOM.render(<HelloWorld />, document.getElementById('root'));
