@@ -1,16 +1,26 @@
 {
   "compilerOptions": {
+    "downlevelIteration": true,
     "allowJs": true,
-    "module": "commonjs",
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "module": "commonjs",
     "noImplicitAny": false,
     "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
     "strict": false,
+    "noUnusedLocals": false,
     "baseUrl": ".",
+    "target": "es5",
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "paths": {
       "*": ["node_modules/*"]
     },
