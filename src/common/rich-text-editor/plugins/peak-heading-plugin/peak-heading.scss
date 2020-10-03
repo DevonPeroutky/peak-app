@@ -1,0 +1,15 @@
+.peak-heading-container {
+  position: relative;
+  margin-left: -20px;
+  padding-left: 20px;
+
+  .header-link-overlay {
+    position: absolute;
+    top: 40%;
+    left: -10px;
+  }
+
+  .hide {
+    display: none;
+  }
+}

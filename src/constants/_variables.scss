@@ -1,0 +1,48 @@
+// --------------
+// Global
+// --------------
+$text-color: rgb(42, 49, 53);
+$text-accent-color: rgba(42, 49, 53, .6);
+$gray-accent-color: #E6ECF1;
+$c-accent-color: rgb(235, 236, 240);
+
+
+// ---------
+// Sidebar
+// ---------
+$sidebar-width: 20%;
+$sidebar-border-right: 1px solid $gray-accent-color;
+//$sidebar-background-color: #F5F7F9;
+$sidebar-background-color: #FFF;
+$sidebar-padding: 40px;
+
+// ------------------
+// Content Container
+// ------------------
+$vertical-padding: 22px;
+$horizontal-padding: 170px;
+
+// ---------
+// Headers
+// ---------
+// Title
+$title-font-size: 2.5rem!important;
+$title-font-weight: 600!important;
+$title-line-height: 2.6rem;
+
+// REMOVE THIS ONCE YOU GET RID OF THE PAGE TITLE
+$h1-font-size: 2.2rem!important;
+$h1-line-height: 2.5rem!important;
+$heading-font-weight: 600;
+$heading-color: $text-color;
+
+// --------------
+// Search Bar Row
+// --------------
+$main-bar-height: 55px;
+
+// -------------
+// Colors
+// -------------
+$primary-blue: #1890ff;
+$c-gray: #f4f5f7;

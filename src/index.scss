@@ -1,10 +1,57 @@
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: auto;
-    max-width: 38rem;
-    padding: 2rem;
+@import "./constants/_variables.scss";
+
+@font-face {
+  font-family: gte-esti-display-regular;
+  src: url(assets/fonts/GT-Eesti-Display-Regular.ttf);
 }
-.App {
-    text-align: center;
-    height: 100vh;
+
+body {
+  height: auto;
+  margin: 0;
+  /*font-family: gte-esti-display, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
+    /*'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
+    /*sans-serif;*/
+  /*font-family: gte-esti-display, sans-serif!important;*/
+  font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /*font-family: Avenir,-apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji,sans-serif;*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: $text-color!important;
+  letter-spacing: .1px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+
+h1, h2, h3, h4, h5 {
+  font-weight: $heading-font-weight!important;
+  color: $heading-color!important;
+}
+
+h1 {
+  font-size: $h1-font-size;
+}
+
+h2 {
+  font-size: 1.9rem;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+h4 {
+  font-size: 1.3rem;
+}
+
+h5 {
+  font-size: 1.0rem;
+}
+
+body::placeholder {
+  color: #8992a4!important;
 }

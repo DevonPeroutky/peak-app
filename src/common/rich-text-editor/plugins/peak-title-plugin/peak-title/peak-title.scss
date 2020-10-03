@@ -1,0 +1,22 @@
+@import "../../../../../constants/variables";
+
+.title-container {
+  position: relative;
+  font-size: $title-font-size;
+  font-weight: $title-font-weight;
+  line-height: $title-line-height;
+  margin-bottom: 30px;
+
+  .peak-title {
+    color: $text-color;
+    font-weight: inherit;
+  }
+
+  .empty-title::after {
+    position: absolute;
+    color: #8993a4;
+    top: 0;
+    cursor: text;
+    content: "Page Title";
+  }
+}

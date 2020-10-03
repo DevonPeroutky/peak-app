@@ -1,0 +1,56 @@
+@import "../../../../../constants/variables";
+
+.link-menu-popover {
+  position: absolute;
+  z-index: 10;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(9, 30, 66, 0.31) 0px 0px 1px, rgba(9, 30, 66, 0.25) 0px 4px 8px -2px;
+  transition: opacity 0.75s;
+  border-radius: 3px 3px 0px 0px;
+
+  .link-editing-input-container {
+    min-width: 300px;
+
+    .link-input-container {
+      display: flex;
+      align-items: center;
+      height: 42px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      .link-input-icon {
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 11px;
+      }
+
+      .link-input {
+        border: 0;
+        padding-left: 11px;
+        outline: none!important;
+        box-shadow: none!important;
+      }
+    }
+
+    .link-input-container.bordered {
+      border-bottom: 1px solid $c-accent-color;
+    }
+
+    .button-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .button-group {
+        .link-button {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}

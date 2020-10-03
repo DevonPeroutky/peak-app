@@ -1,0 +1,21 @@
+.login-page-container {
+  height: 100%;
+  width: 100%;
+  padding-top: 25vh;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .login-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 100px;
+  }
+
+}
+

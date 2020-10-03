@@ -1,0 +1,12 @@
+.delete-topic-icon {
+  cursor: pointer;
+  display: none;
+
+  &.visible {
+    display: inline;
+  }
+
+  &:hover {
+    color: #1890ff;
+  }
+}

@@ -1,0 +1,120 @@
+@import "../../constants/variables";
+
+$section-heading-size: 1.3rem;
+
+.peak-sidebar {
+  width: $sidebar-width!important;
+  min-width: $sidebar-width!important;
+  background: $sidebar-background-color;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  border-right: $sidebar-border-right;
+  overflow-x: hidden;
+  text-align: left;
+
+  overflow-y: scroll!important;
+  top: 0!important;
+  bottom: 0!important;
+
+  .ant-menu-item-selected {
+    background-color: $sidebar-background-color!important;
+  }
+
+  .overview-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding-left: $sidebar-padding!important;
+    padding-right: 16px;
+    font-weight: 600!important;
+    padding-top: 35px;
+    font-size: $section-heading-size!important;
+  }
+
+  .overview-menu {
+    border-right: 0;
+    background: $sidebar-background-color;
+
+    .ant-menu-item {
+      padding-left: $sidebar-padding!important;
+      display: flex;
+      align-items: center;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 14px;
+      letter-spacing: .25px;
+    }
+  }
+
+  .topics-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 50px;
+    padding-left: $sidebar-padding;
+    padding-right: 16px;
+    font-weight: 600!important;
+    font-size: $section-heading-size!important;
+  }
+
+  .topic-menu {
+    display: flex;
+    border-right: 0;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .ant-menu-item-group-title {
+      font-size: 1.1em!important;
+      justify-content: space-between;
+      padding-left: $sidebar-padding!important;
+      font-weight: 600!important;
+      display: flex;
+
+      .topic-group-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .topic-group-title {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          text-align: left;
+        }
+
+        .icons-container {
+          display: flex;
+          align-items: center;
+          z-index: 10;
+
+          .add-page-icon {
+            margin-left: 10px;
+            cursor: pointer;
+            display: none;
+
+            &.visible {
+              display: inline;
+            }
+            &:hover {
+              color: #1890ff;
+            }
+          }
+
+        }
+      }
+
+    }
+
+    .ant-menu-item {
+      font-weight: 400;
+      font-size: 1.1em!important;
+      padding-left: calc(#{$sidebar-padding} * 1.5)!important;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

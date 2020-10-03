@@ -1,0 +1,44 @@
+@import "../../constants/variables";
+
+.main-bar {
+  width: 100%;
+  border-bottom: 1px solid $gray-accent-color;
+  height: $main-bar-height;
+  display: flex;
+  align-items: center;
+  padding-left: $horizontal-padding;
+  padding-right: 25px;
+
+  .ant-input-affix-wrapper {
+    padding-left: 0px;
+    left: 0;
+    border: 0;
+
+    &:focus {
+      border: 0;
+      box-shadow: none;
+    }
+
+    .ant-input-prefix {
+      padding-right: 10px;
+    }
+  }
+
+  .ant-input-affix-wrapper-focused {
+    box-shadow: none;
+    border: 0;
+  }
+
+  .minimal-input {
+    width: 100%;
+
+    .ant-input {
+      border: 0!important;
+      outline: 0!important;;
+
+      &:focus{
+        box-shadow: none!important;;
+      }
+    }
+  }
+}

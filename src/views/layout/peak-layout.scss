@@ -1,0 +1,24 @@
+@import "../../constants/variables";
+
+.peak-parent-layout {
+  min-height: 100vh;
+
+  .peak-main-content {
+    margin-left: $sidebar-width;
+    background-color: white;
+    max-width: calc(100vw - #{$sidebar-width});
+
+    .peak-content-container {
+      height: calc(100% - 55px);
+      padding: $vertical-padding $horizontal-padding;
+      min-width: 500px;
+      max-width: 1500px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow-x: visible!important;
+}
