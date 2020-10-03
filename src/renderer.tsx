@@ -28,8 +28,11 @@
 
 import ReactDOM from "react-dom";
 import React from "react";
-import App from "../src/App";
-import '../src/index.scss';
+import App from "./App";
+import * as serviceWorker from './serviceWorker';
+import './index.scss';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 ReactDOM.render(<App/>, document.getElementById('root'));
+
+serviceWorker.register();

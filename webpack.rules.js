@@ -39,22 +39,26 @@ module.exports = [
     ],
   },
   {
-    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/, /\.woff$/, /\.woff2$/],
-    loader: require.resolve('url-loader'),
+    test: /\.(svg|ico|icns)$/,
+    loader: "file-loader",
     options: {
-      limit: imageInlineSizeLimit,
-      name: 'static/media/[name].[ext]',
+      esModule: false,
+      name: "[path][name].[hash].[ext]",
     },
   },
+  // {
+  //   test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/, /\.woff$/, /\.woff2$/],
+  //   loader: require.resolve('url-loader'),
+  //   options: {
+  //     limit: imageInlineSizeLimit,
+  //     name: 'static/media/[name].[ext]',
+  //   },
+  // },
   {
-    test: [/\.ttf$/, /\.woff$/],
-    use: [
-      {
-        loader: 'ttf-loader',
-        options: {
-          name: './font/[hash].[ext]',
-        },
-      },
-    ]
+    test: /\.(jpg|png|woff|woff2|eot|ttf)$/,
+    loader: "url-loader",
+    options: {
+      name: "[path][name].[ext]",
+    },
   }
 ];
