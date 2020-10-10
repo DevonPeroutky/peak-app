@@ -1,6 +1,3 @@
-const imageInlineSizeLimit = parseInt(
-    process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
-);
 module.exports = [
   // Add support for native node modules
   {
@@ -19,13 +16,14 @@ module.exports = [
   },
   {
     test: /\.tsx?$/,
-    exclude: /(node_modules|\.webpack)/,
-    use: {
-      loader: 'ts-loader',
-      options: {
-        transpileOnly: true
-      }
-    }
+    exclude: /(node_modules|.webpack)/,
+    loaders: [
+      {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        }
+      }]
   },
   {
     test: /\.s[ac]ss$/i,
@@ -46,14 +44,6 @@ module.exports = [
       name: "[path][name].[hash].[ext]",
     },
   },
-  // {
-  //   test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/, /\.woff$/, /\.woff2$/],
-  //   loader: require.resolve('url-loader'),
-  //   options: {
-  //     limit: imageInlineSizeLimit,
-  //     name: 'static/media/[name].[ext]',
-  //   },
-  // },
   {
     test: /\.(jpg|png|woff|woff2|eot|ttf)$/,
     loader: "url-loader",
