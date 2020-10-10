@@ -1,3 +1,10 @@
+const path = require('path');
+const rules = require('./webpack.rules');
+
+function srcPaths(src) {
+  return path.join(__dirname, src);
+}
+
 module.exports = {
   /**
    * This is the main entry point for your application, it's the first file
@@ -9,9 +16,14 @@ module.exports = {
   target: 'electron-main',
   // Put your normal webpack config below here
   module: {
-    rules: require('./webpack.rules'),
+    rules: rules,
   },
   resolve: {
+    alias: {
+      '@main': srcPaths('electron'),
+      '@models': srcPaths('src/models'),
+      '@renderer': srcPaths('src'),
+    },
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
   },
 };
