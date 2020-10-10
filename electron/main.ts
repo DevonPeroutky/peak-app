@@ -1,10 +1,19 @@
 import { app, BrowserWindow } from 'electron';
+const log = require('electron-log');
+
+// on macOS: ~/Library/Logs/{app name}/{process type}.log
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+
+
+console.log(`Main Window Webpack`)
+log.info(`Main Window Webpack`)
+console.log(MAIN_WINDOW_WEBPACK_ENTRY)
+log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
 const createWindow = (): void => {
   // Create the browser window.
