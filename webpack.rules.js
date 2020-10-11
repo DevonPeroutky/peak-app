@@ -42,6 +42,8 @@ module.exports = [
     options: {
       esModule: false,
       name: "[path][name].[hash].[ext]",
+      publicPath: "..", // move up from 'main_window'
+      context: "src", // set relative working folder to src
     },
   },
   {
