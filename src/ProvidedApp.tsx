@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { openSwitcher } from "./redux/quickSwitcherSlice";
 import React, { ReactNode, useEffect } from "react";
 import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { PeakLogin } from "./views/login/Login";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";

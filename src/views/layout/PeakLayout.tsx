@@ -26,7 +26,7 @@ const PeakLayout = (props: {}) => {
     const user = useCurrentUser()
     let match = useRouteMatch();
     const dispatch = useDispatch();
-    const { topic_id } = useParams();
+    // const { topic_id } = useParams();
     const [isLoading, setLoading] = useState(true);
     const currentWikiPage = useCurrentWikiPage();
     const history = useHistory()
@@ -85,13 +85,13 @@ const PeakLayout = (props: {}) => {
                         <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
                         <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                         <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
-                        <Route path={`${match.path}/wiki/:id`} render={(props) => {
-                            if (currentWikiPage) {
-                                return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
-                            } else {
-                                return <Redirect to={"/"} />
-                            }
-                        }}/>
+                        {/*<Route path={`${match.path}/wiki/:id`} render={(props) => {*/}
+                        {/*    if (currentWikiPage) {*/}
+                        {/*        return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>*/}
+                        {/*    } else {*/}
+                        {/*        return <Redirect to={"/"} />*/}
+                        {/*    }*/}
+                        {/*}}/>*/}
                         <Route path={`${match.path}/`} render={(props) => <Journal/>} />
                         <Route path="*">
                             <h1>NOT FOUND</h1>
