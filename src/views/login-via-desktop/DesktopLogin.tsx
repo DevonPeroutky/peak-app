@@ -10,6 +10,7 @@ export const DesktopLogin = (props: {}) => {
     const electronProtocol: string = config.electron_protocol
     const oneTimeCode: string | null = query.get("one-time-code")
     console.log(oneTimeCode)
+    console.log(electronProtocol)
     return (
         <div className={"login-page-container"}>
             <div className={"login-container"}>

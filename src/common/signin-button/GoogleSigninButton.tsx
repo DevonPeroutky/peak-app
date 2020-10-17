@@ -34,6 +34,8 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
             const authedUser = res.data.data as Peaker
             dispatch(setUser(authedUser));
 
+            console.log(`DESKTOP!`)
+            console.log(desktopDeepLinkUrl)
             if (desktopDeepLinkUrl) {
                 window.location.replace(desktopDeepLinkUrl);
             } else {

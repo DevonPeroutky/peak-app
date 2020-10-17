@@ -1,5 +1,5 @@
 const dev = {
-    base_url: "http://localhost:3000",
+    base_url: "http://localhost:3001",
     electron_protocol: "peak-dev-app",
     env: "dev",
     dist: process.env.REACT_APP_DIST || "electron"

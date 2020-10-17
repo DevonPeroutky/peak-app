@@ -8,6 +8,8 @@ import config from "../../constants/environment-vars"
 export const PeakWelcome = (props: {}) => {
     console.log(`Welcoming`)
     const one_time_code = uuidv4();
+
+    console.log(config)
     return (
         <div className={"login-page-container"}>
             <div className={"login-container"}>

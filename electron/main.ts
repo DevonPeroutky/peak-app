@@ -1,8 +1,18 @@
-import { app, BrowserWindow } from 'electron';
+import {app, BrowserWindow, shell} from 'electron';
+import * as isDev from 'electron-is-dev';
+import config from "../src/constants/environment-vars"
+const { Deeplink } = require('electron-deeplink');
 const log = require('electron-log');
 
+console.log(`Is Dev? ${isDev}`)
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
+
+let mainWindow: BrowserWindow | null = null;
+const protocol = config.electron_protocol;
+
+// Instantiate Deep Link listener
+const deeplink = new Deeplink({ app, mainWindow, protocol, isDev });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -10,12 +20,8 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 // on macOS: ~/Library/Logs/{app name}/{process type}.log
-console.log(`Main Window Webpack`)
 log.info(`Main Window Webpack`)
-console.log(MAIN_WINDOW_WEBPACK_ENTRY)
 log.info(MAIN_WINDOW_WEBPACK_ENTRY);
-console.log(MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY)
-log.info(MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY)
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -33,6 +39,13 @@ const createWindow = (): void => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // All new-window events should load in the user's default browser
+  // new-window events are when a user clicks on <a> link with target="_blank"
+  mainWindow.webContents.on("new-window", function(event, url) {
+      event.preventDefault();
+      shell.openExternal(url);
+  });
 };
 
 // This method will be called when Electron has finished
@@ -59,3 +72,10 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+// Handle Deep Links
+deeplink.on('received', (link: string) => {
+  // do stuff here
+  console.log(`Link and Build?!?!? Deeply`)
+  console.log(link)
+  mainWindow && mainWindow.webContents.send('received-link', link);
+});

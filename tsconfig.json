@@ -4,7 +4,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "module": "commonjs",
+    "module": "esnext",
     "noImplicitAny": false,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
@@ -21,10 +21,9 @@
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "*": ["node_modules/*"]
-    },
-    "jsx": "react"
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
   },
   "include": [
     "electron/**/*"
