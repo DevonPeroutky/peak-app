@@ -5,7 +5,8 @@
   "description": "The Peak",
   "main": "./.webpack/main",
   "scripts": {
-    "webapp:dev": "REACT_APP_DIST=electron REACT_APP_ENV=dev react-scripts start",
+    "webapp:dev": "REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
+    "webapp:prod": "REACT_APP_DIST=prod REACT_APP_ENV=dev react-scripts build",
     "start": "REACT_APP_DIST=electron REACT_APP_ENV=dev electron-forge start",
     "package": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge package",
     "make": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge make",
@@ -121,5 +122,17 @@
       "no-unused-vars": "off",
       "noImplicitReturns": false
     }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

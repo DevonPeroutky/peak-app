@@ -90,3 +90,5 @@ out/
 
 # Webstorm
 .idea/
+
+build/
