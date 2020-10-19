@@ -6,7 +6,7 @@
   "main": "./.webpack/main",
   "scripts": {
     "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
-    "webapp:prod": "REACT_APP_DIST=prod REACT_APP_ENV=dev react-scripts build",
+    "webapp:prod": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
     "electron:start": "REACT_APP_DIST=electron REACT_APP_ENV=dev electron-forge start",
     "dev": "concurrently \"yarn webapp:dev\" \"yarn electron:start\"",
     "package": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge package",

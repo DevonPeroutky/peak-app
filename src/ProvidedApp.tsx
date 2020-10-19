@@ -35,9 +35,6 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/welcome">
                         <PeakWelcome/>
                     </Route>
-                    <Route path="/login">
-                        <PeakLogin/>
-                    </Route>
                     <Route path="/login-via-desktop">
                         <DesktopLogin/>
                     </Route>

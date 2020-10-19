@@ -9,7 +9,7 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
 let mainWindow: BrowserWindow | null = null;
-const protocol = config.electron_protocol;
+const protocol = config.protocol;
 
 // Instantiate Deep Link listener
 const deeplink = new Deeplink({ app, mainWindow, protocol, isDev });

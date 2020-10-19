@@ -4,15 +4,16 @@ import "./google-signin-button.scss"
 import {Peaker, setUser} from "../../redux/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import useAxios from "axios-hooks";
 import {message} from "antd";
 import {backend_host_address} from "../../constants/constants";
+import {v4 as uuidv4} from "uuid";
+import config from "../../../src/constants/environment-vars"
+import axios from "axios"
 
-const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
-    const { desktopDeepLinkUrl } = props;
+const DesktopGoogleLogin = (props: { }) => {
+    const oneTimeCode = uuidv4()
     const dispatch = useDispatch()
     let history = useHistory();
-    const [{ data, loading, error}, executePost] = useAxios(`${backend_host_address}/api/v1/users`);
 
     const login = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         console.log(`Response from Google`)
@@ -25,25 +26,16 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
         // @ts-ignore
         const accessToken = (bro.accessToken) ? bro.accessToken : response.wc.access_token
 
-        executePost({
-            method: "POST",
-            data: {
-                "user": {...bro.profileObj, ...{"accessToken": accessToken}}
-            }
-        }).then((res) => {
+        axios.post(`${backend_host_address}/api/v1/users`, { "user": {...bro.profileObj, ...{"accessToken": accessToken}, "oneTimeCode": oneTimeCode} }).then((res) => {
             const authedUser = res.data.data as Peaker
             dispatch(setUser(authedUser));
 
-            console.log(`DESKTOP!`)
-            console.log(desktopDeepLinkUrl)
-            if (desktopDeepLinkUrl) {
-                window.location.replace(desktopDeepLinkUrl);
-            } else {
-                history.push(`/home/journal`);
-            }
+            const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
+            window.location.replace(desktopDeepLinkUrl);
+
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");
-            history.push(`/login`);
+            history.push(`/login-failed`);
         })
     };
 
@@ -57,14 +49,16 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
     return (
         <GoogleLogin
             clientId="261914177641-0gu5jam6arv5m6n95vdjmfu8hpa1kunj.apps.googleusercontent.com"
-            buttonText="Sign in with Google"
-            onSuccess={login}
-            onFailure={failedResponseFromGoogle}
+            buttonText="Sign into Peak with Google"
+            // onSuccess={login}
+            // onFailure={failedResponseFromGoogle}
             theme={"light"}
+            uxMode={"redirect"}
+            redirectUri={`${config.base_url}/login-via-desktop`}
             className="peak-google-login-button"
             cookiePolicy={'single_host_origin'}
         />
     )
 };
 
-export default PeakGoogleLogin;
+export default DesktopGoogleLogin;

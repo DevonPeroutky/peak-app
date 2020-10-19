@@ -1,21 +1,21 @@
 import React from 'react'
-import PeakGoogleLogin from "../../common/signin-button/GoogleSigninButton";
-import {PeakLogo} from "../../common/logo/PeakLogo";
-import config from "../../constants/environment-vars"
 import {useQuery} from "../../utils/urls";
+import {useHistory, useParams } from 'react-router-dom';
+import {useDispatch} from "react-redux";
 
 export const DesktopLogin = (props: {}) => {
-    // TODO GET THE QUERY PARAMS
-    let query = useQuery();
-    const electronProtocol: string = config.electron_protocol
-    const oneTimeCode: string | null = query.get("one-time-code")
-    console.log(oneTimeCode)
-    console.log(electronProtocol)
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const query = useQuery();
+    const broo = useParams();
+
+    console.log(query)
+    console.log(broo)
+
     return (
-        <div className={"login-page-container"}>
-            <div className={"login-container"}>
-                <PeakLogo/>
-                <PeakGoogleLogin desktopDeepLinkUrl={`${electronProtocol}://login?returned-code=${oneTimeCode}`}/>
+        <div className={"logged-in-page-container"}>
+            <div className={"logged-in-container"}>
+                <div>You are logged in!</div>
             </div>
         </div>
     )

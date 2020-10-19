@@ -1,15 +1,17 @@
+import {ELECTRON} from "./constants";
+
 const dev = {
     base_url: "http://localhost:3001",
-    electron_protocol: "peak-dev-app",
     env: "dev",
-    dist: process.env.REACT_APP_DIST || "electron"
+    protocol: process.env.REACT_APP_DIST == ELECTRON ? "peak-dev-app" : "http",
+    dist: process.env.REACT_APP_DIST || ELECTRON
 }
 
 const prod = {
     base_url: "https://peak-webapp.onrender.com/",
     env: "prod",
-    electron_protocol: "peak-app",
-    dist: process.env.REACT_APP_DIST || "electron"
+    protocol: process.env.REACT_APP_DIST == ELECTRON ? "peak-app" : "https",
+    dist: process.env.REACT_APP_DIST || ELECTRON
 }
 
 const config = process.env.REACT_APP_ENV === 'dev' ? dev : prod
