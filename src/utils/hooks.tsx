@@ -170,6 +170,7 @@ function usePageSaver() {
     return (newValue: Node[], pageTitle: string, pageId: string) => {
         if (!isEmpty(currentWikiPage.editorState.codeFocusMap)) {
             console.log("NOT SUBMITTING")
+            // @ts-ignore
             return
         }
 

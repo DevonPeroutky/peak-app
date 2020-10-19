@@ -1,4 +1,4 @@
-import {app, BrowserWindow, shell} from 'electron';
+import {app, BrowserWindow, ipcMain, ipcRenderer, shell} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../src/constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -37,8 +37,9 @@ const createWindow = (): void => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (isDev){
+    mainWindow.webContents.openDevTools();
+  }
 
   // All new-window events should load in the user's default browser
   // new-window events are when a user clicks on <a> link with target="_blank"
@@ -74,8 +75,10 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 // Handle Deep Links
 deeplink.on('received', (link: string) => {
-  // do stuff here
-  console.log(`Link and Build?!?!? Deeply`)
-  console.log(link)
-  mainWindow && mainWindow.webContents.send('received-link', link);
+  const [base_url, returned_code] = link.split("returned-code=")
+
+  mainWindow = BrowserWindow.getAllWindows()[0]
+
+  // TODO: Verify returned_code
+  mainWindow && mainWindow.webContents.send('login-user', returned_code)
 });

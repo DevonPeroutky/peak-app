@@ -41,7 +41,6 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
             } else {
                 history.push(`/home/journal`);
             }
-
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");
             history.push(`/login`);
