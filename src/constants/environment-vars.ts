@@ -3,14 +3,14 @@ import {ELECTRON} from "./constants";
 const dev = {
     base_url: "http://localhost:3001",
     env: "dev",
-    protocol: process.env.REACT_APP_DIST == ELECTRON ? "peak-dev-app" : "http",
+    protocol: "peak-dev-app",
     dist: process.env.REACT_APP_DIST || ELECTRON
 }
 
 const prod = {
     base_url: "https://peak-webapp.onrender.com/",
     env: "prod",
-    protocol: process.env.REACT_APP_DIST == ELECTRON ? "peak-app" : "https",
+    protocol: "peak-app",
     dist: process.env.REACT_APP_DIST || ELECTRON
 }
 

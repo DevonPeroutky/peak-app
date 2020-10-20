@@ -4,17 +4,17 @@ import "./google-signin-button.scss"
 import {Peaker, setUser} from "../../redux/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import useAxios from "axios-hooks";
 import {message} from "antd";
 import {backend_host_address} from "../../constants/constants";
 import {v4 as uuidv4} from "uuid";
 import axios from "axios"
+import config from "../../constants/environment-vars"
 
-const WebappGoogleLogin = (props: { }) => {
+const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
+    const { isDesktopLogin } = props
     const oneTimeCode = uuidv4()
     const dispatch = useDispatch()
     let history = useHistory();
-    const [{ data, loading, error}, executePost] = useAxios(`${backend_host_address}/api/v1/users`);
 
     const login = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         console.log(`Response from Google`)
@@ -28,10 +28,14 @@ const WebappGoogleLogin = (props: { }) => {
         const accessToken = (bro.accessToken) ? bro.accessToken : response.wc.access_token
 
         axios.post(`${backend_host_address}/api/v1/users`, { "user": {...bro.profileObj, ...{"accessToken": accessToken}, "oneTimeCode": oneTimeCode} }).then((res) => {
-            const authedUser = res.data.data as Peaker
-            dispatch(setUser(authedUser));
-            history.push(`/home/journal`);
-
+            if (isDesktopLogin) {
+                const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
+                window.location.replace(desktopDeepLinkUrl);
+            } else {
+                const authedUser = res.data.data as Peaker
+                dispatch(setUser(authedUser));
+                history.push(`/home/journal`);
+            }
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");
             history.push(`/login`);
