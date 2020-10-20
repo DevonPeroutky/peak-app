@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, ipcRenderer, shell} from 'electron';
+import {app, BrowserWindow, shell} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../src/constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -26,8 +26,9 @@ log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 860,
+    width: 1320,
+    title: "Peak",
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,

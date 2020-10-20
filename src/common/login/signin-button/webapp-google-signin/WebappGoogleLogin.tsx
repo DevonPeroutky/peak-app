@@ -1,14 +1,14 @@
 import React from 'react'
 import GoogleLogin, {GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
 import "./google-signin-button.scss"
-import {Peaker, setUser} from "../../redux/userSlice";
+import {Peaker, setUser} from "../../../../redux/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {message} from "antd";
-import {backend_host_address} from "../../constants/constants";
+import {backend_host_address} from "../../../../constants/constants";
 import {v4 as uuidv4} from "uuid";
 import axios from "axios"
-import config from "../../constants/environment-vars"
+import config from "../../../../constants/environment-vars"
 
 const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
     const { isDesktopLogin } = props

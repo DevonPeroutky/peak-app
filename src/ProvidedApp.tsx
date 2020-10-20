@@ -70,6 +70,7 @@ function AuthedRoute({ children, ...rest }: IProps) {
                     children
                 ) : (
                     <Redirect
+                        push={true}
                         to={{
                             pathname: "/welcome",
                             state: { from: location }
