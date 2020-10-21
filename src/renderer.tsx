@@ -33,6 +33,7 @@ import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
 import {Peaker, setUser} from "./redux/userSlice";
+import {enterFullscreen, leaveFullscreen} from "./redux/electronSlice";
 import {message} from "antd";
 import axios  from "axios";
 import {backend_host_address} from "./constants/constants";
@@ -56,3 +57,7 @@ ipcRenderer.on('login-user', (event, arg) => {
     })
 })
 
+ipcRenderer.on('fullscreen', (event, arg) => {
+    console.log(`Fullscreen? ${arg}`)
+    return (arg) ? store.dispatch(enterFullscreen()) : store.dispatch(leaveFullscreen())
+})

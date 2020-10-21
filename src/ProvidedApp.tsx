@@ -3,13 +3,12 @@ import { openSwitcher } from "./redux/quickSwitcherSlice";
 import React, { ReactNode, useEffect } from "react";
 import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
 import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
-import { PeakLogin } from "./views/login/Login";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";
 import { isAuthenticated } from "./redux/userSlice";
 import { useCurrentUser } from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
-import {DesktopLogin} from "./views/login-via-desktop/DesktopLogin";
+import {LoggedIn} from "./views/logged-in/LoggedIn";
 
 const ProvidedApp = (props: {}) => {
     const dispatch = useDispatch()
@@ -35,11 +34,8 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/welcome">
                         <PeakWelcome/>
                     </Route>
-                    <Route path="/login">
-                        <PeakLogin/>
-                    </Route>
-                    <Route path="/login-via-desktop">
-                        <DesktopLogin/>
+                    <Route path="/logged-in">
+                        <LoggedIn/>
                     </Route>
                     <AuthedRoute>
                         <Switch>
@@ -73,6 +69,7 @@ function AuthedRoute({ children, ...rest }: IProps) {
                     children
                 ) : (
                     <Redirect
+                        push={true}
                         to={{
                             pathname: "/welcome",
                             state: { from: location }

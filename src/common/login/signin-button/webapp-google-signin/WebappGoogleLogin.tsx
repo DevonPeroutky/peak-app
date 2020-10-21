@@ -1,18 +1,20 @@
 import React from 'react'
 import GoogleLogin, {GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
 import "./google-signin-button.scss"
-import {Peaker, setUser} from "../../redux/userSlice";
+import {Peaker, setUser} from "../../../../redux/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import useAxios from "axios-hooks";
 import {message} from "antd";
-import {backend_host_address} from "../../constants/constants";
+import {backend_host_address} from "../../../../constants/constants";
+import {v4 as uuidv4} from "uuid";
+import axios from "axios"
+import config from "../../../../constants/environment-vars"
 
-const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
-    const { desktopDeepLinkUrl } = props;
+const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
+    const { isDesktopLogin } = props
+    const oneTimeCode = uuidv4()
     const dispatch = useDispatch()
     let history = useHistory();
-    const [{ data, loading, error}, executePost] = useAxios(`${backend_host_address}/api/v1/users`);
 
     const login = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         console.log(`Response from Google`)
@@ -25,19 +27,13 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
         // @ts-ignore
         const accessToken = (bro.accessToken) ? bro.accessToken : response.wc.access_token
 
-        executePost({
-            method: "POST",
-            data: {
-                "user": {...bro.profileObj, ...{"accessToken": accessToken}}
-            }
-        }).then((res) => {
+        axios.post(`${backend_host_address}/api/v1/users`, { "user": {...bro.profileObj, ...{"accessToken": accessToken}, "oneTimeCode": oneTimeCode} }).then((res) => {
             const authedUser = res.data.data as Peaker
             dispatch(setUser(authedUser));
-
-            console.log(`DESKTOP!`)
-            console.log(desktopDeepLinkUrl)
-            if (desktopDeepLinkUrl) {
+            if (isDesktopLogin) {
+                const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
                 window.location.replace(desktopDeepLinkUrl);
+                history.push(`/logged-in?one-time-code=${oneTimeCode}`);
             } else {
                 history.push(`/home/journal`);
             }
@@ -67,4 +63,4 @@ const PeakGoogleLogin = (props: { desktopDeepLinkUrl?: string }) => {
     )
 };
 
-export default PeakGoogleLogin;
+export default WebappGoogleLogin;

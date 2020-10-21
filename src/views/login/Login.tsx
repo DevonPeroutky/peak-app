@@ -1,14 +1,15 @@
 import React from 'react'
-import PeakGoogleLogin from "../../common/signin-button/GoogleSigninButton";
 import {PeakLogo} from "../../common/logo/PeakLogo";
 import "./login.scss"
+import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
 
+// DEPRECATED: SHOULD DELETE THIS
 export const PeakLogin = (props: {}) => {
     return (
         <div className={"login-page-container"}>
             <div className={"login-container"}>
                 <PeakLogo/>
-                <PeakGoogleLogin/>
+                <WebappGoogleLogin/>
             </div>
         </div>
     )

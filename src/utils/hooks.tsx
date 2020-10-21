@@ -50,6 +50,10 @@ export function useCurrentTopic(topicId: string) {
     return useSelector<AppState, PeakTopic>(state => state.topics.find(t => t.id === topicId)!);
 }
 
+export function useIsFullscreen() {
+    return useSelector<AppState, boolean>(state => state.electron.isFullscreen);
+}
+
 // export function useJournalEditingState() {
 //     const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
 // }

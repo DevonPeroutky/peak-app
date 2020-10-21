@@ -1,22 +1,29 @@
 import React from 'react'
 import {PeakLogo} from "../../common/logo/PeakLogo";
 import "./welcome.scss"
-import {v4 as uuidv4} from "uuid";
 import config from "../../constants/environment-vars"
+import DesktopGoogleLogin from "../../common/login/signin-button/desktop-google-login/DesktopGoogleLogin";
+import {ELECTRON} from "../../constants/constants";
+import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
+import {useLocation, useParams } from 'react-router-dom';
+import {log} from "util";
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 export const PeakWelcome = (props: {}) => {
-    console.log(`Welcoming`)
-    const one_time_code = uuidv4();
+    const query = useQuery();
+    const desktopLoginParam: string | null = query.get("desktop-login")
+    const loggedOutParam: string | null = query.get("logged-out-electron")
+    const desktopFlow: boolean = desktopLoginParam != null && desktopLoginParam == "true"
+    const loggedOutFlow: boolean = loggedOutParam != null && loggedOutParam == "true"
 
-    console.log(config)
     return (
-        <div className={"login-page-container"}>
-            <div className={"login-container"}>
-                <PeakLogo/>
-                <div>
-                    <a target="_blank" href={`${config.base_url}/login-via-desktop?oneTimeCode=${one_time_code}`}>Login with Google</a>
-                </div>
+        <div className={"welcome-page-container"}>
+            <div className={"welcome-container"}>
+                <PeakLogo className={"welcome-logo"}/>
+                { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow || loggedOutFlow}/> }
             </div>
         </div>
     )

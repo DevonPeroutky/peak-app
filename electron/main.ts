@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, ipcRenderer, shell} from 'electron';
+import {app, BrowserWindow, shell} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../src/constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -9,7 +9,7 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
 let mainWindow: BrowserWindow | null = null;
-const protocol = config.electron_protocol;
+const protocol = config.protocol;
 
 // Instantiate Deep Link listener
 const deeplink = new Deeplink({ app, mainWindow, protocol, isDev });
@@ -26,8 +26,9 @@ log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 860,
+    width: 1320,
+    title: "Peak",
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
@@ -48,6 +49,22 @@ const createWindow = (): void => {
       event.preventDefault();
       shell.openExternal(url);
   });
+
+  mainWindow.webContents.send('fullscreen', false)
+
+
+  // If Full-screen, tell renderer (aka. the App that we are fullscreen)
+  mainWindow.on("enter-full-screen", () => {
+    console.log(`Entering full screen`)
+    mainWindow && mainWindow.webContents.send('fullscreen', true)
+  })
+
+  // If not Full-screen, tell renderer (aka. the App that we are fullscreen)
+  mainWindow.on("leave-full-screen", () => {
+    console.log(`Leaving full screen`)
+    mainWindow && mainWindow.webContents.send('fullscreen', false)
+  })
+
 };
 
 // This method will be called when Electron has finished
@@ -83,3 +100,4 @@ deeplink.on('received', (link: string) => {
   // TODO: Verify returned_code
   mainWindow && mainWindow.webContents.send('login-user', returned_code)
 });
+
