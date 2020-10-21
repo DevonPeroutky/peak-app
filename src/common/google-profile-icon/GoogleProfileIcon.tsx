@@ -7,12 +7,9 @@ import { connect } from "react-redux";
 import {Dropdown, Menu, message} from 'antd';
 import {UserOutlined} from "@ant-design/icons/lib";
 import LogoutButton from "../login/logout/LogoutButton";
-import {url} from "inspector";
 
 const GoogleProfileIcon = (props: { setUser: (user: Peaker) => void, user: Peaker }) => {
     const { user, setUser } = props;
-    console.log(`THE URL: ${user.image_url}`)
-
 
     const menu = (
         <Menu>
