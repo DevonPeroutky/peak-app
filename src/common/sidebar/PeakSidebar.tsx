@@ -15,7 +15,7 @@ import {
     PlusSquareOutlined,
 } from '@ant-design/icons';
 import {useCurrentPageId, useCurrentUser, useIsFullscreen, useTopics} from "../../utils/hooks";
-import {backend_host_address} from "../../constants/constants";
+import {backend_host_address, ELECTRON} from "../../constants/constants";
 import {UpdateTopicModal} from "../modals/update-topic/UpdateTopicModal";
 import {MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
 import {DeleteTopicModal} from "../modals/delete-topic-modal/DeleteTopicModal";
@@ -23,16 +23,19 @@ import axios from 'axios';
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {TITLE} from "../rich-text-editor/constants";
 import {capitalize} from "lodash";
+import config from "../../constants/environment-vars"
 const { Sider } = Layout;
+
 
 const PeakSidebar = (props: { }) => {
     const currentPageId = useCurrentPageId();
     const isFullscreen = useIsFullscreen()
+    const isElectron = config.dist === ELECTRON
     const topics = useTopics()
     const user = useCurrentUser()
 
     return (
-        <Sider className={cn("peak-sidebar", isFullscreen ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
+        <Sider className={cn("peak-sidebar", (isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
             <PeakLogo/>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
