@@ -49,6 +49,19 @@ const createWindow = (): void => {
       event.preventDefault();
       shell.openExternal(url);
   });
+
+  // If Full-screen, tell renderer (aka. the App that we are fullscreen)
+  mainWindow.on("enter-full-screen", () => {
+    console.log(`Entering full screen`)
+    mainWindow && mainWindow.webContents.send('fullscreen', true)
+  })
+
+  // If not Full-screen, tell renderer (aka. the App that we are fullscreen)
+  mainWindow.on("leave-full-screen", () => {
+    console.log(`Leaving full screen`)
+    mainWindow && mainWindow.webContents.send('fullscreen', false)
+  })
+
 };
 
 // This method will be called when Electron has finished
@@ -84,3 +97,4 @@ deeplink.on('received', (link: string) => {
   // TODO: Verify returned_code
   mainWindow && mainWindow.webContents.send('login-user', returned_code)
 });
+

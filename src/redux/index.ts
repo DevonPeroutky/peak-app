@@ -3,6 +3,7 @@ import {Peaker} from "./userSlice";
 import {FutureRead} from "./readingListSlice";
 import {JournalEntry, PeakWikiState} from "./wikiPageSlice";
 import {QuickSwitcherState} from "./quickSwitcherSlice";
+import {ElectronState} from "./electronSlice";
 
 export interface AppState {
     topics: PeakTopic[],
@@ -11,4 +12,5 @@ export interface AppState {
     peakWikiState: PeakWikiState,
     quickSwitcher: QuickSwitcherState
     journal: boolean,
+    electron: ElectronState
 }

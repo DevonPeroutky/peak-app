@@ -14,7 +14,7 @@ import cn from "classnames"
 import {
     PlusSquareOutlined,
 } from '@ant-design/icons';
-import {useCurrentPageId, useCurrentUser, useTopics} from "../../utils/hooks";
+import {useCurrentPageId, useCurrentUser, useIsFullscreen, useTopics} from "../../utils/hooks";
 import {backend_host_address} from "../../constants/constants";
 import {UpdateTopicModal} from "../modals/update-topic/UpdateTopicModal";
 import {MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
@@ -27,11 +27,12 @@ const { Sider } = Layout;
 
 const PeakSidebar = (props: { }) => {
     const currentPageId = useCurrentPageId();
+    const isFullscreen = useIsFullscreen()
     const topics = useTopics()
     const user = useCurrentUser()
 
     return (
-        <Sider className="peak-sidebar" theme={"dark"}>
+        <Sider className={cn("peak-sidebar", isFullscreen ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
             <PeakLogo/>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>

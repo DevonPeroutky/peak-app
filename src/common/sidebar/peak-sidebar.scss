@@ -17,6 +17,10 @@ $section-heading-size: 1.3rem;
   top: 0!important;
   bottom: 0!important;
 
+  &.not-fullscreen {
+    padding-top: 30px;
+  }
+
   .ant-menu-item-selected {
     background-color: $sidebar-background-color!important;
   }
@@ -114,6 +118,9 @@ $section-heading-size: 1.3rem;
     }
   }
 }
+
+
+
 
 ::-webkit-scrollbar {
   display: none;

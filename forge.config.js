@@ -22,17 +22,9 @@ module.exports = {
             config: {},
         },
     ],
-    // hooks: {
-    //     packageAfterExtract: async () => {
-    //         console.log('\nOn hook packageAfterExtract');
-    //         console.log(path.resolve(__dirname, '.webpack/renderer/*.*'))
-    //         await cpy(
-    //             [path.resolve(__dirname, '.webpack/renderer/*.*')],
-    //             path.resolve(__dirname, '.webpack/renderer/main_window')
-    //         );
-    //         console.log('Files copied!');
-    //     },
-    // },
+    "packagerConfig": {
+        protocols: [{"name": "Peak", "schemes": ["peak-dev-app", "peak-app"]}]
+    },
     "plugins": [
         [
             "@electron-forge/plugin-webpack",
