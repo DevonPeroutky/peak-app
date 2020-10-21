@@ -6,6 +6,7 @@ import DesktopGoogleLogin from "../../common/login/signin-button/desktop-google-
 import {ELECTRON} from "../../constants/constants";
 import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
 import {useLocation, useParams } from 'react-router-dom';
+import {log} from "util";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -13,14 +14,16 @@ function useQuery() {
 
 export const PeakWelcome = (props: {}) => {
     const query = useQuery();
-    const param: string | null = query.get("desktop-login")
-    const desktopFlow: boolean = param != null && param == "true"
+    const desktopLoginParam: string | null = query.get("desktop-login")
+    const loggedOutParam: string | null = query.get("logged-out-electron")
+    const desktopFlow: boolean = desktopLoginParam != null && desktopLoginParam == "true"
+    const loggedOutFlow: boolean = loggedOutParam != null && loggedOutParam == "true"
 
     return (
         <div className={"welcome-page-container"}>
             <div className={"welcome-container"}>
                 <PeakLogo className={"welcome-logo"}/>
-                { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow}/> }
+                { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow || loggedOutFlow}/> }
             </div>
         </div>
     )

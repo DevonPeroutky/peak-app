@@ -28,12 +28,13 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
         const accessToken = (bro.accessToken) ? bro.accessToken : response.wc.access_token
 
         axios.post(`${backend_host_address}/api/v1/users`, { "user": {...bro.profileObj, ...{"accessToken": accessToken}, "oneTimeCode": oneTimeCode} }).then((res) => {
+            const authedUser = res.data.data as Peaker
+            dispatch(setUser(authedUser));
             if (isDesktopLogin) {
                 const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
                 window.location.replace(desktopDeepLinkUrl);
+                history.push(`/logged-in?one-time-code=${oneTimeCode}`);
             } else {
-                const authedUser = res.data.data as Peaker
-                dispatch(setUser(authedUser));
                 history.push(`/home/journal`);
             }
         }).catch(() => {

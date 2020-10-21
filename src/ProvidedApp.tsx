@@ -9,7 +9,7 @@ import { NoMatch } from "./views/not-found/NoMatch";
 import { isAuthenticated } from "./redux/userSlice";
 import { useCurrentUser } from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
-import {DesktopLogin} from "./views/login-via-desktop/DesktopLogin";
+import {LoggedIn} from "./views/logged-in/LoggedIn";
 
 const ProvidedApp = (props: {}) => {
     const dispatch = useDispatch()
@@ -35,8 +35,8 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/welcome">
                         <PeakWelcome/>
                     </Route>
-                    <Route path="/login-via-desktop">
-                        <DesktopLogin/>
+                    <Route path="/logged-in">
+                        <LoggedIn/>
                     </Route>
                     <AuthedRoute>
                         <Switch>

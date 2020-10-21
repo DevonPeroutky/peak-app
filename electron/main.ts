@@ -50,6 +50,9 @@ const createWindow = (): void => {
       shell.openExternal(url);
   });
 
+  mainWindow.webContents.send('fullscreen', false)
+
+
   // If Full-screen, tell renderer (aka. the App that we are fullscreen)
   mainWindow.on("enter-full-screen", () => {
     console.log(`Entering full screen`)

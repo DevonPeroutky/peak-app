@@ -8,6 +8,7 @@ import {UNAUTHED_USER} from "../../../redux/userSlice";
 import { setUser } from "../../../redux/userSlice";
 import { useHistory } from 'react-router-dom';
 import {useDispatch} from "react-redux";
+import "./logout-button.scss"
 
 const LogoutButton = (props: { }) => {
     const history = useHistory()
@@ -30,16 +31,20 @@ const LogoutButton = (props: { }) => {
 
     if (config.dist === ELECTRON) {
         return (
-            <a href={`${config.base_url}/#/welcome?desktop-login=true`} target="_blank" onClick={logoutElectron}>Logout</a>
+            <div className={"logout-row"}>
+                <LogoutOutlined/>
+                <a href={`${config.base_url}/#/welcome?logged-out-electron=true`} target="_blank" onClick={logoutElectron}>Logout</a>
+            </div>
         )
     } else {
        return (
            <GoogleLogout
                clientId="261914177641-0gu5jam6arv5m6n95vdjmfu8hpa1kunj.apps.googleusercontent.com"
                render={ renderProps => (
-                   <>
-                       <LogoutOutlined/><span onClick={renderProps.onClick}>Logout</span>
-                   </>
+                   <div className={"logout-row"}>
+                       <LogoutOutlined/>
+                       <span onClick={renderProps.onClick}>Logout</span>
+                   </div>
                )}
                onFailure={handleLogoutFailure}
                onLogoutSuccess={logoutWebapp}/>
