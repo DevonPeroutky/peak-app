@@ -29,9 +29,9 @@ module.exports = {
         [
             "@electron-forge/plugin-webpack",
             {
-                "mainConfig": "./webpack.main.config.js",
+                "mainConfig": "./build-config/webpack/webpack.main.config.js",
                 "renderer": {
-                    "config": "./webpack.renderer.config.js",
+                    "config": "./build-config/webpack/webpack.renderer.config.js",
                     "entryPoints": [
                         {
                             "html": "./public/index.html",

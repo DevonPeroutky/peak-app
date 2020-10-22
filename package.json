@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "config": {
-    "forge": "./forge.config.js"
+    "forge": "./build-config/forge/forge.config.js"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",

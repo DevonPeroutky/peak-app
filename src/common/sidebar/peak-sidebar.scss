@@ -120,7 +120,7 @@ $section-heading-size: 1.3rem;
     .ant-menu-item {
       font-weight: 400;
       font-size: 1.1em!important;
-      padding-left: calc(#{$sidebar-padding} * .5)!important;
+      padding-left: calc(#{$sidebar-padding})!important;
     }
   }
 }
