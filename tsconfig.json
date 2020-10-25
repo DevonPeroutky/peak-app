@@ -26,7 +26,7 @@
     "isolatedModules": true
   },
   "include": [
-    "electron/**/*"
+    "src/electron/**/*"
   ],
   "extends": "./node_modules/electron-webpack/tsconfig-base.json"
 }

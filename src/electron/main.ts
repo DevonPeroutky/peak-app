@@ -1,6 +1,6 @@
 import {app, BrowserWindow, shell} from 'electron';
 import * as isDev from 'electron-is-dev';
-import config from "../src/constants/environment-vars"
+import config from "../constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
 const log = require('electron-log');
 
