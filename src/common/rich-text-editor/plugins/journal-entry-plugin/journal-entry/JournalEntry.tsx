@@ -14,6 +14,7 @@ import {JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
 import {useSelectFirstJournalEntry} from "../utils";
 import {PEAK_MARK_COMPLETED} from "../../completed-plugin/CompletedPlugin";
+import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 
 export const JournalEntryBody = (props: { entry_date: string, attributes: any, children: any, element: any }) => {
     const theChildren = props.element.children
@@ -31,7 +32,11 @@ export const JournalEntryBody = (props: { entry_date: string, attributes: any, c
 export const JournalEntryHeader = (props: { entry_date: string, attributes: any, children: any, element: any }) => {
     const isToday: boolean = getCurrentFormattedDate() == props.entry_date
     const journal: PeakWikiPage = useJournal()
-    const isEmpty: boolean = equals(journal.body[0].body, EMPTY_NODE)
+    const isEmpty = () => {
+        const nodeContent = journal.body[0].body
+        const nodeText = Node.string(nodeContent[0])
+        return nodeContent[0].type === ELEMENT_PARAGRAPH && nodeText.length === 0
+    }
 
     return (
         <div className={"peak-journal-entry-header"} {...props.attributes} contentEditable={false}>
@@ -44,7 +49,7 @@ export const JournalEntryHeader = (props: { entry_date: string, attributes: any,
             }}>
                 {(isToday) ? "Today" : props.entry_date}
             </h1>
-            {(isToday && isEmpty) ? <ToDoCopyOverSelect /> : null}
+            {(isToday && isEmpty()) ? <ToDoCopyOverSelect /> : null}
             <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
         </div>
     )
@@ -91,6 +96,7 @@ const ToDoCopyOverSelect = (props: {}) => {
             })
 
             console.log(`BRUG`)
+            console.log(editor.marks)
             const [je] = Editor.nodes(editor, {
                 at: [],
                 mode: "all",
