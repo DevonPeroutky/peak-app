@@ -16,10 +16,15 @@ import {useSelectFirstJournalEntry} from "../utils";
 import {PEAK_MARK_COMPLETED} from "../../completed-plugin/CompletedPlugin";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 
+const isNodeEmpty = (theChildren: Node[]) => {
+    if (theChildren.length != 1) { return false }
+    const theNode = theChildren[0]
+    const nodeText = Node.string(theNode)
+    return theNode.type === ELEMENT_PARAGRAPH && nodeText.length === 0
+}
+
 export const JournalEntryBody = (props: { entry_date: string, attributes: any, children: any, element: any }) => {
-    const theChildren = props.element.children
-    const emptyNode = [{ type: "p", children: [{text: ""}]}]
-    const isEmpty: boolean = equals(theChildren, emptyNode)
+    const isEmpty: boolean = isNodeEmpty(props.element.children)
     return (
         <div
             className={cn("peak-journal-entry", (getCurrentFormattedDate() == props.entry_date) ? "today" : "not-today", (isEmpty) ? "empty-journal" : "" )}
@@ -32,11 +37,7 @@ export const JournalEntryBody = (props: { entry_date: string, attributes: any, c
 export const JournalEntryHeader = (props: { entry_date: string, attributes: any, children: any, element: any }) => {
     const isToday: boolean = getCurrentFormattedDate() == props.entry_date
     const journal: PeakWikiPage = useJournal()
-    const isEmpty = () => {
-        const nodeContent = journal.body[0].body
-        const nodeText = Node.string(nodeContent[0])
-        return nodeContent[0].type === ELEMENT_PARAGRAPH && nodeText.length === 0
-    }
+    const isEmpty = isNodeEmpty(journal.body[0].body)
 
     return (
         <div className={"peak-journal-entry-header"} {...props.attributes} contentEditable={false}>
@@ -49,7 +50,7 @@ export const JournalEntryHeader = (props: { entry_date: string, attributes: any,
             }}>
                 {(isToday) ? "Today" : props.entry_date}
             </h1>
-            {(isToday && isEmpty()) ? <ToDoCopyOverSelect /> : null}
+            {(isToday && isEmpty) ? <ToDoCopyOverSelect /> : null}
             <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
         </div>
     )
@@ -105,6 +106,7 @@ const ToDoCopyOverSelect = (props: {}) => {
                     console.log(n)
                     return (n.type === JOURNAL_ENTRY && n.entry_date === secondNewestDay.entry_date)
                 },
+                universal: true
             })
             console.log(je)
 
