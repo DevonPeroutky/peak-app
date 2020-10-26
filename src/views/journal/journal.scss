@@ -9,6 +9,11 @@
   text-align: left;
   padding-top: 82px;
 
+  &.empty {
+    align-items: center!important;
+    padding-top: 25%!important;
+  }
+
   .peak-journal-title {
     position: relative;
     font-size: $title-font-size;

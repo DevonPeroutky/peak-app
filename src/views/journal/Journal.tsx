@@ -29,8 +29,10 @@ import {JournalEntry, PeakWikiPage, PeakWikiState} from "../../redux/wikiPageSli
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
-import {Skeleton} from "antd";
+import {Empty, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
+import  { equals } from "ramda";
+import cn from "classnames";
 
 const Journal = (props: { }) => {
     const dispatch = useDispatch()
@@ -70,7 +72,7 @@ const Journal = (props: { }) => {
     });
 
     // @ts-ignore
-    const editor = useMemo(() => pipe(createEditor(), ...journalNormalizers),  []);
+    const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
 
     const keyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor, dispatch, currentPageId)
@@ -81,6 +83,7 @@ const Journal = (props: { }) => {
     useEffect(() => {
         journalFetcher(false).then(res => {
             const thisIsBad = res as JournalEntry[]
+            if (!thisIsBad) return
             const slateJournalNodes = thisIsBad.flatMap(convertJournalEntryToSlateNodes)
             const bodyContent: Node[] = [{ children: slateJournalNodes }]
 
@@ -133,39 +136,48 @@ const Journal = (props: { }) => {
         })
     });
 
+    const isEmpty =  equals(journalContent, initialContent)
     return (
-        <div className="peak-user-home">
-            <Slate
-                editor={editor}
-                value={journalContent}
-                onChange={syncJournalEntries}>
-                <MemoizedLinkMenu
-                    key={`${currentPageId}-LinkMenu`}
-                    linkState={journal.editorState.currentLinkState}
-                    showLinkMenu={journal.editorState.showLinkMenu}
-                    pageId={currentPageId}/>
-                <EditablePlugins
-                    onKeyDown={[keyBindingHandler]}
-                    onKeyDownDeps={[index, search, target]}
-                    style={{
-                        display: "flex",
-                        textAlign: "left",
-                        flex: "1 1 auto",
-                        minWidth: "100%"
-                    }}
-                    plugins={journalPlugins}
-                    autoFocus={true}
-                />
-                {(isLoading) ? <Skeleton active paragraph title/> : null}
-                <NodeContentSelect
-                    at={target}
-                    valueIndex={index}
-                    options={values as PeakEditorControl[]}
-                    onClickMention={onAddNodeContent}
-                />
-            </Slate>
+        <div className={cn("peak-user-home", isEmpty ? "empty" : "")}>
+            {(isEmpty) ? <EmptyJournal/> :
+                <Slate
+                    editor={editor}
+                    value={journalContent}
+                    onChange={syncJournalEntries}>
+                    <MemoizedLinkMenu
+                        key={`${currentPageId}-LinkMenu`}
+                        linkState={journal.editorState.currentLinkState}
+                        showLinkMenu={journal.editorState.showLinkMenu}
+                        pageId={currentPageId}/>
+                    <EditablePlugins
+                        onKeyDown={[keyBindingHandler]}
+                        onKeyDownDeps={[index, search, target]}
+                        style={{
+                            display: "flex",
+                            textAlign: "left",
+                            flex: "1 1 auto",
+                            minWidth: "100%"
+                        }}
+                        plugins={journalPlugins}
+                        autoFocus={true}
+                    />
+                    {(isLoading) ? <Skeleton active paragraph title/> : null}
+                    <NodeContentSelect
+                        at={target}
+                        valueIndex={index}
+                        options={values as PeakEditorControl[]}
+                        onClickMention={onAddNodeContent}
+                    />
+                </Slate>
+            }
         </div>
     )
 };
+
+const EmptyJournal = (props: {}) => (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
+        "Failed to load your Journal. Try refreshing."
+    }/>
+)
 
 export default Journal
