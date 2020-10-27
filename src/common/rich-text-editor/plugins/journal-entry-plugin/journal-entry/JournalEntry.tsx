@@ -65,14 +65,18 @@ const ToDoCopyOverSelect = (props: {}) => {
     const copyAllToDos = async () => {
         const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
         if (journalEntries.length > 1) {
+            // Set today's journal entry in Database
             const secondNewestDay: JournalEntry = journalEntries[1]
             const newFirstDay: JournalEntry = {...journalEntries[0], body: secondNewestDay.body}
             await saveBulkJournalEntries([newFirstDay])
+
+            // Get first entry location in Slate Editor
             const [firstJournalEntry] = Editor.nodes(editor, {
                 at: [],
                 match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newFirstDay.entry_date),
             })
 
+            // Set today's journal entry in Slate
             const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: secondNewestDay.body }
             const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
             await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
@@ -85,38 +89,27 @@ const ToDoCopyOverSelect = (props: {}) => {
         const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
         if (journalEntries.length > 1) {
             const secondNewestDay: JournalEntry = journalEntries[1]
-            const newFirstDay: JournalEntry = {...journalEntries[0], body: secondNewestDay.body}
-            await saveBulkJournalEntries([newFirstDay])
-            const [firstJournalEntry] = Editor.nodes(editor, {
-                at: [],
-                match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newFirstDay.entry_date),
-            })
+
+            // Get Uncompleted Tasks from yesterday
             const [secondJournalEntry] = Editor.nodes(editor, {
                 at: [],
                 match: n => (n.type === JOURNAL_ENTRY && n.entry_date === secondNewestDay.entry_date),
             })
-
-            console.log(`BRUG`)
-            console.log(secondJournalEntry)
             const topLevelListNodes: Node[] = (secondJournalEntry[0].children as Node[]).filter(n => [ELEMENT_UL, ELEMENT_OL].includes(n.type as string))
-            console.log(`-------------------`)
-            console.log(topLevelListNodes)
-            const listItemsToConsider: Node[] = topLevelListNodes.flatMap(n => n.children) as Node[]
-            console.log(listItemsToConsider)
-            const uncompletedTasks = listItemsToConsider.map(containsIncompleteTask)
-            console.log(uncompletedTasks)
-            console.log(`-------------------`)
-            let carriedOverTask: Node[] = []
-            uncompletedTasks.forEach((isUncompleted, index) => {
-                if (isUncompleted) {
-                    carriedOverTask.push(listItemsToConsider[index])
-                }
+            const newNodes: Node[] = topLevelListNodes.map(buildIncompleteTask)
+
+            // Set today's journal entry in Database
+            const newFirstDay: JournalEntry = {...journalEntries[0], body: newNodes}
+            await saveBulkJournalEntries([newFirstDay])
+
+            // Get first entry location in Slate Editor
+            const [firstJournalEntry] = Editor.nodes(editor, {
+                at: [],
+                match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newFirstDay.entry_date),
             })
 
-            console.log(`TO CARRY OVER`)
-            console.log(carriedOverTask)
-
-            const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: secondNewestDay.body }
+            // Set today's journal entry in Slate
+            const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: newNodes }
             const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
             await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
             await Transforms.insertNodes(editor, newSlateNode, { at: firstJournalEntry[1] })
@@ -124,7 +117,7 @@ const ToDoCopyOverSelect = (props: {}) => {
         }
     };
 
-    const isUncompletedNode = (n: Node) => {
+    const isUncompletedNode: (n: Node) => Node | null = (n: Node) => {
         console.log(`EVALUATING`)
         console.log(n)
         console.log(n.children)
@@ -136,23 +129,40 @@ const ToDoCopyOverSelect = (props: {}) => {
             return !node.completed
         }, n.children as Node[])
         console.log(`IS UNCOMPLETED??: ${isAllUncompleted}`)
-        return isAllUncompleted
+        return isAllUncompleted ? n : null
     }
 
-    const containsIncompleteTask = (n: Node) => {
-        // Base Case
+    const buildIncompleteTask: (n: Node) => Node | null = (n: Node) => {
+        // Base Case --> Return the paragraph node or nothing (if completed)?
+        // How to best represent "nothing"?
         if (n.type === ELEMENT_PARAGRAPH) {
             console.log(`LEAF NODE!`)
             return isUncompletedNode(n)
         }
 
         // UL || OL
-        if ([ELEMENT_UL, ELEMENT_OL, ELEMENT_LI].includes(n.type as string)) {
-            return any(containsIncompleteTask, n.children as Node[])
+        if ([ELEMENT_UL, ELEMENT_OL].includes(n.type as string)) {
+            const children: Node[] = (n.children as Node[]).map(buildIncompleteTask).filter(n => n != null)
+            return (children.length == 0) ? null : {type: n.type, children: children}
         }
 
-        // if anything else
-        return false
+        // LI
+        if (ELEMENT_LI === n.type as string) {
+            const childrenCount: number = (n.children as Node[]).length
+            if (childrenCount == 2) {
+                const paragraphNode: Node = (n.children as Node[])[0]
+                const subListNode: Node = (n.children as Node[])[1]
+                const isUncompleted: Node | null = isUncompletedNode(paragraphNode)
+                return isUncompleted !== null ? { type: ELEMENT_LI, children: [paragraphNode, buildIncompleteTask(subListNode)].filter(n => n != null) } : null
+            } else if (childrenCount == 1) {
+                const paragraphNode: Node = (n.children as Node[])[0]
+                const isUncompleted: Node | null = isUncompletedNode(paragraphNode)
+                return isUncompleted !== null ? n : null
+            } else {
+                return null
+            }
+        }
+        return null
     }
 
     const menu = (
