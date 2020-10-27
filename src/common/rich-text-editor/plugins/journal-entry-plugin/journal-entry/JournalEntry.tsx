@@ -2,7 +2,7 @@ import React from "react"; import "./journal-entry.scss"
 import {Dropdown, Menu, message, Select} from "antd";
 import cn from "classnames";
 import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
-import {equals} from "ramda"
+import {all, any, equals} from "ramda"
 import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/wikiPageSlice";
 import {Editor, Transforms, Node} from 'slate';
 import {useDebounceBulkJournalEntrySaver, useJournal, useJournalSaver} from "../../../../../utils/hooks";
@@ -14,7 +14,7 @@ import {JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
 import {useSelectFirstJournalEntry} from "../utils";
 import {PEAK_MARK_COMPLETED} from "../../completed-plugin/CompletedPlugin";
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
 
 const isNodeEmpty = (theChildren: Node[]) => {
     if (theChildren.length != 1) { return false }
@@ -97,18 +97,24 @@ const ToDoCopyOverSelect = (props: {}) => {
             })
 
             console.log(`BRUG`)
-            console.log(editor.marks)
-            const [je] = Editor.nodes(editor, {
-                at: [],
-                mode: "all",
-                match: n => {
-                    console.log("THE MAKKS")
-                    console.log(n)
-                    return (n.type === JOURNAL_ENTRY && n.entry_date === secondNewestDay.entry_date)
-                },
-                universal: true
+            console.log(secondJournalEntry)
+            const topLevelListNodes: Node[] = (secondJournalEntry[0].children as Node[]).filter(n => [ELEMENT_UL, ELEMENT_OL].includes(n.type as string))
+            console.log(`-------------------`)
+            console.log(topLevelListNodes)
+            const listItemsToConsider: Node[] = topLevelListNodes.flatMap(n => n.children) as Node[]
+            console.log(listItemsToConsider)
+            const uncompletedTasks = listItemsToConsider.map(containsIncompleteTask)
+            console.log(uncompletedTasks)
+            console.log(`-------------------`)
+            let carriedOverTask: Node[] = []
+            uncompletedTasks.forEach((isUncompleted, index) => {
+                if (isUncompleted) {
+                    carriedOverTask.push(listItemsToConsider[index])
+                }
             })
-            console.log(je)
+
+            console.log(`TO CARRY OVER`)
+            console.log(carriedOverTask)
 
             const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: secondNewestDay.body }
             const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
@@ -117,6 +123,37 @@ const ToDoCopyOverSelect = (props: {}) => {
             await setSelection(editor)
         }
     };
+
+    const isUncompletedNode = (n: Node) => {
+        console.log(`EVALUATING`)
+        console.log(n)
+        console.log(n.children)
+        const isAllUncompleted = all((node: Node) => {
+            console.log(`FUCK YOU MEAN`)
+            console.log(node)
+            console.log(node.completed)
+            // @ts-ignore
+            return !node.completed
+        }, n.children as Node[])
+        console.log(`IS UNCOMPLETED??: ${isAllUncompleted}`)
+        return isAllUncompleted
+    }
+
+    const containsIncompleteTask = (n: Node) => {
+        // Base Case
+        if (n.type === ELEMENT_PARAGRAPH) {
+            console.log(`LEAF NODE!`)
+            return isUncompletedNode(n)
+        }
+
+        // UL || OL
+        if ([ELEMENT_UL, ELEMENT_OL, ELEMENT_LI].includes(n.type as string)) {
+            return any(containsIncompleteTask, n.children as Node[])
+        }
+
+        // if anything else
+        return false
+    }
 
     const menu = (
         <Menu>
