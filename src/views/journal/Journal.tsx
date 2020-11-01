@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import "./journal.scss"
-import {createEditor, Node} from 'slate';
-import {Slate, withReact} from 'slate-react';
+import {createEditor, Editor, Node, Range} from 'slate';
+import {ReactEditor, Slate, withReact} from 'slate-react';
 import {
     EditablePlugins,
+    OnKeyDown,
     pipe,
     SlateDocument,
 } from "@udecode/slate-plugins";
@@ -34,7 +35,7 @@ import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugin
 import  { equals } from "ramda";
 import cn from "classnames";
 
-const Journal = (props: { }) => {
+const PeakJournal = (props: { }) => {
     const dispatch = useDispatch()
     const currentUser = useCurrentUser()
     const journalFetcher = useFetchJournal()
@@ -45,6 +46,8 @@ const Journal = (props: { }) => {
     const currentPageId = "journal"
     const [lastLoadedDate, setLastLoadedDate] = useState<string>()
     const [isLoading, setLoading] = useState<boolean>(true)
+    const [isLoadingMore, setLoadingMore] = useState<boolean>(false)
+    const [atBeginningOfTime, setAtBeginningOfTime] = useState<boolean>(false)
 
     // This is the Node[] that is being based into the Editor aka. What the user will see
     const initialContent: SlateDocument = [
@@ -74,7 +77,7 @@ const Journal = (props: { }) => {
     // @ts-ignore
     const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
 
-    const keyBindingHandler = useCallback((event: any) => {
+    const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor, dispatch, currentPageId)
 
         return onKeyDownMention(event, editor)
@@ -82,8 +85,11 @@ const Journal = (props: { }) => {
 
     useEffect(() => {
         journalFetcher(false).then(res => {
+            setLoading(false)
             const thisIsBad = res as JournalEntry[]
-            if (!thisIsBad) return
+            if (!thisIsBad) {
+                return
+            }
             const slateJournalNodes = thisIsBad.flatMap(convertJournalEntryToSlateNodes)
             const bodyContent: Node[] = [{ children: slateJournalNodes }]
 
@@ -116,7 +122,10 @@ const Journal = (props: { }) => {
     }
 
     useBottomScrollListener(() => {
-        setLoading(true)
+        if (atBeginningOfTime) {
+            return
+        }
+        setLoadingMore(true)
         const nextDateToLoadFrom = formatDate(moment(lastLoadedDate).subtract(1, 'days'))
         journalFetcher(true, nextDateToLoadFrom).then(res => {
             const thisIsBad = res as JournalEntry[]
@@ -132,48 +141,35 @@ const Journal = (props: { }) => {
                 // @ts-ignore
                 setJournalContent(newContent)
             } else {
-                message.info("You have reached the beginning!")
+                setAtBeginningOfTime(true)
+                message.info({
+                    content: "You have reached the beginning!",
+                    key: 1
+                })
             }
-            setLoading(false)
+            setLoadingMore(false)
         })
     });
 
     const isEmpty =  equals(journalContent, initialContent)
-    return (
-        <div className={cn("peak-user-home", isEmpty ? "empty" : "")}>
-            {(isEmpty) ? <EmptyJournal/> :
-                <Slate
-                    editor={editor}
-                    value={journalContent}
-                    onChange={syncJournalEntries}>
-                    <MemoizedLinkMenu
-                        key={`${currentPageId}-LinkMenu`}
-                        linkState={journal.editorState.currentLinkState}
-                        showLinkMenu={journal.editorState.showLinkMenu}
-                        pageId={currentPageId}/>
-                    <EditablePlugins
-                        onKeyDown={[keyBindingHandler]}
-                        onKeyDownDeps={[index, search, target]}
-                        style={{
-                            display: "flex",
-                            textAlign: "left",
-                            flex: "1 1 auto",
-                            minWidth: "100%"
-                        }}
-                        plugins={journalPlugins}
-                        autoFocus={true}
-                    />
-                    {(isLoading) ? <Skeleton active paragraph title/> : null}
-                    <NodeContentSelect
-                        at={target}
-                        valueIndex={index}
-                        options={values as PeakEditorControl[]}
-                        onClickMention={onAddNodeContent}
-                    />
-                </Slate>
-            }
-        </div>
-    )
+    return (<div className={cn("peak-user-home", (isEmpty && !isLoading) ? "empty" : "")}>
+        {
+            (isEmpty && !isLoading) ? <EmptyJournal/> :
+            <Journal
+                editor={editor}
+                journalPageState={journal}
+                journalContent={journalContent}
+                syncJournalEntries={syncJournalEntries}
+                currentPageId={currentPageId}
+                keyBindingHandler={keyBindingHandler}
+                isLoadingMore={isLoadingMore}
+                index={index}
+                target={target}
+                search={search}
+                values={values}
+                onAddNodeContent={onAddNodeContent}/>
+        }
+    </div>)
 };
 
 const EmptyJournal = (props: {}) => (
@@ -182,4 +178,80 @@ const EmptyJournal = (props: {}) => (
     }/>
 )
 
-export default Journal
+const LoadingJournal = (props: {}) => (
+    <Skeleton active title/>
+)
+
+interface InternalJournalProps {
+    // The slate body and handlers
+    editor: ReactEditor
+    journalPageState: PeakWikiPage
+    journalContent: SlateDocument
+    syncJournalEntries: (value: Node[]) => void
+
+    // Is Journal Loading more
+    isLoadingMore: boolean,
+
+    // Random
+    // TODO: This doesn't feel like something we should have to pass
+    currentPageId: string,
+    keyBindingHandler: (event: any) => false | void,
+
+    // Node Content Select Props
+    // TODO: This doesn't feel like something we should have to pass
+    index: number,
+    target: Range,
+    search: string,
+    values: PeakEditorControl[]
+    onAddNodeContent: (editor: Editor, data: PeakEditorControl) => void
+}
+const Journal = (props: InternalJournalProps) => {
+    const {
+        editor,
+        journalContent,
+        syncJournalEntries,
+        currentPageId,
+        keyBindingHandler,
+        journalPageState,
+        isLoadingMore,
+        index,
+        target,
+        values,
+        search,
+        onAddNodeContent
+    } = props
+
+    return (
+        <Slate
+            editor={editor}
+            value={journalContent}
+            onChange={syncJournalEntries}>
+            <MemoizedLinkMenu
+                key={`${currentPageId}-LinkMenu`}
+                linkState={journalPageState.editorState.currentLinkState}
+                showLinkMenu={journalPageState.editorState.showLinkMenu}
+                pageId={currentPageId}/>
+            <EditablePlugins
+                onKeyDown={[keyBindingHandler]}
+                onKeyDownDeps={[index, search, target]}
+                style={{
+                    display: "flex",
+                    textAlign: "left",
+                    flex: "1 1 auto",
+                    minWidth: "100%"
+                }}
+                plugins={journalPlugins}
+                autoFocus={true}
+            />
+            {(isLoadingMore) ? <Skeleton active paragraph title/> : null}
+            <NodeContentSelect
+                at={target}
+                valueIndex={index}
+                options={values as PeakEditorControl[]}
+                onClickMention={onAddNodeContent}
+            />
+        </Slate>
+    )
+}
+
+export default PeakJournal
