@@ -40,7 +40,7 @@ const createWindow = (): void => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   if (isDev){
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools({'mode': 'detach'});
   }
 
   // All new-window events should load in the user's default browser

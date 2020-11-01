@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="506px" height="139px" viewBox="0 0 506 139" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Peak 2</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#4395F5" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD-Copy" transform="translate(-304.000000, -580.000000)">
+            <g id="Peak-2" transform="translate(305.000000, 582.000000)">
+                <g id="K" transform="translate(418.000000, 0.000000)" stroke="#8A8A8A" stroke-linecap="square" stroke-opacity="0.69" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line-Copy-2"></line>
+                    <line x1="14" y1="58" x2="84.377193" y2="0.5" id="Line-4"></line>
+                    <line x1="14" y1="116" x2="84.377193" y2="58.5" id="Line-4-Copy" transform="translate(49.500000, 87.000000) scale(1, -1) translate(-49.500000, -87.000000) "></line>
+                </g>
+                <g id="A-Copy-2" transform="translate(268.000000, 0.000000)">
+                    <polygon id="Triangle" stroke="url(#linearGradient-1)" stroke-width="2" fill="url(#linearGradient-1)" stroke-linejoin="round" points="1 135 50 0 99 135"></polygon>
+                    <polygon id="Triangle-Copy" stroke="#FFFFFF" stroke-width="2" fill="#FFFFFF" points="1 135 50 20 99 135"></polygon>
+                    <polygon id="Rectangle" fill="#FFFFFF" points="3.83774184 130 98.1856524 130 100 137 -1.77635684e-13 137"></polygon>
+                </g>
+                <g id="E" transform="translate(134.000000, 0.000000)" stroke="#8A8A8A" stroke-linecap="square" stroke-opacity="0.69" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line-Copy"></line>
+                    <line x1="17.7444444" y1="0.5" x2="83.2555556" y2="0.5" id="Line-2"></line>
+                    <line x1="17.7444444" y1="115.5" x2="83.2555556" y2="115.5" id="Line-2-Copy"></line>
+                    <line x1="17.559322" y1="57.5" x2="63.5" y2="57.5" id="Line-3"></line>
+                </g>
+                <g id="P" stroke="#8A8A8A" stroke-opacity="0.69" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line" stroke-linecap="square"></line>
+                    <path d="M17,72 C24.1625497,72 34.4155875,72 47.7591135,72 C67.7744024,72 84,55.882251 84,36 C84,16.117749 67.7744024,0 47.7591135,0 L17,0" id="Oval"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

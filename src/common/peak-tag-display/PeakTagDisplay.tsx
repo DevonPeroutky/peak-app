@@ -4,7 +4,6 @@ import {AppState} from "../../redux";
 import {connect} from "react-redux";
 import {PeakTopic} from "../../redux/topicSlice";
 import { capitalize } from "lodash";
-const logo = require('../../assets/images/logo/trans-peak.svg');
 
 const PeakTagDisplay = (props: { topicId: string, topics: PeakTopic[] }) => {
     const { topicId, topics } = props;
