@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import "./journal.scss"
-import {createEditor, Node, Editor, Transforms} from 'slate';
+import {createEditor, Node} from 'slate';
 import {Slate, withReact} from 'slate-react';
 import {
     EditablePlugins,
@@ -12,24 +12,24 @@ import {
     useDebounceBulkJournalEntrySaver,
     useCurrentUser,
     useFetchJournal,
-    useJournal, useShouldCopyOver,
+    useJournal,
 } from "../../utils/hooks";
-import {formatDate, getCurrentFormattedDate, isCurrentDay} from "../../utils/time";
+import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/toolbar-controls";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {useDispatch} from "react-redux";
-import {EMPTY_NODE, journalNormalizers, journalPlugins} from "../../common/rich-text-editor/journal/constants";
+import {journalNormalizers, journalPlugins} from "../../common/rich-text-editor/journal/constants";
 import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
 } from "../../common/rich-text-editor/journal/utils";
-import {JournalEntry, PeakWikiPage, PeakWikiState} from "../../redux/wikiPageSlice";
+import {JournalEntry, PeakWikiPage} from "../../redux/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
-import {Empty, Skeleton} from "antd";
+import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
@@ -44,7 +44,7 @@ const Journal = (props: { }) => {
 
     const currentPageId = "journal"
     const [lastLoadedDate, setLastLoadedDate] = useState<string>()
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
 
     // This is the Node[] that is being based into the Editor aka. What the user will see
     const initialContent: SlateDocument = [
@@ -129,10 +129,12 @@ const Journal = (props: { }) => {
             // If there actually was more
             if (lastDateLoaded) {
                 setLastLoadedDate(lastDateLoaded)
-                setLoading(false)
                 // @ts-ignore
                 setJournalContent(newContent)
+            } else {
+                message.info("You have reached the beginning!")
             }
+            setLoading(false)
         })
     });
 

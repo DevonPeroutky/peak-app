@@ -2,7 +2,7 @@
   "name": "peak-app",
   "productName": "Peak",
   "version": "0.0.1",
-  "description": "The Peak",
+  "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
   "scripts": {
     "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
