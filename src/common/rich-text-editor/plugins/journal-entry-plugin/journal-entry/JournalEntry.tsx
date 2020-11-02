@@ -1,4 +1,4 @@
-import React from "react"; import "./journal-entry.scss"
+import React from "react";
 import {Dropdown, Menu, message, Select} from "antd";
 import cn from "classnames";
 import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
@@ -6,15 +6,13 @@ import {all, any, equals} from "ramda"
 import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/wikiPageSlice";
 import {Editor, Transforms, Node} from 'slate';
 import {useDebounceBulkJournalEntrySaver, useJournal, useJournalSaver} from "../../../../../utils/hooks";
-import {ScheduleOutlined} from "@ant-design/icons/lib";
-import {useDispatch} from "react-redux";
-import {EMPTY_NODE} from "../../../journal/constants";
+import {FileSyncOutlined, PlusOutlined, ScheduleOutlined, UpCircleOutlined} from "@ant-design/icons/lib";
 import {ReactEditor, useSlate} from "slate-react";
 import {JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
 import {useSelectFirstJournalEntry} from "../utils";
-import {PEAK_MARK_COMPLETED} from "../../completed-plugin/CompletedPlugin";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
+import "./journal-entry.scss";
 
 const isNodeEmpty = (theChildren: Node[]) => {
     if (theChildren.length != 1) { return false }
@@ -62,32 +60,51 @@ const ToDoCopyOverSelect = (props: {}) => {
     const editor = useSlate()
     const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
 
+    // Common work
+    const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
+
+    /**
+     * Given the "new" first journal entry:
+     * - Find the location of the first journal_entry_body
+     * - Remove the nodes of the first journal_entry_body
+     * - Insert the nodes of the "new" entry
+     * - Set the selection
+     *
+     * @param newJournalEntry
+     */
+    const copyContentFromPreviousToCurrent = async (newJournalEntry: JournalEntry) => {
+        // Get first entry location in Slate Editor
+        const [firstJournalEntry] = Editor.nodes(editor, {
+            at: [],
+            match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newJournalEntry.entry_date),
+        })
+        console.log(`FIRST JOURNAL ENTRY`)
+        console.log(firstJournalEntry)
+
+        const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
+
+        console.log(`THE NEW SLATE NODE`)
+        console.log(newSlateNode)
+
+        await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
+        await Transforms.insertNodes(editor, newSlateNode, { at: firstJournalEntry[1] })
+        await setSelection(editor)
+        return
+    }
+
     const copyAllToDos = async () => {
-        const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
         if (journalEntries.length > 1) {
             // Set today's journal entry in Database
             const secondNewestDay: JournalEntry = journalEntries[1]
             const newFirstDay: JournalEntry = {...journalEntries[0], body: secondNewestDay.body}
-            await saveBulkJournalEntries([newFirstDay])
-
-            // Get first entry location in Slate Editor
-            const [firstJournalEntry] = Editor.nodes(editor, {
-                at: [],
-                match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newFirstDay.entry_date),
-            })
-
-            // Set today's journal entry in Slate
-            const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: secondNewestDay.body }
-            const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
-            await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
-            await Transforms.insertNodes(editor, newSlateNode, { at: firstJournalEntry[1] })
-            await setSelection(editor)
+            // await saveBulkJournalEntries([newFirstDay])
+           await copyContentFromPreviousToCurrent(newFirstDay)
         }
     };
 
     const copyInProgressToDos = async () => {
-        const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
         if (journalEntries.length > 1) {
+            console.log(`COPYing IN PROGRESS`)
             const secondNewestDay: JournalEntry = journalEntries[1]
 
             // Get Uncompleted Tasks from yesterday
@@ -97,23 +114,10 @@ const ToDoCopyOverSelect = (props: {}) => {
             })
             const topLevelListNodes: Node[] = (secondJournalEntry[0].children as Node[]).filter(n => [ELEMENT_UL, ELEMENT_OL].includes(n.type as string))
             const newNodes: Node[] = topLevelListNodes.map(buildIncompleteTask)
-
-            // Set today's journal entry in Database
             const newFirstDay: JournalEntry = {...journalEntries[0], body: newNodes}
-            await saveBulkJournalEntries([newFirstDay])
 
-            // Get first entry location in Slate Editor
-            const [firstJournalEntry] = Editor.nodes(editor, {
-                at: [],
-                match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newFirstDay.entry_date),
-            })
-
-            // Set today's journal entry in Slate
-            const newJournalEntry: JournalEntry = { entry_date: journalEntries[0].entry_date, body: newNodes }
-            const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
-            await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
-            await Transforms.insertNodes(editor, newSlateNode, { at: firstJournalEntry[1] })
-            await setSelection(editor)
+            // await saveBulkJournalEntries([newFirstDay])
+            await copyContentFromPreviousToCurrent(newFirstDay)
         }
     };
 
@@ -173,8 +177,8 @@ const ToDoCopyOverSelect = (props: {}) => {
     );
 
     return (
-        <Dropdown overlay={menu}>
-            <ScheduleOutlined />
+        <Dropdown overlay={menu} overlayClassName={"copy-over-icon-container"} className={"copy-over-icon-container"}>
+            <FileSyncOutlined className={"copy-over-icon animated slideIn"}/>
         </Dropdown>
     )
 }
