@@ -1,4 +1,4 @@
-import {app, BrowserWindow, shell} from 'electron';
+import {app, BrowserWindow, shell, globalShortcut} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -70,7 +70,14 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// app.on('ready', createWindow);
+app.whenReady().then(() => {
+  globalShortcut.register('CommandOrControl+Shift+J', () => {
+    console.log('Electron loves global shortcuts!')
+    mainWindow && mainWindow.webContents.send('go-to-journal')
+    app.focus()
+  })
+}).then(createWindow)
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

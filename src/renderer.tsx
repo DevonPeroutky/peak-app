@@ -61,3 +61,8 @@ ipcRenderer.on('fullscreen', (event, arg) => {
     console.log(`Fullscreen? ${arg}`)
     return (arg) ? store.dispatch(enterFullscreen()) : store.dispatch(leaveFullscreen())
 })
+
+ipcRenderer.on('go-to-journal', (event, arg) => {
+    window.location.href = "/main_window#/home/journal"
+    window.focus()
+})
