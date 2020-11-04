@@ -33,7 +33,7 @@ import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
 import {Peaker, setUser} from "./redux/userSlice";
-import {enterFullscreen, leaveFullscreen} from "./redux/electronSlice";
+import {enterFullscreen, leaveFullscreen, journalHotkeyPressed} from "./redux/electronSlice";
 import {message} from "antd";
 import axios  from "axios";
 import {backend_host_address} from "./constants/constants";
@@ -64,5 +64,5 @@ ipcRenderer.on('fullscreen', (event, arg) => {
 
 ipcRenderer.on('go-to-journal', (event, arg) => {
     window.location.href = "/main_window#/home/journal"
-    window.focus()
+    store.dispatch(journalHotkeyPressed())
 })

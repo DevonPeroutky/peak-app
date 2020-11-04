@@ -36,7 +36,9 @@ const PeakSidebar = (props: { }) => {
 
     return (
         <Sider className={cn("peak-sidebar", (isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
-            <PeakLogo/>
+            <div className={cn("peak-logo-container")}>
+                <PeakLogo className={"sidebar-logo"}/>
+            </div>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
                 <Menu.Item key="home/journal">

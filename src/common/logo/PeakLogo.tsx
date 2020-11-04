@@ -8,11 +8,9 @@ const peak = require('../../assets/images/logo/peak.svg');
 export const PeakLogo = (props: { className?: string }) => {
     const specifiedClassName: string = (props.className) ? props.className : ""
     return (
-        <div className={cn("peak-logo-container", specifiedClassName)}>
-            <Link
-                to={"/home/journal"}
-                className={cn("peak-logo-wrapper", specifiedClassName)}
-                children={<img className={"peak-logo-img"} src={peak} alt={"Peak"}/>}/>
-        </div>
+        <Link
+            to={"/home/journal"}
+            className={cn("peak-logo-wrapper", )}
+            children={<img className={cn("peak-logo-img", specifiedClassName)} src={peak} alt={"Peak"}/>}/>
     )
 };

@@ -4,7 +4,7 @@ import {Layout} from 'antd';
 import 'antd/dist/antd.css';
 import "./peak-layout.scss"
 import {Route, Switch, useParams, useRouteMatch, Redirect} from "react-router-dom";
-import Journal from "../journal/Journal";
+import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
 import {connect, useDispatch} from "react-redux";
@@ -82,7 +82,7 @@ const PeakLayout = (props: {}) => {
                 <MainBar/>
                 <Content className="peak-content-container">
                     <Switch>
-                        <Route path={`${match.path}/journal`} render={(props) => <Journal />} />
+                        <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
                         <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
                         <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                         <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
@@ -93,7 +93,7 @@ const PeakLayout = (props: {}) => {
                                 return <Redirect to={"/"} />
                             }
                         }}/>
-                        <Route path={`${match.path}/`} render={(props) => <Journal/>} />
+                        <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
                         <Route path="*">
                             <h1>NOT FOUND</h1>
                         </Route>

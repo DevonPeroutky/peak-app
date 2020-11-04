@@ -14,7 +14,7 @@
     z-index: 100;
     display: flex;
     width: 25%;
-    height: 50%;
+    height: fit-content;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -25,7 +25,9 @@
     //box-shadow: rgba(9, 30, 66, 0.31) 0px 0px 1px, rgba(9, 30, 66, 0.25) 0px 4px 8px -2px;
 
     .welcome-logo {
-      margin-bottom: 10px;
+      margin-bottom: 25px;
+      height: 100px!important;
+      width: 100%;
     }
   }
 }

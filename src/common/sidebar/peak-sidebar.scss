@@ -28,6 +28,20 @@ $section-heading-size: 1.3rem;
     padding-left: $sidebar-padding!important;
   }
 
+  .peak-logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    height: $main-bar-height;
+    max-height: 100%!important;
+
+    .sidebar-logo {
+      height: calc(#{$main-bar-height} / 2);
+    }
+
+  }
+
   .ant-menu-item-selected {
     background-color: $sidebar-background-color!important;
   }

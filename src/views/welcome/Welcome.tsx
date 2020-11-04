@@ -6,7 +6,6 @@ import DesktopGoogleLogin from "../../common/login/signin-button/desktop-google-
 import {ELECTRON} from "../../constants/constants";
 import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
 import {useLocation, useParams } from 'react-router-dom';
-import {log} from "util";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
