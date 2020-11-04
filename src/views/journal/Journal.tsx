@@ -6,7 +6,7 @@ import {
     EditablePlugins,
     OnKeyDown,
     pipe,
-    SlateDocument,
+    SlateDocument, SlateDocumentDescendant, SlateDocumentFragment,
 } from "@udecode/slate-plugins";
 import {JOURNAL_ENTRY} from "../../common/rich-text-editor/constants";
 import {
@@ -21,7 +21,12 @@ import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/t
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {useDispatch} from "react-redux";
-import {journalNormalizers, journalPlugins} from "../../common/rich-text-editor/journal/constants";
+import {
+    EMPTY_JOURNAL_STATE,
+    JOURNAL_PAGE_ID,
+    journalNormalizers,
+    journalPlugins
+} from "../../common/rich-text-editor/journal/constants";
 import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
@@ -36,6 +41,8 @@ import  { equals } from "ramda";
 import cn from "classnames";
 
 const PeakJournal = (props: { }) => {
+    const currentPageId = "journal"
+
     const dispatch = useDispatch()
     const currentUser = useCurrentUser()
     const journalFetcher = useFetchJournal()
@@ -43,49 +50,10 @@ const PeakJournal = (props: { }) => {
     const journal: PeakWikiPage = useJournal()
     const setSelection = useSelectFirstJournalEntry()
 
-    const currentPageId = "journal"
-    const [lastLoadedDate, setLastLoadedDate] = useState<string>()
+    // Initial State
     const [isLoading, setLoading] = useState<boolean>(true)
-    const [isLoadingMore, setLoadingMore] = useState<boolean>(false)
-    const [atBeginningOfTime, setAtBeginningOfTime] = useState<boolean>(false)
-
-    // This is the Node[] that is being based into the Editor aka. What the user will see
-    const initialContent: SlateDocument = [
-        {
-            children: [
-                {
-                    children: [{text: ''}]
-                },
-            ]
-        }
-    ];
-    const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent)
-
-    // @ts-ignore
-    const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
-
-    const {
-        onChangeMention,
-        onKeyDownMention,
-        onAddNodeContent,
-        search,
-        values,
-        index,
-        target,
-    } = useNodeContentSelect(NODE_CONTENT_TYPES, {
-        maxSuggestions: 10,
-        trigger: '/',
-    });
-
-
-    const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor, dispatch, currentPageId)
-
-        return onKeyDownMention(event, editor)
-    }, [index, search, target])
-
     useEffect(() => {
-        journalFetcher(false).then(res => {
+        journalFetcher(false).then(async res => {
             setLoading(false)
             const thisIsBad = res as JournalEntry[]
             if (!thisIsBad) {
@@ -103,27 +71,15 @@ const PeakJournal = (props: { }) => {
         })
     }, [])
 
-    const syncJournalEntries = (newValue: Node[]) => {
-        const journalEntries = journal.body as JournalEntry[]
-        if (newValue !== journalContent) {
-            // Immediately update component state
-            // @ts-ignore
-            setJournalContent(newValue)
-
-            const rawSlateNodes = newValue[0].children as Node[]
-            // Find the modified entries --> Bulk update to DB and sync to redux
-            const newEntries: JournalEntry[] = rawSlateNodes.filter(n => n.type === JOURNAL_ENTRY).map(slateNode => convertSlateNodeToJournalEntry(slateNode, currentUser.id))
-
-            const modifiedEntries = newEntries.filter((je, index) => JSON.stringify(je.body) !== JSON.stringify(journalEntries[index].body))
-            saveBulkJournalEntries(modifiedEntries)
-            onChangeMention(editor);
-        }
-    }
-
-    useBottomScrollListener(() => {
+    // Infinite Loading State
+    const [lastLoadedDate, setLastLoadedDate] = useState<string>()
+    const [isLoadingMore, setLoadingMore] = useState<boolean>(false)
+    const [atBeginningOfTime, setAtBeginningOfTime] = useState<boolean>(false)
+    useBottomScrollListener(async () => {
         if (atBeginningOfTime) {
             return
         }
+        await new Promise(r => setTimeout(r, 2000));
         setLoadingMore(true)
         const nextDateToLoadFrom = formatDate(moment(lastLoadedDate).subtract(1, 'days'))
         journalFetcher(true, nextDateToLoadFrom).then(res => {
@@ -150,11 +106,66 @@ const PeakJournal = (props: { }) => {
         })
     });
 
-    const isEmpty =  equals(journalContent, initialContent)
-    return (<div className={cn("peak-user-home", (isEmpty && !isLoading) ? "empty" : "")}>
+    // Journal State
+    const initialContent: SlateDocument = [
         {
-            (isEmpty && !isLoading) ? <EmptyJournal/> :
-            <Journal
+            children: [
+                {
+                    children: [{text: ''}]
+                },
+            ]
+        }
+    ];
+    const todayPlaceholder: SlateDocumentFragment = EMPTY_JOURNAL_STATE.flatMap(convertJournalEntryToSlateNodes) as SlateDocumentFragment
+    const initialContent2: SlateDocument = [{children: todayPlaceholder }]
+    const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent2)
+
+    // @ts-ignore
+    const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
+
+    // TODO: Refactor these two into a single export for Peak Editors
+    const {
+        onChangeMention,
+        onKeyDownMention,
+        onAddNodeContent,
+        search,
+        values,
+        index,
+        target,
+    } = useNodeContentSelect(NODE_CONTENT_TYPES, {
+        maxSuggestions: 10,
+        trigger: '/',
+    });
+    const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
+        baseKeyBindingHandler(event, editor, dispatch, currentPageId)
+
+        return onKeyDownMention(event, editor)
+    }, [index, search, target])
+
+    const syncJournalEntries = (newValue: Node[]) => {
+        const journalEntries = journal.body as JournalEntry[]
+        if (newValue !== journalContent) {
+            // Immediately update component state
+            // @ts-ignore
+            setJournalContent(newValue)
+
+            const rawSlateNodes = newValue[0].children as Node[]
+            // Find the modified entries --> Bulk update to DB and sync to redux
+            const newEntries: JournalEntry[] = rawSlateNodes.filter(n => n.type === JOURNAL_ENTRY).map(slateNode => convertSlateNodeToJournalEntry(slateNode, currentUser.id))
+
+            const modifiedEntries = newEntries.filter((je, index) => JSON.stringify(je.body) !== JSON.stringify(journalEntries[index].body))
+            saveBulkJournalEntries(modifiedEntries)
+            onChangeMention(editor);
+        }
+    }
+
+    const isEmpty =  equals(journalContent, initialContent)
+
+    const daComponent = () => {
+        if (isEmpty) {
+            return <EmptyJournal/>
+        } else {
+            return <Journal
                 editor={editor}
                 journalPageState={journal}
                 journalContent={journalContent}
@@ -167,8 +178,15 @@ const PeakJournal = (props: { }) => {
                 search={search}
                 values={values}
                 onAddNodeContent={onAddNodeContent}/>
+
         }
-    </div>)
+    }
+
+    return (
+        <div className={cn("peak-user-home", (isEmpty && !isLoading) ? "empty" : "")}>
+            { daComponent() }
+        </div>
+    )
 };
 
 const EmptyJournal = (props: {}) => (
