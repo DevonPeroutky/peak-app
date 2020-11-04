@@ -25,7 +25,7 @@ log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
 const createWindow = (): void => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     height: 860,
     width: 1320,
     title: "Peak",
@@ -72,12 +72,35 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 // app.on('ready', createWindow);
 app.whenReady().then(() => {
-  globalShortcut.register('CommandOrControl+Shift+J', () => {
+  const ret = globalShortcut.register('CommandOrControl+Shift+J', () => {
     console.log('Electron loves global shortcuts!')
+    console.log(mainWindow)
+
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+
     mainWindow && mainWindow.webContents.send('go-to-journal')
-    app.focus()
+    // mainWindow && mainWindow.focus()
+    // mainWindow && mainWindow.webContents.focus()
+    mainWindow && mainWindow.show()
   })
+
+  if (!ret) {
+    console.log('Registration failed')
+  }
+
+  // Check whether a shortcut is registered.
+  console.log(globalShortcut.isRegistered('CommandOrControl+Shift+J'))
 }).then(createWindow)
+
+app.on('will-quit', () => {
+  // Unregister a shortcut.
+  globalShortcut.unregister('CommandOrControl+Shift+J')
+
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll()
+})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

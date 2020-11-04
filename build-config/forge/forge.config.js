@@ -23,7 +23,9 @@ module.exports = {
         },
     ],
     "packagerConfig": {
-        protocols: [{"name": "Peak", "schemes": ["peak-dev-app", "peak-app"]}]
+        protocols: [{"name": "Peak", "schemes": ["peak-dev-app", "peak-app"]}],
+        name: "Peak",
+        executableName: "Peak"
     },
     "plugins": [
         [

@@ -61,6 +61,9 @@ const PeakJournal = (props: { }) => {
     ];
     const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent)
 
+    // @ts-ignore
+    const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
+
     const {
         onChangeMention,
         onKeyDownMention,
@@ -74,8 +77,6 @@ const PeakJournal = (props: { }) => {
         trigger: '/',
     });
 
-    // @ts-ignore
-    const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
 
     const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor, dispatch, currentPageId)
@@ -103,10 +104,8 @@ const PeakJournal = (props: { }) => {
     }, [])
 
     const syncJournalEntries = (newValue: Node[]) => {
-        console.log(`SYNC-ing`)
         const journalEntries = journal.body as JournalEntry[]
         if (newValue !== journalContent) {
-            console.log(newValue)
             // Immediately update component state
             // @ts-ignore
             setJournalContent(newValue)
@@ -220,10 +219,6 @@ const Journal = (props: InternalJournalProps) => {
         search,
         onAddNodeContent
     } = props
-
-    console.log(`SELECTION!`)
-    console.log(editor.selection)
-    console.log(journalContent)
 
     return (
         <Slate

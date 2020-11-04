@@ -10,7 +10,6 @@ import {FileSyncOutlined, PlusOutlined, ScheduleOutlined, UpCircleOutlined} from
 import {ReactEditor, useSlate} from "slate-react";
 import {JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
-import {useSelectFirstJournalEntry} from "../utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
 import "./journal-entry.scss";
 
@@ -56,9 +55,9 @@ export const JournalEntryHeader = (props: { entry_date: string, attributes: any,
 
 const ToDoCopyOverSelect = (props: {}) => {
     const journal = useJournal()
-    const setSelection = useSelectFirstJournalEntry()
+    // const setSelection = useSelectFirstJournalEntry()
     const editor = useSlate()
-    const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
+    // const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
 
     // Common work
     const journalEntries: JournalEntry[] = journal.body as JournalEntry[]
@@ -78,17 +77,12 @@ const ToDoCopyOverSelect = (props: {}) => {
             at: [],
             match: n => (n.type === JOURNAL_ENTRY && n.entry_date === newJournalEntry.entry_date),
         })
-        console.log(`FIRST JOURNAL ENTRY`)
-        console.log(firstJournalEntry)
-
         const newSlateNode: Node = convertJournalEntryToSlateNodes(newJournalEntry)[1]
 
-        console.log(`THE NEW SLATE NODE`)
-        console.log(newSlateNode)
-
+        // TODO: Can we do this in one step?
         await Transforms.removeNodes(editor, { at: firstJournalEntry[1] })
         await Transforms.insertNodes(editor, newSlateNode, { at: firstJournalEntry[1] })
-        await setSelection(editor)
+        // await setSelection(editor)
         return
     }
 
@@ -104,7 +98,6 @@ const ToDoCopyOverSelect = (props: {}) => {
 
     const copyInProgressToDos = async () => {
         if (journalEntries.length > 1) {
-            console.log(`COPYing IN PROGRESS`)
             const secondNewestDay: JournalEntry = journalEntries[1]
 
             // Get Uncompleted Tasks from yesterday
@@ -122,17 +115,10 @@ const ToDoCopyOverSelect = (props: {}) => {
     };
 
     const isUncompletedNode: (n: Node) => Node | null = (n: Node) => {
-        console.log(`EVALUATING`)
-        console.log(n)
-        console.log(n.children)
         const isAllUncompleted = all((node: Node) => {
-            console.log(`FUCK YOU MEAN`)
-            console.log(node)
-            console.log(node.completed)
             // @ts-ignore
             return !node.completed
         }, n.children as Node[])
-        console.log(`IS UNCOMPLETED??: ${isAllUncompleted}`)
         return isAllUncompleted ? n : null
     }
 
@@ -140,7 +126,6 @@ const ToDoCopyOverSelect = (props: {}) => {
         // Base Case --> Return the paragraph node or nothing (if completed)?
         // How to best represent "nothing"?
         if (n.type === ELEMENT_PARAGRAPH) {
-            console.log(`LEAF NODE!`)
             return isUncompletedNode(n)
         }
 
