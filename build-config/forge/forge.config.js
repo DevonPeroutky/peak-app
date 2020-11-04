@@ -1,6 +1,3 @@
-const path = require('path');
-const cpy = require('cpy');
-
 module.exports = {
     makers: [
         {
@@ -25,7 +22,8 @@ module.exports = {
     "packagerConfig": {
         protocols: [{"name": "Peak", "schemes": ["peak-dev-app", "peak-app"]}],
         name: "Peak",
-        executableName: "Peak"
+        executableName: "Peak",
+        "icon": "./src/assets/logos/electron-icons/mac/icon.icns"
     },
     "plugins": [
         [

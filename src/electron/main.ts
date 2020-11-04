@@ -32,6 +32,7 @@ const createWindow = (): void => {
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      devTools: isDev,
       nodeIntegration: true
     }
   });
