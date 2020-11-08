@@ -292,7 +292,10 @@ export function useFetchJournal() {
                 dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {
-                message.error('Failed to fetch your Journal! Tell Devon he sucks at the whole "Programming" thing')
+                message.error({
+                    content: 'Failed to fetch your Journal! Tell Devon he sucks at the whole "Programming" thing',
+                    key: 1
+                })
             })
     }
 }
