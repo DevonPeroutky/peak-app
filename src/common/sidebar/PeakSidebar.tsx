@@ -36,6 +36,7 @@ const PeakSidebar = (props: { }) => {
 
     return (
         <Sider className={cn("peak-sidebar", (isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
+            {(isElectron && !isFullscreen) ? <div className={"electron-draggable-region"}/> : null }
             <div className={cn("peak-logo-container")}>
                 <PeakLogo className={"sidebar-logo"}/>
             </div>
