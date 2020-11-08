@@ -71,8 +71,6 @@ const PeakJournal = (props: { }) => {
             setLoading(false)
             const thisIsBad = res as JournalEntry[]
             if (!thisIsBad) {
-                console.log(`THE RESULT`)
-                console.log(res)
                 setJournalContent(emptyState)
                 return
             }
