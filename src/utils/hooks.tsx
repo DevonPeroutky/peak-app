@@ -30,6 +30,10 @@ const R = require('ramda');
 // --------------------------------------------------
 // Fetching from Redux
 // --------------------------------------------------
+export function useOnlineStatus() {
+    return useSelector<AppState, boolean>(state => state.electron.isOnline);
+}
+
 export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
 }

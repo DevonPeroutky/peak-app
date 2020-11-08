@@ -1,4 +1,4 @@
-import {app, BrowserWindow, shell, globalShortcut} from 'electron';
+import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -131,4 +131,3 @@ deeplink.on('received', (link: string) => {
   // TODO: Verify returned_code
   mainWindow && mainWindow.webContents.send('login-user', returned_code)
 });
-

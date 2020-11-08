@@ -17,7 +17,7 @@ import {addPages, setEditing} from "../../redux/wikiPageSlice";
 import axios from "axios";
 import {backend_host_address} from "../../constants/constants";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentWikiPage} from "../../utils/hooks";
+import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 const { Content } = Layout;
@@ -30,6 +30,13 @@ const PeakLayout = (props: {}) => {
     const [isLoading, setLoading] = useState(true);
     const currentWikiPage = useCurrentWikiPage();
     const history = useHistory()
+    const isOnline = useOnlineStatus()
+
+    useEffect(() => {
+        if (!isOnline) {
+            history.push("/offline");
+        }
+    })
 
     useEffect(() => {
         console.log(`FIRING THIS BAD BOY`)

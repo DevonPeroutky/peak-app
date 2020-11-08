@@ -5,8 +5,8 @@ import {AppState} from "../../redux";
 import {connect} from "react-redux";
 import {Peaker} from "../../redux/userSlice";
 import GoogleProfileIcon from "../google-profile-icon/GoogleProfileIcon";
-import Icon from '@ant-design/icons';
 import {SearchOutlined} from "@ant-design/icons/lib";
+import {OfflineAlert} from "../offline-alert/OfflineAlert";
 
 const MainBar = (props: { user: Peaker }) => {
     const [query, setQuery] = useState('');
@@ -26,6 +26,7 @@ const MainBar = (props: { user: Peaker }) => {
                 }}
                 onPressEnter={search}
             />
+            <OfflineAlert/>
             <GoogleProfileIcon/>
         </div>
     )
