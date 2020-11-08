@@ -47,12 +47,12 @@ const PeakSidebar = (props: { }) => {
                         <ReadOutlined />Journal
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="home/timeline">
-                    {/*<Link to={`${match.url}/timeline`}>*/}
-                    <Link to="/home/timeline">
-                        <MenuOutlined/>Timeline
-                    </Link>
-                </Menu.Item>
+                {/*<Menu.Item key="home/timeline">*/}
+                {/*    /!*<Link to={`${match.url}/timeline`}>*!/*/}
+                {/*    <Link to="/home/timeline">*/}
+                {/*        <MenuOutlined/>Timeline*/}
+                {/*    </Link>*/}
+                {/*</Menu.Item>*/}
             </Menu>
             <h3 className="topics-header">Topics</h3>
             <Menu mode="inline" selectedKeys={[currentPageId!]} className={"topic-menu"}>
