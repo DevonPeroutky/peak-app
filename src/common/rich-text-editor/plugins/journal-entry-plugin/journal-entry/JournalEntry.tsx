@@ -47,7 +47,7 @@ export const JournalEntryHeader = (props: { entry_date: string, attributes: any,
             }}>
                 {(isToday) ? "Today" : props.entry_date}
             </h1>
-            {(isToday && isEmpty) ? <ToDoCopyOverSelect /> : null}
+            {/*{(isToday && isEmpty) ? <ToDoCopyOverSelect /> : null}*/}
             <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
         </div>
     )

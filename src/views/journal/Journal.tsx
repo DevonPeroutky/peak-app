@@ -50,13 +50,30 @@ const PeakJournal = (props: { }) => {
     const journal: PeakWikiPage = useJournal()
     const setSelection = useSelectFirstJournalEntry()
 
-    // Initial State
+    // Journal State
+    const emptyState: SlateDocument = [
+        {
+            children: [
+                {
+                    children: [{text: ''}]
+                },
+            ]
+        }
+    ];
+    const todayPlaceholder: SlateDocumentFragment = EMPTY_JOURNAL_STATE.flatMap(convertJournalEntryToSlateNodes) as SlateDocumentFragment
+    const initialContent2: SlateDocument = [{children: todayPlaceholder }]
+    const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent2)
+
+    // Initial Loading
     const [isLoading, setLoading] = useState<boolean>(true)
     useEffect(() => {
         journalFetcher(false).then(async res => {
             setLoading(false)
             const thisIsBad = res as JournalEntry[]
             if (!thisIsBad) {
+                console.log(`THE RESULT`)
+                console.log(res)
+                setJournalContent(emptyState)
                 return
             }
             const slateJournalNodes = thisIsBad.flatMap(convertJournalEntryToSlateNodes)
@@ -106,20 +123,6 @@ const PeakJournal = (props: { }) => {
         })
     });
 
-    // Journal State
-    const initialContent: SlateDocument = [
-        {
-            children: [
-                {
-                    children: [{text: ''}]
-                },
-            ]
-        }
-    ];
-    const todayPlaceholder: SlateDocumentFragment = EMPTY_JOURNAL_STATE.flatMap(convertJournalEntryToSlateNodes) as SlateDocumentFragment
-    const initialContent2: SlateDocument = [{children: todayPlaceholder }]
-    const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent2)
-
     // @ts-ignore
     const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
 
@@ -159,7 +162,7 @@ const PeakJournal = (props: { }) => {
         }
     }
 
-    const isEmpty =  equals(journalContent, initialContent)
+    const isEmpty =  equals(journalContent, emptyState)
 
     const daComponent = () => {
         if (isEmpty) {
