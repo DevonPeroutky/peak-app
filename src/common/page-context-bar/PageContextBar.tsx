@@ -5,7 +5,6 @@ import React, {useState} from "react";
 import cn from "classnames";
 import "./page-context-bar.scss"
 import {message, Popconfirm, Switch} from 'antd';
-import Icon from '@ant-design/icons';
 import useAxios from "axios-hooks";
 import {DeleteOutlined, EditOutlined, QuestionCircleOutlined} from "@ant-design/icons/lib";
 import {useHistory} from "react-router-dom";

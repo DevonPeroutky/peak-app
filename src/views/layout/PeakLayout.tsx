@@ -22,6 +22,7 @@ import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 import {Slate} from "slate-react";
+import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -108,7 +109,7 @@ const PeakLayout = (props: {}) => {
                         </Route>
                     </Switch>
                 </Content>
-                <HelpModal/>
+                <EditorContextBar/>
             </Content>
         </Layout>
     )

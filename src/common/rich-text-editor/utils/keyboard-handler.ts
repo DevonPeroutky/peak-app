@@ -9,7 +9,6 @@ import {
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
 import {isEqual} from "lodash";
-import {useCallback} from "react";
 import {Dispatch} from "redux";
 
 export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
@@ -60,6 +59,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             const [nextNode, path] = Editor.next(editor);
             if (nextNode && nextNode.code_id) {
                 event.preventDefault()
+                // @ts-ignore
                 dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: nextNode.code_id, focused: true}))
             }
         }
@@ -74,6 +74,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             const [previousNode, path] = Editor.previous(editor )
             if (previousNode.code_id) {
                 event.preventDefault()
+                // @ts-ignore
                 dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
             }
         }
@@ -89,6 +90,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
             if (previousNode.code_id && (selectionCollapsedAndAtStart)) {
                 event.preventDefault()
+                // @ts-ignore
                 dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
             }
         }

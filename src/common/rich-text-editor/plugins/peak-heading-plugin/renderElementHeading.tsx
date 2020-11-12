@@ -14,6 +14,7 @@ import {LinkOutlined} from "@ant-design/icons/lib";
 import "./peak-heading.scss"
 import {HEADER_TYPES} from "../../constants";
 
+// @ts-ignore
 export const renderElementHeading = ({ levels = 6 }: HeadingRenderElementOptions = {}) => (props: RenderElementProps) => {
     const {
         element: { type },
@@ -32,6 +33,7 @@ const PeakHeading = (props: PeakHeadingProps) => {
     const base_url = window.location.href.split('#')[0]
     const url = `${base_url}#${props.element.header_id as string}`
 
+    // @ts-ignore
     const renderSpecificHeading = () => {
         if (levels >= 1 && header_type === ELEMENT_H1) return <h1 className={"peak-divider"} {...attributes}>{props.children}</h1>;
         if (levels >= 2 && header_type === ELEMENT_H2) return <h2 {...props} />;
