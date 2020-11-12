@@ -29,11 +29,11 @@ import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-conten
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/wiki/constants";
+import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
     const dispatch = useDispatch();
-    let { id } = useParams();
     const publishPage = usePagePublisher();
     const savePageToDB = useDebounceWikiSaver();
     const currentWikiPage = useCurrentWikiPage();
@@ -80,16 +80,13 @@ const TopicWiki = (props: {topic_id: string}) => {
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...wikiNormalizers), []);
 
-    const updateComponentPageContent = (newValue: Node[]) => {
-        setWikiPageContent(newValue)
-    }
-
     const updatePageContent = (newValue: Node[]) => {
         if (newValue !== currentWikiPage.body) {
             if (!currentWikiPage.isSaving) {
                 dispatch(beginSavingPage({pageId: currentPageId}));
             }
-            updateComponentPageContent(newValue)
+            // updateComponentPageContent
+            setWikiPageContent(newValue)
 
             // If PageTitle changed. Update it in Redux immediately due to Sidebar showing the Title's
             const children: Node[] = newValue[0].children as Node[]
@@ -100,9 +97,8 @@ const TopicWiki = (props: {topic_id: string}) => {
             }
 
             savePageToDB(newValue, titleNode, currentWikiPage.id);
+            onChangeMention(editor);
         }
-
-        onChangeMention(editor);
     }
 
     const updatePageTitleEverywhere = (newTitle: string) => {
@@ -115,7 +111,6 @@ const TopicWiki = (props: {topic_id: string}) => {
             editor={editor}
             value={wikiPageContent}
             onChange={updatePageContent}>
-            { (currentWikiPage.editorState.isEditing) ? <PeakTextEditorToolBar isVisible={currentWikiPage.editorState.isEditing}/> : <div className={"filler animated fadeIn"}/> }
             <div className="peak-topic-wiki-container">
                 <MemoizedLinkMenu
                     key={`${currentPageId}-LinkMenu`}

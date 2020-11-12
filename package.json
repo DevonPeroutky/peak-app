@@ -2,7 +2,7 @@
   "name": "peak-app",
   "productName": "Peak",
   "version": "0.0.1",
-  "description": "The Peak",
+  "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
   "scripts": {
     "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
@@ -79,7 +79,7 @@
     "@types/uuid": "^7.0.3",
     "@udecode/slate-plugins": "^0.65.0",
     "ace-builds": "^1.4.11",
-    "animate.css": "^3.7.2",
+    "animate.css": "^4.1.1",
     "antd": "^4.4.1",
     "axios": "^0.19.2",
     "axios-hooks": "^1.9.0",

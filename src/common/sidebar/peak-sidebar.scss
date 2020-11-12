@@ -16,6 +16,11 @@ $section-heading-size: 1.3rem;
   top: 0!important;
   bottom: 0!important;
 
+  .electron-draggable-region {
+    height: 30px;
+    -webkit-app-region: drag;
+  }
+
   &.fullscreen {
     padding-top: 0;
     padding-left: $fullscreen-sidebar-padding;
@@ -23,9 +28,23 @@ $section-heading-size: 1.3rem;
   }
 
   &.not-fullscreen {
-    padding-top: 30px;
+    padding-top: 0;
     width: $sidebar-width!important;
     padding-left: $sidebar-padding!important;
+  }
+
+  .peak-logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    height: $main-bar-height;
+    max-height: 100%!important;
+
+    .sidebar-logo {
+      height: calc(#{$main-bar-height} / 2);
+    }
+
   }
 
   .ant-menu-item-selected {

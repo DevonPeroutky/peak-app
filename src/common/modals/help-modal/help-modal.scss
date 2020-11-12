@@ -1,0 +1,45 @@
+.help-modal-icon {
+  font-size: 25px;
+  color: gray;
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+}
+.help-modal {
+  width: 800px!important;
+
+  .help-modal-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-height: 650px;
+    overflow: scroll;
+
+    .help-modal-column {
+      max-width: 300px;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+
+      .hotkey-instruction-row {
+        display: flex;
+        align-items: center;
+        margin: 10px 0px;
+        justify-content: space-between;
+        line-height: 20px;
+        min-height: 24px;
+      }
+    }
+  }
+}
+
+.hotkey-button-tag {
+  background-color: rgb(244, 245, 247);
+  border-radius: 3px;
+  min-width: 25px!important;
+  padding: 5px;
+  display: inline-block;
+  vertical-align: center;
+  horiz-align: center;
+  text-align: center;
+}

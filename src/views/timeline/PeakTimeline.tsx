@@ -31,7 +31,7 @@ export const PeakTimeline = (props: {}) => {
 
     return (
         <div className="peak-timeline-container">
-            <h1>Timeline</h1>
+            <h1 className="peak-timeline-header">Timeline</h1>
             <Slate
                 editor={editor}
                 value={value}

@@ -1,4 +1,4 @@
-import {app, BrowserWindow, shell} from 'electron';
+import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../constants/environment-vars"
 const { Deeplink } = require('electron-deeplink');
@@ -25,13 +25,14 @@ log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
 const createWindow = (): void => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     height: 860,
     width: 1320,
     title: "Peak",
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      devTools: isDev,
       nodeIntegration: true
     }
   });
@@ -40,7 +41,7 @@ const createWindow = (): void => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   if (isDev){
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools({'mode': 'detach'});
   }
 
   // All new-window events should load in the user's default browser
@@ -70,7 +71,37 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// app.on('ready', createWindow);
+app.whenReady().then(() => {
+  const ret = globalShortcut.register('CommandOrControl+Shift+J', () => {
+    console.log('Electron loves global shortcuts!')
+    console.log(mainWindow)
+
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+
+    mainWindow && mainWindow.webContents.send('go-to-journal')
+    // mainWindow && mainWindow.focus()
+    // mainWindow && mainWindow.webContents.focus()
+    mainWindow && mainWindow.show()
+  })
+
+  if (!ret) {
+    console.log('Registration failed')
+  }
+
+  // Check whether a shortcut is registered.
+  console.log(globalShortcut.isRegistered('CommandOrControl+Shift+J'))
+}).then(createWindow)
+
+app.on('will-quit', () => {
+  // Unregister a shortcut.
+  globalShortcut.unregister('CommandOrControl+Shift+J')
+
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll()
+})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -100,4 +131,3 @@ deeplink.on('received', (link: string) => {
   // TODO: Verify returned_code
   mainWindow && mainWindow.webContents.send('login-user', returned_code)
 });
-

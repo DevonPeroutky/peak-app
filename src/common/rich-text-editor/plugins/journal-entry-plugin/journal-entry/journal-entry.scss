@@ -25,13 +25,28 @@
 .peak-journal-entry-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  min-height: 50px;
 
   .peak-je-title {
     line-height: $title-line-height;
     font-size: $title-font-size;
+    margin-bottom: 0px;
   }
 
   .journal-todo-copy-select {
     display: flex;
   }
 }
+
+.copy-over-icon-container {
+  padding-left: 20px!important;
+
+  svg {
+    opacity: .5;
+    height: 20px;
+    width: auto;
+  }
+}
+

@@ -33,7 +33,7 @@ import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
 import {Peaker, setUser} from "./redux/userSlice";
-import {enterFullscreen, leaveFullscreen} from "./redux/electronSlice";
+import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/electronSlice";
 import {message} from "antd";
 import axios  from "axios";
 import {backend_host_address} from "./constants/constants";
@@ -61,3 +61,27 @@ ipcRenderer.on('fullscreen', (event, arg) => {
     console.log(`Fullscreen? ${arg}`)
     return (arg) ? store.dispatch(enterFullscreen()) : store.dispatch(leaveFullscreen())
 })
+
+ipcRenderer.on('go-to-journal', (event, arg) => {
+    window.location.href = "/main_window#/home/journal"
+    store.dispatch(journalHotkeyPressed())
+})
+
+
+// -----------------------------
+// Update Online/Offline Status
+// -----------------------------
+const updateOnlineStatus = () => {
+    // ipcRenderer.send('online-status-changed', navigator.onLine ? 'online' : 'offline')
+    // const status = navigator.onLine ? 'online' : 'offline';
+    if (navigator.onLine) {
+        store.dispatch(setOnline())
+    } else {
+        store.dispatch(setOffline())
+    }
+}
+
+window.addEventListener('online', updateOnlineStatus)
+window.addEventListener('offline', updateOnlineStatus)
+
+updateOnlineStatus()

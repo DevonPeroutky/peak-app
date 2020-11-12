@@ -1,15 +1,19 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface ElectronState {
-    isFullscreen: boolean
+    isOnline: boolean,
+    isFullscreen: boolean,
+    journalHotKeyPressed: boolean,
 }
 
 export const INITIAL_STATE: ElectronState = {
-    isFullscreen: false
+    isOnline: true,
+    isFullscreen: false,
+    journalHotKeyPressed: false,
 };
 
 export const electronSlice = createSlice({
-    name: 'quickSwitcher',
+    name: 'electron',
     initialState: INITIAL_STATE,
     reducers: {
         leaveFullscreen(state) {
@@ -17,9 +21,21 @@ export const electronSlice = createSlice({
         },
         enterFullscreen(state) {
             return { ...state, isFullscreen: true }
+        },
+        journalHotkeyPressed(state) {
+            return { ...state, journalHotKeyPressed: true }
+        },
+        resetJournalHotkeyPressed(state) {
+            return { ...state, journalHotKeyPressed: false }
+        },
+        setOnline(state) {
+            return { ...state, isOnline: true }
+        },
+        setOffline(state) {
+            return { ...state, isOnline: false }
         }
     }
 });
 
-export const { leaveFullscreen, enterFullscreen } = electronSlice.actions;
+export const { leaveFullscreen, enterFullscreen, journalHotkeyPressed, resetJournalHotkeyPressed, setOffline, setOnline } = electronSlice.actions;
 export default electronSlice.reducer;

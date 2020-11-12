@@ -30,6 +30,10 @@ const R = require('ramda');
 // --------------------------------------------------
 // Fetching from Redux
 // --------------------------------------------------
+export function useOnlineStatus() {
+    return useSelector<AppState, boolean>(state => state.electron.isOnline);
+}
+
 export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
 }
@@ -288,7 +292,10 @@ export function useFetchJournal() {
                 dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {
-                message.error('Failed to fetch your Journal! Tell Devon he sucks at the whole "Programming" thing')
+                message.error({
+                    content: 'Failed to fetch your Journal! Tell Devon he sucks at the whole "Programming" thing',
+                    key: 1
+                })
             })
     }
 }

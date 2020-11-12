@@ -36,7 +36,10 @@ const PeakSidebar = (props: { }) => {
 
     return (
         <Sider className={cn("peak-sidebar", (isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
-            <PeakLogo/>
+            {(isElectron && !isFullscreen) ? <div className={"electron-draggable-region"}/> : null }
+            <div className={cn("peak-logo-container")}>
+                <PeakLogo className={"sidebar-logo"}/>
+            </div>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
                 <Menu.Item key="home/journal">
@@ -45,12 +48,12 @@ const PeakSidebar = (props: { }) => {
                         <ReadOutlined />Journal
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="home/timeline">
-                    {/*<Link to={`${match.url}/timeline`}>*/}
-                    <Link to="/home/timeline">
-                        <MenuOutlined/>Timeline
-                    </Link>
-                </Menu.Item>
+                {/*<Menu.Item key="home/timeline">*/}
+                {/*    /!*<Link to={`${match.url}/timeline`}>*!/*/}
+                {/*    <Link to="/home/timeline">*/}
+                {/*        <MenuOutlined/>Timeline*/}
+                {/*    </Link>*/}
+                {/*</Menu.Item>*/}
             </Menu>
             <h3 className="topics-header">Topics</h3>
             <Menu mode="inline" selectedKeys={[currentPageId!]} className={"topic-menu"}>

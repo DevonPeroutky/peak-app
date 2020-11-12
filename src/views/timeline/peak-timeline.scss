@@ -1,6 +1,14 @@
+@import "../../constants/variables";
+
 .peak-timeline-container {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
+  padding-top: 82px;
+
+  .peak-timeline-header {
+    line-height: $title-line-height;
+    font-size: $title-font-size;
+  }
 }
