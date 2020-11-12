@@ -111,7 +111,6 @@ const TopicWiki = (props: {topic_id: string}) => {
             editor={editor}
             value={wikiPageContent}
             onChange={updatePageContent}>
-            { (currentWikiPage.editorState.isEditing) ? <PeakTextEditorToolBar isVisible={currentWikiPage.editorState.isEditing}/> : <div className={"filler animated fadeIn"}/> }
             <div className="peak-topic-wiki-container">
                 <MemoizedLinkMenu
                     key={`${currentPageId}-LinkMenu`}
