@@ -36,13 +36,14 @@ import {CALLOUT, DIVIDER} from "../rich-text-editor/constants";
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
     markup?: string[]
+    markupLabel?: string[]
     elementType: string
     label: string
     customFormat?: (editor: Editor) => void
 }
 
 export interface PeakEditorControlDisplay extends PeakEditorControl {
-    hotkeyInstruction?: string
+    hotkeyInstructionArray?: string[]
     description?: string
     icon?: ReactNode,
     className?: string
@@ -53,35 +54,39 @@ const BOLD_MARK: PeakEditorControlDisplay = {
     icon: <BoldOutlined className={"peak-editor-control-icon"}/>,
     label: "Bold",
     elementType: MARK_BOLD,
-    hotkeyInstruction: '(⌘B)',
+    markupLabel: ["**Bold**"],
+    hotkeyInstructionArray: ['⌘', 'B'],
 };
 const ITALIC_MARK: PeakEditorControlDisplay = {
     controlType: "mark",
     icon: <ItalicOutlined className={"peak-editor-control-icon"}/>,
     label: "Italic",
     elementType: MARK_ITALIC,
-    hotkeyInstruction: '(⌘I)',
+    markupLabel: ["*Italic*"],
+    hotkeyInstructionArray: ['⌘', 'I'],
 };
-const CODE_MARK: PeakEditorControlDisplay = {
+const PEAK_CODE_MARK: PeakEditorControlDisplay = {
     controlType: "mark",
     icon: <HighlightOutlined className={"peak-editor-control-icon"}/>,
-    label: "",
+    label: "Code",
     elementType: MARK_CODE,
-    hotkeyInstruction: 'Use markdown-style backticks',
+    markupLabel: ["`Code`"],
+    markup: ['`Code`']
 };
 const UNDERLINE_MARK: PeakEditorControlDisplay = {
     controlType: "mark",
     icon: <UnderlineOutlined className={"peak-editor-control-icon"}/>,
     label: "Underline",
     elementType: MARK_UNDERLINE,
-    hotkeyInstruction: '(⌘U)',
+    hotkeyInstructionArray: ['⌘', 'U'],
 };
 const STRIKETHROUGH_MARK: PeakEditorControlDisplay = {
     controlType: "mark",
     icon: <StrikethroughOutlined className={"peak-editor-control-icon"}/>,
     label: "Strikethrough",
     elementType: MARK_STRIKETHROUGH,
-    hotkeyInstruction: '(⌘X)',
+    markupLabel: ["~~Strikethrough~~"],
+    hotkeyInstructionArray: ['⌘', 'X'],
 };
 const ORDERED_LIST: PeakEditorControlDisplay = {
     controlType: "list",
@@ -93,7 +98,8 @@ const ORDERED_LIST: PeakEditorControlDisplay = {
     }),
     elementType: ELEMENT_OL,
     markup: ['1.', '1)'],
-    hotkeyInstruction: '(⌘⇧9)'
+    markupLabel: ["1.", "Space"],
+    hotkeyInstructionArray: ['⌘', '⇧', '9'],
 };
 const UNORDERED_LIST: PeakEditorControlDisplay = {
     controlType: "list",
@@ -105,35 +111,36 @@ const UNORDERED_LIST: PeakEditorControlDisplay = {
     customFormat: (editor => {
         toggleList(editor, { typeList: ELEMENT_UL })
     }),
-    hotkeyInstruction: '(⌘⇧8)',
+    markupLabel: ["*", "Space"],
+    hotkeyInstructionArray: ['⌘', '⇧', '8'],
 };
 
-const LINK_MARK: PeakEditorControlDisplay = {
+const PEAK_LINK: PeakEditorControlDisplay = {
     controlType: undefined,
     icon: <LinkOutlined className={"peak-editor-control-icon"}/>,
     label: "Link",
     elementType: ELEMENT_LINK,
-    hotkeyInstruction: '(⌘K)',
+    hotkeyInstructionArray: ['⌘', 'K'],
     customFormat: (editor => toggleMark(editor, ELEMENT_LINK)),
 };
 const PEAK_CODE_BLOCK: PeakEditorControlDisplay = {
     controlType: ELEMENT_CODE_BLOCK,
     icon: <CodeOutlined className={"peak-editor-control-icon"}/>,
-    label: "Code",
+    label: "Code Block",
     description: "Display code with syntax highlighting",
     elementType: ELEMENT_CODE_BLOCK,
     markup: ['```'],
+    markupLabel: ["```", "Space"],
     customFormat: (editor => createAndFocusCodeBlock(editor)),
-    hotkeyInstruction: '(```)',
 };
-const QUOTE_MARK: PeakEditorControlDisplay = {
+const PEAK_QUOTE: PeakEditorControlDisplay = {
     controlType: "block",
     icon: <RightOutlined className={"peak-editor-control-icon"}/>,
     label: "Quote",
     description: "Insert a quote or citation",
     elementType: ELEMENT_BLOCKQUOTE,
     markup: ['>'],
-    hotkeyInstruction: '(>)',
+    markupLabel: [">", "Space"],
 };
 const TABLE_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
@@ -143,14 +150,14 @@ const TABLE_MARK: PeakEditorControlDisplay = {
     elementType: "table",
     customFormat: (editor => message.info("Not implemented yet!")),
 };
-const CALLOUT_MARK: PeakEditorControlDisplay = {
+const PEAK_CALLOUT: PeakEditorControlDisplay = {
     controlType: "block",
     icon: <InfoCircleOutlined className={"peak-editor-control-icon"}/>,
-    description: "Callout important inelementTypeion",
-    markup: ['\\c'],
+    description: "Callout important information",
+    markup: ['<>'],
     label: "Callout",
+    markupLabel: ["<>", "Space"],
     elementType: CALLOUT,
-    hotkeyInstruction: '(\\c)'
 };
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
@@ -173,7 +180,7 @@ const NORMAL_TEXT: PeakEditorControlDisplay = {
     controlType: "block",
     label: "Normal Text",
     elementType: ELEMENT_PARAGRAPH,
-    hotkeyInstruction: "⌘⇧0",
+    hotkeyInstructionArray: ['⌘', '⇧', '0'],
 };
 const HEADER_ONE: PeakEditorControlDisplay = {
     icon: <Icon icon={headingH1} className={"peak-editor-control-icon"}/>,
@@ -182,7 +189,8 @@ const HEADER_ONE: PeakEditorControlDisplay = {
     markup: ['#'],
     elementType: ELEMENT_H1,
     description: "Use this for a top level heading",
-    hotkeyInstruction: "⌘⇧1",
+    hotkeyInstructionArray: ['⌘', '⇧', '1'],
+    markupLabel: ["#", "Space"],
     className: "h1",
 };
 const HEADER_TWO: PeakEditorControlDisplay = {
@@ -192,7 +200,8 @@ const HEADER_TWO: PeakEditorControlDisplay = {
     markup: ['##'],
     label: "Heading 2",
     elementType: ELEMENT_H2,
-    hotkeyInstruction: "⌘⇧2",
+    hotkeyInstructionArray: ['⌘', '⇧', '2'],
+    markupLabel: ["##", "Space"],
     className: "h2",
 };
 const HEADER_THREE: PeakEditorControlDisplay = {
@@ -201,7 +210,8 @@ const HEADER_THREE: PeakEditorControlDisplay = {
     label: "Heading 3",
     elementType: ELEMENT_H3,
     markup: ['###'],
-    hotkeyInstruction: "⌘⇧3",
+    hotkeyInstructionArray: ['⌘', '⇧', '3'],
+    markupLabel: ["###", "Space"],
     description: "Use this for sub sections and group headings",
     className: "h3",
 };
@@ -211,7 +221,8 @@ const HEADER_FOUR: PeakEditorControlDisplay = {
     label: "Heading 4",
     markup: ['####'],
     elementType: ELEMENT_H4,
-    hotkeyInstruction: "⌘⇧4",
+    markupLabel: ["####", "Space"],
+    hotkeyInstructionArray: ['⌘', '⇧', '4'],
     description: "Use this for deep headings",
     className: "h4",
 };
@@ -222,7 +233,8 @@ const HEADER_FIVE: PeakEditorControlDisplay = {
     description: "Use this fro grouping list items",
     label: "Heading 5",
     elementType: ELEMENT_H5,
-    hotkeyInstruction: "⌘⇧5",
+    markupLabel: ["#####", "Space"],
+    hotkeyInstructionArray: ['⌘', '⇧', '5'],
     className: "h5",
 };
 
@@ -237,14 +249,46 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     UNORDERED_LIST,
     ORDERED_LIST,
     PEAK_CODE_BLOCK,
-    QUOTE_MARK,
+    PEAK_QUOTE,
     TABLE_MARK,
-    CALLOUT_MARK,
+    PEAK_CALLOUT,
     DIVIDER_MARK,
     IMAGE_MARK
 ]
 
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
-export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, QUOTE_MARK, TABLE_MARK, CALLOUT_MARK, DIVIDER_MARK, IMAGE_MARK];
+export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT, DIVIDER_MARK, IMAGE_MARK];
 
+// Undo, Clear formatting, Code?, Redo, Emoji, Quick Insert?
+export const KEYBOARD_SHORTCUTS: PeakEditorControlDisplay[] = [
+    BOLD_MARK,
+    ITALIC_MARK,
+    UNDERLINE_MARK,
+    STRIKETHROUGH_MARK,
+    HEADER_ONE,
+    HEADER_TWO,
+    HEADER_THREE,
+    HEADER_FOUR,
+    HEADER_FIVE,
+    UNORDERED_LIST,
+    ORDERED_LIST,
+    PEAK_LINK,
+]
+
+export const MARKDOWN_SHORTCUTS: PeakEditorControlDisplay[] = [
+    BOLD_MARK,
+    ITALIC_MARK,
+    STRIKETHROUGH_MARK,
+    HEADER_ONE,
+    HEADER_TWO,
+    HEADER_THREE,
+    HEADER_FOUR,
+    HEADER_FIVE,
+    UNORDERED_LIST,
+    ORDERED_LIST,
+    PEAK_CODE_MARK,
+    PEAK_CALLOUT,
+    PEAK_CODE_BLOCK,
+    PEAK_QUOTE,
+]

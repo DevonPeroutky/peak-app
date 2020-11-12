@@ -4,9 +4,9 @@ import {createEditor, Editor, Node, Range} from 'slate';
 import {ReactEditor, Slate, withReact} from 'slate-react';
 import {
     EditablePlugins,
-    OnKeyDown,
     pipe,
-    SlateDocument, SlateDocumentDescendant, SlateDocumentFragment,
+    SlateDocument,
+    SlateDocumentFragment,
 } from "@udecode/slate-plugins";
 import {JOURNAL_ENTRY} from "../../common/rich-text-editor/constants";
 import {
@@ -39,6 +39,7 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
+import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"

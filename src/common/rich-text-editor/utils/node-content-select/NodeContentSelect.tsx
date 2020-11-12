@@ -103,8 +103,7 @@ const NodeContentSelectBase = ({
                                     <div className={"node-title"}>{option.label}</div>
                                     <div className={"node-description"}>{option.description}</div>
                                 </div>
-                                {(option.hotkeyInstruction) ? <Tag
-                                    className={"node-hotkey"}>{trim(option.hotkeyInstruction, '()')}</Tag> : null}
+                                {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
                             </div>
                         </div>
                     </div>

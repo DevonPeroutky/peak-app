@@ -20,6 +20,8 @@ import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
+import {HelpModal} from "../../common/modals/help-modal/HelpModal";
+import {Slate} from "slate-react";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -106,6 +108,7 @@ const PeakLayout = (props: {}) => {
                         </Route>
                     </Switch>
                 </Content>
+                <HelpModal/>
             </Content>
         </Layout>
     )

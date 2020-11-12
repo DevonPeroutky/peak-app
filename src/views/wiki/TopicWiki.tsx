@@ -29,6 +29,7 @@ import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-conten
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/wiki/constants";
+import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
