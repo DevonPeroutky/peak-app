@@ -13,11 +13,12 @@ import {
     DEFAULTS_MENTION,
     DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
     ELEMENT_BLOCKQUOTE,
+    getSelectableElement,
     ImagePlugin,
     isBlockAboveEmpty,
     isSelectionAtBlockStart,
     ItalicPlugin,
-    ListPlugin,
+    ListPlugin, ParagraphPlugin,
     ResetBlockTypePlugin,
     setDefaults,
     SoftBreakPlugin,
@@ -25,7 +26,7 @@ import {
     UnderlinePlugin,
     withAutoformat,
     withImageUpload,
-    withLink, withList,
+    withLink, withList, withNodeID,
 } from "@udecode/slate-plugins";
 import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
 import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/TextHeadingPlugin";
@@ -50,61 +51,56 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_CODE, {}),
 };
 
-// const draggableComponentOptions = [
-//     { ...defaultOptions.p, level: 1 },
-//     defaultOptions.blockquote,
-//     defaultOptions.h1,
-//     defaultOptions.h2,
-//     defaultOptions.h3,
-//     defaultOptions.h4,
-//     defaultOptions.h5,
-//     defaultOptions.h6,
-//     defaultOptions.img,
-//     defaultOptions.ol,
-//     defaultOptions.ul,
-//     defaultOptions.media_embed,
-// ].map(
-//     ({
-//          type,
-//          level,
-//          component,
-//          ...options
-//      }: {
-//         type: string;
-//         level?: number;
-//         component: any;
-//     }) => [
-//         type,
-//         {
-//             ...options,
-//             component: getSelectableElement({
-//                 component,
-//                 level,
-//                 styles: {
-//                     blockAndGutter: {
-//                         padding: '4px 0',
-//                     },
-//                     blockToolbarWrapper: {
-//                         height: '1.5em',
-//                     },
-//                 },
-//             }),
-//             rootProps: {
-//                 styles: {
-//                     root: {
-//                         margin: 0,
-//                         lineHeight: '1.5',
-//                     },
-//                 },
-//             },
-//         },
-//     ]
-// );
+const draggableComponentOptions = [
+    { ...defaultOptions.p, level: 1 },
+    defaultOptions.blockquote,
+    defaultOptions.img,
+    defaultOptions.ol,
+    defaultOptions.ul,
+    defaultOptions.media_embed,
+].map(
+    ({
+         type,
+         level,
+         component,
+         ...options
+     }: {
+        type: string;
+        level?: number;
+        component: any;
+    }) => [
+        type,
+        {
+            ...options,
+            component: getSelectableElement({
+                component,
+                level,
+                styles: {
+                    blockAndGutter: {
+                        padding: '4px 0',
+                    },
+                    blockToolbarWrapper: {
+                        height: '1.5em',
+                    },
+                },
+            }),
+            rootProps: {
+                styles: {
+                    root: {
+                        margin: 0,
+                        lineHeight: '1.5',
+                    },
+                },
+            },
+        },
+    ]
+);
 const options = {
-    ...defaultOptions
-    // ...Object.fromEntries(draggableComponentOptions),
+    ...defaultOptions,
+    ...Object.fromEntries(draggableComponentOptions),
 };
 export const newBasePlugins = [
+    ParagraphPlugin(options),
     CodePlugin(options),
     ListPlugin(options),
     BlockquotePlugin(options),
@@ -152,5 +148,6 @@ export const baseNormalizers = [
         rules: autoformatRules,
     }),
     withList(options),
+    withNodeID(),
     withAutoReplace,
 ];

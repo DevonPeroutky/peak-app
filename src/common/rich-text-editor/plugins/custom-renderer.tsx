@@ -7,6 +7,7 @@ import {JournalEntryBody, JournalEntryHeader} from "./journal-entry-plugin/journ
 import {CALLOUT, JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER} from "../constants";
 import "./completed-plugin/completed.scss"
 
+// @ts-ignore
 export const renderCustomPeakElement = (options: any ) => (props: RenderElementProps) => {
     const { attributes, children, element } = props
     switch (element.type) {

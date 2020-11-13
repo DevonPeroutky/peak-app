@@ -30,6 +30,20 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/wiki/constants";
 import {HelpModal} from "../../common/modals/help-modal/HelpModal";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {DndProvider} from "react-dnd";
+
+const setNodeId: (node: Node[]) => Node[] = (nodes: Node[]) => {
+    let id = 10000;
+    return nodes.map((node) => {
+        const children = node.children as any[];
+        const newChildren = children.map((child) => {
+            id++;
+            return Object.assign({}, child, {id: id})
+        })
+        return Object.assign({}, node, {children: newChildren})
+    })
+};
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -38,7 +52,9 @@ const TopicWiki = (props: {topic_id: string}) => {
     const savePageToDB = useDebounceWikiSaver();
     const currentWikiPage = useCurrentWikiPage();
     const currentPageId: string = currentWikiPage.id;
-    const [wikiPageContent, setWikiPageContent] = useState<Node[]>(currentWikiPage.body as Node[])
+
+    const thePageSlateContent: Node[] = setNodeId(currentWikiPage.body as Node[])
+    const [wikiPageContent, setWikiPageContent] = useState<Node[]>(thePageSlateContent)
     const [pageTitle, setPageTitle] = useState(currentWikiPage.title)
 
     const {
@@ -106,43 +122,48 @@ const TopicWiki = (props: {topic_id: string}) => {
         dispatch(updatePageTitleInSidebar({ pageId: currentWikiPage.id, newTitle: newTitle }));
     };
 
+    console.log(`PAGE CONTENT`)
+    console.log(wikiPageContent)
+
     return (
-        <Slate
-            editor={editor}
-            value={wikiPageContent}
-            onChange={updatePageContent}>
-            <div className="peak-topic-wiki-container">
-                <MemoizedLinkMenu
-                    key={`${currentPageId}-LinkMenu`}
-                    linkState={currentWikiPage.editorState.currentLinkState}
-                    showLinkMenu={currentWikiPage.editorState.showLinkMenu}
-                    pageId={currentPageId}/>
-                <div className={"rich-text-editor-container"}>
-                    <PageContextBar topicId={topic_id}/>
-                    <EditablePlugins
-                        onKeyDown={[keyBindingHandler]}
-                        onKeyDownDeps={[index, search, target]}
-                        key={`${currentPageId}-${currentWikiPage.editorState.isEditing}`}
-                        plugins={wikiPlugins}
-                        placeholder="Drop some knowledge..."
-                        spellCheck={true}
-                        autoFocus={true}
-                        readOnly={!currentWikiPage.editorState.isEditing}
-                        style={{
-                            textAlign: "left",
-                            flex: "1 1 auto",
-                            minHeight: "100%"
-                        }}
-                    />
-                    <NodeContentSelect
-                        at={target}
-                        valueIndex={index}
-                        options={values as PeakEditorControl[]}
-                        onClickMention={onAddNodeContent}
-                    />
+        <DndProvider backend={HTML5Backend}>
+            <Slate
+                editor={editor}
+                value={wikiPageContent}
+                onChange={updatePageContent}>
+                <div className="peak-topic-wiki-container">
+                    <MemoizedLinkMenu
+                        key={`${currentPageId}-LinkMenu`}
+                        linkState={currentWikiPage.editorState.currentLinkState}
+                        showLinkMenu={currentWikiPage.editorState.showLinkMenu}
+                        pageId={currentPageId}/>
+                    <div className={"rich-text-editor-container"}>
+                        <PageContextBar topicId={topic_id}/>
+                        <EditablePlugins
+                            onKeyDown={[keyBindingHandler]}
+                            onKeyDownDeps={[index, search, target]}
+                            key={`${currentPageId}-${currentWikiPage.editorState.isEditing}`}
+                            plugins={wikiPlugins}
+                            placeholder="Drop some knowledge..."
+                            spellCheck={true}
+                            autoFocus={true}
+                            readOnly={!currentWikiPage.editorState.isEditing}
+                            style={{
+                                textAlign: "left",
+                                flex: "1 1 auto",
+                                minHeight: "100%"
+                            }}
+                        />
+                        <NodeContentSelect
+                            at={target}
+                            valueIndex={index}
+                            options={values as PeakEditorControl[]}
+                            onClickMention={onAddNodeContent}
+                        />
+                    </div>
                 </div>
-            </div>
-        </Slate>
+            </Slate>
+        </DndProvider>
     )
 };
 
