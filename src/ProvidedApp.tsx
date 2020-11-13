@@ -15,7 +15,6 @@ const ProvidedApp = (props: {}) => {
     const dispatch = useDispatch()
     const keyBindingHandler = (event: any) => {
         if (event.metaKey && event.key == 'k') {
-            console.log("Open command switcher")
             dispatch(openSwitcher())
         }
     }

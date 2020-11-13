@@ -40,7 +40,7 @@ const QuickSwitcher = (props: { }) => {
         return () => {
             clearTimeout(timer!)
         };
-    }, [isOpen]);
+    }, [ isOpen ]);
 
     const closeModal = () => {
         setMounted(false)

@@ -45,6 +45,15 @@ $icon-dimension: 16px;
             outline: none!important;
             border: none!important;
             box-shadow: none!important;
+            padding-left: 15px;
+
+            .ant-select-selection-search {
+              padding-left: 5px;
+            }
+
+            .ant-select-selection-placeholder {
+              //padding-left: 15px;
+            }
           }
         }
       }
