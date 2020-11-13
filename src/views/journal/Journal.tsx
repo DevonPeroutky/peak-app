@@ -39,7 +39,6 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
-import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"

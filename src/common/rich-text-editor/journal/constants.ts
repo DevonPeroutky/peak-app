@@ -5,14 +5,14 @@ import {
     SlateDocument,
     withInlineVoid, withTrailingNode
 } from "@udecode/slate-plugins";
-import {baseNormalizers, basePlugins} from "../defaults";
+import {baseNormalizers, newBasePlugins} from "../defaults";
 import {withEditableJournalEntry} from "../plugins/journal-entry-plugin/withEditableJournalEntry";
 import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
 import {JournalEntry} from "../../../redux/wikiPageSlice";
 import {getCurrentFormattedDate} from "../../../utils/time";
 
 export const journalPlugins = [
-    ...basePlugins,
+    ...newBasePlugins,
     ExitBreakPlugin({
         rules: [
             {

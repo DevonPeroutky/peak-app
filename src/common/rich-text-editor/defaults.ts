@@ -4,7 +4,14 @@ import {
     BlockquotePlugin,
     BoldPlugin,
     CodePlugin,
+    DEFAULTS_ALIGN,
+    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_CODE_BLOCK,
+    DEFAULTS_HEADING,
+    DEFAULTS_IMAGE, DEFAULTS_ITALIC,
+    DEFAULTS_LIST,
+    DEFAULTS_MEDIA_EMBED,
     DEFAULTS_MENTION,
+    DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
     ELEMENT_BLOCKQUOTE,
     ImagePlugin,
     isBlockAboveEmpty,
@@ -13,7 +20,8 @@ import {
     ListPlugin,
     MentionNodeData,
     MentionPlugin,
-    ResetBlockTypePlugin,
+    ResetBlockTypePlugin, ResetBlockTypePluginOptions,
+    setDefaults,
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
@@ -30,14 +38,85 @@ import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin
 import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "./constants";
 import {PeakCompletedPlugin} from "./plugins/completed-plugin/CompletedPlugin";
 
-export const basePlugins = [
-    CodePlugin(),
-    ListPlugin(),
-    BlockquotePlugin(),
-    ImagePlugin(),
-    BoldPlugin(),
-    ItalicPlugin(),
-    UnderlinePlugin(),
+export const defaultOptions = {
+    ...setDefaults(DEFAULTS_PARAGRAPH, {}),
+    ...setDefaults(DEFAULTS_MENTION, {}),
+    ...setDefaults(DEFAULTS_BLOCKQUOTE, {}),
+    ...setDefaults(DEFAULTS_IMAGE, {}),
+    ...setDefaults(DEFAULTS_MEDIA_EMBED, {}),
+    ...setDefaults(DEFAULTS_LIST, {}),
+    ...setDefaults(DEFAULTS_HEADING, {}),
+    ...setDefaults(DEFAULTS_ALIGN, {}),
+    ...setDefaults(DEFAULTS_BOLD, {}),
+    ...setDefaults(DEFAULTS_ITALIC, {}),
+    ...setDefaults(DEFAULTS_UNDERLINE, {}),
+    ...setDefaults(DEFAULTS_STRIKETHROUGH, {}),
+    ...setDefaults(DEFAULTS_SUBSUPSCRIPT, {}),
+    ...setDefaults(DEFAULTS_CODE, {}),
+};
+
+// const draggableComponentOptions = [
+//     { ...defaultOptions.p, level: 1 },
+//     defaultOptions.blockquote,
+//     defaultOptions.h1,
+//     defaultOptions.h2,
+//     defaultOptions.h3,
+//     defaultOptions.h4,
+//     defaultOptions.h5,
+//     defaultOptions.h6,
+//     defaultOptions.img,
+//     defaultOptions.ol,
+//     defaultOptions.ul,
+//     defaultOptions.media_embed,
+// ].map(
+//     ({
+//          type,
+//          level,
+//          component,
+//          ...options
+//      }: {
+//         type: string;
+//         level?: number;
+//         component: any;
+//     }) => [
+//         type,
+//         {
+//             ...options,
+//             component: getSelectableElement({
+//                 component,
+//                 level,
+//                 styles: {
+//                     blockAndGutter: {
+//                         padding: '4px 0',
+//                     },
+//                     blockToolbarWrapper: {
+//                         height: '1.5em',
+//                     },
+//                 },
+//             }),
+//             rootProps: {
+//                 styles: {
+//                     root: {
+//                         margin: 0,
+//                         lineHeight: '1.5',
+//                     },
+//                 },
+//             },
+//         },
+//     ]
+// );
+const options = {
+    ...defaultOptions
+    // ...Object.fromEntries(draggableComponentOptions),
+};
+export const newBasePlugins = [
+    CodePlugin(options),
+    ListPlugin(options),
+    BlockquotePlugin(options),
+    ImagePlugin(options),
+    BoldPlugin(options),
+    ItalicPlugin(options),
+    UnderlinePlugin(options),
     SoftBreakPlugin({
         rules: [
             {
@@ -48,7 +127,7 @@ export const basePlugins = [
             },
         ],
     }),
-    StrikethroughPlugin(PEAK_STRIKETHROUGH_OPTIONS),
+    StrikethroughPlugin(options),
     ResetBlockTypePlugin({
         rules: [
             {
@@ -63,13 +142,7 @@ export const basePlugins = [
             }
         ]
     }),
-    MentionPlugin({
-        mention: {
-            ...DEFAULTS_MENTION,
-            // @ts-ignore
-            onClick: (mentionable: MentionNodeData) => console.info(`Hello, I'm ${mentionable.value}`),
-        },
-    }),
+    // TODO. Pass options into these.
     PeakCompletedPlugin(),
     PeakHeadingPlugin(),
     PeakLinkPlugin(),

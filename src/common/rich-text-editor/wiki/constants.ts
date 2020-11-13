@@ -7,10 +7,10 @@ import {
     withNormalizeTypes, withTrailingNode
 } from "@udecode/slate-plugins";
 import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
-import {baseNormalizers, basePlugins} from "../defaults";
+import {baseNormalizers, newBasePlugins} from "../defaults";
 
 export const wikiPlugins = [
-    ...basePlugins,
+    ...newBasePlugins,
     PeakTitlePlugin(),
     ExitBreakPlugin({
         rules: [
