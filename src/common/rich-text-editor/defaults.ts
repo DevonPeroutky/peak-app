@@ -18,24 +18,20 @@ import {
     isSelectionAtBlockStart,
     ItalicPlugin,
     ListPlugin,
-    MentionNodeData,
-    MentionPlugin,
-    ResetBlockTypePlugin, ResetBlockTypePluginOptions,
+    ResetBlockTypePlugin,
     setDefaults,
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
     withAutoformat,
     withImageUpload,
-    withLink,
-    withToggleType,
-    withTransforms
+    withLink, withList,
 } from "@udecode/slate-plugins";
 import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
 import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/TextHeadingPlugin";
 import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
-import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "./constants";
+import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
 import {PeakCompletedPlugin} from "./plugins/completed-plugin/CompletedPlugin";
 
 export const defaultOptions = {
@@ -45,12 +41,11 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_IMAGE, {}),
     ...setDefaults(DEFAULTS_MEDIA_EMBED, {}),
     ...setDefaults(DEFAULTS_LIST, {}),
-    ...setDefaults(DEFAULTS_HEADING, {}),
     ...setDefaults(DEFAULTS_ALIGN, {}),
     ...setDefaults(DEFAULTS_BOLD, {}),
     ...setDefaults(DEFAULTS_ITALIC, {}),
     ...setDefaults(DEFAULTS_UNDERLINE, {}),
-    ...setDefaults(DEFAULTS_STRIKETHROUGH, {}),
+    ...setDefaults(PEAK_STRIKETHROUGH_OVERRIDES, DEFAULTS_STRIKETHROUGH),
     ...setDefaults(DEFAULTS_SUBSUPSCRIPT, {}),
     ...setDefaults(DEFAULTS_CODE, {}),
 };
@@ -153,10 +148,9 @@ export const baseNormalizers = [
     withHistory,
     withLink(),
     withImageUpload(),
-    withToggleType(),
-    withTransforms(),
     withAutoformat({
         rules: autoformatRules,
     }),
+    withList(options),
     withAutoReplace,
 ];

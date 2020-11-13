@@ -23,7 +23,6 @@ import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboar
 import {useDispatch} from "react-redux";
 import {
     EMPTY_JOURNAL_STATE,
-    JOURNAL_PAGE_ID,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/journal/constants";
@@ -194,10 +193,6 @@ const EmptyJournal = (props: {}) => (
     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
         "Failed to load your Journal. Try refreshing."
     }/>
-)
-
-const LoadingJournal = (props: {}) => (
-    <Skeleton active title/>
 )
 
 interface InternalJournalProps {

@@ -17,15 +17,9 @@ export const TITLE = "title";
 export const JOURNAL = "journal";
 export const TIMELINE = "timeline";
 
-export const PEAK_STRIKETHROUGH_OPTIONS = {
+export const PEAK_STRIKETHROUGH_OVERRIDES = {
     strikethrough: {
-        component: StyledLeaf,
-        type: MARK_STRIKETHROUGH,
         hotkey: 'mod+shift+x',
-        rootProps: {
-            className: `slate-strikethrough`,
-            as: 's',
-        },
     }
 }
 

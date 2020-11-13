@@ -5,10 +5,10 @@ import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
 import {all, any, equals} from "ramda"
 import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/wikiPageSlice";
 import {Editor, Transforms, Node} from 'slate';
-import {useDebounceBulkJournalEntrySaver, useJournal, useJournalSaver} from "../../../../../utils/hooks";
-import {FileSyncOutlined, PlusOutlined, ScheduleOutlined, UpCircleOutlined} from "@ant-design/icons/lib";
-import {ReactEditor, useSlate} from "slate-react";
-import {JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OPTIONS} from "../../../constants";
+import {useJournal} from "../../../../../utils/hooks";
+import {FileSyncOutlined} from "@ant-design/icons/lib";
+import {useSlate} from "slate-react";
+import {JOURNAL_ENTRY} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
 import "./journal-entry.scss";

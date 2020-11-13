@@ -10,7 +10,6 @@ import {
     HeadingRenderElementOptions
 } from "@udecode/slate-plugins";
 import {message} from "antd";
-import {LinkOutlined} from "@ant-design/icons/lib";
 import "./peak-heading.scss"
 import {HEADER_TYPES} from "../../constants";
 
@@ -56,12 +55,6 @@ const PeakHeading = (props: PeakHeadingProps) => {
             onMouseLeave={() => setShowLink(false)}>
             <a href={`#${props.element.header_id as string}`}>
                 <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
-                <LinkOutlined
-                    {...attributes}
-                    contentEditable={false}
-                    href={`#${props.element.header_id as string}`}
-                    className={(showLink) ? "header-link-overlay" : "hide" }
-                    onClick={copyToKeyboard}/>
             </a>
             {renderSpecificHeading()}
         </div>
