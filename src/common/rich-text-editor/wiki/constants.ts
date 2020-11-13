@@ -10,7 +10,7 @@ import {
     ImagePlugin, isBlockAboveEmpty, isSelectionAtBlockStart,
     ItalicPlugin,
     ListPlugin,
-    ParagraphPlugin, ResetBlockTypePlugin,
+    ParagraphPlugin, ResetBlockTypePlugin, SlatePlugin,
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
@@ -20,61 +20,119 @@ import {
 } from "@udecode/slate-plugins";
 import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
 import {
-    baseNormalizers,
-    defaultOptions,
-    baseDraggableComponentOptions,
-    styleDraggableOptions
+    defaultOptions, DraggableNodeConfig, setEditorNormalizers, setEditorPlugins,
 } from "../defaults";
 import {PeakCompletedPlugin} from "../plugins/completed-plugin/CompletedPlugin";
 import {PeakHeadingPlugin} from "../plugins/peak-heading-plugin/TextHeadingPlugin";
 import {PeakLinkPlugin} from "../plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "../plugins/peak-callout-plugin/PeakCalloutPlugin";
+import {Editor} from "slate";
+import {withEditableJournalEntry} from "../plugins/journal-entry-plugin/withEditableJournalEntry";
 
-const wikiDraggableOptions = [...baseDraggableComponentOptions, { ...defaultOptions.p, level: 1 }].map(styleDraggableOptions);
-const options = {
-    ...defaultOptions,
-    ...Object.fromEntries(wikiDraggableOptions),
-};
+// const wikiDraggableOptions = [...baseDraggableComponentOptions, { ...defaultOptions.p, level: 1 }].map(styleDraggableOptions);
+// const options = {
+//     ...defaultOptions,
+//     ...Object.fromEntries(wikiDraggableOptions),
+// };
+//
+// export const wikiPlugins = [
+//     ParagraphPlugin(options),
+//     CodePlugin(options),
+//     ListPlugin(options),
+//     BlockquotePlugin(options),
+//     ImagePlugin(options),
+//     BoldPlugin(options),
+//     ItalicPlugin(options),
+//     UnderlinePlugin(options),
+//     SoftBreakPlugin({
+//         rules: [
+//             {
+//                 hotkey: 'enter',
+//                 query: {
+//                     allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, CALLOUT],
+//                 },
+//             },
+//         ],
+//     }),
+//     StrikethroughPlugin(options),
+//     ResetBlockTypePlugin({
+//         rules: [
+//             {
+//                 types: [ELEMENT_BLOCKQUOTE, CALLOUT],
+//                 hotkey: ['Enter'],
+//                 predicate: isBlockAboveEmpty
+//             },
+//             {
+//                 types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, CALLOUT],
+//                 hotkey: ['Backspace'],
+//                 predicate: isSelectionAtBlockStart
+//             }
+//         ]
+//     }),
+//     // TODO. Pass options into these.
+//     PeakCompletedPlugin(),
+//     PeakHeadingPlugin(),
+//     PeakLinkPlugin(),
+//     PeakCalloutPlugin(),
+//     PeakTitlePlugin(),
+//     ExitBreakPlugin({
+//         rules: [
+//             {
+//                 hotkey: 'mod+enter',
+//                 query: {
+//                     allow: [ELEMENT_BLOCKQUOTE, CALLOUT],
+//                 },
+//             },
+//             {
+//                 hotkey: 'mod+shift+enter',
+//                 before: true,
+//             },
+//             {
+//                 hotkey: 'enter',
+//                 query: {
+//                     allow: [...HEADER_TYPES, TITLE],
+//                 },
+//             },
+//         ],
+//     })
+// ];
+//
+// const oldWikiSpecificPlugins = [
+//     PeakTitlePlugin(),
+//     ExitBreakPlugin({
+//         rules: [
+//             {
+//                 hotkey: 'mod+enter',
+//                 query: {
+//                     allow: [ELEMENT_BLOCKQUOTE, CALLOUT],
+//                 },
+//             },
+//             {
+//                 hotkey: 'mod+shift+enter',
+//                 before: true,
+//             },
+//             {
+//                 hotkey: 'enter',
+//                 query: {
+//                     allow: [...HEADER_TYPES, TITLE],
+//                 },
+//             },
+//         ],
+//     })
+// ]
+//
+// export const oldWikiNormalizers = [
+//     ...baseNormalizers,
+//     withList(options),
+//     withNormalizeTypes({
+//         rules: [{ path: [0, 0], strictType: TITLE }],
+//     }),
+//     withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] }),
+//     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 }),
+// ] as const;
 
-export const wikiPlugins = [
-    ParagraphPlugin(options),
-    CodePlugin(options),
-    ListPlugin(options),
-    BlockquotePlugin(options),
-    ImagePlugin(options),
-    BoldPlugin(options),
-    ItalicPlugin(options),
-    UnderlinePlugin(options),
-    SoftBreakPlugin({
-        rules: [
-            {
-                hotkey: 'enter',
-                query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, CALLOUT],
-                },
-            },
-        ],
-    }),
-    StrikethroughPlugin(options),
-    ResetBlockTypePlugin({
-        rules: [
-            {
-                types: [ELEMENT_BLOCKQUOTE, CALLOUT],
-                hotkey: ['Enter'],
-                predicate: isBlockAboveEmpty
-            },
-            {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, CALLOUT],
-                hotkey: ['Backspace'],
-                predicate: isSelectionAtBlockStart
-            }
-        ]
-    }),
-    // TODO. Pass options into these.
-    PeakCompletedPlugin(),
-    PeakHeadingPlugin(),
-    PeakLinkPlugin(),
-    PeakCalloutPlugin(),
+const wikiSpecificDragConfig: DraggableNodeConfig[] = [{ ...defaultOptions.p, level: 1 }]
+const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
     ExitBreakPlugin({
         rules: [
@@ -96,13 +154,13 @@ export const wikiPlugins = [
             },
         ],
     })
-];
-export const wikiNormalizers = [
-    ...baseNormalizers,
-    withList(options),
+
+]
+export const wikiPlugins: SlatePlugin[] = setEditorPlugins(wikiSpecificDragConfig, wikiSpecificPlugins)
+export const wikiNormalizers = setEditorNormalizers(wikiSpecificDragConfig, [
     withNormalizeTypes({
         rules: [{ path: [0, 0], strictType: TITLE }],
     }),
     withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] }),
-    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 }),
-] as const;
+    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 })
+])
