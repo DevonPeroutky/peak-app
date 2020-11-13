@@ -248,10 +248,10 @@ const Journal = (props: InternalJournalProps) => {
                 onKeyDown={[keyBindingHandler]}
                 onKeyDownDeps={[index, search, target]}
                 style={{
-                    display: "flex",
                     textAlign: "left",
                     flex: "1 1 auto",
-                    minWidth: "100%"
+                    minWidth: "100%",
+                    width: "100%"
                 }}
                 plugins={journalPlugins}
                 autoFocus={true}

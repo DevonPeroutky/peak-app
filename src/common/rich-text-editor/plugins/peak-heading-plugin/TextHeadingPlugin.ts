@@ -1,9 +1,9 @@
 import {Editor} from "slate";
 import {renderElementHeading} from "./renderElementHeading";
 import {
-    deserializeHeading, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5,
+    deserializeHeading, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, getOnHotkeyToggleNodeType,
     HeadingPluginOptions,
-    SlatePlugin,
+    SlatePlugin, toggleNodeType,
 } from "@udecode/slate-plugins";
 import {resetHeader, toggleHeader} from "./header-utils";
 
@@ -21,6 +21,7 @@ const peakOnKeyDownTextHeading = (options?: HeadingPluginOptions) => (event: Key
                 return resetHeader(editor)
             case 49:
                 event.preventDefault()
+                // return toggleNodeType(editor, { activeType: ELEMENT_H1 })
                 return toggleHeader(editor, ELEMENT_H1)
             case 50:
                 event.preventDefault()
