@@ -20,9 +20,9 @@ import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
-import {HelpModal} from "../../common/modals/help-modal/HelpModal";
-import {Slate} from "slate-react";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -86,32 +86,34 @@ const PeakLayout = (props: {}) => {
 
     if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={[fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy]}/>
     return (
-        <Layout className="peak-parent-layout">
-            <PeakSidebar/>
-            <Content className="peak-main-content">
-                <MainBar/>
-                <Content className="peak-content-container">
-                    <Switch>
-                        <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
-                        <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
-                        <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
-                        <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
-                        <Route path={`${match.path}/wiki/:id`} render={(props) => {
-                            if (currentWikiPage) {
-                                return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
-                            } else {
-                                return <Redirect to={"/"} />
-                            }
-                        }}/>
-                        <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
-                        <Route path="*">
-                            <h1>NOT FOUND</h1>
-                        </Route>
-                    </Switch>
+        <DndProvider backend={HTML5Backend}>
+            <Layout className="peak-parent-layout">
+                <PeakSidebar/>
+                <Content className="peak-main-content">
+                    <MainBar/>
+                    <Content className="peak-content-container">
+                                                                   <Switch>
+                                                                   <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                                                                   <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
+                                                                   <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
+                                                                   <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
+                                                                   <Route path={`${match.path}/wiki/:id`} render={(props) => {
+                                                                   if (currentWikiPage) {
+                                                                   return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
+                                                                   } else {
+                                                                   return <Redirect to={"/"} />
+                                                                   }
+                                                                   }}/>
+                                                                   <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
+                                                                   <Route path="*">
+                                                                   <h1>NOT FOUND</h1>
+                                                                   </Route>
+                                                                   </Switch>
+                                                                   </Content>
+                    <EditorContextBar/>
                 </Content>
-                <EditorContextBar/>
-            </Content>
-        </Layout>
+            </Layout>
+        </DndProvider>
     )
 };
 

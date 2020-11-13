@@ -51,24 +51,8 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_CODE, {}),
 };
 
-const draggableComponentOptions = [
-    { ...defaultOptions.p, level: 1 },
-    defaultOptions.blockquote,
-    defaultOptions.img,
-    defaultOptions.ol,
-    defaultOptions.ul,
-    defaultOptions.media_embed,
-].map(
-    ({
-         type,
-         level,
-         component,
-         ...options
-     }: {
-        type: string;
-        level?: number;
-        component: any;
-    }) => [
+export const styleDraggableOptions = ({ type, level, component, ...options}: { type: string; level?: number; component: any; }) => (
+    [
         type,
         {
             ...options,
@@ -94,51 +78,17 @@ const draggableComponentOptions = [
             },
         },
     ]
-);
-const options = {
-    ...defaultOptions,
-    ...Object.fromEntries(draggableComponentOptions),
-};
-export const newBasePlugins = [
-    ParagraphPlugin(options),
-    CodePlugin(options),
-    ListPlugin(options),
-    BlockquotePlugin(options),
-    ImagePlugin(options),
-    BoldPlugin(options),
-    ItalicPlugin(options),
-    UnderlinePlugin(options),
-    SoftBreakPlugin({
-        rules: [
-            {
-                hotkey: 'enter',
-                query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, CALLOUT],
-                },
-            },
-        ],
-    }),
-    StrikethroughPlugin(options),
-    ResetBlockTypePlugin({
-        rules: [
-            {
-                types: [ELEMENT_BLOCKQUOTE, CALLOUT],
-                hotkey: ['Enter'],
-                predicate: isBlockAboveEmpty
-            },
-            {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, CALLOUT],
-                hotkey: ['Backspace'],
-                predicate: isSelectionAtBlockStart
-            }
-        ]
-    }),
-    // TODO. Pass options into these.
-    PeakCompletedPlugin(),
-    PeakHeadingPlugin(),
-    PeakLinkPlugin(),
-    PeakCalloutPlugin()
-];
+)
+
+export const baseDraggableComponentOptions = [
+    { ...defaultOptions.p, level: 2 },
+    defaultOptions.blockquote,
+    defaultOptions.img,
+    defaultOptions.ol,
+    defaultOptions.ul,
+    defaultOptions.media_embed
+]
+
 export const baseNormalizers = [
     withReact,
     withHistory,
@@ -147,7 +97,6 @@ export const baseNormalizers = [
     withAutoformat({
         rules: autoformatRules,
     }),
-    withList(options),
     withNodeID(),
     withAutoReplace,
 ];

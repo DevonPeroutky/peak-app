@@ -38,6 +38,8 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -233,6 +235,9 @@ const Journal = (props: InternalJournalProps) => {
         search,
         onAddNodeContent
     } = props
+
+    console.log(`JOURNAL CONTENT`)
+    console.log(journalContent)
 
     return (
         <Slate

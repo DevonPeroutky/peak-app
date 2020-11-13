@@ -8,6 +8,7 @@ export const PeakTitlePlugin = (options?: any): SlatePlugin => ({
     renderElement: renderPeakTitle(options),
 });
 
+// @ts-ignore
 export const renderPeakTitle = (options: any | undefined) => (props: RenderElementProps) => {
     if (props.element.type === TITLE) {
         return <PeakTitle {...props}/>
