@@ -179,5 +179,5 @@ export const setEditorNormalizers = (draggableConfig: DraggableNodeConfig[], add
         ...Object.fromEntries(draggableOptions),
     };
 
-    return [...baseNormalizers, withLink(options), ...additionalNormalizers]
+    return [...baseNormalizers, withList(options), ...additionalNormalizers]
 }

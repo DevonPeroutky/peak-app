@@ -7,7 +7,7 @@ import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../r
 import {Editor, Transforms, Node} from 'slate';
 import {useJournal} from "../../../../../utils/hooks";
 import {FileSyncOutlined} from "@ant-design/icons/lib";
-import {useSlate} from "slate-react";
+import {useSelected, useSlate} from "slate-react";
 import {JOURNAL_ENTRY} from "../../../constants";
 import {convertJournalEntryToSlateNodes} from "../../../journal/utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
