@@ -32,6 +32,8 @@
   justify-content: flex-start;
   margin-bottom: 20px;
   min-height: 50px;
+  user-select: none;
+  user-focus: none;
 
   .peak-je-title {
     line-height: $title-line-height;
