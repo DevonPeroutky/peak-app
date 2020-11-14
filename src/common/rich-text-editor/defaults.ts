@@ -12,7 +12,7 @@ import {
     DEFAULTS_MEDIA_EMBED,
     DEFAULTS_MENTION,
     DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
-    ELEMENT_BLOCKQUOTE, ExitBreakPlugin,
+    ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH, ExitBreakPlugin,
     getSelectableElement,
     ImagePlugin,
     isBlockAboveEmpty,
@@ -27,7 +27,7 @@ import {
     UnderlinePlugin,
     withAutoformat,
     withImageUpload,
-    withLink, withList, withNodeID,
+    withLink, withList, withNodeID, withTrailingNode,
 } from "@udecode/slate-plugins";
 import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
 import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/TextHeadingPlugin";
@@ -114,9 +114,7 @@ const baseBehaviorPlugins = [
             }
         ]
     }),
-
 ]
-
 const basePlugins = [
     ParagraphPlugin,
     CodePlugin,
@@ -128,12 +126,10 @@ const basePlugins = [
     UnderlinePlugin,
     StrikethroughPlugin,
     // TODO. Pass options into these.
-    PeakCompletedPlugin,
     PeakHeadingPlugin,
     PeakLinkPlugin,
     PeakCalloutPlugin
 ];
-
 const baseDraggableComponentOptions = [
     defaultOptions.blockquote,
     defaultOptions.img,
@@ -141,7 +137,6 @@ const baseDraggableComponentOptions = [
     defaultOptions.ul,
     defaultOptions.media_embed
 ]
-
 const baseNormalizers = [
     withReact,
     withHistory,
@@ -153,11 +148,41 @@ const baseNormalizers = [
     withNodeID(),
     withAutoReplace,
 ];
-
+const levelDependentPlugins = (level: number) => {
+    return [
+        ExitBreakPlugin({
+            rules: [
+                {
+                    hotkey: 'mod+enter',
+                    query: {
+                        allow: [ELEMENT_BLOCKQUOTE, CALLOUT],
+                    },
+                    level: level,
+                },
+                {
+                    hotkey: 'mod+shift+enter',
+                    before: true,
+                    level: level,
+                },
+                {
+                    hotkey: 'enter',
+                    level: level,
+                    query: {
+                        allow: [...HEADER_TYPES, TITLE],
+                    },
+                },
+            ],
+        })
+    ]
+}
+const levelDependentNormalizers = (level: number) => [
+    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
+]
 
 // foo: { (data: string): void; } []
-export const setEditorPlugins = (draggableConfig: DraggableNodeConfig[], additionalPlugins?: SlatePlugin[]) => {
-    const draggableOptions = [...baseDraggableComponentOptions, ...draggableConfig].map(styleDraggableOptions);
+export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = []) => {
+    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
+    const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 
     const options = {
@@ -166,12 +191,12 @@ export const setEditorPlugins = (draggableConfig: DraggableNodeConfig[], additio
     };
 
     const slatePlugins: SlatePlugin[] = [...basePlugins].map(plugin => plugin(options))
-    return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins]
+    return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...levelDependentPlugins(baseNodeLevel)]
 }
 
-
-export const setEditorNormalizers = (draggableConfig: DraggableNodeConfig[], additionalNormalizers?: SlateNormalizer[]) => {
-    const draggableOptions = [...baseDraggableComponentOptions, ...draggableConfig].map(styleDraggableOptions);
+export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[]) => {
+    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
+    const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 
     const options = {
@@ -179,5 +204,5 @@ export const setEditorNormalizers = (draggableConfig: DraggableNodeConfig[], add
         ...Object.fromEntries(draggableOptions),
     };
 
-    return [...baseNormalizers, withList(options), ...additionalNormalizers]
+    return [...baseNormalizers, withList(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
 }

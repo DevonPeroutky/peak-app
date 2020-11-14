@@ -2,19 +2,16 @@ import {PeakTitlePlugin} from "../plugins/peak-title-plugin/PeakTitlePlugin";
 import {
     ELEMENT_BLOCKQUOTE,
     ELEMENT_CODE_BLOCK,
-    ELEMENT_PARAGRAPH,
     ExitBreakPlugin,
     SlatePlugin,
     withInlineVoid,
-    withNormalizeTypes,
-    withTrailingNode
+    withNormalizeTypes
 } from "@udecode/slate-plugins";
-import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
+import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
 import {
-    defaultOptions, DraggableNodeConfig, setEditorNormalizers, setEditorPlugins,
+    setEditorNormalizers, setEditorPlugins,
 } from "../defaults";
 
-const wikiSpecificDragConfig: DraggableNodeConfig[] = [{ ...defaultOptions.p, level: 1 }]
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
     ExitBreakPlugin({
@@ -39,11 +36,12 @@ const wikiSpecificPlugins: SlatePlugin[] = [
     })
 
 ]
-export const wikiPlugins: SlatePlugin[] = setEditorPlugins(wikiSpecificDragConfig, wikiSpecificPlugins)
-export const wikiNormalizers = setEditorNormalizers(wikiSpecificDragConfig, [
+// Default
+const nodeLevel: number = 1
+export const wikiPlugins: SlatePlugin[] = setEditorPlugins(nodeLevel, wikiSpecificPlugins)
+export const wikiNormalizers = setEditorNormalizers(nodeLevel, [
     withNormalizeTypes({
         rules: [{ path: [0, 0], strictType: TITLE }],
     }),
-    withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] }),
-    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 })
+    withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] })
 ])
