@@ -5,7 +5,7 @@ import {
     BoldPlugin,
     CodePlugin,
     DEFAULTS_ALIGN,
-    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_HEADING,
+    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_CODE_BLOCK, DEFAULTS_HEADING,
     DEFAULTS_IMAGE, DEFAULTS_ITALIC,
     DEFAULTS_LIST,
     DEFAULTS_MEDIA_EMBED,
@@ -37,6 +37,8 @@ import {DraggableNodeConfig, HEADER_TYPES, JOURNAL_ENTRY, SlateNormalizer, TITLE
 import {PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
 import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
+import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
+import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -53,6 +55,7 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_SUBSUPSCRIPT, {}),
     ...setDefaults(DEFAULTS_PEAK_HEADING, {}),
     ...setDefaults(DEFAULTS_CODE, {}),
+    ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
 };
 
@@ -123,6 +126,7 @@ const basePlugins = [
     StrikethroughPlugin,
     // TODO. Pass options into these.
     PeakHeadingPlugin,
+    PeakCodePlugin,
     PeakLinkPlugin,
     PeakCalloutPlugin
 ];
@@ -144,6 +148,7 @@ const baseDraggableComponentOptions = [
     defaultOptions.h4,
     defaultOptions.h5,
     defaultOptions.h6,
+    defaultOptions.code_block
 ]
 
 console.log(`THINGS TO DRAG`)

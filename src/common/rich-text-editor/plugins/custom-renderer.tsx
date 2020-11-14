@@ -11,8 +11,6 @@ import "./completed-plugin/completed.scss"
 export const renderCustomPeakElement = (options: any ) => (props: RenderElementProps) => {
     const { attributes, children, element } = props
     switch (element.type) {
-        case ELEMENT_CODE_BLOCK:
-            return <PeakCodeEditor key={props.element.code_id as string} {...props}/>
         case JOURNAL_ENTRY:
             return <JournalEntryBody entry_date={props.element.entry_date as string} {...props}/>
         case JOURNAL_ENTRY_HEADER:

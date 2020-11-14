@@ -29,7 +29,7 @@ import headingH3 from '@iconify/icons-gridicons/heading-h3';
 import headingH4 from '@iconify/icons-gridicons/heading-h4';
 import headingH5 from '@iconify/icons-gridicons/heading-h5';
 import {message} from "antd";
-import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/PeakCodePlugin";
+import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/utils";
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
