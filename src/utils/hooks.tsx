@@ -24,7 +24,7 @@ import {isEmpty} from "ramda";
 import {PeakPage, PeakTopic, updateTopic} from "../redux/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
-import {JOURNAL_PAGE_ID, journalNormalizers} from "../common/rich-text-editor/journal/constants";
+import {JOURNAL_PAGE_ID, journalNormalizers} from "../common/rich-text-editor/editors/journal/constants";
 const R = require('ramda');
 
 // --------------------------------------------------

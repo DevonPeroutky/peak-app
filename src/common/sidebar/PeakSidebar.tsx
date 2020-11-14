@@ -21,7 +21,7 @@ import {MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
 import {DeleteTopicModal} from "../modals/delete-topic-modal/DeleteTopicModal";
 import axios from 'axios';
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {TITLE} from "../rich-text-editor/constants";
+import {TITLE} from "../rich-text-editor/types";
 import {capitalize} from "lodash";
 import config from "../../constants/environment-vars"
 const { Sider } = Layout;

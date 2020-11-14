@@ -8,7 +8,7 @@ import {
     SlateDocument,
     SlateDocumentFragment,
 } from "@udecode/slate-plugins";
-import {JOURNAL_ENTRY} from "../../common/rich-text-editor/constants";
+import {JOURNAL_ENTRY} from "../../common/rich-text-editor/types";
 import {
     useDebounceBulkJournalEntrySaver,
     useCurrentUser,
@@ -25,11 +25,11 @@ import {
     EMPTY_JOURNAL_STATE,
     journalNormalizers,
     journalPlugins
-} from "../../common/rich-text-editor/journal/constants";
+} from "../../common/rich-text-editor/editors/journal/constants";
 import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
-} from "../../common/rich-text-editor/journal/utils";
+} from "../../common/rich-text-editor/editors/journal/utils";
 import {JournalEntry, PeakWikiPage} from "../../redux/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
@@ -38,8 +38,6 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"

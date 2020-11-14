@@ -1,7 +1,7 @@
 import {Editor, Path, Range, Node} from "slate";
 import {ReactEditor} from "slate-react";
 import {isSelectionAtBlockStart} from "@udecode/slate-plugins";
-import {JOURNAL_ENTRY_HEADER} from "../../constants";
+import {JOURNAL_ENTRY_HEADER} from "../../types";
 
 export const withEditableJournalEntry = <T extends ReactEditor>(editor: T) => {
     const { isVoid, deleteBackward, deleteFragment } = editor

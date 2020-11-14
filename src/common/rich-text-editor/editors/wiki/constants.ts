@@ -1,4 +1,4 @@
-import {PeakTitlePlugin} from "../plugins/peak-title-plugin/PeakTitlePlugin";
+import {PeakTitlePlugin} from "../../plugins/peak-title-plugin/PeakTitlePlugin";
 import {
     ELEMENT_BLOCKQUOTE,
     ELEMENT_CODE_BLOCK,
@@ -7,11 +7,11 @@ import {
     withInlineVoid,
     withNormalizeTypes
 } from "@udecode/slate-plugins";
-import {HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
+import {HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../../types";
 import {
     setEditorNormalizers, setEditorPlugins,
-} from "../defaults";
-import {PEAK_CALLOUT} from "../plugins/peak-callout-plugin/defaults";
+} from "../../defaults";
+import {PEAK_CALLOUT} from "../../plugins/peak-callout-plugin/defaults";
 
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),

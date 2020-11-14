@@ -28,7 +28,7 @@ import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/t
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
-import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/wiki/constants";
+import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";
 import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";

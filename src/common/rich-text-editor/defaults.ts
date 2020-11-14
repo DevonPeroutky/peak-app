@@ -1,18 +1,18 @@
-import {ReactEditor, withReact} from "slate-react";
+import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {
     BlockquotePlugin,
     BoldPlugin,
     CodePlugin,
     DEFAULTS_ALIGN,
-    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE,
+    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_HEADING,
     DEFAULTS_IMAGE, DEFAULTS_ITALIC,
     DEFAULTS_LIST,
     DEFAULTS_MEDIA_EMBED,
     DEFAULTS_MENTION,
     DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
     ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH, ExitBreakPlugin,
-    getSelectableElement,
+    getSelectableElement, HeadingPlugin,
     ImagePlugin,
     isBlockAboveEmpty,
     isSelectionAtBlockStart,
@@ -30,12 +30,13 @@ import {
     withLink, withList, withNodeID, withTrailingNode,
 } from "@udecode/slate-plugins";
 import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
-import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/TextHeadingPlugin";
+import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/PeakHeadingPlugin";
 import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
-import {HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OVERRIDES, TITLE} from "./constants";
-import {Editor} from "slate";
+import {DraggableNodeConfig, HEADER_TYPES, JOURNAL_ENTRY, SlateNormalizer, TITLE} from "./types";
+import {PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
 import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
+import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -50,16 +51,10 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_UNDERLINE, {}),
     ...setDefaults(PEAK_STRIKETHROUGH_OVERRIDES, DEFAULTS_STRIKETHROUGH),
     ...setDefaults(DEFAULTS_SUBSUPSCRIPT, {}),
+    ...setDefaults(DEFAULTS_PEAK_HEADING, {}),
     ...setDefaults(DEFAULTS_CODE, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
 };
-
-export interface DraggableNodeConfig {
-    type: string
-    level?: number
-    component: any
-}
-type SlateNormalizer = (rules: any) => <T extends Editor>(editor: T) => T
 
 const styleDraggableOptions = ({ type, level, component, ...options}: DraggableNodeConfig) => (
     [
@@ -131,15 +126,29 @@ const basePlugins = [
     PeakLinkPlugin,
     PeakCalloutPlugin
 ];
+
+console.log(`VERIFY THESE ARE CORRECT`)
+console.log(DEFAULTS_PEAK_HEADING)
+console.log(defaultOptions)
+
 const baseDraggableComponentOptions = [
     defaultOptions.blockquote,
     defaultOptions.img,
     defaultOptions.ol,
     defaultOptions.ul,
     defaultOptions.media_embed,
-    defaultOptions.callout
-
+    defaultOptions.callout,
+    defaultOptions.h1,
+    defaultOptions.h2,
+    defaultOptions.h3,
+    defaultOptions.h4,
+    defaultOptions.h5,
+    defaultOptions.h6,
 ]
+
+console.log(`THINGS TO DRAG`)
+console.log(baseDraggableComponentOptions)
+
 const baseNormalizers = [
     withReact,
     withHistory,
@@ -151,6 +160,7 @@ const baseNormalizers = [
     withNodeID(),
     withAutoReplace,
 ];
+
 const levelDependentPlugins = (level: number) => {
     return [
         ExitBreakPlugin({
@@ -182,7 +192,6 @@ const levelDependentNormalizers = (level: number) => [
     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
 ]
 
-// foo: { (data: string): void; } []
 export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = []) => {
     const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
     const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
@@ -196,7 +205,6 @@ export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: S
     const slatePlugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
     return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...levelDependentPlugins(baseNodeLevel)]
 }
-
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[]) => {
     const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
     const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);

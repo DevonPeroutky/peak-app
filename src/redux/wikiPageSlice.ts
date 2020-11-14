@@ -3,7 +3,7 @@ import {Range} from "slate/dist/interfaces/range";
 import {Node} from "slate";
 import {differenceWith, omit} from "ramda";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {EMPTY_JOURNAL_STATE, JOURNAL_PAGE_ID} from "../common/rich-text-editor/journal/constants";
+import {EMPTY_JOURNAL_STATE, JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
 const R = require('ramda');
 
 interface CodeEditorFocusState {

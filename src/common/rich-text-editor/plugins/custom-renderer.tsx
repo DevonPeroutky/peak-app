@@ -3,7 +3,7 @@ import PeakCodeEditor from "./peak-code-plugin/code-editor/PeakCodeEditor";
 import React from "react";
 import {ELEMENT_CODE_BLOCK, getRenderElement} from "@udecode/slate-plugins";
 import {JournalEntryBody, JournalEntryHeader} from "./journal-entry-plugin/journal-entry/JournalEntry";
-import {JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER} from "../constants";
+import {JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER} from "../types";
 import "./completed-plugin/completed.scss"
 
 
