@@ -238,6 +238,7 @@ const Journal = (props: InternalJournalProps) => {
 
     console.log(`JOURNAL CONTENT`)
     console.log(journalContent)
+    console.log(editor.selection)
 
     return (
         <Slate
