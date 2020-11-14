@@ -5,8 +5,7 @@ import {
     BoldPlugin,
     CodePlugin,
     DEFAULTS_ALIGN,
-    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_CODE_BLOCK,
-    DEFAULTS_HEADING,
+    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE,
     DEFAULTS_IMAGE, DEFAULTS_ITALIC,
     DEFAULTS_LIST,
     DEFAULTS_MEDIA_EMBED,
@@ -18,7 +17,8 @@ import {
     isBlockAboveEmpty,
     isSelectionAtBlockStart,
     ItalicPlugin,
-    ListPlugin, ParagraphPlugin, RenderNodeOptions,
+    ListPlugin,
+    ParagraphPlugin,
     ResetBlockTypePlugin,
     setDefaults,
     SlatePlugin,
@@ -33,9 +33,9 @@ import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
 import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/TextHeadingPlugin";
 import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
-import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OVERRIDES, TITLE} from "./constants";
-import {PeakCompletedPlugin} from "./plugins/completed-plugin/CompletedPlugin";
+import {HEADER_TYPES, JOURNAL_ENTRY, PEAK_STRIKETHROUGH_OVERRIDES, TITLE} from "./constants";
 import {Editor} from "slate";
+import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -51,6 +51,7 @@ export const defaultOptions = {
     ...setDefaults(PEAK_STRIKETHROUGH_OVERRIDES, DEFAULTS_STRIKETHROUGH),
     ...setDefaults(DEFAULTS_SUBSUPSCRIPT, {}),
     ...setDefaults(DEFAULTS_CODE, {}),
+    ...setDefaults(DEFAULTS_CALLOUT, {}),
 };
 
 export interface DraggableNodeConfig {
@@ -95,7 +96,7 @@ const baseBehaviorPlugins = [
             {
                 hotkey: 'enter',
                 query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, CALLOUT],
+                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT],
                 },
             },
         ],
@@ -103,12 +104,12 @@ const baseBehaviorPlugins = [
     ResetBlockTypePlugin({
         rules: [
             {
-                types: [ELEMENT_BLOCKQUOTE, CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Enter'],
                 predicate: isBlockAboveEmpty
             },
             {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, CALLOUT],
+                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
                 predicate: isSelectionAtBlockStart
             }
@@ -135,7 +136,9 @@ const baseDraggableComponentOptions = [
     defaultOptions.img,
     defaultOptions.ol,
     defaultOptions.ul,
-    defaultOptions.media_embed
+    defaultOptions.media_embed,
+    defaultOptions.callout
+
 ]
 const baseNormalizers = [
     withReact,
@@ -155,7 +158,7 @@ const levelDependentPlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, CALLOUT],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                     },
                     level: level,
                 },
@@ -190,7 +193,7 @@ export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: S
         ...Object.fromEntries(draggableOptions),
     };
 
-    const slatePlugins: SlatePlugin[] = [...basePlugins].map(plugin => plugin(options))
+    const slatePlugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
     return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...levelDependentPlugins(baseNodeLevel)]
 }
 

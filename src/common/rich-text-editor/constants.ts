@@ -3,12 +3,10 @@ import {
     ELEMENT_H2,
     ELEMENT_H3,
     ELEMENT_H4,
-    ELEMENT_H5, ELEMENT_H6,
-    MARK_STRIKETHROUGH,
-    StyledLeaf
+    ELEMENT_H5,
+    ELEMENT_H6,
 } from "@udecode/slate-plugins";
 
-export const CALLOUT = "callout";
 export const DIVIDER = "divider";
 export const JOURNAL_ENTRY = "journal_entry";
 export const JOURNAL_ENTRY_HEADER = "journal_entry_header";

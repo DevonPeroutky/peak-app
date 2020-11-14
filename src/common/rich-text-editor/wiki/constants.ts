@@ -7,10 +7,11 @@ import {
     withInlineVoid,
     withNormalizeTypes
 } from "@udecode/slate-plugins";
-import {CALLOUT, HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
+import {HEADER_TYPES, JOURNAL_ENTRY_HEADER, TITLE} from "../constants";
 import {
     setEditorNormalizers, setEditorPlugins,
 } from "../defaults";
+import {PEAK_CALLOUT} from "../plugins/peak-callout-plugin/defaults";
 
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
@@ -19,7 +20,7 @@ const wikiSpecificPlugins: SlatePlugin[] = [
             {
                 hotkey: 'mod+enter',
                 query: {
-                    allow: [ELEMENT_BLOCKQUOTE, CALLOUT],
+                    allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 },
             },
             {

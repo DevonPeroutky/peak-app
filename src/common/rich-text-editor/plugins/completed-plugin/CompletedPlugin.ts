@@ -21,18 +21,18 @@ export const PeakCompletedPlugin = (
     }),
 });
 
+export declare type CompletedKeyOption = 'completed';
+export const PEAK_MARK_COMPLETED = 'completed';
+
 export const renderLeafCompleted = (
     options?: StrikethroughRenderLeafOptions
 ) =>
     getRenderLeafDefault({
-        key: 'completed',
+        key: PEAK_MARK_COMPLETED,
         defaultOptions: DEFAULTS_COMPLETED,
         options,
     });
 
-
-export declare type CompletedKeyOption = 'completed';
-export const PEAK_MARK_COMPLETED = 'completed';
 
 export const DEFAULTS_COMPLETED: Record<
     CompletedKeyOption,
