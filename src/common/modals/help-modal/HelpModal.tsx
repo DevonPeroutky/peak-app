@@ -3,10 +3,6 @@ import {QuestionCircleFilled} from "@ant-design/icons/lib";
 import {Modal} from "antd";
 import "./help-modal.scss"
 import {KEYBOARD_SHORTCUTS, MARKDOWN_SHORTCUTS} from "../../peak-toolbar/toolbar-controls";
-import {CALLOUT, HEADER_TYPES} from "../../rich-text-editor/constants";
-import {ELEMENT_CODE_BLOCK, ELEMENT_OL, ELEMENT_UL} from "@udecode/slate-plugins";
-import {useHotkeys} from "react-hotkeys-hook";
-import {setEditing} from "../../../redux/wikiPageSlice";
 
 export const HelpModal = (props: {}) => {
     const [isVisible, setVisible] = useState(false)
@@ -29,7 +25,7 @@ export const HelpModal = (props: {}) => {
                     </div>
                     <div className={"help-modal-column"}>
                         <h4>Markdown Shortcuts</h4>
-                        {MARKDOWN_SHORTCUTS.map(k => <MarkdownHelp key={k.label} label={k.label} markupLabel={k.markupLabel}/>)}
+                        {MARKDOWN_SHORTCUTS.map(k => <MarkdownHelp key={`${k.label}-md`} label={k.label} markupLabel={k.markupLabel}/>)}
                     </div>
                 </div>
             </Modal>
@@ -40,11 +36,11 @@ export const HelpModal = (props: {}) => {
 const ShortcutHelp = (props: {label: string, hotkeyInstructionArray: string[]}) => {
     const { label, hotkeyInstructionArray } = props
     return (
-        <div className="hotkey-instruction-row">
+        <div className="hotkey-instruction-row" key={`${label}-${hotkeyInstructionArray.join(",")}`}>
             <span>{label}</span>
-            <div>
+            <div key={`${label}-${hotkeyInstructionArray.join(" ")}`}>
                 {hotkeyInstructionArray
-                    .map<ReactNode>(hotkey => <span className={"hotkey-button-tag"}>{hotkey}</span>)
+                    .map<ReactNode>(hotkey => <span className={"hotkey-button-tag"} key={`${label}-${hotkey}`}>{hotkey}</span>)
                     .reduce((prev, curr) => [prev, ' + ', curr])}
             </div>
         </div>
@@ -55,11 +51,11 @@ const MarkdownHelp = (props: {label: string, markupLabel: string[]}) => {
     const { label, markupLabel } = props
 
     return (
-        <div className="hotkey-instruction-row">
+        <div className="hotkey-instruction-row" key={`${label}-${markupLabel.join(",")}`}>
             <span>{label}</span>
-            <div>
+            <div key={`${label}-${markupLabel.join(" ")}`}>
                 {markupLabel
-                    .map<ReactNode>(hotkey => <span className={"hotkey-button-tag"}>{hotkey}</span>)
+                    .map<ReactNode>(hotkey => <span className={"hotkey-button-tag"} key={`${label}-${hotkey}`}>{hotkey}</span>)
                     .reduce((prev, curr) => [prev, ' ', curr])}
 
             </div>

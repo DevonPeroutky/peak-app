@@ -234,10 +234,6 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
 
-    console.log(`JOURNAL CONTENT`)
-    console.log(journalContent)
-    console.log(editor.selection)
-
     return (
         <Slate
             editor={editor}
