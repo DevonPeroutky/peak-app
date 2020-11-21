@@ -1,0 +1,22 @@
+@import "../../../../constants/variables";
+
+.topic-menu {
+  display: flex;
+  border-right: 0;
+  justify-content: space-between;
+  flex-direction: column;
+
+  .ant-menu-item-group-title {
+    font-size: 1.1em!important;
+    justify-content: space-between;
+    font-weight: 600!important;
+    padding-left: 0;
+    display: flex;
+  }
+
+  .ant-menu-item {
+    font-weight: 400;
+    font-size: 1.1em!important;
+    padding-left: calc(#{$sidebar-padding})!important;
+  }
+}

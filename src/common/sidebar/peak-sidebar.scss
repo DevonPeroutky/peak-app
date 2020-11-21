@@ -86,62 +86,6 @@ $section-heading-size: 1.3rem;
     font-weight: 600!important;
     font-size: $section-heading-size!important;
   }
-
-  .topic-menu {
-    display: flex;
-    border-right: 0;
-    justify-content: space-between;
-    flex-direction: column;
-
-    .ant-menu-item-group-title {
-      font-size: 1.1em!important;
-      justify-content: space-between;
-      font-weight: 600!important;
-      padding-left: 0;
-      display: flex;
-
-      .topic-group-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-
-        .topic-group-title {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          text-align: left;
-        }
-
-        .icons-container {
-          display: flex;
-          align-items: center;
-          z-index: 10;
-
-          .add-page-icon {
-            margin-left: 10px;
-            cursor: pointer;
-            display: none;
-
-            &.visible {
-              display: inline;
-            }
-            &:hover {
-              color: #1890ff;
-            }
-          }
-
-        }
-      }
-
-    }
-
-    .ant-menu-item {
-      font-weight: 400;
-      font-size: 1.1em!important;
-      padding-left: calc(#{$sidebar-padding})!important;
-    }
-  }
 }
 
 ::-webkit-scrollbar {

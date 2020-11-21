@@ -1,0 +1,33 @@
+.topic-group-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .topic-group-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+
+  .icons-container {
+    display: flex;
+    align-items: center;
+    z-index: 10;
+
+    .add-page-icon {
+      margin-left: 10px;
+      cursor: pointer;
+      display: none;
+
+      &.visible {
+        display: inline;
+      }
+      &:hover {
+        color: #1890ff;
+      }
+    }
+
+  }
+}
