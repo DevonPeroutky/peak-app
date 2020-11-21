@@ -18,5 +18,14 @@
     font-weight: 400;
     font-size: 1.1em!important;
     padding-left: calc(#{$sidebar-padding})!important;
+
+    .dragging {
+      opacity: 0.25;
+    }
+
+    .hovering {
+      opacity: 0.5;
+      background-color: yellow;
+    }
   }
 }

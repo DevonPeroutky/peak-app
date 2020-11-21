@@ -12,7 +12,6 @@ import {backend_host_address, ELECTRON} from "../../constants/constants";
 import {MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
 
 import config from "../../constants/environment-vars"
-import {TopicHeaderRow} from "./topic-section/topic-header-row/TopicHeaderRow";
 import {TopicPageGroup} from "./topic-section/topic-page-group/TopicPageGroup";
 const { Sider } = Layout;
 
