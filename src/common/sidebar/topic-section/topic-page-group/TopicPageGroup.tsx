@@ -6,6 +6,7 @@ import React from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
 import "./topic-page-group.scss"
 import {PeakTopic} from "../../../../redux/topicSlice";
+import {PeakWikiPage} from "../../../../redux/wikiPageSlice";
 
 export const TopicPageGroup = (props: {topics: PeakTopic[]}) => {
     const { topics } = props
@@ -27,5 +28,16 @@ export const TopicPageGroup = (props: {topics: PeakTopic[]}) => {
                 </Menu.ItemGroup>
             )}
         </Menu>
+    )
+}
+
+const TopicPageRow = (props: {page: PeakWikiPage, topicId: string}) => {
+    const { page, topicId } = props
+    return (
+        <Menu.Item key={page.id}>
+            <Link to={`/topic/${topicId.toLowerCase()}/wiki/${page.id}`}>
+                { (page.title && page.title.length > 0) ? capitalize_and_truncate(page.title) : "Untitled Page" }
+            </Link>
+        </Menu.Item>
     )
 }
