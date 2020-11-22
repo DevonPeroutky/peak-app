@@ -83,18 +83,18 @@ const LinkMenu = (props: LinkMenuProps) => {
         const el = ref.current;
 
         if (!el) {
-            return
+            return undefined
         }
 
         if (!showLinkMenu) {
             setUrl('')
             el.removeAttribute('style');
-            return
+            return undefined
         }
 
         if (editor.selection == null) {
             closeMenu();
-            return
+            return undefined
         }
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -117,7 +117,7 @@ const LinkMenu = (props: LinkMenuProps) => {
 
         if (!Range.isCollapsed(editor.selection) && linkState.currentLinkUrl) {
             message.info(`Links on links confuse me. Just click on the link to open it up`)
-            return
+            return undefined;
         }
 
         console.log("OPENING LINK MENU")

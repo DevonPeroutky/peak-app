@@ -195,7 +195,7 @@ const levelDependentNormalizers = (level: number) => [
 ]
 
 export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = []) => {
-    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
+    const paragraphDragConfig = { ...defaultOptions.p, level: 1 }
     const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 

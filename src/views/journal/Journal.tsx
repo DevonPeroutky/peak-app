@@ -145,7 +145,7 @@ const PeakJournal = (props: { }) => {
     const syncJournalEntries = (newValue: Node[]) => {
         console.log(editor.selection)
         const journalEntries = journal.body as JournalEntry[]
-        if (!equals(newValue, journalContent)) {
+        if (newValue !== journalContent) {
             // Immediately update component state
             // @ts-ignore
             setJournalContent(newValue)
@@ -235,6 +235,9 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
 
+
+    console.log(`RENDERING IN THE JOURNAL`)
+    console.log(journalContent)
     return (
         <Slate
             editor={editor}

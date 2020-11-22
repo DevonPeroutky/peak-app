@@ -34,6 +34,7 @@ import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
+import {createLearning} from "../rich-text-editor/plugins/peak-learning-plugin/utils";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -167,6 +168,7 @@ const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
     description: "Record something you learned!",
     label: "Learning",
     elementType: PEAK_LEARNING,
+    customFormat: (editor => createLearning(editor))
 };
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
