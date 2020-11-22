@@ -59,6 +59,13 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         dispatch(closeLinkMenu(currentPageId));
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the bottom
+     */
     if (!event.metaKey && event.key == "ArrowDown") {
         const nextNode = getNextNodeInTheOnlyGrossWayPossible(editor, editorLevel)
 
@@ -66,13 +73,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             const [currNode, currPath] = Editor.above(editor)
             const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
-            console.log(`CURRENT PARENT`)
-            console.log(currNode)
-            console.log(currParent)
-
-            // This is sucks because of Slate: https://slate-js.slack.com/archives/C1RH7AXSS/p1600693641086800
-            const [lastChildNode] = currParent.children.slice(-1)
-            if (currParent.type === PEAK_LEARNING && lastChildNode.id === currNode.id) {
+            if (isAtLastLineOfLearning(editor, editorLevel)) {
                 console.log(`AT THE BOTTOM`)
                 dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as string, focused: true}))
             }
@@ -86,24 +87,33 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         }
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the Top
+     */
     if (!event.metaKey && (event.key == "ArrowUp")) {
         let previousNode: Node | undefined = getPreviousNodeInTheOnlyGrossWayPossible(editor, editorLevel)
         if (!previousNode) {
             return
         }
 
-        switch (previousNode.type) {
-            case ELEMENT_CODE_BLOCK:
-                event.preventDefault()
-                // @ts-ignore
-                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.code_id, focused: true}))
-                return
-            case PEAK_LEARNING:
-                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as string, focused: true}))
-                return
+        const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
+        if (isPreviousBlockVoid && (isAtFirstLineOfLearning(editor, editorLevel) || isTopLevel(editor, editorLevel))) {
+            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
         }
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the Top
+     */
     if (!event.metaKey && event.key == "Backspace") {
         let previousNode: Node | undefined = getPreviousNodeInTheOnlyGrossWayPossible(editor, editorLevel)
         if (!previousNode) {
@@ -111,17 +121,19 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         }
 
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-        if ([PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string) && (selectionCollapsedAndAtStart)) {
-            event.preventDefault()
+        const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
+        if (isPreviousBlockVoid && (isAtFirstLineOfLearning(editor, editorLevel) || isTopLevel(editor, editorLevel)) && (selectionCollapsedAndAtStart)) {
             const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
             dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
         }
-
     }
-
 }
 
-export function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
+
+// -----------------------------------
+// Helpers
+// -----------------------------------
+function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
     const currentPath = editor.selection?.anchor.path
     let previousNode: Node = undefined
 
@@ -155,7 +167,7 @@ export function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, le
     return previousNode
 }
 
-export function getNextNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
+function getNextNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
     const currentPath = editor.selection?.anchor.path
     let nextNode: Node = undefined
 
@@ -187,4 +199,26 @@ export function getNextNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level:
 
     }
     return nextNode
+}
+
+function getCurrentLevel(editor: Editor): number {
+    return Array.from(Node.levels(editor, editor.selection!.anchor.path)).length
+}
+
+function isTopLevel(editor: Editor, editorLevel: number): boolean {
+    return getCurrentLevel(editor) === editorLevel + 3
+}
+
+function isAtFirstLineOfLearning(editor: Editor, editorLevel: number): boolean {
+    const [currNode, currPath] = Editor.above(editor)
+    const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+    const firstBorn = currParent.children[0]
+    return currParent.type === PEAK_LEARNING && firstBorn.id === currNode.id
+}
+function isAtLastLineOfLearning(editor: Editor, editorLevel: number): boolean {
+    const [currNode, currPath] = Editor.above(editor)
+    const [currParent, currParentPath] = Editor.parent(editor, currPath)
+    const [lastChildNode] = currParent.children.slice(-1)
+    return currParent.type === PEAK_LEARNING && lastChildNode.id === currNode.id
 }
