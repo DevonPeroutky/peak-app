@@ -1,4 +1,4 @@
-import {ELEMENT_OL, ELEMENT_UL, isSelectionAtBlockStart, toggleList} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, ELEMENT_OL, ELEMENT_UL, isSelectionAtBlockStart, toggleList} from "@udecode/slate-plugins";
 import {Editor, Node, Range} from "slate";
 import {
     closeLinkMenu,
@@ -10,6 +10,7 @@ import {
 import {ReactEditor} from "slate-react";
 import {isEqual} from "lodash";
 import {Dispatch} from "redux";
+import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
 export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
     if (event.shiftKey && event.key == '8') {
@@ -57,6 +58,8 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const lastPath = ReactEditor.findPath(editor, lastNode)
         if (lastPath && currentPath && !isEqual(lastPath, currentPath)) {
             const [nextNode, path] = Editor.next(editor);
+            console.log(`GOING DOWN toooo`)
+            console.log(nextNode)
             if (nextNode && nextNode.code_id) {
                 event.preventDefault()
                 // @ts-ignore
@@ -70,8 +73,25 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const [firstNode] = Editor.first(editor, [])
         const firstPath = ReactEditor.findPath(editor, firstNode)
 
+        console.log(currentPath)
         if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
             const [previousNode, path] = Editor.previous(editor )
+            const [codeMatch] = Editor.nodes(editor, {
+                match: n => n.type === ELEMENT_CODE_BLOCK,
+                at: []
+            })
+            const [match] = Editor.nodes(editor, {
+                match: n => n.type === PEAK_LEARNING,
+                at: []
+            })
+
+            console.log(match)
+            console.log(codeMatch)
+
+
+            console.log(`GOING UP towards...`)
+            console.log(previousNode)
+
             if (previousNode.code_id) {
                 event.preventDefault()
                 // @ts-ignore

@@ -80,6 +80,7 @@ const TopicWiki = (props: {topic_id: string}) => {
 
     const updatePageContent = (newValue: Node[]) => {
         if (newValue !== currentWikiPage.body) {
+            console.log('CHANGE HAPPENED THAT WE NEED TO SAVE')
             if (!currentWikiPage.isSaving) {
                 dispatch(beginSavingPage({pageId: currentPageId}));
             }
