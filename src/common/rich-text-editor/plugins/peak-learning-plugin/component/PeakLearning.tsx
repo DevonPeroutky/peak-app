@@ -6,7 +6,7 @@ import {useCurrentWikiPage} from "../../../../../utils/hooks";
 import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
 import {Editor, Transforms} from "slate";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, renderElementParagraph} from "@udecode/slate-plugins";
 import {PEAK_LEARNING} from "../defaults";
 const { Option } = Select;
 

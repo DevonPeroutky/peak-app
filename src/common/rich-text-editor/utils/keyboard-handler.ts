@@ -60,17 +60,24 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
     }
 
     if (!event.metaKey && event.key == "ArrowDown") {
-        const currentPath = editor.selection?.anchor.path
-        const [lastNode] = Editor.last(editor, [])
-        const lastPath = ReactEditor.findPath(editor, lastNode)
-        const currNode = Editor.above(editor)
-        console.log(`CURRENT NODE`)
-        console.log(currNode)
-        console.log(editor.selection)
-        if (lastPath && currentPath && !isEqual(lastPath, currentPath)) {
-            const [nextNode, path] = Editor.next(editor);
-            console.log(`GOING DOWN toooo`)
-            console.log(nextNode)
+        const nextNode = getNextNodeInTheOnlyGrossWayPossible(editor, editorLevel)
+
+        if (nextNode) {
+            const [currNode, currPath] = Editor.above(editor)
+            const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+            console.log(`CURRENT PARENT`)
+            console.log(currNode)
+            console.log(currParent)
+
+            // This is sucks because of Slate: https://slate-js.slack.com/archives/C1RH7AXSS/p1600693641086800
+            const [lastChildNode] = currParent.children.slice(-1)
+            if (currParent.type === PEAK_LEARNING && lastChildNode.id === currNode.id) {
+                console.log(`AT THE BOTTOM`)
+                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as string, focused: true}))
+            }
+
+            // WE ARE AT THE BOTTOM OF THE Code
             if (nextNode && nextNode.code_id) {
                 event.preventDefault()
                 // @ts-ignore
@@ -87,7 +94,6 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
 
         switch (previousNode.type) {
             case ELEMENT_CODE_BLOCK:
-                console.log(`WERE BELOW A CODE BLOCk`)
                 event.preventDefault()
                 // @ts-ignore
                 dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.code_id, focused: true}))
@@ -115,7 +121,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
 
 }
 
-function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
+export function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
     const currentPath = editor.selection?.anchor.path
     let previousNode: Node = undefined
 
@@ -149,3 +155,36 @@ function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: nu
     return previousNode
 }
 
+export function getNextNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
+    const currentPath = editor.selection?.anchor.path
+    let nextNode: Node = undefined
+
+    const [lastNode] = Editor.last(editor, [])
+    const lastPath = ReactEditor.findPath(editor, lastNode)
+    if (lastPath && currentPath && !isEqual(lastPath, currentPath)) {
+
+        const [wtf, nodes] = Editor.nodes(editor, {
+            mode: 'all',
+            at: [],
+            match: n => {
+                return Node.isNode(n)
+            },
+        });
+
+        // We are in the Journal. Account for the JournalEntry and Header
+        if (level === 2 && currentPath[level] !== 0) {
+            const journalEntryIndex = currentPath[1]
+            const currentNodeIndex = currentPath[level]
+            const belowNodeIndex = currentNodeIndex + 1
+            const journalEntry = nodes[0].children[journalEntryIndex]
+            nextNode = journalEntry.children[belowNodeIndex]
+        } else {
+            // We are in the Wiki. Account for the JournalEntry and Header
+            const currentNodeIndex = currentPath[level]
+            const belowNodeIndex = currentNodeIndex + 1
+            nextNode = nodes[0].children[belowNodeIndex]
+        }
+
+    }
+    return nextNode
+}

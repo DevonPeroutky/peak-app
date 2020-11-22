@@ -236,8 +236,6 @@ const Journal = (props: InternalJournalProps) => {
     } = props
 
 
-    console.log(`RENDERING IN THE JOURNAL`)
-    console.log(journalContent)
     return (
         <Slate
             editor={editor}

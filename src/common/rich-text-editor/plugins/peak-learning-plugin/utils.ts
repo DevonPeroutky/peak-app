@@ -7,7 +7,7 @@ import {PEAK_LEARNING} from "./defaults";
 
 export const createLearning = (editor: Editor) => {
     unwrapList(editor);
-    Transforms.removeNodes(editor)
+    // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, {
         type: PEAK_LEARNING,
         children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH}]

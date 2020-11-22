@@ -105,12 +105,12 @@ const baseBehaviorPlugins = [
     ResetBlockTypePlugin({
         rules: [
             {
-                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Enter'],
                 predicate: isBlockAboveEmpty
             },
             {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
                 predicate: isSelectionAtBlockStart
             }
@@ -135,7 +135,6 @@ const basePlugins = [
 ];
 
 const baseDraggableComponentOptions = [
-    defaultOptions.blockquote,
     defaultOptions.img,
     defaultOptions.ol,
     defaultOptions.ul,
@@ -187,7 +186,7 @@ const levelDependentPlugins = (level: number) => {
                     },
                 },
             ],
-        })
+        }),
     ]
 }
 const levelDependentNormalizers = (level: number) => [
@@ -195,8 +194,10 @@ const levelDependentNormalizers = (level: number) => [
 ]
 
 export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = []) => {
-    const paragraphDragConfig = { ...defaultOptions.p, level: 1 }
-    const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
+    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
+    const blockquoteDragConfig = { ...defaultOptions.blockquote, level: baseNodeLevel }
+
+    const draggableOptions = [...baseDraggableComponentOptions, blockquoteDragConfig, paragraphDragConfig].map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 
     const options = {

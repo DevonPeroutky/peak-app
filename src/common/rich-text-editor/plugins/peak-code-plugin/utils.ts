@@ -6,8 +6,8 @@ import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const codeId = uuidv4()
-    unwrapList(editor);
-    Transforms.removeNodes(editor)
+
+    // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, {
         type: ELEMENT_CODE_BLOCK,
         code_id: codeId,
