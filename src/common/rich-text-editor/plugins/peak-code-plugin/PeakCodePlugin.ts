@@ -1,30 +1,23 @@
 import {
-    CodePluginOptions,
-    deserializeCode, ELEMENT_CODE_BLOCK,
-    SlatePlugin, unwrapList
+    CodeBlockPluginOptions, CodeBlockRenderElementOptions, DEFAULTS_CODE_BLOCK,
+    deserializeCodeBlock, getRenderElement, setDefaults,
+    SlatePlugin
 } from "@udecode/slate-plugins";
-import {renderCustomPeakElement} from "../custom-renderer";
-import {Editor, Transforms} from "slate";
-import {v4 as uuidv4} from "uuid";
-import {store} from "../../../../redux/store";
-import {setCodeEditorFocus} from "../../../../redux/wikiPageSlice";
-const R = require('ramda');
+import {DEFAULTS_PEAK_CODE_BLOCK} from "./defaults";
 
-export const PeakCodePlugin = (options?: CodePluginOptions): SlatePlugin => ({
-    renderElement: renderCustomPeakElement(options),
-    deserialize: deserializeCode(),
+export const PeakCodePlugin = (options?: CodeBlockPluginOptions): SlatePlugin => ({
+    renderElement: renderPeakCodeElement(options),
+    deserialize: deserializeCodeBlock(options),
 });
 
 
-export const createAndFocusCodeBlock = (editor: Editor) => {
-    const codeId = uuidv4()
-    unwrapList(editor);
-    Transforms.removeNodes(editor)
-    Transforms.insertNodes(editor, {
-        type: ELEMENT_CODE_BLOCK,
-        code_id: codeId,
-        children: [{text: ''}]
-    });
-    const pageId = window.location.href.split("/").pop()
-    store.dispatch(setCodeEditorFocus({pageId: pageId!, codeEditorId: codeId, focused: true}))
-}
+const renderPeakCodeElement = (
+    options?: CodeBlockRenderElementOptions
+) => {
+    const { code_block } = setDefaults(options, DEFAULTS_PEAK_CODE_BLOCK);
+    return getRenderElement(code_block);
+};
+
+
+
+

@@ -8,13 +8,11 @@ import {
 } from "../../redux/wikiPageSlice";
 import {updatePageTitleInSidebar} from "../../redux/topicSlice"
 import 'antd/dist/antd.css';
-import {PeakTextEditorToolBar} from "../../common/peak-toolbar/toolbar/PeakTextEditorToolBar";
-import {Slate, ReactEditor, withReact} from "slate-react";
-import {createEditor, Editor, Node, Range} from "slate";
+import {Slate, ReactEditor} from "slate-react";
+import {createEditor, Node} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import {useHotkeys} from "react-hotkeys-hook";
-import {useParams} from "react-router-dom";
 import {
     usePagePublisher,
     useDebounceWikiSaver,
@@ -28,8 +26,7 @@ import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/t
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
-import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/wiki/constants";
-import {HelpModal} from "../../common/modals/help-modal/HelpModal";
+import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -38,6 +35,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     const savePageToDB = useDebounceWikiSaver();
     const currentWikiPage = useCurrentWikiPage();
     const currentPageId: string = currentWikiPage.id;
+
     const [wikiPageContent, setWikiPageContent] = useState<Node[]>(currentWikiPage.body as Node[])
     const [pageTitle, setPageTitle] = useState(currentWikiPage.title)
 
@@ -105,6 +103,9 @@ const TopicWiki = (props: {topic_id: string}) => {
         dispatch(updatePageTitle({ pageId: currentWikiPage.id, title: newTitle }));
         dispatch(updatePageTitleInSidebar({ pageId: currentWikiPage.id, newTitle: newTitle }));
     };
+
+    console.log(`PAGE CONTENT`)
+    console.log(wikiPageContent)
 
     return (
         <Slate

@@ -1,7 +1,13 @@
+@import "../../../../../constants/variables";
+
 .peak-heading-container {
   position: relative;
   margin-left: -20px;
   padding-left: 20px;
+
+  .peak-divider {
+    border-bottom: 1px solid $gray-accent-color;
+  }
 
   .header-link-overlay {
     position: absolute;

@@ -27,7 +27,6 @@ export const useNodeContentSelect = (
     const onAddNodeContent = useCallback(
         (editor: Editor, data: PeakEditorControl) => {
             if (targetRange !== null) {
-                console.log(`WTF #1`)
                 Transforms.select(editor, targetRange);
                 insertNodeContent(editor, data, targetRange)
                 return setTargetRange(null);

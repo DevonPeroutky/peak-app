@@ -29,9 +29,10 @@ import headingH3 from '@iconify/icons-gridicons/heading-h3';
 import headingH4 from '@iconify/icons-gridicons/heading-h4';
 import headingH5 from '@iconify/icons-gridicons/heading-h5';
 import {message} from "antd";
-import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/PeakCodePlugin";
+import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/utils";
 import {Editor, Transforms} from "slate";
-import {CALLOUT, DIVIDER} from "../rich-text-editor/constants";
+import {DIVIDER} from "../rich-text-editor/types";
+import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -150,14 +151,14 @@ const TABLE_MARK: PeakEditorControlDisplay = {
     elementType: "table",
     customFormat: (editor => message.info("Not implemented yet!")),
 };
-const PEAK_CALLOUT: PeakEditorControlDisplay = {
+const PEAK_CALLOUT_BLOCK: PeakEditorControlDisplay = {
     controlType: "block",
     icon: <InfoCircleOutlined className={"peak-editor-control-icon"}/>,
     description: "Callout important information",
     markup: ['<>'],
     label: "Callout",
     markupLabel: ["<>", "Space"],
-    elementType: CALLOUT,
+    elementType: PEAK_CALLOUT,
 };
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
@@ -251,14 +252,14 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     PEAK_CODE_BLOCK,
     PEAK_QUOTE,
     TABLE_MARK,
-    PEAK_CALLOUT,
+    PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
     IMAGE_MARK
 ]
 
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
-export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT, DIVIDER_MARK, IMAGE_MARK];
+export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK, IMAGE_MARK];
 
 // Undo, Clear formatting, Code?, Redo, Emoji, Quick Insert?
 export const KEYBOARD_SHORTCUTS: PeakEditorControlDisplay[] = [
@@ -288,7 +289,7 @@ export const MARKDOWN_SHORTCUTS: PeakEditorControlDisplay[] = [
     UNORDERED_LIST,
     ORDERED_LIST,
     PEAK_CODE_MARK,
-    PEAK_CALLOUT,
+    PEAK_CALLOUT_BLOCK,
     PEAK_CODE_BLOCK,
     PEAK_QUOTE,
 ]

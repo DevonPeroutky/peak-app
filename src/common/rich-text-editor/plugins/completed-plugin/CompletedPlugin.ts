@@ -1,8 +1,7 @@
 import {
     deserializeStrikethrough,
+    getOnHotkeyToggleMarkDefault,
     getRenderLeafDefault,
-    MarkOnKeyDownOptions,
-    onKeyDownMarkDefault,
     StrikethroughPluginOptions,
     StrikethroughPluginOptionsValues,
     StrikethroughRenderLeafOptions,
@@ -15,29 +14,29 @@ export const PeakCompletedPlugin = (
 ): SlatePlugin => ({
     renderLeaf: renderLeafCompleted(options),
     deserialize: deserializeStrikethrough(options),
-    onKeyDown: onKeyDownMarkDefault({
+    onKeyDown: getOnHotkeyToggleMarkDefault({
         key: 'completed',
         defaultOptions: DEFAULTS_COMPLETED,
         options,
     }),
 });
 
+export declare type CompletedKeyOption = 'completed';
+export const PEAK_MARK_COMPLETED = 'completed';
+
 export const renderLeafCompleted = (
     options?: StrikethroughRenderLeafOptions
 ) =>
     getRenderLeafDefault({
-        key: 'completed',
+        key: PEAK_MARK_COMPLETED,
         defaultOptions: DEFAULTS_COMPLETED,
         options,
     });
 
 
-export declare type CompletedKeyOption = 'completed';
-export const PEAK_MARK_COMPLETED = 'completed';
-
 export const DEFAULTS_COMPLETED: Record<
     CompletedKeyOption,
-    StrikethroughPluginOptionsValues & MarkOnKeyDownOptions
+    StrikethroughPluginOptionsValues
     > = {
     completed: {
         component: StyledLeaf,

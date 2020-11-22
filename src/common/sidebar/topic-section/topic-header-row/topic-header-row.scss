@@ -1,0 +1,42 @@
+.topic-group-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 16px;
+  color: rgba(0,0,0,.45);
+
+  .topic-group-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+
+    font-size: 1.1em!important;
+    justify-content: space-between;
+    font-weight: 600!important;
+    display: flex;
+  }
+
+  .icons-container {
+    display: flex;
+    align-items: center;
+    z-index: 10;
+
+    .add-page-icon {
+      margin-left: 10px;
+      cursor: pointer;
+      display: none;
+
+      &.visible {
+        display: inline;
+      }
+      &:hover {
+        color: #1890ff;
+      }
+    }
+
+  }
+}

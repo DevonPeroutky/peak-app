@@ -8,7 +8,7 @@ import {
     SlateDocument,
     SlateDocumentFragment,
 } from "@udecode/slate-plugins";
-import {JOURNAL_ENTRY} from "../../common/rich-text-editor/constants";
+import {JOURNAL_ENTRY} from "../../common/rich-text-editor/types";
 import {
     useDebounceBulkJournalEntrySaver,
     useCurrentUser,
@@ -23,14 +23,13 @@ import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboar
 import {useDispatch} from "react-redux";
 import {
     EMPTY_JOURNAL_STATE,
-    JOURNAL_PAGE_ID,
     journalNormalizers,
     journalPlugins
-} from "../../common/rich-text-editor/journal/constants";
+} from "../../common/rich-text-editor/editors/journal/constants";
 import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
-} from "../../common/rich-text-editor/journal/utils";
+} from "../../common/rich-text-editor/editors/journal/utils";
 import {JournalEntry, PeakWikiPage} from "../../redux/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
@@ -39,7 +38,6 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
-import {HelpModal} from "../../common/modals/help-modal/HelpModal";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -197,10 +195,6 @@ const EmptyJournal = (props: {}) => (
     }/>
 )
 
-const LoadingJournal = (props: {}) => (
-    <Skeleton active title/>
-)
-
 interface InternalJournalProps {
     // The slate body and handlers
     editor: ReactEditor
@@ -254,10 +248,10 @@ const Journal = (props: InternalJournalProps) => {
                 onKeyDown={[keyBindingHandler]}
                 onKeyDownDeps={[index, search, target]}
                 style={{
-                    display: "flex",
                     textAlign: "left",
                     flex: "1 1 auto",
-                    minWidth: "100%"
+                    minWidth: "100%",
+                    width: "100%"
                 }}
                 plugins={journalPlugins}
                 autoFocus={true}

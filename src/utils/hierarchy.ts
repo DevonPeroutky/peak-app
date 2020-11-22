@@ -7,7 +7,7 @@ import { cloneDeep} from "lodash";
 import { TreeNodeNormal} from "antd/es/tree/Tree";
 import { capitalize } from "lodash";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6 } from "@udecode/slate-plugins";
-import {HEADER_TYPES, TITLE} from "../common/rich-text-editor/constants";
+import {HEADER_TYPES, TITLE} from "../common/rich-text-editor/types";
 
 const priority = (node: PeakStructureNode) => {
     const HIERARCHY_PRIORITIES: string[] = [TITLE, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6].map(x => x as string)
@@ -79,6 +79,7 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
         })
     }
 
+    // @ts-ignore
     return omitFromObject(obj); // return the inner function result
 }
 
@@ -146,6 +147,7 @@ export function convertPeakNodeToTreeNode(obj: PeakNode): TreeNodeNormal {
         })
     }
 
+    // @ts-ignore
     return populateNecessaryFields(obj)
 }
 

@@ -1,9 +1,9 @@
 import {Editor, Node, Transforms} from "slate";
-import {JOURNAL_ENTRY} from "../../constants";
+import {JOURNAL_ENTRY} from "../../types";
 import {isCurrentDay} from "../../../../utils/time";
 import {useJournal} from "../../../../utils/hooks";
 import {JournalEntry} from "../../../../redux/wikiPageSlice";
-import {convertJournalEntryToSlateNodes} from "../../journal/utils";
+import {convertJournalEntryToSlateNodes} from "../../editors/journal/utils";
 
 export const useSelectFirstJournalEntry = () => {
     const journal = useJournal()

@@ -11,6 +11,8 @@ $section-heading-size: 1.3rem;
   border-right: $sidebar-border-right;
   overflow-x: hidden;
   text-align: left;
+  width: 20%!important;
+  max-width: 20%!important;
 
   overflow-y: scroll!important;
   top: 0!important;
@@ -47,10 +49,6 @@ $section-heading-size: 1.3rem;
 
   }
 
-  .ant-menu-item-selected {
-    background-color: $sidebar-background-color!important;
-  }
-
   .overview-header {
     display: flex;
     width: 100%;
@@ -85,62 +83,6 @@ $section-heading-size: 1.3rem;
     padding-right: 16px;
     font-weight: 600!important;
     font-size: $section-heading-size!important;
-  }
-
-  .topic-menu {
-    display: flex;
-    border-right: 0;
-    justify-content: space-between;
-    flex-direction: column;
-
-    .ant-menu-item-group-title {
-      font-size: 1.1em!important;
-      justify-content: space-between;
-      font-weight: 600!important;
-      padding-left: 0;
-      display: flex;
-
-      .topic-group-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-
-        .topic-group-title {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          text-align: left;
-        }
-
-        .icons-container {
-          display: flex;
-          align-items: center;
-          z-index: 10;
-
-          .add-page-icon {
-            margin-left: 10px;
-            cursor: pointer;
-            display: none;
-
-            &.visible {
-              display: inline;
-            }
-            &:hover {
-              color: #1890ff;
-            }
-          }
-
-        }
-      }
-
-    }
-
-    .ant-menu-item {
-      font-weight: 400;
-      font-size: 1.1em!important;
-      padding-left: calc(#{$sidebar-padding})!important;
-    }
   }
 }
 

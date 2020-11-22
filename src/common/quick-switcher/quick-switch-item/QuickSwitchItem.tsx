@@ -4,7 +4,7 @@ import {PeakDisplayNode} from "../../../redux/userSlice";
 import "./quick-switch-item.scss"
 import {AutoComplete} from "antd";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5 } from "@udecode/slate-plugins";
-import {JOURNAL, TIMELINE, TITLE} from "../../rich-text-editor/constants";
+import {JOURNAL, TIMELINE, TITLE} from "../../rich-text-editor/types";
 const { Option } = AutoComplete;
 
 const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {
