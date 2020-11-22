@@ -5,9 +5,10 @@ import { Select } from 'antd';
 import {useCurrentWikiPage} from "../../../../../utils/hooks";
 import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
-import {Editor, Transforms} from "slate";
-import {ELEMENT_CODE_BLOCK, renderElementParagraph} from "@udecode/slate-plugins";
+import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
+import {edit} from "ace-builds";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 const { Option } = Select;
 
 
@@ -48,26 +49,34 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         console.log(event.key)
         if (event.key === 'Enter' && !open) {
             event.preventDefault()
-            leave("down")
+            leaveDown()
         } else if (event.key === "Escape") {
             setDropdownState(false)
         } else if (["ArrowDown", "ArrowUp"].includes(event.key) && !open) {
-            leave((event.key === "ArrowDown") ? "down" : "up")
+            (event.key === "ArrowDown") ? leaveDown() : leaveUp()
         }
     }
 
-    const leave = (direction: "up" | "down") => {
+    const leaveDown = () => {
         const [match] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
 
         if (match) {
             const codeNode = match[0]
             const pathToCodeEditor = ReactEditor.findPath(editor, codeNode)
-            const nextLocation = (direction === "down") ? Editor.after(editor, pathToCodeEditor, { unit: "block" }) : Editor.before(editor, pathToCodeEditor, { unit: "block" })
+            const nextLocation = Editor.after(editor, pathToCodeEditor, { unit: "block" })
             Transforms.select(editor, nextLocation!)
             ReactEditor.focus(editor)
         } else {
             console.log("NO MATCH???")
         }
+    }
+    const leaveUp = () => {
+        const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
+        const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
+        const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
+        Transforms.select(editor, lastChildNodePath)
+        Transforms.collapse(editor, { edge: "end"})
+        ReactEditor.focus(editor)
     }
 
     const lockFocus = (shouldFocus: boolean) => {
