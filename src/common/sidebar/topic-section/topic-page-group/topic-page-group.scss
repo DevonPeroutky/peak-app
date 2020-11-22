@@ -8,10 +8,13 @@
 
   .topic-group {
 
+    &.hovering {
+      background-color: rgba(64, 169, 255, .1);
+    }
+
     .topic-page-item {
       padding-left: 20px;
       font-weight: 400;
-      background-color: $sidebar-background-color!important;
       color: rgba(0, 0, 0, .65);
       margin-top: 4px;
       margin-bottom: 8px;

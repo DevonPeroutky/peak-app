@@ -11,7 +11,7 @@ import {ELECTRON} from "../../constants/constants";
 import { ReadOutlined} from "@ant-design/icons/lib";
 
 import config from "../../constants/environment-vars"
-import {TopicPageGroup} from "./topic-section/topic-page-group/TopicPageGroup";
+import {TopicSection} from "./topic-section/topic-page-group/TopicPageGroup";
 const { Sider } = Layout;
 
 
@@ -37,7 +37,7 @@ const PeakSidebar = (props: { }) => {
                 </Menu.Item>
             </Menu>
             <h3 className="topics-header">Topics</h3>
-            <TopicPageGroup topics={topics}/>
+            <TopicSection topics={topics}/>
             <AddTopicModal/>
         </Sider>
     )
