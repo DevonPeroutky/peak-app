@@ -39,6 +39,8 @@ import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defa
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
+import {DEFAULTS_LEARNING, PEAK_LEARNING} from "./plugins/peak-learning-plugin/defaults";
+import {PeakLearningPlugin} from "./plugins/peak-learning-plugin/PeakLearningPlugin";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -57,6 +59,7 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_CODE, {}),
     ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
+    ...setDefaults(DEFAULTS_LEARNING, {}),
 };
 
 const styleDraggableOptions = ({ type, level, component, ...options}: DraggableNodeConfig) => (
@@ -94,7 +97,7 @@ const baseBehaviorPlugins = [
             {
                 hotkey: 'enter',
                 query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT],
+                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT, PEAK_LEARNING],
                 },
             },
         ],
@@ -102,12 +105,12 @@ const baseBehaviorPlugins = [
     ResetBlockTypePlugin({
         rules: [
             {
-                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
                 hotkey: ['Enter'],
                 predicate: isBlockAboveEmpty
             },
             {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
                 hotkey: ['Backspace'],
                 predicate: isSelectionAtBlockStart
             }
@@ -124,11 +127,11 @@ const basePlugins = [
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
-    // TODO. Pass options into these.
     PeakHeadingPlugin,
     PeakCodePlugin,
     PeakLinkPlugin,
-    PeakCalloutPlugin
+    PeakCalloutPlugin,
+    PeakLearningPlugin
 ];
 
 const baseDraggableComponentOptions = [
@@ -144,7 +147,8 @@ const baseDraggableComponentOptions = [
     defaultOptions.h4,
     defaultOptions.h5,
     defaultOptions.h6,
-    defaultOptions.code_block
+    defaultOptions.code_block,
+    defaultOptions.learning
 ]
 
 const baseNormalizers = [
@@ -166,7 +170,7 @@ const levelDependentPlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
                     },
                     level: level,
                 },

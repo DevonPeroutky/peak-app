@@ -20,7 +20,7 @@ import {
     HighlightOutlined, InfoCircleOutlined,
     ItalicOutlined, LinkOutlined, MinusOutlined, OrderedListOutlined, PictureOutlined, RightOutlined,
     StrikethroughOutlined, TableOutlined,
-    UnderlineOutlined, UnorderedListOutlined
+    UnderlineOutlined, UnorderedListOutlined, BookOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
 import headingH1 from '@iconify/icons-gridicons/heading-h1';
@@ -33,6 +33,7 @@ import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plu
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
+import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -160,6 +161,13 @@ const PEAK_CALLOUT_BLOCK: PeakEditorControlDisplay = {
     markupLabel: ["<>", "Space"],
     elementType: PEAK_CALLOUT,
 };
+const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
+    controlType: "block",
+    icon: <BookOutlined className={"peak-editor-control-icon"}/>,
+    description: "Record something you learned!",
+    label: "Learning",
+    elementType: PEAK_LEARNING,
+};
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
     description: "Separate content with a horizontal line",
@@ -254,6 +262,7 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     TABLE_MARK,
     PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
+    PEAK_LEARNING_BLOCK,
     IMAGE_MARK
 ]
 
