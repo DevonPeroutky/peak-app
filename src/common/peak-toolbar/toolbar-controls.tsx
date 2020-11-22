@@ -249,6 +249,7 @@ const HEADER_FIVE: PeakEditorControlDisplay = {
 
 export const TEXT_MARKS: PeakEditorControlDisplay[] = [NORMAL_TEXT, HEADER_ONE, HEADER_TWO, HEADER_THREE, HEADER_FOUR, HEADER_FIVE];
 
+// THIS IS THE ONE THAT MATTERS
 export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     HEADER_ONE,
     HEADER_TWO,

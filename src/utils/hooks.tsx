@@ -171,7 +171,7 @@ function usePageSaver() {
     const currentWikiPage = useCurrentWikiPage()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
-        if (!isEmpty(currentWikiPage.editorState.codeFocusMap)) {
+        if (!isEmpty(currentWikiPage.editorState.focusMap)) {
             console.log("NOT SUBMITTING")
             // @ts-ignore
             return

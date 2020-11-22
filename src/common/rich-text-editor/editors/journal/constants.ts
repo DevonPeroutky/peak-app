@@ -20,9 +20,9 @@ export const EMPTY_JOURNAL_STATE: JournalEntry[] = [{
 }]
 
 // Because we have JournalEntry --> Node[] per JournalEntry, the editor 'depth' is 2 deep instead of the default of 1.
-const nodeLevel: number = 2
-export const journalPlugins: SlatePlugin[] = setEditorPlugins(nodeLevel, [JournalEntryPlugin()])
-export const journalNormalizers = setEditorNormalizers(nodeLevel, [
+export const JOURNAL_NODE_LEVEL: number = 2
+export const journalPlugins: SlatePlugin[] = setEditorPlugins(JOURNAL_NODE_LEVEL, [JournalEntryPlugin()])
+export const journalNormalizers = setEditorNormalizers(JOURNAL_NODE_LEVEL, [
     withEditableJournalEntry,
     withInlineVoid({ plugins: journalPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] })
 ])

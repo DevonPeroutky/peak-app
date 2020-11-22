@@ -17,7 +17,7 @@ export interface PeakHyperlinkState {
 };
 export interface PeakEditorState {
     isEditing: boolean,
-    codeFocusMap: CodeEditorFocusState,
+    focusMap: CodeEditorFocusState,
     showLinkMenu: boolean,
     currentLinkState: PeakHyperlinkState,
 };
@@ -41,13 +41,13 @@ const INITIAL_LINK_STATE: PeakHyperlinkState = {
 
 const INITIAL_EDITOR_STATE: PeakEditorState = {
     isEditing: false,
-    codeFocusMap: {},
+    focusMap: {},
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE
 };
 const INITIAL_EDITING_STATE: PeakEditorState = {
     isEditing: true,
-    codeFocusMap: {},
+    focusMap: {},
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE,
 };
@@ -130,18 +130,18 @@ export const wikiPageSlice = createSlice({
             const newPageState = {...state[action.payload.pageId], editorState: newPageEditingState};
             return {...state, [action.payload.pageId]: newPageState }
         },
-        setCodeEditorFocus(state, action: PayloadAction<{pageId: string, codeEditorId: string, focused: boolean }>) {
-            const { pageId, codeEditorId, focused } = action.payload
-            const newCodeEditorFocusState = { [codeEditorId]: focused }
-            const newPageEditingState = { ...state[pageId].editorState, codeFocusMap: newCodeEditorFocusState };
+        setEditorFocusToNode(state, action: PayloadAction<{pageId: string, nodeId: string, focused: boolean }>) {
+            const { pageId, nodeId, focused } = action.payload
+            const newCodeEditorFocusState = { [nodeId]: focused }
+            const newPageEditingState = { ...state[pageId].editorState, focusMap: newCodeEditorFocusState };
             const newPageState = {...state[pageId], editorState: newPageEditingState};
             return {...state, [pageId]: newPageState }
         },
-        deleteCodeBlock(state, action: PayloadAction<{pageId: string, codeEditorId: string}>) {
-            const { pageId, codeEditorId } = action.payload
+        deleteCodeBlock(state, action: PayloadAction<{pageId: string, nodeId: string}>) {
+            const { pageId, nodeId } = action.payload
             const emptyParagraphBlock = { text: "", type: ELEMENT_PARAGRAPH }
             const currentPageBody: Node[] = state[pageId].body as Node[]
-            const newPageBody = currentPageBody.map(node => node.code_id === codeEditorId ? emptyParagraphBlock : node )
+            const newPageBody = currentPageBody.map(node => node.code_id === nodeId ? emptyParagraphBlock : node )
             const newPageState = {...state[pageId], body: newPageBody};
             return {...state, [pageId]: newPageState }
         },
@@ -193,7 +193,7 @@ export const {
     updatePageTitle,
     beginSavingPage,
     endSavingPage,
-    setCodeEditorFocus,
+    setEditorFocusToNode,
     setJournalEntries,
     addNewJournalEntry,
     updateJournalEntry,

@@ -1,18 +1,25 @@
-import {ELEMENT_CODE_BLOCK, ELEMENT_OL, ELEMENT_UL, isSelectionAtBlockStart, toggleList} from "@udecode/slate-plugins";
+import {
+    ELEMENT_CODE_BLOCK,
+    ELEMENT_LINK,
+    ELEMENT_OL,
+    ELEMENT_UL,
+    isSelectionAtBlockStart,
+    toggleList
+} from "@udecode/slate-plugins";
 import {Editor, Node, Range} from "slate";
 import {
     closeLinkMenu,
     openEditLinkMenu,
     openEmptyLinkMenu,
     PeakHyperlinkState,
-    setCodeEditorFocus
+    setEditorFocusToNode
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
 import {isEqual} from "lodash";
 import {Dispatch} from "redux";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
-export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
+export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
     if (event.shiftKey && event.key == '8') {
         toggleList(editor, { typeList: ELEMENT_UL })
     }
@@ -56,6 +63,10 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const currentPath = editor.selection?.anchor.path
         const [lastNode] = Editor.last(editor, [])
         const lastPath = ReactEditor.findPath(editor, lastNode)
+        const currNode = Editor.above(editor)
+        console.log(`CURRENT NODE`)
+        console.log(currNode)
+        console.log(editor.selection)
         if (lastPath && currentPath && !isEqual(lastPath, currentPath)) {
             const [nextNode, path] = Editor.next(editor);
             console.log(`GOING DOWN toooo`)
@@ -63,56 +74,78 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             if (nextNode && nextNode.code_id) {
                 event.preventDefault()
                 // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: nextNode.code_id, focused: true}))
+                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.code_id, focused: true}))
             }
         }
     }
 
     if (!event.metaKey && (event.key == "ArrowUp")) {
-        const currentPath = editor.selection?.anchor.path
-        const [firstNode] = Editor.first(editor, [])
-        const firstPath = ReactEditor.findPath(editor, firstNode)
+        let previousNode: Node | undefined = getPreviousNodeInTheOnlyGrossWayPossible(editor, editorLevel)
+        if (!previousNode) {
+            return
+        }
 
-        console.log(currentPath)
-        if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
-            const [previousNode, path] = Editor.previous(editor )
-            const [codeMatch] = Editor.nodes(editor, {
-                match: n => n.type === ELEMENT_CODE_BLOCK,
-                at: []
-            })
-            const [match] = Editor.nodes(editor, {
-                match: n => n.type === PEAK_LEARNING,
-                at: []
-            })
-
-            console.log(match)
-            console.log(codeMatch)
-
-
-            console.log(`GOING UP towards...`)
-            console.log(previousNode)
-
-            if (previousNode.code_id) {
+        switch (previousNode.type) {
+            case ELEMENT_CODE_BLOCK:
+                console.log(`WERE BELOW A CODE BLOCk`)
                 event.preventDefault()
                 // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
-            }
+                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.code_id, focused: true}))
+                return
+            case PEAK_LEARNING:
+                dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as string, focused: true}))
+                return
         }
     }
 
     if (!event.metaKey && event.key == "Backspace") {
-        const currentPath = editor.selection?.anchor.path
-        const [firstNode] = Editor.first(editor, [])
-        const firstPath = ReactEditor.findPath(editor, firstNode)
-
-        if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
-            const [previousNode, path] = Editor.previous(editor, {})
-            const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-            if (previousNode.code_id && (selectionCollapsedAndAtStart)) {
-                event.preventDefault()
-                // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
-            }
+        let previousNode: Node | undefined = getPreviousNodeInTheOnlyGrossWayPossible(editor, editorLevel)
+        if (!previousNode) {
+            return
         }
-   }
+
+        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
+        if ([PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string) && (selectionCollapsedAndAtStart)) {
+            event.preventDefault()
+            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+        }
+
+    }
+
 }
+
+function getPreviousNodeInTheOnlyGrossWayPossible(editor: ReactEditor, level: number): Node | undefined {
+    const currentPath = editor.selection?.anchor.path
+    let previousNode: Node = undefined
+
+    const [firstNode] = Editor.first(editor, [])
+    const firstPath = ReactEditor.findPath(editor, firstNode)
+    if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
+
+        const [wtf, nodes] = Editor.nodes(editor, {
+            mode: 'all',
+            at: [],
+            match: n => {
+                return Node.isNode(n)
+            },
+        });
+
+        // We are in the Journal. Account for the JournalEntry and Header
+        if (level === 2 && currentPath[level] !== 0) {
+            const journalEntryIndex = currentPath[1]
+            const currentNodeIndex = currentPath[level]
+            const aboveNodeIndex = currentNodeIndex - 1
+            const journalEntry = nodes[0].children[journalEntryIndex]
+            previousNode = journalEntry.children[aboveNodeIndex]
+        } else {
+            // We are in the Wiki. Account for the JournalEntry and Header
+            const currentNodeIndex = currentPath[level]
+            const aboveNodeIndex = currentNodeIndex - 1
+            previousNode = nodes[0].children[aboveNodeIndex]
+        }
+
+    }
+    return previousNode
+}
+

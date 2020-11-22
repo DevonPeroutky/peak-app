@@ -26,7 +26,7 @@ export const EditorToolBarIcon = (props: {
     const { editorControl, isScrolled, className } = props;
     const editor = useSlate();
     const currentPage: PeakWikiPage = useCurrentWikiPage()
-    const tooltipContent = <div>{capitalize(editorControl.label)} <span className={"hotkey-command-tag"}>{editorControl.hotkeyInstruction}</span></div>;
+    const tooltipContent = <div>{capitalize(editorControl.label)} <span className={"hotkey-command-tag"}>{editorControl.hotkeyInstructionArray.join(" ")}</span></div>;
 
     const handleClick = () => {
 
@@ -63,8 +63,8 @@ export const EditorToolBarIcon = (props: {
             case "list":
                 return isNodeTypeIn(editor, editorControl.elementType);
             case ELEMENT_CODE_BLOCK:
-                const codeFocusMap = currentPage.editorState.codeFocusMap
-                return (codeFocusMap) ? any((a: boolean) => { return a })(Object.values(currentPage.editorState.codeFocusMap)) : false;
+                const focusMap = currentPage.editorState.focusMap
+                return (focusMap) ? any((a: boolean) => { return a })(Object.values(currentPage.editorState.focusMap)) : false;
             default:
                 return false;
         }

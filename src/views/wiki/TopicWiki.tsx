@@ -18,6 +18,7 @@ import {
     useDebounceWikiSaver,
     useCurrentWikiPage,
 } from '../../utils/hooks';
+import { equals } from "ramda";
 import {
     EditablePlugins,
     pipe,
@@ -79,8 +80,8 @@ const TopicWiki = (props: {topic_id: string}) => {
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...wikiNormalizers), []);
 
     const updatePageContent = (newValue: Node[]) => {
-        if (newValue !== currentWikiPage.body) {
-            console.log('CHANGE HAPPENED THAT WE NEED TO SAVE')
+        console.log(editor.selection)
+        if (!equals(newValue, currentWikiPage.body)) {
             if (!currentWikiPage.isSaving) {
                 dispatch(beginSavingPage({pageId: currentPageId}));
             }

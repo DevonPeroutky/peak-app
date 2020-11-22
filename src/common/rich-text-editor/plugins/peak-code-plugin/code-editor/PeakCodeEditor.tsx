@@ -11,7 +11,7 @@ import {
     useDebounceBulkJournalEntrySaver
 } from '../../../../../utils/hooks';
 import { useDispatch } from 'react-redux';
-import {updatePageContents, setCodeEditorFocus, JournalEntry} from '../../../../../redux/wikiPageSlice';
+import {updatePageContents, setEditorFocusToNode, JournalEntry} from '../../../../../redux/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
@@ -132,9 +132,9 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     // Focus handler
     const lockFocus = (shouldFocus: boolean) => {
         wikiSave.cancel()
-        dispatch(setCodeEditorFocus({pageId: currentWikiPage.id, codeEditorId: element.code_id, focused: shouldFocus}))
+        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: element.code_id, focused: shouldFocus}))
     }
-    const shouldFocus: boolean = currentWikiPage.editorState.codeFocusMap[element.code_id] || false
+    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.code_id] || false
 
     return (
         <div
