@@ -5,7 +5,6 @@ import {Layout, Menu, Divider, message} from 'antd';
 import { PeakLogo } from "../logo/PeakLogo";
 import AddTopicModal from "../modals/add-topic/AddTopicModal";
 import {Link, useHistory} from "react-router-dom";
-import {capitalize_and_truncate} from "../../utils/strings";
 import cn from "classnames"
 import {useCurrentPageId, useCurrentUser, useIsFullscreen, useTopics} from "../../utils/hooks";
 import {backend_host_address, ELECTRON} from "../../constants/constants";
