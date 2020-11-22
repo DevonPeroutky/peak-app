@@ -7,8 +7,7 @@ import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
-import {edit} from "ace-builds";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {TagOutlined} from "@ant-design/icons/lib";
 const { Option } = Select;
 
 
@@ -30,6 +29,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const currentWikiPage = useCurrentWikiPage();
+    const [tags, setTags] = useState([""])
 
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
     if (shouldFocus) {
@@ -85,6 +85,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     }
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
+            <TagOutlined className={"peak-tag-icon"}/>
             <Select
                 ref={mainRef}
                 onBlur={() => {
@@ -94,6 +95,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
                 onInputKeyDown={handleInputKeyDown}
                 onSearch={() => setDropdownState(true)}
                 open={open}
+                bordered={false}
                 mode="tags"
                 style={{ width: '100%' }}
                 placeholder="Tag this information for later"

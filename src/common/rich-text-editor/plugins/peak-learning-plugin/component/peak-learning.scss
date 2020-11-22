@@ -1,4 +1,33 @@
 .peak-learning-container {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
-  padding: 16px;
+  padding: 16px 25px;
+
+  .peak-learning-select-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+
+    .peak-tag-icon {
+      margin-right: 25px;
+    }
+  }
+
+  .ant-select {
+    .ant-select-selector {
+      left: -7px;
+      padding-left: 0!important;
+
+      .ant-select-selection-search {
+        //display: none!important;
+        margin-left: 0!important;
+      }
+
+      .ant-select-selection-placeholder {
+        //display: none!important;
+        margin-left: 0!important;
+        left: 7px!important;
+      }
+    }
+  }
 }
