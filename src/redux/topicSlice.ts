@@ -3,7 +3,6 @@ const R = require('ramda');
 
 export interface PeakPage {
     id: string
-    orderIndex: number
     title: string
 }
 
@@ -18,10 +17,6 @@ const emptyTopicList: PeakTopic[] = [];
 
 const topicOrdering = (a: PeakTopic, b: PeakTopic) => {
     return (a.inserted_at <= b.inserted_at) ? -1 : 1
-};
-
-export const topicPageOrdering = (a: PeakPage, b: PeakPage) => {
-    return (a.orderIndex <= b.orderIndex) ? -1 : 1
 };
 
 export const topicsSlice = createSlice({
@@ -45,8 +40,7 @@ export const topicsSlice = createSlice({
             return R.sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
         },
         removePageFromTopic(state, action: PayloadAction<{pageId: string}>) {
-            const topic = state.find(topic => topic.pages.find(p => p.id == action.payload.pageId) != undefined)!;
-            const newPages = topic.pages.filter(p => p.id !== action.payload.pageId);
+            const topic = state.find(topic => topic.pages.find(p => p.id == action.payload.pageId) != undefined)!; const newPages = topic.pages.filter(p => p.id !== action.payload.pageId);
             const newTopic = {...topic, pages: newPages};
             return R.sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
         },
@@ -59,6 +53,16 @@ export const topicsSlice = createSlice({
             const newTopicWithPages = {...newTopic, pages: ogTopic.pages}
             return R.sort(topicOrdering,[...state.filter(t => t.id !== newTopic.id), newTopicWithPages]);
         },
+        movePage(state, action: PayloadAction<{page: PeakPage, sourceTopicId: string, destTopicId: string}>) {
+            const { page, sourceTopicId, destTopicId } = action.payload;
+            const sourceTopic: PeakTopic = state.find(topic => topic.id === sourceTopicId)!;
+            const destTopic: PeakTopic = state.find(topic => topic.id === destTopicId)!;
+            const sourcePages = sourceTopic.pages.filter(p => p.id !== page.id);
+            const destPages = [...destTopic.pages, page]
+            const newSourceTopic = { ...sourceTopic, pages: sourcePages}
+            const newDestTopic = { ...destTopic, pages: destPages}
+            return R.sort(topicOrdering,[...state.filter(t => !([sourceTopic.id, destTopic.id].includes(t.id))), newDestTopic, newSourceTopic]);
+        },
         setTopics(state, action: PayloadAction<PeakTopic[]>) {
             return R.sort(topicOrdering, action.payload);
         },
@@ -69,5 +73,5 @@ export const topicsSlice = createSlice({
     }
 });
 
-export const { addTopic, setTopics, deleteTopic, addPageToTopic, updatePageTitleInSidebar, removePageFromTopic, updateTopic } = topicsSlice.actions;
+export const { addTopic, movePage, setTopics, deleteTopic, addPageToTopic, updatePageTitleInSidebar, removePageFromTopic, updateTopic } = topicsSlice.actions;
 export default topicsSlice.reducer;

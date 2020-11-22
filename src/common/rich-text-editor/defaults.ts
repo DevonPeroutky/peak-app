@@ -131,10 +131,6 @@ const basePlugins = [
     PeakCalloutPlugin
 ];
 
-console.log(`VERIFY THESE ARE CORRECT`)
-console.log(DEFAULTS_PEAK_HEADING)
-console.log(defaultOptions)
-
 const baseDraggableComponentOptions = [
     defaultOptions.blockquote,
     defaultOptions.img,
@@ -150,9 +146,6 @@ const baseDraggableComponentOptions = [
     defaultOptions.h6,
     defaultOptions.code_block
 ]
-
-console.log(`THINGS TO DRAG`)
-console.log(baseDraggableComponentOptions)
 
 const baseNormalizers = [
     withReact,

@@ -41,6 +41,7 @@ export interface PeakStructureNode extends PeakNode {
     page_id: string
     topic_id: string
 }
+export type PeakHierarchy = PeakTopicNode[]
 export interface PeakTopicNode {
     children: PeakStructureNode[]
     title: string,

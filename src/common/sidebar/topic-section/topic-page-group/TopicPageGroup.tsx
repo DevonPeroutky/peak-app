@@ -2,11 +2,12 @@ import {TopicHeaderRow} from "../topic-header-row/TopicHeaderRow";
 import {capitalize_and_truncate} from "../../../../utils/strings";
 import React  from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
-import {PeakPage, PeakTopic, topicPageOrdering} from "../../../../redux/topicSlice";
-import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
+import {PeakPage, PeakTopic} from "../../../../redux/topicSlice";
+import {DropTargetMonitor, useDrag, useDrop} from "react-dnd";
 import cn from "classnames";
 import {Link, useHistory} from "react-router-dom";
 import "./topic-page-group.scss"
+import { useMovePageToNewTopic } from "../../../../utils/topics";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
@@ -25,6 +26,7 @@ export const TopicSection = (props: {topics: PeakTopic[]}) => {
 const TopicPageGroup = (props: { topic: PeakTopic }) => {
     const { topic } = props
     const user = useCurrentUser()
+    const movePageToNewTopic = useMovePageToNewTopic()
 
     const [{isOver}, drop] = useDrop({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
@@ -32,18 +34,14 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             if (item.topicId === topic.id) {
                 console.log(`Do nothing`)
             } else {
-                movePageToNewTopic(item.pageId, item.topicId)
+                console.log(`Moving: ${item.pageId} to ${topic.name}`)
+                movePageToNewTopic(item.pageId, item.topicId, topic.id)
             }
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver()
         })
     })
-
-    // TODO IMPLEMENT THIS AND PASS IT TO <TOPICPAGEROW/>
-    // --- This should update the backend orderIndex and redux
-
-    console.log(`IS CURRENTLY OVER ${topic.name}: ${isOver}`)
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>
@@ -133,8 +131,4 @@ const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number}) =
             <span className={"topic-page-item-link"}>{ (page.title && page.title.length > 0) ? capitalize_and_truncate(page.title) : "Untitled Page" }</span>
         </div>
     )
-}
-
-const movePageToNewTopic = (pageId: string, newTopicId: string) => {
-    console.log(`MOVE ${pageId} to ${newTopicId}`)
 }

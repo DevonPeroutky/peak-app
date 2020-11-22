@@ -8,13 +8,11 @@ import {
 } from "../../redux/wikiPageSlice";
 import {updatePageTitleInSidebar} from "../../redux/topicSlice"
 import 'antd/dist/antd.css';
-import {PeakTextEditorToolBar} from "../../common/peak-toolbar/toolbar/PeakTextEditorToolBar";
-import {Slate, ReactEditor, withReact} from "slate-react";
-import {createEditor, Editor, Node, Range} from "slate";
+import {Slate, ReactEditor} from "slate-react";
+import {createEditor, Node} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import {useHotkeys} from "react-hotkeys-hook";
-import {useParams} from "react-router-dom";
 import {
     usePagePublisher,
     useDebounceWikiSaver,
@@ -29,9 +27,6 @@ import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-conten
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";
-import {HelpModal} from "../../common/modals/help-modal/HelpModal";
-import {HTML5Backend} from "react-dnd-html5-backend";
-import {DndProvider} from "react-dnd";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
