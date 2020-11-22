@@ -1,26 +1,38 @@
 import {Menu} from "antd";
 import {TopicHeaderRow} from "../topic-header-row/TopicHeaderRow";
-import {Link} from "react-router-dom";
 import {capitalize_and_truncate} from "../../../../utils/strings";
 import React, {useCallback, useRef, useState} from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
 import "./topic-page-group.scss"
-import {PeakPage, PeakTopic} from "../../../../redux/topicSlice";
+import {PeakPage, PeakTopic, topicPageOrdering} from "../../../../redux/topicSlice";
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import cn from "classnames";
 import update from 'immutability-helper';
+import { sort } from 'ramda';
+import {Link, useHistory} from "react-router-dom";
 
-export const ItemTypes = {
-    TOPIC_PAGE_ITEM: 'topic_page_item'
+export const DragItemTypes = {
+    TOPIC_PAGE_ITEM: 'topic_page_item',
+    TOPIC_HEADER: 'topic_header'
 }
 
 export const TopicPageGroup = (props: {topics: PeakTopic[]}) => {
     const { topics } = props
-    const currentPageId = useCurrentPageId();
+    const topicRef = useRef<HTMLDivElement>(null)
     const user = useCurrentUser()
-
     const [topicList, setTopicList] = useState<PeakTopic[]>(topics)
-    const [pages, setPages] = useState<PeakPage[]>(topics.flatMap(t => t.pages))
+
+
+    const [, drop] = useDrop({
+        accept: DragItemTypes.TOPIC_PAGE_ITEM,
+        hover(item: DragItem, monitor: DropTargetMonitor) {
+            console.log(`HOVERING`)
+            console.log(item)
+        },
+    })
+
+    // ASSUME we have a `BLESSED` list of topics
+    const [pages, setPages] = useState<PeakPage[]>(sort(topicPageOrdering, topics.flatMap(t => t.pages)))
 
     // TODO IMPLEMENT THIS AND PASS IT TO <TOPICPAGEROW/>
     // --- This should update the backend orderIndex and redux
@@ -41,27 +53,20 @@ export const TopicPageGroup = (props: {topics: PeakTopic[]}) => {
         },
         [pages],
     )
-
     return (
-        <Menu mode="inline" selectedKeys={[currentPageId!]} className={"topic-menu"}>
+        <div className={"topic-group-container"}>
             {topics.map(topic =>
                 // @ts-ignore
-                <Menu.ItemGroup key={topic.id.toLowerCase()} title={<TopicHeaderRow topic={topic} user={user}/>}>
+                <div key={topic.id.toLowerCase()} className={"topic-group"}>
+                    <TopicHeaderRow topic={topic} user={user}/>
                     {topic.pages.map((page, i) =>
-                        <Menu.Item key={page.id}>
-                            <TopicPageRow page={page} topicId={topic.id} index={i} movePage={movePageToDifferentTopic}/>
-                        </Menu.Item>
+                        <TopicPageRow key={page.id} page={page} topicId={topic.id} index={i} movePage={movePageToDifferentTopic}/>
                     )}
-                </Menu.ItemGroup>
+                </div>
             )}
-        </Menu>
+        </div>
     )
 }
-
-
-// ---- Take inspiration from Card ------------
-// --------------------------------------------
-
 
 interface DragItem {
     index: number
@@ -70,9 +75,12 @@ interface DragItem {
 }
 const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number, movePage: (dragIndex: number, hoverIndex: number) => void}) => {
     const { page, topicId, index, movePage } = props
+    const currentPageId = useCurrentPageId();
+    const history = useHistory();
     const ref = useRef<HTMLDivElement>(null)
-    const [, drop] = useDrop({
-        accept: ItemTypes.TOPIC_PAGE_ITEM,
+
+    const [{dropResult, canDrop}, drop] = useDrop({
+        accept: DragItemTypes.TOPIC_PAGE_ITEM,
         hover(item: DragItem, monitor: DropTargetMonitor) {
             if (!ref.current) {
                 return
@@ -126,17 +134,19 @@ const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number, mo
     })
 
     const [{ isDragging, draggedItem }, drag] = useDrag({
-        item: { type: ItemTypes.TOPIC_PAGE_ITEM, pageId: page.id, topicId: topicId.toLowerCase() },
+        item: { type: DragItemTypes.TOPIC_PAGE_ITEM, pageId: page.id, topicId: topicId.toLowerCase() },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
-            draggedItem: !!monitor.getItem()
+            draggedItem: !!monitor.getItem(),
         })
     })
 
     drag(drop(ref))
+
+    const selected = currentPageId === page.id
     return (
-            <div ref={ref} className={cn((isDragging) ? "dragging" : "")}>
-                { (page.title && page.title.length > 0) ? capitalize_and_truncate(page.title) : "Untitled Page" }
-            </div>
+        <div ref={ref} onClick={() => history.push(`/topic/${topicId.toLowerCase()}/wiki/${page.id}`)} className={cn("topic-page-item", (isDragging) ? "dragging" : "", (selected) ? "selected" : "")}>
+            <span className={"topic-page-item-link"}>{ (page.title && page.title.length > 0) ? capitalize_and_truncate(page.title) : "Untitled Page" }</span>
+        </div>
     )
 }

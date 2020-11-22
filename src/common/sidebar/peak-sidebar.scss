@@ -11,6 +11,8 @@ $section-heading-size: 1.3rem;
   border-right: $sidebar-border-right;
   overflow-x: hidden;
   text-align: left;
+  width: 20%!important;
+  max-width: 20%!important;
 
   overflow-y: scroll!important;
   top: 0!important;
@@ -45,10 +47,6 @@ $section-heading-size: 1.3rem;
       height: calc(#{$main-bar-height} / 2);
     }
 
-  }
-
-  .ant-menu-item-selected {
-    background-color: $sidebar-background-color!important;
   }
 
   .overview-header {

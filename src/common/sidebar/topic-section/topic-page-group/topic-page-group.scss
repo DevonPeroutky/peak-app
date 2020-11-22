@@ -1,31 +1,49 @@
 @import "../../../../constants/variables";
 
-.topic-menu {
+.topic-group-container {
   display: flex;
   border-right: 0;
   justify-content: space-between;
   flex-direction: column;
 
-  .ant-menu-item-group-title {
-    font-size: 1.1em!important;
-    justify-content: space-between;
-    font-weight: 600!important;
-    padding-left: 0;
-    display: flex;
-  }
+  .topic-group {
 
-  .ant-menu-item {
-    font-weight: 400;
-    font-size: 1.1em!important;
-    padding-left: calc(#{$sidebar-padding})!important;
+    .topic-page-item {
+      padding-left: 20px;
+      font-weight: 400;
+      background-color: $sidebar-background-color!important;
+      color: rgba(0, 0, 0, .65);
+      margin-top: 4px;
+      margin-bottom: 8px;
+      height: 40px;
+      line-height: 40px;
 
-    .dragging {
-      opacity: 0;
+      &:hover {
+        color: $primary-blue;
+        cursor: pointer;
+      }
+
+      &.selected {
+        color: $primary-blue;
+        border-right: 2px solid $primary-blue;
+      }
+
+      .topic-page-item-link {
+        color: inherit;
+        width: 100%;
+        font-size: 1.1em!important;
+      }
+
+      .dragging {
+        opacity: 0;
+      }
+
+      .hovering {
+        opacity: 0.5;
+        background-color: yellow;
+      }
     }
 
-    .hovering {
-      opacity: 0.5;
-      background-color: yellow;
-    }
   }
+
 }

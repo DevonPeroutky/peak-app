@@ -20,7 +20,7 @@ const topicOrdering = (a: PeakTopic, b: PeakTopic) => {
     return (a.inserted_at <= b.inserted_at) ? -1 : 1
 };
 
-const topicPageOrdering = (a: PeakPage, b: PeakPage) => {
+export const topicPageOrdering = (a: PeakPage, b: PeakPage) => {
     return (a.orderIndex <= b.orderIndex) ? -1 : 1
 };
 

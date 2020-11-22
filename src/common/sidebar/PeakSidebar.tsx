@@ -6,9 +6,9 @@ import { PeakLogo } from "../logo/PeakLogo";
 import AddTopicModal from "../modals/add-topic/AddTopicModal";
 import {Link, useHistory} from "react-router-dom";
 import cn from "classnames"
-import {useCurrentPageId, useCurrentUser, useIsFullscreen, useTopics} from "../../utils/hooks";
-import {backend_host_address, ELECTRON} from "../../constants/constants";
-import {MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
+import {useCurrentPageId, useIsFullscreen, useTopics} from "../../utils/hooks";
+import {ELECTRON} from "../../constants/constants";
+import { ReadOutlined} from "@ant-design/icons/lib";
 
 import config from "../../constants/environment-vars"
 import {TopicPageGroup} from "./topic-section/topic-page-group/TopicPageGroup";
