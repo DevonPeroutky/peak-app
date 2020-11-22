@@ -104,9 +104,6 @@ const TopicWiki = (props: {topic_id: string}) => {
         dispatch(updatePageTitleInSidebar({ pageId: currentWikiPage.id, newTitle: newTitle }));
     };
 
-    console.log(`PAGE CONTENT`)
-    console.log(wikiPageContent)
-
     return (
         <Slate
             editor={editor}

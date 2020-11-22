@@ -62,9 +62,10 @@ $section-heading-size: 1.3rem;
 
   .overview-menu {
     border-right: 0;
-    background: $sidebar-background-color;
+    background: $sidebar-background-color!important;
 
     .ant-menu-item {
+      background: $sidebar-background-color!important;
       padding-left: 0!important;
       display: flex;
       align-items: center;
