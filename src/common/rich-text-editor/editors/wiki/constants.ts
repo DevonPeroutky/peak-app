@@ -15,27 +15,6 @@ import {PEAK_CALLOUT} from "../../plugins/peak-callout-plugin/defaults";
 
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
-    ExitBreakPlugin({
-        rules: [
-            {
-                hotkey: 'mod+enter',
-                query: {
-                    allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
-                },
-            },
-            {
-                hotkey: 'mod+shift+enter',
-                before: true,
-            },
-            {
-                hotkey: 'enter',
-                query: {
-                    allow: [...HEADER_TYPES, TITLE],
-                },
-            },
-        ],
-    })
-
 ]
 // Default
 const nodeLevel: number = 1

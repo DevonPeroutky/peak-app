@@ -1,14 +1,13 @@
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import React, {useCallback, useRef, useState} from "react";
 import "./peak-learning.scss"
-import { Select } from 'antd';
+import {Empty, Select} from 'antd';
 import {useCurrentWikiPage} from "../../../../../utils/hooks";
 import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
-import {filter} from "ramda";
 const { Option } = Select;
 
 export interface PeakTag {
@@ -39,11 +38,8 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     const [tags, setTags] = useState<PeakTag[]>([{id: "0", value: "Product Management"}])
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
     const [currentSearch, setCurrentSearch] = useState<string>("")
-    const prefix = "Create new tag: "
 
     const onSelect = (tagName: string) => {
-        console.log("SELECTING")
-        console.log(tagName)
         const existingTag = tags.find(t => t.value === (tagName))
         if (existingTag) {
             setSelectedTags([...selectedTags, existingTag])
@@ -56,7 +52,8 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         setSelectedTags(selectedTags.filter(tag => tag.value !== tagName))
     }
     const handleInputKeyDown = (event) => {
-        if (event.key === 'Enter' && !open) {
+        if (event.key === 'Enter' && (!open && currentSearch.length === 0)) {
+            console.log("WE WILL BE LEAVING NOW")
             event.preventDefault()
             leaveDown()
         } else if (event.key === "Escape") {
@@ -97,15 +94,8 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
 
 
     const isEmptyInput: boolean = currentSearch.length === 0
-    const isSearched: boolean = filteredTags.find(t => t.value === currentSearch) === undefined
     const isExistingTag: boolean = tags.find(t => t.value === CREATE_NEW_TAG_OPTION.value) !== undefined
     const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
-    console.log(`---------`)
-    console.log(`Selected Tags`)
-    console.log(tags)
-    console.log(selectedTags)
-    console.log(filteredTags)
-    console.log(renderedTagList)
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
             <TagOutlined className={"peak-tag-icon"}/>
@@ -138,7 +128,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
                 placeholder="Tag this information for later"
                 onSelect={onSelect}
                 onDeselect={onDeselect}
-                notFoundContent={null}
+                notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
                     <Option key={tag.id} value={tag.value as string}>

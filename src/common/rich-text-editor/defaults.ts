@@ -146,10 +146,11 @@ const baseDraggableComponentOptions = [
     defaultOptions.h4,
     defaultOptions.h5,
     defaultOptions.h6,
+    defaultOptions.blockquote,
     defaultOptions.code_block,
-    defaultOptions.learning
+    defaultOptions.learning,
+    defaultOptions.p
 ]
-
 const baseNormalizers = [
     withReact,
     withHistory,
@@ -162,7 +163,7 @@ const baseNormalizers = [
     withAutoReplace,
 ];
 
-const levelDependentPlugins = (level: number) => {
+const snowflakePlugins = (level: number) => {
     return [
         ExitBreakPlugin({
             rules: [
@@ -170,6 +171,21 @@ const levelDependentPlugins = (level: number) => {
                     hotkey: 'mod+enter',
                     query: {
                         allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                        filter: (entry => {
+                            const [node, path] = Array.from(entry)
+                            return path.length === level + 2
+                        })
+                    },
+                    level: level + 1,
+                },
+                {
+                    hotkey: 'mod+enter',
+                    query: {
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                        filter: (entry => {
+                            const [node, path] = Array.from(entry)
+                            return path.length === level + 1
+                        })
                     },
                     level: level,
                 },
@@ -194,10 +210,10 @@ const levelDependentNormalizers = (level: number) => [
 ]
 
 export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = []) => {
-    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
-    const blockquoteDragConfig = { ...defaultOptions.blockquote, level: baseNodeLevel }
-
-    const draggableOptions = [...baseDraggableComponentOptions, blockquoteDragConfig, paragraphDragConfig].map(styleDraggableOptions);
+    const levelAwareDragConfig = baseDraggableComponentOptions.map(sup => {
+        return {...sup, level: baseNodeLevel}
+    })
+    const draggableOptions = levelAwareDragConfig.map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 
     const options = {
@@ -206,11 +222,13 @@ export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: S
     };
 
     const slatePlugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
-    return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...levelDependentPlugins(baseNodeLevel)]
+    return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...snowflakePlugins(baseNodeLevel)]
 }
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[]) => {
-    const paragraphDragConfig = { ...defaultOptions.p, level: baseNodeLevel }
-    const draggableOptions = [...baseDraggableComponentOptions, paragraphDragConfig].map(styleDraggableOptions);
+    const levelAwareDragConfig = baseDraggableComponentOptions.map(sup => {
+        return {...sup, level: baseNodeLevel}
+    })
+    const draggableOptions = levelAwareDragConfig.map(styleDraggableOptions);
     const copyableOptions = [] // IMPLEMENT ME
 
     const options = {
