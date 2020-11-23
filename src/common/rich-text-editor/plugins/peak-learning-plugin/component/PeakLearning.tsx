@@ -8,8 +8,14 @@ import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
-const { Option } = Select;
+import {filter} from "ramda";
 
+export interface PeakTag {
+    id: string
+    value: string
+    label?: string
+    color?: string
+}
 
 export const PeakLearning = (props: RenderElementProps) => {
     const { element } = props
@@ -29,29 +35,31 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const currentWikiPage = useCurrentWikiPage();
-    const [tags, setTags] = useState([""])
+    const [tags, setTags] = useState<PeakTag[]>([{id: "0", value: "Product Management"}])
+    const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+    const [currentSearch, setCurrentSearch] = useState<string>("")
+    const prefix = "Create new tag: "
 
-    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
-    if (shouldFocus) {
-        mainRef.current.focus()
+    const onSelect = (tagName: string) => {
+        console.log("SELECTING")
+        console.log(tagName)
+        const existingTag = tags.find(t => t.value === (tagName))
+        if (existingTag) {
+            setSelectedTags([...selectedTags, existingTag])
+        } else {
+            setSelectedTags([...selectedTags, {id: "CHANGE THIS", value: tagName}])
+        }
     }
-
-    const children = [];
-    for (let i = 10; i < 36; i++) {
-        // @ts-ignore
-        children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    const onDeselect = (tagName: string) => {
+        setSelectedTags(selectedTags.filter(tag => tag.value !== tagName))
     }
-    const handleChange = (value) => {
-        console.log(`Selected ${value}`)
-    }
-
     const handleInputKeyDown = (event) => {
-        console.log(event.key)
         if (event.key === 'Enter' && !open) {
             event.preventDefault()
             leaveDown()
         } else if (event.key === "Escape") {
             setDropdownState(false)
+            mainRef.current.focus()
         } else if (["ArrowDown", "ArrowUp"].includes(event.key) && !open) {
             (event.key === "ArrowDown") ? leaveDown() : leaveUp()
         }
@@ -78,29 +86,56 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         Transforms.collapse(editor, { edge: "end"})
         ReactEditor.focus(editor)
     }
-
     const lockFocus = (shouldFocus: boolean) => {
         // wikiSave.cancel()
         dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
     }
+
+    const createNewTagOption: PeakTag = { id: "Change me", value: currentSearch, label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakTag[] = tags.filter(o => !selectedTags.includes(o));
+    const renderedTagList: PeakTag[] = (currentSearch.length === 0 || filteredTags.find(t => t.value === currentSearch)) ? filteredTags : [...filteredTags, createNewTagOption]
+
+    console.log(`---------`)
+    console.log(`Selected Tags`)
+    console.log(selectedTags)
+    console.log(renderedTagList)
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
             <TagOutlined className={"peak-tag-icon"}/>
             <Select
+                onClick={() => {
+                    console.log('ON FOCUS-ish')
+                    setDropdownState(true)
+                    lockFocus(true)
+                }}
                 ref={mainRef}
                 onBlur={() => {
+                    console.log(`BLURRED`)
                     lockFocus(false)
                     setDropdownState(false)
                 }}
-                onInputKeyDown={handleInputKeyDown}
-                onSearch={() => setDropdownState(true)}
                 open={open}
+                onFocus={() => {
+                    console.log(`Getting FOCUSED`)
+                    setDropdownState(true)
+                }}
+                onInputKeyDown={handleInputKeyDown}
+                onSearch={(value) => {
+                    setDropdownState(true)
+                    setCurrentSearch(value)
+                }}
+                mode="multiple"
+                value={selectedTags.map(t => t.value)}
                 bordered={false}
-                mode="tags"
-                style={{ width: '100%' }}
                 placeholder="Tag this information for later"
-                onChange={handleChange}>
-                {children}
+                onSelect={onSelect}
+                onDeselect={onDeselect}
+                style={{ width: '100%' }}>
+                {renderedTagList.map(tag => (
+                    <Select.Option key={tag.id} value={tag.value as string}>
+                        {tag.label || tag.value}
+                    </Select.Option>
+                ))}
             </Select>
         </div>
     )
