@@ -9,6 +9,7 @@ import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
 import {filter} from "ramda";
+const { Option } = Select;
 
 export interface PeakTag {
     id: string
@@ -47,6 +48,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         if (existingTag) {
             setSelectedTags([...selectedTags, existingTag])
         } else {
+            setTags([...tags, {id: "CHANGE THIS", value: tagName}])
             setSelectedTags([...selectedTags, {id: "CHANGE THIS", value: tagName}])
         }
     }
@@ -87,17 +89,22 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         ReactEditor.focus(editor)
     }
     const lockFocus = (shouldFocus: boolean) => {
-        // wikiSave.cancel()
         dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
     }
 
-    const createNewTagOption: PeakTag = { id: "Change me", value: currentSearch, label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakTag[] = tags.filter(o => !selectedTags.includes(o));
-    const renderedTagList: PeakTag[] = (currentSearch.length === 0 || filteredTags.find(t => t.value === currentSearch)) ? filteredTags : [...filteredTags, createNewTagOption]
+    const CREATE_NEW_TAG_OPTION: PeakTag = { id: "TEMP ONLY", value: currentSearch, label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakTag[] = tags.filter(o => !selectedTags.map(t => t.id).includes(o.id));
 
+
+    const isEmptyInput: boolean = currentSearch.length === 0
+    const isSearched: boolean = filteredTags.find(t => t.value === currentSearch) === undefined
+    const isExistingTag: boolean = tags.find(t => t.value === CREATE_NEW_TAG_OPTION.value) !== undefined
+    const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
     console.log(`---------`)
     console.log(`Selected Tags`)
+    console.log(tags)
     console.log(selectedTags)
+    console.log(filteredTags)
     console.log(renderedTagList)
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
@@ -124,17 +131,19 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
                     setDropdownState(true)
                     setCurrentSearch(value)
                 }}
+                optionLabelProp="value"
                 mode="multiple"
                 value={selectedTags.map(t => t.value)}
                 bordered={false}
                 placeholder="Tag this information for later"
                 onSelect={onSelect}
                 onDeselect={onDeselect}
+                notFoundContent={null}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
-                    <Select.Option key={tag.id} value={tag.value as string}>
+                    <Option key={tag.id} value={tag.value as string}>
                         {tag.label || tag.value}
-                    </Select.Option>
+                    </Option>
                 ))}
             </Select>
         </div>
