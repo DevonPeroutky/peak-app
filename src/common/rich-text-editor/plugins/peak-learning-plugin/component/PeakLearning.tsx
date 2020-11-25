@@ -39,6 +39,11 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
+    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
+    if (shouldFocus) {
+        console.log(`Focusing ${nodeId}`)
+        mainRef.current.focus()
+    }
     const onSelect = (tagName: string) => {
         const existingTag = tags.find(t => t.value === (tagName))
         if (existingTag) {
@@ -91,7 +96,6 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
 
     const CREATE_NEW_TAG_OPTION: PeakTag = { id: "TEMP ONLY", value: currentSearch, label: `Create new tag: ${currentSearch}` }
     const filteredTags: PeakTag[] = tags.filter(o => !selectedTags.map(t => t.id).includes(o.id));
-
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = tags.find(t => t.value === CREATE_NEW_TAG_OPTION.value) !== undefined

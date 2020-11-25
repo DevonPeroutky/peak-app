@@ -12,3 +12,17 @@
     font-size: $title-font-size;
   }
 }
+
+fieldset {
+  border: 1px solid #000;
+  width: 100%;
+}
+
+legend {
+  text-align:left;
+  margin-left: 25px;
+  background-color: white;
+  color: blue;
+  padding: 5px 10px;
+  width: fit-content;
+}

@@ -68,6 +68,8 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
      */
     if (!event.metaKey && event.key == "ArrowDown") {
         const nextNode = getNextNodeInTheOnlyGrossWayPossible(editor, editorLevel)
+        console.log(`Next Node`)
+        console.log(nextNode)
 
         if (nextNode) {
             const [currNode, currPath] = Editor.above(editor)
@@ -100,8 +102,10 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
             return
         }
 
+        console.log(previousNode)
         const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
         if (isPreviousBlockVoid && (isAtFirstLineOfLearning(editor, editorLevel) || isTopLevel(editor, editorLevel))) {
+            console.log(`Previous Node is a Voidable`)
             const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
             dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
         }
