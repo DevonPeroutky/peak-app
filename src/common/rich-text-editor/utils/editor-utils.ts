@@ -1,8 +1,10 @@
 import {ReactEditor} from "slate-react";
-import {Editor, Node} from "slate";
+import {Editor, Node, NodeEntry, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {setEditorFocusToNode} from "../../../redux/wikiPageSlice";
+import {Dispatch} from "redux";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -51,9 +53,65 @@ export function next(editor: ReactEditor): Node | undefined {
     return undefined
 }
 
+export function reEnterDown(dispatch: Dispatch, editor: ReactEditor, pageId: string, match: NodeEntry<Node>) {
+    const [currNode, currNodePath] = match
+    if (isAtLastLineOfLearning(editor, match)) {
+        const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
+        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as string, focused: true}))
+        return
+    }
+
+    const pathToCodeEditor = ReactEditor.findPath(editor, match[0])
+
+    // Get previous Node and its parent
+    const [nextNode, nextNodePath] = Editor.next(editor, {
+        at: pathToCodeEditor,
+        match: n => Editor.isBlock(editor, n),
+        voids: true
+    })
+
+    if (nextNode.type === ELEMENT_CODE_BLOCK) {
+        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.code_id as string, focused: true}))
+    } else {
+        Transforms.select(editor, nextNodePath)
+        Transforms.collapse(editor, {edge: 'end'} )
+        ReactEditor.focus(editor)
+    }
+
+}
+export function useReEnterUp(dispatch: Dispatch, editor: ReactEditor, pageId: string, match: NodeEntry<Node>) {
+    const [currNode, currNodePath] = match
+
+    const pathToCodeEditor = ReactEditor.findPath(editor, currNode)
+
+    // Get previous Node and its parent
+    const [previousNode, previousNodePath] = Editor.previous(editor, {
+        at: pathToCodeEditor,
+        match: n => Editor.isBlock(editor, n),
+        voids: true
+    })
+    const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
+    console.log(`Previous Parent`)
+    console.log(previousParent)
+
+
+    if (previousParent && previousParent.type === PEAK_LEARNING) {
+        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as string, focused: true}))
+    } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
+        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.code_id as string, focused: true}))
+    } else {
+        Transforms.select(editor, previousNodePath)
+        Transforms.collapse(editor, {edge: 'end'} )
+        ReactEditor.focus(editor)
+    }
+
+}
+
 // Random utils we need
-export function isAtLastLineOfLearning(editor: Editor): boolean {
-    const [currNode, currPath] = Editor.above(editor)
+export function isAtLastLineOfLearning(editor: Editor, nodeEntry?: any): boolean {
+    const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
+    console.log(`Current Node`)
+    console.log(currNode)
     const [currParent, currParentPath] = Editor.parent(editor, currPath)
     const [lastChildNode] = currParent.children.slice(-1)
     return currParent.type === PEAK_LEARNING && lastChildNode.id === currNode.id
