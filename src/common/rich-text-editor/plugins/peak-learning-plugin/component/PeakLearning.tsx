@@ -8,6 +8,8 @@ import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {next, reEnterDown} from "../../../utils/editor-utils";
 const { Option } = Select;
 
 export interface PeakTag {
@@ -71,24 +73,20 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
 
     const leaveDown = () => {
         const [match] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
-
-        if (match) {
-            const codeNode = match[0]
-            const pathToCodeEditor = ReactEditor.findPath(editor, codeNode)
-            const nextLocation = Editor.after(editor, pathToCodeEditor, { unit: "block" })
-            Transforms.select(editor, nextLocation!)
-            ReactEditor.focus(editor)
-        } else {
-            console.log("NO MATCH???")
-        }
+        reEnterDown(dispatch, editor, currentWikiPage.id, match)
     }
     const leaveUp = () => {
         const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
-        const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
-        Transforms.select(editor, lastChildNodePath)
-        Transforms.collapse(editor, { edge: "end"})
-        ReactEditor.focus(editor)
+
+        if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
+            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.code_id as string, focused: true}))
+        } else {
+            const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
+            Transforms.select(editor, lastChildNodePath)
+            Transforms.collapse(editor, { edge: "end"})
+            ReactEditor.focus(editor)
+        }
     }
     const lockFocus = (shouldFocus: boolean) => {
         dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
