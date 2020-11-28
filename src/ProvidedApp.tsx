@@ -10,6 +10,8 @@ import {useCurrentUser, useOnlineStatus} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
 import {LoggedIn} from "./views/logged-in/LoggedIn";
 import {PeakOffline} from "./views/offline/Offline";
+import {PeakTitle} from "./common/rich-text-editor/plugins/peak-title-plugin/peak-title/PeakTitle";
+import {PeakTimeline} from "./views/timeline/PeakTimeline";
 
 const ProvidedApp = (props: {}) => {
     const dispatch = useDispatch()
@@ -31,6 +33,9 @@ const ProvidedApp = (props: {}) => {
             <Router>
                 <QuickSwitcher/>
                 <Switch>
+                    <Route path="/timeline">
+                        <PeakTimeline/>
+                    </Route>
                     <Route path="/offline">
                         <PeakOffline/>
                     </Route>

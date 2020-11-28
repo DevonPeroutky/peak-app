@@ -22,7 +22,7 @@ import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-conten
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {useDispatch} from "react-redux";
 import {
-    EMPTY_JOURNAL_STATE,
+    EMPTY_JOURNAL_STATE, JOURNAL_NODE_LEVEL,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/constants";
@@ -137,12 +137,13 @@ const PeakJournal = (props: { }) => {
         trigger: '/',
     });
     const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor, dispatch, currentPageId)
+        baseKeyBindingHandler(event, editor, dispatch, currentPageId, JOURNAL_NODE_LEVEL)
 
         return onKeyDownMention(event, editor)
     }, [index, search, target])
 
     const syncJournalEntries = (newValue: Node[]) => {
+        console.log(editor.selection)
         const journalEntries = journal.body as JournalEntry[]
         if (newValue !== journalContent) {
             // Immediately update component state
@@ -233,6 +234,7 @@ const Journal = (props: InternalJournalProps) => {
         search,
         onAddNodeContent
     } = props
+
 
     return (
         <Slate

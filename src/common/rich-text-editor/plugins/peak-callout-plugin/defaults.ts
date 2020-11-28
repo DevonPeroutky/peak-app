@@ -13,7 +13,7 @@ export const DEFAULTS_CALLOUT: Record<
         type: "callout",
         rootProps: {
             className: `slate-PLUGIN-peak-callout`,
-            as: 'callout',
+            as: PEAK_CALLOUT,
         },
     },
 };

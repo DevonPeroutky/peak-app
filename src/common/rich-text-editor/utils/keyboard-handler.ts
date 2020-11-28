@@ -1,17 +1,30 @@
-import {ELEMENT_OL, ELEMENT_UL, isSelectionAtBlockStart, toggleList} from "@udecode/slate-plugins";
+import {
+    ELEMENT_CODE_BLOCK, ELEMENT_LI,
+    ELEMENT_LINK,
+    ELEMENT_OL,
+    ELEMENT_UL,
+    isSelectionAtBlockStart,
+    toggleList
+} from "@udecode/slate-plugins";
 import {Editor, Node, Range} from "slate";
 import {
     closeLinkMenu,
     openEditLinkMenu,
     openEmptyLinkMenu,
     PeakHyperlinkState,
-    setCodeEditorFocus
+    setEditorFocusToNode
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
-import {isEqual} from "lodash";
 import {Dispatch} from "redux";
+import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
+import {
+    isAtLastLineOfLearning,
+    isCustomPeakVoidElement,
+    next,
+    previous
+} from "./editor-utils";
 
-export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
+export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
     if (event.shiftKey && event.key == '8') {
         toggleList(editor, { typeList: ELEMENT_UL })
     }
@@ -51,48 +64,74 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         dispatch(closeLinkMenu(currentPageId));
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     * 3. Going into a PeakCodeEditor within a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the bottom
+     */
     if (!event.metaKey && event.key == "ArrowDown") {
-        const currentPath = editor.selection?.anchor.path
-        const [lastNode] = Editor.last(editor, [])
-        const lastPath = ReactEditor.findPath(editor, lastNode)
-        if (lastPath && currentPath && !isEqual(lastPath, currentPath)) {
-            const [nextNode, path] = Editor.next(editor);
-            if (nextNode && nextNode.code_id) {
-                event.preventDefault()
-                // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: nextNode.code_id, focused: true}))
-            }
+        const nextNode: Node | undefined = next(editor)
+
+        const [currNode, currPath] = Editor.above(editor)
+        const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+        if (isAtLastLineOfLearning(editor)) {
+            console.log(`Go to LearningSelect`)
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as string, focused: true}))
+        } else if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
+            event.preventDefault()
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.code_id as string, focused: true}))
         }
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     * 3. Going into a PeakCodeEditor within a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the Top
+     */
     if (!event.metaKey && (event.key == "ArrowUp")) {
         const currentPath = editor.selection?.anchor.path
-        const [firstNode] = Editor.first(editor, [])
-        const firstPath = ReactEditor.findPath(editor, firstNode)
 
-        if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
-            const [previousNode, path] = Editor.previous(editor )
-            if (previousNode.code_id) {
-                event.preventDefault()
-                // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
-            }
+        // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
+        const currNode = Node.parent(editor, currentPath)
+        const currParent = Node.parent(editor, ReactEditor.findPath(editor, currNode))
+
+        // getPreviousNode(editor, currentLevel, editorLevel)
+        let previousNode: Node | undefined = previous(editor)
+
+        if (currParent && currParent.type === ELEMENT_LI) {
+            console.log(`LIST ITEM`)
+        } else if (previousNode && isCustomPeakVoidElement(previousNode)) {
+            // TODO: Replace this when we get rid of code_id
+            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
         }
     }
 
+    /**
+     * Handle the following usecases:
+     * 1. Going into a PeakCodeEditor
+     * 2. Going into a PeakLearningTagSelect
+     *
+     * Without throwing errors when at the Top
+     */
     if (!event.metaKey && event.key == "Backspace") {
-        const currentPath = editor.selection?.anchor.path
-        const [firstNode] = Editor.first(editor, [])
-        const firstPath = ReactEditor.findPath(editor, firstNode)
-
-        if (firstPath && currentPath && !isEqual(firstPath, currentPath)) {
-            const [previousNode, path] = Editor.previous(editor, {})
-            const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-            if (previousNode.code_id && (selectionCollapsedAndAtStart)) {
-                event.preventDefault()
-                // @ts-ignore
-                dispatch(setCodeEditorFocus({ pageId: currentPageId, codeEditorId: previousNode.code_id, focused: true}))
-            }
+        let previousNode: Node | undefined = previous(editor)
+        if (!previousNode) {
+            return
         }
-   }
+
+        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
+        const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
+        if (isPreviousBlockVoid && (selectionCollapsedAndAtStart)) {
+            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+        }
+    }
 }

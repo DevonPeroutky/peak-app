@@ -44,7 +44,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
     // If removing the link
     if (!url || !text) {
         unWrapLink(editor, selection)
-        return
+        return null
     }
 
     // If updating an existing link

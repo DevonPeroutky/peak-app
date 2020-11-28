@@ -32,6 +32,13 @@ export const PeakTimeline = (props: {}) => {
     return (
         <div className="peak-timeline-container">
             <h1 className="peak-timeline-header">Timeline</h1>
+            <form>
+                <fieldset>
+                    <legend>Personalia</legend>
+                    <div>Swagggggggggggg</div>
+                    <div>Swaggggggggggggggggggggggggggggggggggggggggggg</div>
+                </fieldset>
+            </form>
             <Slate
                 editor={editor}
                 value={value}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Editor, Node, Path, Point, Transforms} from 'slate';
+import {Editor, Node, NodeEntry, Path, Point, Transforms} from 'slate';
 import {
     useEditor,
     ReactEditor,
@@ -11,12 +11,13 @@ import {
     useDebounceBulkJournalEntrySaver
 } from '../../../../../utils/hooks';
 import { useDispatch } from 'react-redux';
-import {updatePageContents, setCodeEditorFocus, JournalEntry} from '../../../../../redux/wikiPageSlice';
+import {updatePageContents, setEditorFocusToNode, JournalEntry} from '../../../../../redux/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
+import { reEnterDown, reEnterUp} from "../../../utils/editor-utils";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
@@ -94,17 +95,20 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         Transforms.removeNodes(editor, { at: [], match: node => node.code_id === element.code_id })
     }
     const leave = (direction: "up" | "down") => {
-        const [match] = Editor.nodes(editor, { match: n => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id, at: []});
+        const matchFunc = (n: Node) => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id
 
-        if (match) {
-            const codeNode = match[0]
-            const pathToCodeEditor = ReactEditor.findPath(editor, codeNode)
-            const nextLocation = (direction === "down") ? Editor.after(editor, pathToCodeEditor, { unit: "block" }) : Editor.before(editor, pathToCodeEditor, { unit: "block" })
-            Transforms.select(editor, nextLocation!)
-            ReactEditor.focus(editor)
+        if (direction === "down") {
+            exitDown(matchFunc)
         } else {
-            console.log("NO MATCH???")
+            exitUp(matchFunc)
         }
+    }
+
+    const exitUp = (matchFunc: (n: Node) => boolean) => {
+        reEnterUp(editor, currentWikiPage.id, matchFunc)
+    }
+    const exitDown = (matchFunc: (n: Node) => boolean) => {
+        reEnterDown(editor, currentWikiPage.id, matchFunc)
     }
     const exitBreak = async () => {
         const empty_paragraph = {
@@ -132,9 +136,9 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     // Focus handler
     const lockFocus = (shouldFocus: boolean) => {
         wikiSave.cancel()
-        dispatch(setCodeEditorFocus({pageId: currentWikiPage.id, codeEditorId: element.code_id, focused: shouldFocus}))
+        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: element.code_id, focused: shouldFocus}))
     }
-    const shouldFocus: boolean = currentWikiPage.editorState.codeFocusMap[element.code_id] || false
+    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.code_id] || false
 
     return (
         <div

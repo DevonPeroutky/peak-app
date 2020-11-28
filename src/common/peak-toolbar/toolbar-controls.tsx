@@ -20,7 +20,7 @@ import {
     HighlightOutlined, InfoCircleOutlined,
     ItalicOutlined, LinkOutlined, MinusOutlined, OrderedListOutlined, PictureOutlined, RightOutlined,
     StrikethroughOutlined, TableOutlined,
-    UnderlineOutlined, UnorderedListOutlined
+    UnderlineOutlined, UnorderedListOutlined, BookOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
 import headingH1 from '@iconify/icons-gridicons/heading-h1';
@@ -33,6 +33,8 @@ import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plu
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
+import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
+import {createLearning} from "../rich-text-editor/plugins/peak-learning-plugin/utils";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -160,6 +162,14 @@ const PEAK_CALLOUT_BLOCK: PeakEditorControlDisplay = {
     markupLabel: ["<>", "Space"],
     elementType: PEAK_CALLOUT,
 };
+const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
+    controlType: "block",
+    icon: <BookOutlined className={"peak-editor-control-icon"}/>,
+    description: "Record something you learned!",
+    label: "Learning",
+    elementType: PEAK_LEARNING,
+    customFormat: (editor => createLearning(editor))
+};
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
     description: "Separate content with a horizontal line",
@@ -241,6 +251,7 @@ const HEADER_FIVE: PeakEditorControlDisplay = {
 
 export const TEXT_MARKS: PeakEditorControlDisplay[] = [NORMAL_TEXT, HEADER_ONE, HEADER_TWO, HEADER_THREE, HEADER_FOUR, HEADER_FIVE];
 
+// THIS IS THE ONE THAT MATTERS
 export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     HEADER_ONE,
     HEADER_TWO,
@@ -254,6 +265,7 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     TABLE_MARK,
     PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
+    PEAK_LEARNING_BLOCK,
     IMAGE_MARK
 ]
 
