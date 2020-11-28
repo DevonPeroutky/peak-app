@@ -72,8 +72,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
     }
 
     const leaveDown = () => {
-        const [match] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
-        reEnterDown(dispatch, editor, currentWikiPage.id, match)
+        reEnterDown(editor, currentWikiPage.id, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
     }
     const leaveUp = () => {
         const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});

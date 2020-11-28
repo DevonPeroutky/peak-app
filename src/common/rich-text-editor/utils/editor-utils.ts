@@ -4,7 +4,7 @@ import {isEqual} from "lodash";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {setEditorFocusToNode} from "../../../redux/wikiPageSlice";
-import {Dispatch} from "redux";
+import {store, persistor} from "../../../redux/store";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -53,15 +53,22 @@ export function next(editor: ReactEditor): Node | undefined {
     return undefined
 }
 
-export function reEnterDown(dispatch: Dispatch, editor: ReactEditor, pageId: string, match: NodeEntry<Node>) {
+export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
+    const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
+    if (!match) { return }
+
     const [currNode, currNodePath] = match
+    console.log(`RE-ENTERING DOWN`)
+    console.log(currNode)
     if (isAtLastLineOfLearning(editor, match)) {
         const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
-        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as string, focused: true}))
+        console.log(`WE LAST LINE OF LEARNING`)
+        console.log(currParent)
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as string, focused: true}))
         return
     }
 
-    const pathToCodeEditor = ReactEditor.findPath(editor, match[0])
+    const pathToCodeEditor = ReactEditor.findPath(editor, currNode)
 
     // Get previous Node and its parent
     const [nextNode, nextNodePath] = Editor.next(editor, {
@@ -69,9 +76,11 @@ export function reEnterDown(dispatch: Dispatch, editor: ReactEditor, pageId: str
         match: n => Editor.isBlock(editor, n),
         voids: true
     })
+    console.log(`NEXT NODE`)
+    console.log(nextNode)
 
     if (nextNode.type === ELEMENT_CODE_BLOCK) {
-        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.code_id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.code_id as string, focused: true}))
     } else {
         Transforms.select(editor, nextNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
@@ -79,8 +88,11 @@ export function reEnterDown(dispatch: Dispatch, editor: ReactEditor, pageId: str
     }
 
 }
-export function useReEnterUp(dispatch: Dispatch, editor: ReactEditor, pageId: string, match: NodeEntry<Node>) {
+export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
+    const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
+    if (!match) { return }
     const [currNode, currNodePath] = match
+    const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
 
     const pathToCodeEditor = ReactEditor.findPath(editor, currNode)
 
@@ -91,14 +103,11 @@ export function useReEnterUp(dispatch: Dispatch, editor: ReactEditor, pageId: st
         voids: true
     })
     const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
-    console.log(`Previous Parent`)
-    console.log(previousParent)
 
-
-    if (previousParent && previousParent.type === PEAK_LEARNING) {
-        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as string, focused: true}))
+    if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as string, focused: true}))
     } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
-        dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.code_id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.code_id as string, focused: true}))
     } else {
         Transforms.select(editor, previousNodePath)
         Transforms.collapse(editor, {edge: 'end'} )

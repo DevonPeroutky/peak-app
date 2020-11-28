@@ -17,8 +17,7 @@ import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
-import {isAtLastLineOfLearning, next} from "../../../utils/editor-utils";
-import {PEAK_LEARNING} from "../../peak-learning-plugin/defaults";
+import { reEnterDown, reEnterUp} from "../../../utils/editor-utils";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
@@ -96,71 +95,20 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         Transforms.removeNodes(editor, { at: [], match: node => node.code_id === element.code_id })
     }
     const leave = (direction: "up" | "down") => {
-        const [match] = Editor.nodes(editor, { match: n => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id, at: []});
+        const matchFunc = (n: Node) => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id
 
-        if (!match) { return}
         if (direction === "down") {
-            exitDown(match)
+            exitDown(matchFunc)
         } else {
-            exitUp(match)
+            exitUp(matchFunc)
         }
     }
 
-    const exitUp = (match: NodeEntry<Node>) => {
-        const [currNode, currNodePath] = match
-
-        const pathToCodeEditor = ReactEditor.findPath(editor, currNode)
-
-        const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
-
-        // Get previous Node and its parent
-        const [previousNode, previousNodePath] = Editor.previous(editor, {
-            at: pathToCodeEditor,
-            match: n => Editor.isBlock(editor, n),
-            voids: true
-        })
-        const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
-        console.log(`Current Parent`)
-        console.log(currParent)
-        console.log(`Previous Parent`)
-        console.log(previousParent)
-
-
-        if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: previousParent.id as string, focused: true}))
-        } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: previousNode.code_id as string, focused: true}))
-        } else {
-            Transforms.select(editor, previousNodePath)
-            Transforms.collapse(editor, {edge: 'end'} )
-            ReactEditor.focus(editor)
-        }
+    const exitUp = (matchFunc: (n: Node) => boolean) => {
+        reEnterUp(editor, currentWikiPage.id, matchFunc)
     }
-    const exitDown = (match: NodeEntry<Node>) => {
-        const [currNode, currNodePath] = match
-        if (isAtLastLineOfLearning(editor, match)) {
-            console.log(`WE ARE AT THE last line of the learning`)
-            console.log(currNode)
-            const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: currParent.id as string, focused: true}))
-            return
-        }
-
-        const pathToCodeEditor = ReactEditor.findPath(editor, match[0])
-        // Get previous Node and its parent
-        const [nextNode, nextNodePath] = Editor.next(editor, {
-            at: pathToCodeEditor,
-            match: n => Editor.isBlock(editor, n),
-            voids: true
-        })
-
-        if (nextNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: nextNode.code_id as string, focused: true}))
-        } else {
-            Transforms.select(editor, nextNodePath)
-            Transforms.collapse(editor, {edge: 'end'} )
-            ReactEditor.focus(editor)
-        }
+    const exitDown = (matchFunc: (n: Node) => boolean) => {
+        reEnterDown(editor, currentWikiPage.id, matchFunc)
     }
     const exitBreak = async () => {
         const empty_paragraph = {
