@@ -119,8 +119,6 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
 // Random utils we need
 export function isAtLastLineOfLearning(editor: Editor, nodeEntry?: any): boolean {
     const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
-    console.log(`Current Node`)
-    console.log(currNode)
     const [currParent, currParentPath] = Editor.parent(editor, currPath)
     const [lastChildNode] = currParent.children.slice(-1)
     return currParent.type === PEAK_LEARNING && lastChildNode.id === currNode.id

@@ -1,5 +1,5 @@
 import {
-    ELEMENT_CODE_BLOCK,
+    ELEMENT_CODE_BLOCK, ELEMENT_LI,
     ELEMENT_LINK,
     ELEMENT_OL,
     ELEMENT_UL,
@@ -77,8 +77,6 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
 
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
-        console.log(`NEXT NODE`)
-        console.log(nextNode)
 
         if (isAtLastLineOfLearning(editor)) {
             console.log(`Go to LearningSelect`)
@@ -98,12 +96,18 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
      * Without throwing errors when at the Top
      */
     if (!event.metaKey && (event.key == "ArrowUp")) {
+        const currentPath = editor.selection?.anchor.path
+
+        // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
+        const currNode = Node.parent(editor, currentPath)
+        const currParent = Node.parent(editor, ReactEditor.findPath(editor, currNode))
 
         // getPreviousNode(editor, currentLevel, editorLevel)
         let previousNode: Node | undefined = previous(editor)
-        console.log(`Previous Node`)
-        console.log(previousNode)
-        if (previousNode && isCustomPeakVoidElement(previousNode)) {
+
+        if (currParent && currParent.type === ELEMENT_LI) {
+            console.log(`LIST ITEM`)
+        } else if (previousNode && isCustomPeakVoidElement(previousNode)) {
             // TODO: Replace this when we get rid of code_id
             const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
             dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
