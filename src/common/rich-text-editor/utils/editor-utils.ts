@@ -64,7 +64,7 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
         const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
         console.log(`WE LAST LINE OF LEARNING`)
         console.log(currParent)
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as number, focused: true}))
         return
     }
 
@@ -80,7 +80,7 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
     console.log(nextNode)
 
     if (nextNode.type === ELEMENT_CODE_BLOCK) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.code_id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.id as number, focused: true}))
     } else {
         Transforms.select(editor, nextNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
@@ -112,9 +112,9 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
     console.log(currParent)
 
     if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as number, focused: true}))
     } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.code_id as string, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.id as number, focused: true}))
     } else {
         console.log(`JUST FOCUSING`)
         console.log(previousParent)

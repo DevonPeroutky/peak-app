@@ -15,7 +15,7 @@ interface LanguageSelectProps {
 }
 
 export function LanguageContextBar(props: LanguageSelectProps) {
-    const { updateLanguage, language, isEditing, codeId, pageId, deleteCodeBlock } = props
+    const { updateLanguage, language, isEditing, deleteCodeBlock } = props
     return (
         <div className={cn("code-metadata-overlay")}>
             { (isEditing) ?

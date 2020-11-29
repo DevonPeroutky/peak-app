@@ -109,10 +109,11 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
                     // codeEditorRef.current!.editor.selection.cursor.onChange
                 }}
                 onFocus={() => {
-                    updateFocus(true)
+                    if (shouldFocus) {
+                        updateFocus(true)
+                    }
                 }}
                 onBlur={() => {
-                    console.log(`BLURRing`)
                     updateFocus(false)
                     saveCode(codeBlockValue)
                 }}

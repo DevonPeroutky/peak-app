@@ -79,10 +79,10 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
 
         if (isAtLastLineOfLearning(editor)) {
             console.log(`Go to LearningSelect`)
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as number, focused: true}))
         } else if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
             event.preventDefault()
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.code_id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.id as number, focused: true}))
         }
     }
 
@@ -104,12 +104,8 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         // getPreviousNode(editor, currentLevel, editorLevel)
         let previousNode: Node | undefined = previous(editor)
 
-        if (currParent && currParent.type === ELEMENT_LI) {
-            console.log(`LIST ITEM`)
-        } else if (previousNode && isCustomPeakVoidElement(previousNode)) {
-            // TODO: Replace this when we get rid of code_id
-            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
         }
     }
 
@@ -129,8 +125,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
         const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
         if (isPreviousBlockVoid && (selectionCollapsedAndAtStart)) {
-            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
         }
     }
 }

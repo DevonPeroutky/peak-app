@@ -130,7 +130,7 @@ export const wikiPageSlice = createSlice({
             const newPageState = {...state[action.payload.pageId], editorState: newPageEditingState};
             return {...state, [action.payload.pageId]: newPageState }
         },
-        setEditorFocusToNode(state, action: PayloadAction<{pageId: string, nodeId: string, focused: boolean }>) {
+        setEditorFocusToNode(state, action: PayloadAction<{pageId: string, nodeId: number, focused: boolean }>) {
             const { pageId, nodeId, focused } = action.payload
             const newCodeEditorFocusState = { [nodeId]: focused }
             const newPageEditingState = { ...state[pageId].editorState, focusMap: newCodeEditorFocusState };
@@ -141,7 +141,7 @@ export const wikiPageSlice = createSlice({
             const { pageId, nodeId } = action.payload
             const emptyParagraphBlock = { text: "", type: ELEMENT_PARAGRAPH }
             const currentPageBody: Node[] = state[pageId].body as Node[]
-            const newPageBody = currentPageBody.map(node => node.code_id === nodeId ? emptyParagraphBlock : node )
+            const newPageBody = currentPageBody.map(node => node.id === nodeId ? emptyParagraphBlock : node )
             const newPageState = {...state[pageId], body: newPageBody};
             return {...state, [pageId]: newPageState }
         },

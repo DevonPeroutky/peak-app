@@ -25,12 +25,12 @@ export const PeakLearning = (props: RenderElementProps) => {
     return (
         <div className={"peak-learning-container"} {...props.attributes} key={0} tabIndex={0}>
             {props.children}
-            <PeakLearningSelect nodeId={element.id as string}/>
+            <PeakLearningSelect nodeId={element.id as number}/>
         </div>
     )
 }
 
-const PeakLearningSelect = (props: { nodeId: string }) => {
+const PeakLearningSelect = (props: { nodeId: number }) => {
     const { nodeId } = props
     const dispatch = useDispatch()
     const editor = useEditor()
@@ -79,7 +79,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.code_id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.id as number, focused: true}))
         } else {
             const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
             Transforms.select(editor, lastChildNodePath)

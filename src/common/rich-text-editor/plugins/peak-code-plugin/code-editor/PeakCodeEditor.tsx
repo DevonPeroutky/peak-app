@@ -22,7 +22,7 @@ import { reEnterDown, reEnterUp} from "../../../utils/editor-utils";
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
     const editor = useEditor()
-    const matchFunc = (n: Node) => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id
+    const matchFunc = (n: Node) => n.type === ELEMENT_CODE_BLOCK && n.id === element.id
 
     // Hooks
     const currentWikiPage = useCurrentWikiPage();
@@ -61,7 +61,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
             const bro: Node[] = currentPageNodes[0] as Node[]
             // @ts-ignore
             const childNodes: Node[] = bro.children as Node[]
-            const updatedNodes: Node[] = childNodes.map(n => (n.code_id && n.code_id === props.element.code_id) ? {...n, ...payload} : n)
+            const updatedNodes: Node[] = childNodes.map(n => (n.id && n.id === props.element.id) ? {...n, ...payload} : n)
 
             const newBody: Node[] = [{
                 children: updatedNodes
@@ -74,13 +74,13 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
             const journalEntries: JournalEntry[] = currentPageNodes as JournalEntry[]
 
             // @ts-ignore
-            const responsibleJournalEntry: JournalEntry | undefined = journalEntries.find(je => je.body.map(n => n.code_id).includes(props.element.code_id))
+            const responsibleJournalEntry: JournalEntry | undefined = journalEntries.find(je => je.body.map(n => n.id).includes(props.element.id))
 
             if (!responsibleJournalEntry) {
                 console.log(`WHAT THE FUCK`)
             } else {
                 // @ts-ignore
-                const updatedJournalBody = responsibleJournalEntry.body.map(n => (n.code_id && n.code_id === props.element.code_id) ? {...n, ...payload} : n)
+                const updatedJournalBody = responsibleJournalEntry.body.map(n => (n.id && n.id === props.element.id) ? {...n, ...payload} : n)
                 const newJournalEntry: JournalEntry = {...responsibleJournalEntry, body: updatedJournalBody}
                 saveBulkJournalEntries([newJournalEntry])
             }
@@ -92,8 +92,8 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         if (e) {
             e.preventDefault();
         }
+        await toggleNodeType(editor, { activeType: ELEMENT_CODE_BLOCK })
         await exitUp()
-        toggleNodeType(editor, { activeType: ELEMENT_CODE_BLOCK })
     }
 
     const exitUp = () => {
@@ -109,7 +109,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         }
 
         const transformFunc = () => {
-            const [match] = Editor.nodes(editor, { match: n => n.type === ELEMENT_CODE_BLOCK && n.code_id === element.code_id, at: []});
+            const [match] = Editor.nodes(editor, { match: n => n.type === ELEMENT_CODE_BLOCK && n.id === element.id, at: []});
 
             if (match) {
                 const codeNode = match[0]
@@ -125,26 +125,23 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     }
 
     // Focus handler
-    const lockFocus = (shouldFocus: boolean) => {
+    const lockFocus = (shouldFocusThis: boolean) => {
         wikiSave.cancel()
-        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: element.code_id, focused: shouldFocus}))
+        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: element.id, focused: shouldFocusThis}))
     }
-    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.code_id] || false
-
-    console.log(`Re-Rendering: ${shouldFocus}`)
-    console.log(`Re-Rendering (Should focus?): ${currentWikiPage.editorState.focusMap[element.code_id]}`)
+    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.id] || false
     return (
         <div
             {...props.attributes}
             className={"editor-container"}
             style={{ witdth: "100%!important" }}
             tabIndex="0"
-            key={element.code_id}
+            key={element.id}
         >
             <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
             <div className="code-block-container">
                 <LanguageContextBar
-                    codeId={props.element.code_id}
+                    codeId={props.element.id}
                     pageId={currentWikiPage.id}
                     updateLanguage={updateLanguage}
                     isEditing={currentWikiPage.editorState.isEditing}
