@@ -1,6 +1,5 @@
 import {
     ELEMENT_CODE_BLOCK, ELEMENT_LI,
-    ELEMENT_LINK,
     ELEMENT_OL,
     ELEMENT_UL,
     isSelectionAtBlockStart,
@@ -16,13 +15,13 @@ import {
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
 import {Dispatch} from "redux";
-import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {
     isAtLastLineOfLearning,
     isCustomPeakVoidElement,
     next,
     previous
 } from "./editor-utils";
+import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
 export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
     if (event.shiftKey && event.key == '8') {

@@ -90,7 +90,10 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
 }
 export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
+    console.log(`Re-Enter Up`)
+    console.log(match)
     if (!match) { return }
+    console.log(`Curr Node`)
     const [currNode, currNodePath] = match
     const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
 
@@ -104,11 +107,18 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
     })
     const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
 
+    console.log(`SUCK`)
+    console.log(currNode)
+    console.log(currParent)
+
     if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
         store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as string, focused: true}))
     } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
         store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.code_id as string, focused: true}))
     } else {
+        console.log(`JUST FOCUSING`)
+        console.log(previousParent)
+        console.log(previousNodePath)
         Transforms.select(editor, previousNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
         ReactEditor.focus(editor)
