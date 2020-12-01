@@ -1,5 +1,6 @@
 import {
-    ELEMENT_CODE_BLOCK, ELEMENT_LI,
+    ELEMENT_CODE_BLOCK,
+    ELEMENT_LI,
     ELEMENT_OL,
     ELEMENT_UL,
     isSelectionAtBlockStart,
@@ -76,6 +77,9 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
 
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+        console.log(`GOING DOWN -> Current Node`)
+        console.log(currNode)
 
         if (isAtLastLineOfLearning(editor)) {
             console.log(`Go to LearningSelect`)

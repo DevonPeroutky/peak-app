@@ -2,7 +2,7 @@ import {ReactEditor} from "slate-react";
 import {Editor, Node, NodeEntry, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, ELEMENT_LI} from "@udecode/slate-plugins";
 import {setEditorFocusToNode} from "../../../redux/wikiPageSlice";
 import {store, persistor} from "../../../redux/store";
 
@@ -90,10 +90,8 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
 }
 export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
-    console.log(`Re-Enter Up`)
-    console.log(match)
     if (!match) { return }
-    console.log(`Curr Node`)
+
     const [currNode, currNodePath] = match
     const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
 
@@ -106,10 +104,6 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
         voids: true
     })
     const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
-
-    console.log(`SUCK`)
-    console.log(currNode)
-    console.log(currParent)
 
     if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
         store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as number, focused: true}))
@@ -126,7 +120,7 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
 
 }
 
-// Random utils we need
+// TDOD: THIS DOES NOT WORK WITH LISTS.
 export function isAtLastLineOfLearning(editor: Editor, nodeEntry?: any): boolean {
     const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
     const [currParent, currParentPath] = Editor.parent(editor, currPath)

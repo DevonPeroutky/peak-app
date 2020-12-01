@@ -7,6 +7,7 @@ import peakWikiState from "./wikiPageSlice"
 import quickSwitcher from "./quickSwitcherSlice"
 import journal from "./journalSlice"
 import electron from "./electronSlice"
+import tags from "./tagSlice"
 
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
@@ -17,7 +18,7 @@ const persistConfig = {
     storage,
 };
 
-const rootReducer = combineReducers({ topics, user, futureReads, peakWikiState, quickSwitcher, journal, electron });
+const rootReducer = combineReducers({ topics, user, futureReads, peakWikiState, quickSwitcher, journal, electron, tags});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const middleware = [...getDefaultMiddleware(), logger];

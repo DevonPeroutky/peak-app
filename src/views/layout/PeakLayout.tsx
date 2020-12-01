@@ -23,6 +23,7 @@ import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
+import {loadPeakTags} from "../../utils/requests";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -83,8 +84,12 @@ const PeakLayout = (props: {}) => {
                 dispatch(setUser(user))
             });
     };
+    
+    const fetchTags = () => {
+        return loadPeakTags(user.id)
+    }
 
-    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={[fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy]}/>
+    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={[fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy, fetchTags]}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">
@@ -92,24 +97,24 @@ const PeakLayout = (props: {}) => {
                 <Content className="peak-main-content">
                     <MainBar/>
                     <Content className="peak-content-container">
-                                                                   <Switch>
-                                                                   <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
-                                                                   <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
-                                                                   <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
-                                                                   <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
-                                                                   <Route path={`${match.path}/wiki/:id`} render={(props) => {
-                                                                   if (currentWikiPage) {
-                                                                   return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
-                                                                   } else {
-                                                                   return <Redirect to={"/"} />
-                                                                   }
-                                                                   }}/>
-                                                                   <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
-                                                                   <Route path="*">
-                                                                   <h1>NOT FOUND</h1>
-                                                                   </Route>
-                                                                   </Switch>
-                                                                   </Content>
+                       <Switch>
+                           <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                           <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList {...props} />} />
+                           <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
+                           <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
+                           <Route path={`${match.path}/wiki/:id`} render={(props) => {
+                               if (currentWikiPage) {
+                                   return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
+                               } else {
+                                   return <Redirect to={"/"} />
+                               }
+                           }}/>
+                           <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
+                           <Route path="*">
+                               <h1>NOT FOUND</h1>
+                           </Route>
+                           </Switch>
+                       </Content>
                     <EditorContextBar/>
                 </Content>
             </Layout>
