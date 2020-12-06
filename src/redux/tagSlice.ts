@@ -4,8 +4,9 @@ export const STUB_TAG_ID = "new-tag"
 export interface PeakTag {
     id: string
     title: string
+    inserted_at: string
     label?: string
-    color?: string
+    color: string
 }
 const emptyTagList: PeakTag[] = []
 

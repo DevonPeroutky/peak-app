@@ -1,7 +1,7 @@
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import React, {useCallback, useRef, useState} from "react";
 import "./peak-learning.scss"
-import {Empty, Select} from 'antd';
+import {Empty, Select, Tag} from 'antd';
 import {useCurrentUser, useCurrentWikiPage} from "../../../../../utils/hooks";
 import {setEditorFocusToNode, updatePageContents} from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
@@ -12,7 +12,18 @@ import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {next, reEnterDown} from "../../../utils/editor-utils";
 import {PeakTag, STUB_TAG_ID} from "../../../../../redux/tagSlice";
 import {createPeakTags, useTags} from "../../../../../utils/requests";
+import {calculateNextColor} from "../utils";
+import {LabeledValue} from "antd/es/select";
 const { Option } = Select;
+
+
+
+export interface PeakDisplayTag {
+    id: string
+    title: string
+    color?: string
+    label?: string
+}
 
 export const PeakLearning = (props: RenderElementProps) => {
     const { element } = props
@@ -38,26 +49,30 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const currentWikiPage = useCurrentWikiPage();
-    const [tags, setTags] = useState<PeakTag[]>(existingTags)
-    const [componentSelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
+    const [tags, setTags] = useState<PeakDisplayTag[]>(existingTags)
+    const [displaySelectedTags, setSelectedTags] = useState<PeakDisplayTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
     if (shouldFocus) {
+        console.log(`SHOULD FOCUS: ${shouldFocus}`)
         mainRef.current.focus()
     }
-    const onSelect = (tagName: string) => {
-        const existingTag = tags.find(t => t.title === (tagName))
+    const onSelect = (displayLabel: LabeledValue) => {
+        console.log(`SELECtEd`)
+        console.log(displayLabel)
+        const existingTag = tags.find(t => t.title === (displayLabel.value))
         if (existingTag) {
-            setSelectedTags([...componentSelectedTags, existingTag])
+            setSelectedTags([...displaySelectedTags, existingTag])
         } else {
-            const newTag: PeakTag = {id: STUB_TAG_ID, title: tagName}
+            const newColor: string = calculateNextColor(tags)
+            const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setTags([...tags, newTag])
-            setSelectedTags([...componentSelectedTags, newTag])
+            setSelectedTags([...displaySelectedTags, newTag])
         }
     }
-    const onDeselect = (tagName: string) => {
-        const newTagList: PeakTag[] = componentSelectedTags.filter(tag => tag.title !== tagName)
+    const onDeselect = (displayLabel: LabeledValue) => {
+        const newTagList: PeakDisplayTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
         // User clicked on the X of the tag, without ever focusing
         if (!shouldFocus) {
             Transforms.setNodes(editor, {selected_tags: newTagList}, { at: nodePath })
@@ -102,24 +117,37 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         lockFocus(false)
         setDropdownState(false)
 
-        const hotSwap = (ogList: PeakTag[], fullList: PeakTag[]) => {
+        const hotSwap = (ogList: PeakDisplayTag[], fullList: PeakTag[]) => {
             return ogList.map(tag => (tag.id === STUB_TAG_ID) ? fullList.find(t => t.title === tag.title) as PeakTag : tag)
         }
-        createPeakTags(currentUser.id, componentSelectedTags).then(createdTags => {
-            const newSelected: PeakTag[] = hotSwap(componentSelectedTags, createdTags)
-            const newTagList: PeakTag[] = hotSwap(tags, createdTags)
+        createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
+            const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
+            const newTagList: PeakDisplayTag[] = hotSwap(tags, createdTags)
             setTags(newTagList)
             setSelectedTags(newSelected)
             Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
         })
     }
 
-    const CREATE_NEW_TAG_OPTION: PeakTag = { id: "create-new-tag-item", title: currentSearch, label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakTag[] = tags.filter(o => !componentSelectedTags.map(t => t.id).includes(o.id));
+    function tagRender(props) {
+        const { label, value, closable, onClose } = props;
+        console.log(`da props`)
+        console.log(props)
+
+        return (
+            <Tag color={label} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
+                {value}
+            </Tag>
+        );
+    }
+
+    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: "create-new-tag-item", title: currentSearch, label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = tags.find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
-    const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+    const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
             <TagOutlined className={"peak-tag-icon"}/>
@@ -133,7 +161,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
                 onBlur={saveAndLeave}
                 open={open}
                 onFocus={() => {
-                    console.log(`Getting FOCUSED`)
                     setDropdownState(true)
                 }}
                 onInputKeyDown={handleInputKeyDown}
@@ -143,12 +170,16 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
                 }}
                 optionLabelProp="value"
                 mode="multiple"
-                value={componentSelectedTags.map(t => t.title)}
+                value={displaySelectedTags.map(t => {
+                    return { value: t.title, label: t.color } as LabeledValue
+                })}
+                labelInValue={true}
                 bordered={false}
                 placeholder="Tag this information for later"
                 onSelect={onSelect}
                 onDeselect={onDeselect}
                 notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
+                tagRender={tagRender}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
                     <Option key={tag.id} value={tag.title as string}>

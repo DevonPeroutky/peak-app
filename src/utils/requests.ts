@@ -6,6 +6,7 @@ import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/tagSli
 import {store, persistor} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
+import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-learning-plugin/component/PeakLearning";
 
 
 // Page
@@ -25,7 +26,7 @@ export function updatePage(userId: string, pageId: string, updatedPageParams: Pe
 function deleteTagRequest(userId: string, tagId: string) {
     return axios.delete(`${backend_host_address}/api/v1/users/${userId}/tags/${tagId}`)
 }
-function createTagsRequest(userId: string, tags: PeakTag[]) {
+function createTagsRequest(userId: string, tags: PeakDisplayTag[]) {
     return axios.post(`${backend_host_address}/api/v1/users/${userId}/tags`, {
         "tags": tags
     })
@@ -34,8 +35,9 @@ function loadTagsRequests(userId: string) {
     return axios.get(`${backend_host_address}/api/v1/users/${userId}/tags`)
 }
 
-export function createPeakTags(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
-    const tagsToBeCreated: PeakTag[] = tags.filter(t => t.id === STUB_TAG_ID)
+export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<PeakTag[]> {
+    console.log(`ACTUAlLY CREATING THE TAGS`)
+    const tagsToBeCreated: PeakDisplayTag[] = tags.filter(t => t.id === STUB_TAG_ID)
     if (tagsToBeCreated.length > 0) {
         return createTagsRequest(userId, tagsToBeCreated).then(res => {
             const created_tags: PeakTag[] = res.data.tags as PeakTag[]
