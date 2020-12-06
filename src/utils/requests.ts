@@ -55,19 +55,19 @@ export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<
     });
 
 }
-export function deletePeakTag(userId: string, tag: PeakTag): Promise<boolean> {
-    if (tag.id === STUB_TAG_ID) {
+export function deletePeakTag(userId: string, tagId: string): Promise<string> {
+    if (tagId === STUB_TAG_ID) {
         return new Promise(function(resolve, reject) {
-            resolve(true);
+            resolve(tagId);
         });
     } else {
-        return deleteTagRequest(userId, tag.id).then(res => {
-            store.dispatch(deleteTag(tag.id))
-            return true
+        return deleteTagRequest(userId, tagId).then(res => {
+            store.dispatch(deleteTag(tagId))
+            return tagId
         }).catch(err => {
-            console.log(`DID NOT successfully delete the tag: ${tag.id}`)
+            console.log(`DID NOT successfully delete the tag: ${tagId}`)
             console.log(err)
-            return false
+            return tagId
         })
     }
 

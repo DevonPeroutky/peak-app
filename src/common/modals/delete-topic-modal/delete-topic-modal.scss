@@ -1,3 +1,4 @@
+@import "../../../constants/variables";
 .delete-topic-icon {
   cursor: pointer;
   display: none;
@@ -7,6 +8,6 @@
   }
 
   &:hover {
-    color: #1890ff;
+    color: $primary-blue;
   }
 }

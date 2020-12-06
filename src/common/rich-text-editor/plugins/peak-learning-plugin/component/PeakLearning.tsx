@@ -3,20 +3,19 @@ import React, {useCallback, useRef, useState} from "react";
 import "./peak-learning.scss"
 import {Empty, Select, Tag} from 'antd';
 import {useCurrentUser, useCurrentWikiPage} from "../../../../../utils/hooks";
-import {setEditorFocusToNode, updatePageContents} from "../../../../../redux/wikiPageSlice";
+import {setEditorFocusToNode } from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {next, reEnterDown} from "../../../utils/editor-utils";
+import {reEnterDown} from "../../../utils/editor-utils";
 import {PeakTag, STUB_TAG_ID} from "../../../../../redux/tagSlice";
-import {createPeakTags, useTags} from "../../../../../utils/requests";
+import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
 import {calculateNextColor} from "../utils";
 import {LabeledValue} from "antd/es/select";
+import {DeleteOutlined} from "@ant-design/icons/lib";
 const { Option } = Select;
-
-
 
 export interface PeakDisplayTag {
     id: string
@@ -30,7 +29,6 @@ export const PeakLearning = (props: RenderElementProps) => {
     const editor = useEditor()
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
-    console.log(element.selected_tags)
 
     return (
         <div className={"peak-learning-container"} {...props.attributes} key={0} tabIndex={0}>
@@ -55,12 +53,9 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
 
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
     if (shouldFocus) {
-        console.log(`SHOULD FOCUS: ${shouldFocus}`)
         mainRef.current.focus()
     }
     const onSelect = (displayLabel: LabeledValue) => {
-        console.log(`SELECtEd`)
-        console.log(displayLabel)
         const existingTag = tags.find(t => t.title === (displayLabel.value))
         if (existingTag) {
             setSelectedTags([...displaySelectedTags, existingTag])
@@ -82,7 +77,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
     }
     const handleInputKeyDown = (event) => {
         if (event.key === 'Enter' && (!open && currentSearch.length === 0)) {
-            console.log("WE WILL BE LEAVING NOW")
             event.preventDefault()
             leaveDown()
         } else if (event.key === "Escape") {
@@ -91,6 +85,12 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         } else if (["ArrowDown", "ArrowUp"].includes(event.key) && !open) {
             (event.key === "ArrowDown") ? leaveDown() : leaveUp()
         }
+    }
+    const deleteTag = (displayTag: PeakDisplayTag) => {
+        deletePeakTag(currentUser.id, displayTag.id).then(res => {
+            const newTagList: PeakDisplayTag[] = tags.filter(t => t.id !== res)
+            setTags(newTagList)
+        })
     }
 
     const leaveDown = () => {
@@ -131,8 +131,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
 
     function tagRender(props) {
         const { label, value, closable, onClose } = props;
-        console.log(`da props`)
-        console.log(props)
 
         return (
             <Tag color={label} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
@@ -153,7 +151,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
             <TagOutlined className={"peak-tag-icon"}/>
             <Select
                 onClick={() => {
-                    console.log('ON FOCUS-ish')
                     setDropdownState(true)
                     lockFocus(true)
                 }}
@@ -183,7 +180,13 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
                     <Option key={tag.id} value={tag.title as string}>
-                        {tag.label || tag.title}
+                        <div className={"peak-learning-select-option"}>
+                            <span>{tag.label || tag.title}</span>
+                            <DeleteOutlined className={"peak-delete-learning-option"} onClick={(e) => {
+                                e.stopPropagation()
+                                deleteTag(tag)
+                            }}/>
+                        </div>
                     </Option>
                 ))}
             </Select>

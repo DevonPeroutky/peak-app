@@ -1,3 +1,4 @@
+@import "../../../../../constants/variables";
 .peak-learning-container {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 16px 24px;
@@ -12,6 +13,19 @@
     .peak-tag-icon {
       margin-right: 5px;
       color: rgba(9, 30, 66, 0.25);
+    }
+  }
+}
+
+.peak-learning-select-option {
+  display: flex!important;
+  justify-content: space-between!important;
+  align-items: center;
+  width: 100%;
+
+  .peak-delete-learning-option {
+    &:hover {
+      color: $primary-blue;
     }
   }
 }
