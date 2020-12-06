@@ -235,7 +235,6 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
 
-
     return (
         <Slate
             editor={editor}
