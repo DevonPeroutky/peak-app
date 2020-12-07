@@ -126,12 +126,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         const hotSwap = (ogList: PeakDisplayTag[], fullList: PeakTag[]) => {
             return ogList.map(tag => (tag.id === STUB_TAG_ID) ? fullList.find(t => t.title === tag.title) as PeakTag : tag)
         }
-        console.log(`Tags to POST`)
-        console.log(displaySelectedTags)
         createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
-            console.log(`RESPONSE`)
-            console.log(createdTags)
-            console.log(displaySelectedTags)
             const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
             setTags([...tags, ...createdTags])
             setSelectedTags(newSelected)
