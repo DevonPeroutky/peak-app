@@ -41,14 +41,15 @@ interface PeakCodeEditorProps {
     isEditing: boolean,
     onCodeChange: (newValue: string) => void,
     saveCode: (newValue: string) => void,
-    leaveHandler: (direction: "up" | "down") => void,
+    leaveUp: () => void,
+    leaveDown: () => void,
     language: string,
     exitBreak: () => void,
     deleteCodeBlock: (e: any) => void
 }
 
 function PeakAceEditor(props: PeakCodeEditorProps) {
-    const { leaveHandler, exitBreak, saveCode, shouldFocus, updateFocus, codeBlockValue, onCodeChange, language, isEditing, deleteCodeBlock } = props
+    const { leaveUp, leaveDown, exitBreak, saveCode, shouldFocus, updateFocus, codeBlockValue, onCodeChange, language, isEditing, deleteCodeBlock } = props
     const codeEditorRef = useRef<ReactAce | null>(null)
     const copyToClipboard = () => {
         message.warning("Copy code to clipboard, not implemented yet!")
@@ -77,12 +78,12 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
 
     const moveUpDown = (direction: "up" | "down") => {
         if (isAtBeginning() && direction === "up") {
-            leaveHandler("up")
+            leaveUp()
             return
         }
 
         if (isAtEnd() && direction === "down") {
-            leaveHandler("down")
+            leaveDown()
             return
         }
 
@@ -108,7 +109,9 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
                     // codeEditorRef.current!.editor.selection.cursor.onChange
                 }}
                 onFocus={() => {
-                    updateFocus(true)
+                    if (shouldFocus) {
+                        updateFocus(true)
+                    }
                 }}
                 onBlur={() => {
                     updateFocus(false)

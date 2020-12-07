@@ -1,18 +1,17 @@
 import {Editor, Transforms} from "slate";
-import {v4 as uuidv4} from "uuid";
-import {ELEMENT_CODE_BLOCK, unwrapList} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {store} from "../../../../redux/store";
 import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
-    const codeId = uuidv4()
+    const nodeId = Date.now()
 
     // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, {
         type: ELEMENT_CODE_BLOCK,
-        code_id: codeId,
+        id: nodeId,
         children: [{text: ''}]
     });
     const pageId = window.location.href.split("/").pop()
-    store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: codeId, focused: true}))
+    store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
 }

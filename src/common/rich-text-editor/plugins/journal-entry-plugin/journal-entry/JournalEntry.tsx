@@ -13,15 +13,16 @@ import {convertJournalEntryToSlateNodes} from "../../../editors/journal/utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
 import "./journal-entry.scss";
 
-const isNodeEmpty = (theChildren: Node[]) => {
-    if (theChildren.length != 1) { return false }
+export const isNodeEmpty = (node: Node) => {
+    const theChildren: Node[] = node.children as Node[]
+    if (!theChildren || theChildren.length != 1) { return false }
     const theNode = theChildren[0]
     const nodeText = Node.string(theNode)
     return theNode.type === ELEMENT_PARAGRAPH && nodeText.length === 0
 }
 
 export const JournalEntryBody = (props: { entry_date: string, attributes: any, children: any, element: any }) => {
-    const isEmpty: boolean = isNodeEmpty(props.element.children)
+    const isEmpty: boolean = isNodeEmpty(props.element)
     return (
         <div
             className={cn("peak-journal-entry", (getCurrentFormattedDate() == props.entry_date) ? "today" : "not-today", (isEmpty) ? "empty-journal" : "" )}

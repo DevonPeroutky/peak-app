@@ -10,8 +10,8 @@ import {
 import {withEditableJournalEntry} from "../../plugins/journal-entry-plugin/withEditableJournalEntry";
 import {JOURNAL_ENTRY_HEADER} from "../../types";
 import {JournalEntry} from "../../../../redux/wikiPageSlice";
-import {getCurrentFormattedDate} from "../../../../utils/time";
 import {JournalEntryPlugin} from "../../plugins/journal-entry-plugin/JournalEntryPlugin";
+import {getCurrentFormattedDate} from "../../../../utils/time";
 
 export const JOURNAL_PAGE_ID = "journal"
 export const EMPTY_JOURNAL_STATE: JournalEntry[] = [{

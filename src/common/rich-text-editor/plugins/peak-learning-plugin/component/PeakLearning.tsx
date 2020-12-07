@@ -1,66 +1,88 @@
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import React, {useCallback, useRef, useState} from "react";
 import "./peak-learning.scss"
-import {Empty, Select} from 'antd';
-import {useCurrentWikiPage} from "../../../../../utils/hooks";
-import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
+import {Empty, Select, Tag} from 'antd';
+import {useCurrentUser, useCurrentWikiPage} from "../../../../../utils/hooks";
+import {setEditorFocusToNode } from "../../../../../redux/wikiPageSlice";
 import {useDispatch} from "react-redux";
 import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {next, reEnterDown} from "../../../utils/editor-utils";
+import {reEnterDown} from "../../../utils/editor-utils";
+import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../redux/tagSlice";
+import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
+import {calculateNextColor} from "../utils";
+import {LabeledValue} from "antd/es/select";
+import {DeleteOutlined} from "@ant-design/icons/lib";
+import cn from 'classnames';
+import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
+import {capitalize_and_truncate} from "../../../../../utils/strings";
 const { Option } = Select;
 
-export interface PeakTag {
+export interface PeakDisplayTag {
     id: string
-    value: string
-    label?: string
+    title: string
     color?: string
+    label?: string
 }
 
 export const PeakLearning = (props: RenderElementProps) => {
     const { element } = props
+    const editor = useEditor()
+    const path = ReactEditor.findPath(editor, props.element)
+    const tags = element.selected_tags as PeakTag[]
+    console.log(element)
+    const isEmpty: boolean = isNodeEmpty(element)
 
     return (
-        <div className={"peak-learning-container"} {...props.attributes} key={0} tabIndex={0}>
+        <div className={cn("peak-learning-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
             {props.children}
-            <PeakLearningSelect nodeId={element.id as string}/>
+            <PeakLearningSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
         </div>
     )
 }
 
-const PeakLearningSelect = (props: { nodeId: string }) => {
-    const { nodeId } = props
+const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
+    const { nodeId, nodePath, selected_tags } = props
     const dispatch = useDispatch()
     const editor = useEditor()
+    const existingTags = useTags()
+    const currentUser = useCurrentUser()
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const currentWikiPage = useCurrentWikiPage();
-    const [tags, setTags] = useState<PeakTag[]>([{id: "0", value: "Product Management"}])
-    const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+    const [tags, setTags] = useState<PeakDisplayTag[]>(existingTags)
+    const [displaySelectedTags, setSelectedTags] = useState<PeakDisplayTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
     if (shouldFocus) {
-        console.log(`Focusing ${nodeId}`)
         mainRef.current.focus()
     }
-    const onSelect = (tagName: string) => {
-        const existingTag = tags.find(t => t.value === (tagName))
+    const onSelect = (displayLabel: LabeledValue) => {
+        const existingTag = tags.find(t => t.title === (displayLabel.value))
         if (existingTag) {
-            setSelectedTags([...selectedTags, existingTag])
+            setSelectedTags([...displaySelectedTags, existingTag])
         } else {
-            setTags([...tags, {id: "CHANGE THIS", value: tagName}])
-            setSelectedTags([...selectedTags, {id: "CHANGE THIS", value: tagName}])
+            const newColor: string = calculateNextColor(tags)
+            const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
+            console.log(`CREATING NEW TAG`)
+            console.log(newTag)
+            setSelectedTags([...displaySelectedTags, newTag])
         }
     }
-    const onDeselect = (tagName: string) => {
-        setSelectedTags(selectedTags.filter(tag => tag.value !== tagName))
+    const onDeselect = (displayLabel: LabeledValue) => {
+        const newTagList: PeakDisplayTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
+        // User clicked on the X of the tag, without ever focusing
+        if (!shouldFocus) {
+            Transforms.setNodes(editor, {selected_tags: newTagList}, { at: nodePath })
+        }
+        setSelectedTags(newTagList)
+        setCurrentSearch("")
     }
     const handleInputKeyDown = (event) => {
         if (event.key === 'Enter' && (!open && currentSearch.length === 0)) {
-            console.log("WE WILL BE LEAVING NOW")
             event.preventDefault()
             leaveDown()
         } else if (event.key === "Escape") {
@@ -69,6 +91,12 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         } else if (["ArrowDown", "ArrowUp"].includes(event.key) && !open) {
             (event.key === "ArrowDown") ? leaveDown() : leaveUp()
         }
+    }
+    const deleteTag = (displayTag: PeakDisplayTag) => {
+        deletePeakTag(currentUser.id, displayTag.id).then(res => {
+            const newTagList: PeakDisplayTag[] = tags.filter(t => t.id !== res)
+            setTags(newTagList)
+        })
     }
 
     const leaveDown = () => {
@@ -79,7 +107,7 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.code_id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.id as number, focused: true}))
         } else {
             const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
             Transforms.select(editor, lastChildNodePath)
@@ -91,30 +119,52 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
         dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
     }
 
-    const CREATE_NEW_TAG_OPTION: PeakTag = { id: "TEMP ONLY", value: currentSearch, label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakTag[] = tags.filter(o => !selectedTags.map(t => t.id).includes(o.id));
+    const saveAndLeave = () => {
+        lockFocus(false)
+        setDropdownState(false)
+
+        const hotSwap = (ogList: PeakDisplayTag[], fullList: PeakTag[]) => {
+            return ogList.map(tag => (tag.id === STUB_TAG_ID) ? fullList.find(t => t.title === tag.title) as PeakTag : tag)
+        }
+        createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
+            const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
+            setTags([...tags, ...createdTags])
+            setSelectedTags(newSelected)
+            Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
+        }).finally(() => {
+            setCurrentSearch("")
+        })
+    }
+
+    function tagRender(props) {
+        const { label, value, closable, onClose } = props;
+
+        return (
+            <Tag color={label} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
+                {capitalize_and_truncate(value)}
+            </Tag>
+        );
+    }
+
+    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
-    const isExistingTag: boolean = tags.find(t => t.value === CREATE_NEW_TAG_OPTION.value) !== undefined
-    const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+    const isExistingTag: boolean = [...tags, ...displaySelectedTags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
+    const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+
     return (
         <div className={"peak-learning-select-container"} data-slate-editor >
             <TagOutlined className={"peak-tag-icon"}/>
             <Select
                 onClick={() => {
-                    console.log('ON FOCUS-ish')
                     setDropdownState(true)
                     lockFocus(true)
                 }}
                 ref={mainRef}
-                onBlur={() => {
-                    console.log(`BLURRED`)
-                    lockFocus(false)
-                    setDropdownState(false)
-                }}
+                onBlur={saveAndLeave}
                 open={open}
                 onFocus={() => {
-                    console.log(`Getting FOCUSED`)
                     setDropdownState(true)
                 }}
                 onInputKeyDown={handleInputKeyDown}
@@ -124,16 +174,30 @@ const PeakLearningSelect = (props: { nodeId: string }) => {
                 }}
                 optionLabelProp="value"
                 mode="multiple"
-                value={selectedTags.map(t => t.value)}
+                value={displaySelectedTags.map(t => {
+                    return { value: t.title, label: t.color } as LabeledValue
+                })}
+                labelInValue={true}
                 bordered={false}
                 placeholder="Tag this information for later"
                 onSelect={onSelect}
                 onDeselect={onDeselect}
                 notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
+                tagRender={tagRender}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
-                    <Option key={tag.id} value={tag.value as string}>
-                        {tag.label || tag.value}
+                    <Option key={tag.id} value={tag.title as string}>
+                        <div className={"peak-learning-select-option"}>
+                            <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
+                            { (tag.id === TEMP_HOLDER) ?
+                                null :
+                                <DeleteOutlined className={"peak-delete-learning-option"} onClick={(e) => {
+                                    e.stopPropagation()
+                                    deleteTag(tag)
+                                }}/>
+                            }
+
+                        </div>
                     </Option>
                 ))}
             </Select>

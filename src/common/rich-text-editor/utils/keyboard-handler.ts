@@ -1,6 +1,6 @@
 import {
-    ELEMENT_CODE_BLOCK, ELEMENT_LI,
-    ELEMENT_LINK,
+    ELEMENT_CODE_BLOCK,
+    ELEMENT_LI,
     ELEMENT_OL,
     ELEMENT_UL,
     isSelectionAtBlockStart,
@@ -16,15 +16,18 @@ import {
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
 import {Dispatch} from "redux";
-import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {
     isAtLastLineOfLearning,
     isCustomPeakVoidElement,
     next,
     previous
 } from "./editor-utils";
+import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
 export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
+    const currentPath = editor.selection?.anchor.path
+    if (currentPath === undefined)  { return }
+
     if (event.shiftKey && event.key == '8') {
         toggleList(editor, { typeList: ELEMENT_UL })
     }
@@ -78,12 +81,15 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
+        console.log(`GOING DOWN -> Current Node`)
+        console.log(currNode)
+
         if (isAtLastLineOfLearning(editor)) {
             console.log(`Go to LearningSelect`)
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as number, focused: true}))
         } else if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
             event.preventDefault()
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.code_id as string, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.id as number, focused: true}))
         }
     }
 
@@ -96,7 +102,6 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
      * Without throwing errors when at the Top
      */
     if (!event.metaKey && (event.key == "ArrowUp")) {
-        const currentPath = editor.selection?.anchor.path
 
         // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
         const currNode = Node.parent(editor, currentPath)
@@ -105,12 +110,8 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         // getPreviousNode(editor, currentLevel, editorLevel)
         let previousNode: Node | undefined = previous(editor)
 
-        if (currParent && currParent.type === ELEMENT_LI) {
-            console.log(`LIST ITEM`)
-        } else if (previousNode && isCustomPeakVoidElement(previousNode)) {
-            // TODO: Replace this when we get rid of code_id
-            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
         }
     }
 
@@ -130,8 +131,7 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
         const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
         if (isPreviousBlockVoid && (selectionCollapsedAndAtStart)) {
-            const id: string = previousNode.type === PEAK_LEARNING ? previousNode.id as string : previousNode.code_id as string
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: id, focused: true}))
+            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
         }
     }
 }

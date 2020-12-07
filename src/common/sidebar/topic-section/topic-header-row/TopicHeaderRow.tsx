@@ -9,12 +9,12 @@ import axios from "axios";
 import {backend_host_address} from "../../../../constants/constants";
 import {createPage, PeakWikiPage, setEditing} from "../../../../redux/wikiPageSlice";
 import {message} from "antd";
-import {capitalize} from "lodash";
 import {DeleteTopicModal} from "../../../modals/delete-topic-modal/DeleteTopicModal";
 import {UpdateTopicModal} from "../../../modals/update-topic/UpdateTopicModal";
 import cn from "classnames";
 import {PlusSquareOutlined} from "@ant-design/icons/lib";
 import "./topic-header-row.scss";
+import {capitalize_and_truncate} from "../../../../utils/strings";
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
     const [hovered, setHovering] = useState(false);
@@ -52,7 +52,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
     return (
         <div className="topic-group-title-row" onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <span className={"topic-group-title"}>{capitalize(props.topic.name)}</span>
+            <span className={"topic-group-title"}>{capitalize_and_truncate(props.topic.name)}</span>
             <div className="icons-container">
                 <DeleteTopicModal hovered={hovered} topicId={topic.id}/>
                 <UpdateTopicModal hovered={hovered} topicId={topic.id}/>
