@@ -25,6 +25,9 @@ import {
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
 export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
+    const currentPath = editor.selection?.anchor.path
+    if (currentPath === undefined)  { return }
+
     if (event.shiftKey && event.key == '8') {
         toggleList(editor, { typeList: ELEMENT_UL })
     }
@@ -99,7 +102,6 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
      * Without throwing errors when at the Top
      */
     if (!event.metaKey && (event.key == "ArrowUp")) {
-        const currentPath = editor.selection?.anchor.path
 
         // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
         const currNode = Node.parent(editor, currentPath)

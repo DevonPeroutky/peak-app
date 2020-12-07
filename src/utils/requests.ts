@@ -42,6 +42,8 @@ export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<
         return createTagsRequest(userId, tagsToBeCreated).then(res => {
             const created_tags: PeakTag[] = res.data.tags as PeakTag[]
             store.dispatch(addTags(created_tags))
+            console.log(`RESPONSE`)
+            console.log(res)
             console.log(created_tags)
             return created_tags
         }).catch(err => {

@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export const STUB_TAG_ID = "new-tag"
+export const TEMP_HOLDER = "create-new-tag-item"
 export interface PeakTag {
     id: string
     title: string

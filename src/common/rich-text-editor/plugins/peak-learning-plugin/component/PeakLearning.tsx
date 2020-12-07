@@ -10,7 +10,7 @@ import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {reEnterDown} from "../../../utils/editor-utils";
-import {PeakTag, STUB_TAG_ID} from "../../../../../redux/tagSlice";
+import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../redux/tagSlice";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
 import {calculateNextColor} from "../utils";
 import {LabeledValue} from "antd/es/select";
@@ -66,7 +66,8 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         } else {
             const newColor: string = calculateNextColor(tags)
             const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
-            setTags([...tags, newTag])
+            console.log(`ADDING ON SELECT`)
+            console.log(newTag)
             setSelectedTags([...displaySelectedTags, newTag])
         }
     }
@@ -77,7 +78,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
             Transforms.setNodes(editor, {selected_tags: newTagList}, { at: nodePath })
         }
         setSelectedTags(newTagList)
-
+        setCurrentSearch("")
     }
     const handleInputKeyDown = (event) => {
         if (event.key === 'Enter' && (!open && currentSearch.length === 0)) {
@@ -127,9 +128,14 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
             const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
             const newTagList: PeakDisplayTag[] = hotSwap(tags, createdTags)
+            console.log(`CREATING: SELECT`)
+            console.log(createdTags)
+            console.log(newTagList)
             setTags(newTagList)
             setSelectedTags(newSelected)
             Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
+        }).finally(() => {
+            setCurrentSearch("")
         })
     }
 
@@ -143,13 +149,11 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         );
     }
 
-    console.log(`THE TAGS`)
-    console.log(tags)
-    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: "create-new-tag-item", title: currentSearch, label: `Create new tag: ${currentSearch}` }
+    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch, label: `Create new tag: ${currentSearch}` }
     const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
-    const isExistingTag: boolean = tags.find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
+    const isExistingTag: boolean = [...tags, ...displaySelectedTags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
     const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     return (
@@ -188,10 +192,14 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
                     <Option key={tag.id} value={tag.title as string}>
                         <div className={"peak-learning-select-option"}>
                             <span>{tag.label || tag.title}</span>
-                            <DeleteOutlined className={"peak-delete-learning-option"} onClick={(e) => {
-                                e.stopPropagation()
-                                deleteTag(tag)
-                            }}/>
+                            { (tag.id === TEMP_HOLDER) ?
+                                null :
+                                <DeleteOutlined className={"peak-delete-learning-option"} onClick={(e) => {
+                                    e.stopPropagation()
+                                    deleteTag(tag)
+                                }}/>
+                            }
+
                         </div>
                     </Option>
                 ))}
