@@ -17,6 +17,7 @@ import {LabeledValue} from "antd/es/select";
 import {DeleteOutlined} from "@ant-design/icons/lib";
 import cn from 'classnames';
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
+import {capitalize_and_truncate} from "../../../../../utils/strings";
 const { Option } = Select;
 
 export interface PeakDisplayTag {
@@ -66,7 +67,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         } else {
             const newColor: string = calculateNextColor(tags)
             const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
-            console.log(`ADDING ON SELECT`)
+            console.log(`CREATING NEW TAG`)
             console.log(newTag)
             setSelectedTags([...displaySelectedTags, newTag])
         }
@@ -125,13 +126,14 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         const hotSwap = (ogList: PeakDisplayTag[], fullList: PeakTag[]) => {
             return ogList.map(tag => (tag.id === STUB_TAG_ID) ? fullList.find(t => t.title === tag.title) as PeakTag : tag)
         }
+        console.log(`Tags to POST`)
+        console.log(displaySelectedTags)
         createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
-            const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
-            const newTagList: PeakDisplayTag[] = hotSwap(tags, createdTags)
-            console.log(`CREATING: SELECT`)
+            console.log(`RESPONSE`)
             console.log(createdTags)
-            console.log(newTagList)
-            setTags(newTagList)
+            console.log(displaySelectedTags)
+            const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
+            setTags([...tags, ...createdTags])
             setSelectedTags(newSelected)
             Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
         }).finally(() => {
@@ -144,12 +146,12 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
 
         return (
             <Tag color={label} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
-                {value}
+                {capitalize_and_truncate(value)}
             </Tag>
         );
     }
 
-    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch, label: `Create new tag: ${currentSearch}` }
+    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
     const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
@@ -191,7 +193,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
                 {renderedTagList.map(tag => (
                     <Option key={tag.id} value={tag.title as string}>
                         <div className={"peak-learning-select-option"}>
-                            <span>{tag.label || tag.title}</span>
+                            <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
                             { (tag.id === TEMP_HOLDER) ?
                                 null :
                                 <DeleteOutlined className={"peak-delete-learning-option"} onClick={(e) => {
