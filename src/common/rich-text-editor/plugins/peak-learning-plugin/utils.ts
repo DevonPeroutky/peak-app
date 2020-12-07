@@ -8,10 +8,16 @@ import {PeakDisplayTag} from "./component/PeakLearning";
 export const createLearning = (editor: Editor) => {
     unwrapList(editor);
     // Transforms.removeNodes(editor)
-    Transforms.insertNodes(editor, {
-        type: PEAK_LEARNING,
-        children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH}]
-    });
+    Transforms.insertNodes(editor, [
+        {
+            type: PEAK_LEARNING,
+            children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH}]
+        },
+        {
+            type: ELEMENT_PARAGRAPH,
+            children: [{text: ' '}]
+        }
+    ]);
 }
 
 export const calculateNextColor = (tags: PeakDisplayTag[]) => {
