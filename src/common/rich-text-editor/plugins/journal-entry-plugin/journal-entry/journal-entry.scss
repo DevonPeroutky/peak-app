@@ -16,8 +16,8 @@
 
   &.empty-journal::after {
       position: absolute;
-      color: #8993a4;
       top: 0;
+      color: $placeholder-text-color;
       cursor: text;
       content: "What did you learn today?";
       padding-top: 2px;

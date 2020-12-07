@@ -1,8 +1,22 @@
 @import "../../../../../constants/variables";
+$padding-top: 16px;
 .peak-learning-container {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 16px 24px;
   border: none;
+
+  &.empty::after {
+    position: absolute;
+    color: $placeholder-text-color;
+    top: 0;
+    cursor: text;
+    content: "Write down something that caught your attention....";
+    display: flex;
+    align-items: center;
+    line-height: inherit;
+    padding-top: calc(#{$padding-top} + 3px);
+    pointer-events:none;
+  }
 
   .peak-learning-select-container {
     display: flex;

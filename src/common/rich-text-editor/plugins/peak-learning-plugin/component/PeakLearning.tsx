@@ -15,6 +15,8 @@ import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/reque
 import {calculateNextColor} from "../utils";
 import {LabeledValue} from "antd/es/select";
 import {DeleteOutlined} from "@ant-design/icons/lib";
+import cn from 'classnames';
+import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 const { Option } = Select;
 
 export interface PeakDisplayTag {
@@ -29,9 +31,11 @@ export const PeakLearning = (props: RenderElementProps) => {
     const editor = useEditor()
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
+    console.log(element)
+    const isEmpty: boolean = isNodeEmpty(element)
 
     return (
-        <div className={"peak-learning-container"} {...props.attributes} key={0} tabIndex={0}>
+        <div className={cn("peak-learning-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
             {props.children}
             <PeakLearningSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
         </div>
@@ -139,6 +143,8 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         );
     }
 
+    console.log(`THE TAGS`)
+    console.log(tags)
     const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: "create-new-tag-item", title: currentSearch, label: `Create new tag: ${currentSearch}` }
     const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
