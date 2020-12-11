@@ -9,7 +9,6 @@ import {Editor, Transforms, Node} from "slate";
 import {PEAK_LEARNING} from "../defaults";
 import {TagOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {reEnterDown} from "../../../utils/editor-utils";
 import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../redux/tagSlice";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
 import {calculateNextColor} from "../utils";
@@ -18,6 +17,7 @@ import {DeleteOutlined} from "@ant-design/icons/lib";
 import cn from 'classnames';
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
+import {forceFocusToNode, reEnterDown} from "../../../utils/external-editor-utils";
 const { Option } = Select;
 
 export interface PeakDisplayTag {
@@ -67,8 +67,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         } else {
             const newColor: string = calculateNextColor(tags)
             const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
-            console.log(`CREATING NEW TAG`)
-            console.log(newTag)
             setSelectedTags([...displaySelectedTags, newTag])
         }
     }
@@ -100,14 +98,18 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
     }
 
     const leaveDown = () => {
-        reEnterDown(editor, currentWikiPage.id, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
+        console.log("LEAVING Down")
+        reEnterDown(editor, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
     }
+
+    // TODO: Why can't this be re-enter up?
     const leaveUp = () => {
         const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
+        console.log("LEAVING UP")
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.id as number, focused: true}))
+            forceFocusToNode(lastChildNode)
         } else {
             const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
             Transforms.select(editor, lastChildNodePath)

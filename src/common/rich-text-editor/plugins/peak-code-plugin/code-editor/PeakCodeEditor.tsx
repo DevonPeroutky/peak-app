@@ -16,8 +16,8 @@ import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, toggleNodeType} from "@udecode/slate-plugins";
-import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
-import { reEnterDown, reEnterUp} from "../../../utils/editor-utils";
+import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
+import {JOURNAL_PAGE_ID} from "../../../../../redux/journalSlice";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
@@ -97,37 +97,19 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     }
 
     const exitUp = () => {
-        reEnterUp(editor, currentWikiPage.id, matchFunc)
+        reEnterUp(editor, matchFunc)
     }
     const exitDown = () => {
-        reEnterDown(editor, currentWikiPage.id, matchFunc)
+        reEnterDown(editor, matchFunc)
     }
     const exitBreak = async () => {
-        const empty_paragraph = {
-            type: ELEMENT_PARAGRAPH,
-            children: [{ text: "" }],
-        }
-
-        const transformFunc = () => {
-            const [match] = Editor.nodes(editor, { match: n => n.type === ELEMENT_CODE_BLOCK && n.id === element.id, at: []});
-
-            if (match) {
-                const codeNode = match[0]
-                const pathToCodeEditor = ReactEditor.findPath(editor, codeNode)
-                const nextLocation = Editor.after(editor, pathToCodeEditor, { unit: "block" })
-                Transforms.insertNodes(editor, empty_paragraph, { at: nextLocation })
-            } else {
-                console.log("NO MATCH???")
-            }
-        }
-
         exitDown()
     }
 
     // Focus handler
     const lockFocus = (shouldFocusThis: boolean) => {
         wikiSave.cancel()
-        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: element.id, focused: shouldFocusThis}))
+        forceFocusToNode(element, shouldFocusThis)
     }
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.id] || false
     return (

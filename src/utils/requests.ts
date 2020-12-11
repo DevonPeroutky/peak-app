@@ -3,7 +3,7 @@ import axios from "axios";
 import {Node} from "slate";
 import {backend_host_address} from "../constants/constants";
 import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/tagSlice";
-import {store, persistor} from "../redux/store";
+import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-learning-plugin/component/PeakLearning";
