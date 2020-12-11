@@ -1,6 +1,5 @@
 import {Editor, Node, Range, Transforms} from "slate";
 import {
-    ELEMENT_CODE_BLOCK,
     ELEMENT_LI,
     ELEMENT_PARAGRAPH,
     isSelectionAtBlockStart,
@@ -12,7 +11,6 @@ import {PeakDisplayTag} from "./component/PeakLearning";
 import {ReactEditor} from "slate-react";
 import {previous} from "../../utils/base-utils";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
-import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
 
 export const createLearning = (editor: Editor) => {
     unwrapList(editor);
@@ -49,6 +47,7 @@ function isPeakLearningType(n: Node): boolean {
 }
 
 export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
+    const reactEditor: ReactEditor = editor as ReactEditor
     if (!event.metaKey && event.key == "ArrowDown") {
 
         const [currNode, currPath] = Editor.above(editor)
@@ -56,7 +55,6 @@ export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
 
         if (isAtLastLineOfLearning(editor)) {
             event.preventDefault();
-            console.log("WE AT LAST LINE OF LEARNING")
             forceFocusToNode(currParent)
         }
     }
@@ -66,10 +64,12 @@ export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
-        let previousNode: Node | undefined = previous(editor as ReactEditor)
+        const previousNode: Node | undefined = previous(reactEditor)
         if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakLearningType(previousNode)) {
             event.preventDefault();
-            forceFocusToNode(previousNode)
+            const previousNodePath: number[] = ReactEditor.findPath(reactEditor, previousNode)
+            Transforms.select(editor, previousNodePath)
+            Transforms.collapse(editor, { edge: 'end' });
         }
     }
 

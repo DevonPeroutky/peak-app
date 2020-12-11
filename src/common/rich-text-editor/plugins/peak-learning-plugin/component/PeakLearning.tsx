@@ -17,7 +17,7 @@ import {DeleteOutlined} from "@ant-design/icons/lib";
 import cn from 'classnames';
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
-import {reEnterDown} from "../../../utils/external-editor-utils";
+import {forceFocusToNode, reEnterDown} from "../../../utils/external-editor-utils";
 const { Option } = Select;
 
 export interface PeakDisplayTag {
@@ -99,7 +99,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
 
     const leaveDown = () => {
         console.log("LEAVING Down")
-        reEnterDown(editor, currentWikiPage.id, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
+        reEnterDown(editor, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
     }
 
     // TODO: Why can't this be re-enter up?
@@ -109,7 +109,7 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
 
         console.log("LEAVING UP")
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
-            dispatch(setEditorFocusToNode({ pageId: currentWikiPage.id, nodeId: lastChildNode.id as number, focused: true}))
+            forceFocusToNode(lastChildNode)
         } else {
             const lastChildNodePath = ReactEditor.findPath(editor, lastChildNode)
             Transforms.select(editor, lastChildNodePath)

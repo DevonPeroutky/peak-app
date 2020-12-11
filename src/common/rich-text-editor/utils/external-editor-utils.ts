@@ -8,7 +8,7 @@ import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {getCurrentPageId} from "../../../utils/links";
 
 // TODO: This shouldn't require last line of learning knowledge
-export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
+export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
     if (!match) { return }
 
@@ -19,7 +19,7 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
         const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
         console.log(`WE LAST LINE OF LEARNING`)
         console.log(currParent)
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: currParent.id as number, focused: true}))
+        forceFocusToNode(currParent)
         return
     }
 
@@ -35,7 +35,7 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
     console.log(nextNode)
 
     if (nextNode.type === ELEMENT_CODE_BLOCK) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: nextNode.id as number, focused: true}))
+        forceFocusToNode(nextNode)
     } else {
         Transforms.select(editor, nextNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
@@ -43,7 +43,7 @@ export function reEnterDown(editor: ReactEditor, pageId: string, matchFunc: (nod
     }
 
 }
-export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node: Node) => boolean) {
+export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
     if (!match) { return }
 
@@ -61,9 +61,11 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
     const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
 
     if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousParent.id as number, focused: true}))
+        Transforms.select(editor, previousParentPath)
+        Transforms.collapse(editor, { edge: "end"})
+        ReactEditor.focus(editor)
     } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
-        store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.id as number, focused: true}))
+        forceFocusToNode(previousNode)
     } else {
         Transforms.select(editor, previousNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
@@ -72,9 +74,9 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
 
 }
 
-export function forceFocusToNode(slateNode: Node) {
+export function forceFocusToNode(slateNode: Node, focus: boolean = true) {
     const currentPageId = getCurrentPageId()
     if (currentPageId) {
-        store.dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: slateNode.id as number, focused: true}))
+        store.dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: slateNode.id as number, focused: focus}))
     }
 }

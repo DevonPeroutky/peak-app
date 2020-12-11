@@ -43,7 +43,7 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
         // getPreviousNode(editor, currentLevel, editorLevel)
         let previousNode: Node | undefined = previous(editor as ReactEditor)
 
-        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
+        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCodeBlockNode(previousNode)) {
             forceFocusToNode(previousNode)
         }
     }
@@ -55,9 +55,12 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
         }
 
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-        if (previousNode.type === ELEMENT_CODE_BLOCK && (selectionCollapsedAndAtStart)) {
+        if (isCodeBlockNode(previousNode) && (selectionCollapsedAndAtStart)) {
             forceFocusToNode(previousNode)
         }
     }
 }
 
+function isCodeBlockNode(n: Node): boolean {
+    return n.type === ELEMENT_CODE_BLOCK
+}
