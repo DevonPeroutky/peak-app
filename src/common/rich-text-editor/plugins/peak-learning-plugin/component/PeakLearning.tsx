@@ -67,8 +67,6 @@ const PeakLearningSelect = (props: { nodeId: number, nodePath: number[], selecte
         } else {
             const newColor: string = calculateNextColor(tags)
             const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
-            console.log(`CREATING NEW TAG`)
-            console.log(newTag)
             setSelectedTags([...displaySelectedTags, newTag])
         }
     }

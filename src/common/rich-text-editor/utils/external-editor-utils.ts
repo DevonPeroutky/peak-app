@@ -65,9 +65,6 @@ export function reEnterUp(editor: ReactEditor, pageId: string, matchFunc: (node:
     } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
         store.dispatch(setEditorFocusToNode({ pageId: pageId, nodeId: previousNode.id as number, focused: true}))
     } else {
-        console.log(`JUST FOCUSING`)
-        console.log(previousParent)
-        console.log(previousNodePath)
         Transforms.select(editor, previousNodePath)
         Transforms.collapse(editor, {edge: 'end'} )
         ReactEditor.focus(editor)

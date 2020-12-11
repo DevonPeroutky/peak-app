@@ -13,7 +13,6 @@ import {JournalEntry} from "../../../../redux/wikiPageSlice";
 import {JournalEntryPlugin} from "../../plugins/journal-entry-plugin/JournalEntryPlugin";
 import {getCurrentFormattedDate} from "../../../../utils/time";
 
-export const JOURNAL_PAGE_ID = "journal"
 export const EMPTY_JOURNAL_STATE: JournalEntry[] = [{
     entry_date: getCurrentFormattedDate(),
     body: [{children: [{text: ""}]}],

@@ -16,8 +16,8 @@ import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, toggleNodeType} from "@udecode/slate-plugins";
-import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
 import {reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
+import {JOURNAL_PAGE_ID} from "../../../../../redux/journalSlice";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
