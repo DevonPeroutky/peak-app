@@ -1,7 +1,10 @@
-import {Editor, Transforms} from "slate";
-import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {Editor, Node, Range, Transforms} from "slate";
+import {ELEMENT_CODE_BLOCK, ELEMENT_LI, ELEMENT_PARAGRAPH, isSelectionAtBlockStart} from "@udecode/slate-plugins";
 import {store} from "../../../../redux/store";
 import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
+import {isCustomPeakVoidElement, next, previous} from "../../utils/base-utils";
+import {ReactEditor} from "slate-react";
+import {forceFocusToNode} from "../../utils/external-editor-utils";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
@@ -21,3 +24,43 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
     const pageId = window.location.href.split("/").pop()
     store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
 }
+
+export const peakCodeEditorOnKeyDownHandler = () => {
+
+    return (event: any, editor: Editor) => {
+        if (!event.metaKey && event.key == "ArrowDown") {
+            const nextNode: Node | undefined = next(editor as ReactEditor)
+
+            if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
+                event.preventDefault()
+                forceFocusToNode(nextNode)
+            }
+        }
+
+        if (!event.metaKey && (event.key == "ArrowUp")) {
+            // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
+            const [currNode, currPath] = Editor.above(editor)
+            const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+            // getPreviousNode(editor, currentLevel, editorLevel)
+            let previousNode: Node | undefined = previous(editor as ReactEditor)
+
+            if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
+                forceFocusToNode(previousNode)
+            }
+        }
+
+        if (!event.metaKey && event.key == "Backspace") {
+            let previousNode: Node | undefined = previous(editor as ReactEditor)
+            if (!previousNode) {
+                return
+            }
+
+            const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
+            if (previousNode.type === ELEMENT_CODE_BLOCK && (selectionCollapsedAndAtStart)) {
+                forceFocusToNode(previousNode)
+            }
+        }
+    };
+}
+

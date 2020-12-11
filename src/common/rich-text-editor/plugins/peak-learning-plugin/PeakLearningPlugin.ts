@@ -4,9 +4,11 @@ import {
     SlatePlugin,
 } from "@udecode/slate-plugins";
 import {DEFAULTS_LEARNING} from "./defaults";
+import {learningOnKeyDownHandler} from "./utils";
 
 export const PeakLearningPlugin = (options?: any): SlatePlugin => ({
     renderElement: renderElementPeakLearning(options),
+    onKeyDown: learningOnKeyDownHandler()
 });
 
 const renderElementPeakLearning = (

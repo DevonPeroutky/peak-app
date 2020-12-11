@@ -1,30 +1,19 @@
 import {
-    ELEMENT_CODE_BLOCK,
-    ELEMENT_LI,
     ELEMENT_OL,
     ELEMENT_UL,
-    isSelectionAtBlockStart,
     toggleList
 } from "@udecode/slate-plugins";
-import {Editor, Node, Range} from "slate";
+import {Editor, Node, Range, Transforms} from "slate";
 import {
     closeLinkMenu,
     openEditLinkMenu,
     openEmptyLinkMenu,
     PeakHyperlinkState,
-    setEditorFocusToNode
 } from "../../../redux/wikiPageSlice";
 import {ReactEditor} from "slate-react";
 import {Dispatch} from "redux";
-import {
-    isAtLastLineOfLearning,
-    isCustomPeakVoidElement,
-    next,
-    previous
-} from "./editor-utils";
-import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 
-export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string, editorLevel: number = 1) => {
+export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
     const currentPath = editor.selection?.anchor.path
     if (currentPath === undefined)  { return }
 
@@ -66,72 +55,5 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch:
     if (event.key === 'Escape') {
         dispatch(closeLinkMenu(currentPageId));
     }
-
-    /**
-     * Handle the following usecases:
-     * 1. Going into a PeakCodeEditor
-     * 2. Going into a PeakLearningTagSelect
-     * 3. Going into a PeakCodeEditor within a PeakLearningTagSelect
-     *
-     * Without throwing errors when at the bottom
-     */
-    if (!event.metaKey && event.key == "ArrowDown") {
-        const nextNode: Node | undefined = next(editor)
-
-        const [currNode, currPath] = Editor.above(editor)
-        const [currParent, currParentPath] = Editor.parent(editor, currPath)
-
-        console.log(`GOING DOWN -> Current Node`)
-        console.log(currNode)
-
-        if (isAtLastLineOfLearning(editor)) {
-            console.log(`Go to LearningSelect`)
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: currParent.id as number, focused: true}))
-        } else if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
-            event.preventDefault()
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: nextNode.id as number, focused: true}))
-        }
-    }
-
-    /**
-     * Handle the following usecases:
-     * 1. Going into a PeakCodeEditor
-     * 2. Going into a PeakLearningTagSelect
-     * 3. Going into a PeakCodeEditor within a PeakLearningTagSelect
-     *
-     * Without throwing errors when at the Top
-     */
-    if (!event.metaKey && (event.key == "ArrowUp")) {
-
-        // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
-        const currNode = Node.parent(editor, currentPath)
-        const currParent = Node.parent(editor, ReactEditor.findPath(editor, currNode))
-
-        // getPreviousNode(editor, currentLevel, editorLevel)
-        let previousNode: Node | undefined = previous(editor)
-
-        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
-        }
-    }
-
-    /**
-     * Handle the following usecases:
-     * 1. Going into a PeakCodeEditor
-     * 2. Going into a PeakLearningTagSelect
-     *
-     * Without throwing errors when at the Top
-     */
-    if (!event.metaKey && event.key == "Backspace") {
-        let previousNode: Node | undefined = previous(editor)
-        if (!previousNode) {
-            return
-        }
-
-        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-        const isPreviousBlockVoid: boolean = [PEAK_LEARNING, ELEMENT_CODE_BLOCK].includes(previousNode.type as string)
-        if (isPreviousBlockVoid && (selectionCollapsedAndAtStart)) {
-            dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: previousNode.id as number, focused: true}))
-        }
-    }
 }
+
