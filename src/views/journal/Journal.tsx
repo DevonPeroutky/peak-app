@@ -137,7 +137,7 @@ const PeakJournal = (props: { }) => {
         trigger: '/',
     });
     const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor, dispatch, currentPageId, JOURNAL_NODE_LEVEL)
+        baseKeyBindingHandler(event, editor)
 
         return onKeyDownMention(event, editor)
     }, [index, search, target])

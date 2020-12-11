@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {Range} from "slate/dist/interfaces/range";
 import {Node} from "slate";
-import {differenceWith, omit} from "ramda";
+import {differenceWith, omit, uniqBy} from "ramda";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {EMPTY_JOURNAL_STATE} from "../common/rich-text-editor/editors/journal/constants";
 import {JOURNAL_PAGE_ID} from "./journalSlice";
@@ -66,6 +66,7 @@ const INITIAL_PAGE_STATE: PeakWikiPage = {
 };
 const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }} ;
 export interface JournalEntry {
+    id: string
     entry_date: string,
     body: any,
 }
@@ -82,7 +83,7 @@ export const wikiPageSlice = createSlice({
                 map[obj.id] = {...INITIAL_PAGE_STATE, ...obj};
                 return map;
             }, {} as PeakWikiState);
-            return {...INITIAL_WIKI_STATE, ...wikiPage}
+            return {...state, ...wikiPage}
         },
         createPage(state, action: PayloadAction<{pageId: string, newPage: PeakWikiPage}>) {
             const newPage = {...INITIAL_PAGE_STATE, ...action.payload.newPage };
@@ -149,7 +150,7 @@ export const wikiPageSlice = createSlice({
         setJournalEntries(state, action: PayloadAction<JournalEntry[]>) {
             const newJournals: JournalEntry[] = R.sort(journalOrdering, action.payload)
             const existingJournals: JournalEntry[] = state[JOURNAL_PAGE_ID].body as JournalEntry[]
-            const updateJournalBody = [...newJournals, ...existingJournals]
+            const updateJournalBody = uniqBy((je: JournalEntry) => je.entry_date, [...newJournals, ...existingJournals])
             const newJournal: PeakWikiPage = {...state[JOURNAL_PAGE_ID], body: updateJournalBody}
             return { ...state, [JOURNAL_PAGE_ID]: newJournal }
         },

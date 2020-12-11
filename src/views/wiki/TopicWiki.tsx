@@ -67,7 +67,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     }, {}, [currentPageId]);
 
     const keyBindingHandler = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor, dispatch, currentPageId)
+        baseKeyBindingHandler(event, editor)
 
         if (event.metaKey && event.key == 's') {
             event.preventDefault();
