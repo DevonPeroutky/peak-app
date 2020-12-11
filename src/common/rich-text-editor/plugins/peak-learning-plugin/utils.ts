@@ -47,8 +47,10 @@ function isPeakLearningType(n: Node): boolean {
 }
 
 export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
+    const currentPath = editor.selection?.anchor.path
+    if (currentPath === undefined)  { return }
     const reactEditor: ReactEditor = editor as ReactEditor
-    if (!event.metaKey && event.key == "ArrowDown") {
+    if (currentPath && !event.metaKey && event.key == "ArrowDown") {
 
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
@@ -59,8 +61,7 @@ export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
         }
     }
 
-    if (!event.metaKey && (event.key == "ArrowUp")) {
-
+    if (currentPath && !event.metaKey && (event.key == "ArrowUp")) {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
@@ -73,7 +74,7 @@ export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
         }
     }
 
-    if (!event.metaKey && event.key == "Backspace") {
+    if (currentPath && !event.metaKey && event.key == "Backspace") {
         let previousNode: Node | undefined = previous(editor as ReactEditor)
         if (!previousNode) {
             return
