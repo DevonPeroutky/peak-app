@@ -8,7 +8,7 @@ import {learningOnKeyDownHandler} from "./utils";
 
 export const PeakLearningPlugin = (options?: any): SlatePlugin => ({
     renderElement: renderElementPeakLearning(options),
-    onKeyDown: learningOnKeyDownHandler()
+    onKeyDown: learningOnKeyDownHandler
 });
 
 const renderElementPeakLearning = (

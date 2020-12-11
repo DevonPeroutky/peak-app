@@ -48,44 +48,41 @@ function isPeakLearningType(n: Node): boolean {
     return n.type === PEAK_LEARNING
 }
 
-export const learningOnKeyDownHandler = () => {
-    return (event: any, editor: Editor) => {
-        if (!event.metaKey && event.key == "ArrowDown") {
+export const learningOnKeyDownHandler = (event: any, editor: Editor) => {
+    if (!event.metaKey && event.key == "ArrowDown") {
 
-            const [currNode, currPath] = Editor.above(editor)
-            const [currParent, currParentPath] = Editor.parent(editor, currPath)
+        const [currNode, currPath] = Editor.above(editor)
+        const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
-            if (isAtLastLineOfLearning(editor)) {
-                event.preventDefault();
-                console.log("WE AT LAST LINE OF LEARNING")
-                forceFocusToNode(currParent)
-            }
+        if (isAtLastLineOfLearning(editor)) {
+            event.preventDefault();
+            console.log("WE AT LAST LINE OF LEARNING")
+            forceFocusToNode(currParent)
+        }
+    }
+
+    if (!event.metaKey && (event.key == "ArrowUp")) {
+
+        const [currNode, currPath] = Editor.above(editor)
+        const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+        let previousNode: Node | undefined = previous(editor as ReactEditor)
+        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakLearningType(previousNode)) {
+            event.preventDefault();
+            forceFocusToNode(previousNode)
+        }
+    }
+
+    if (!event.metaKey && event.key == "Backspace") {
+        let previousNode: Node | undefined = previous(editor as ReactEditor)
+        if (!previousNode) {
+            return
         }
 
-        if (!event.metaKey && (event.key == "ArrowUp")) {
-
-            const [currNode, currPath] = Editor.above(editor)
-            const [currParent, currParentPath] = Editor.parent(editor, currPath)
-
-            let previousNode: Node | undefined = previous(editor as ReactEditor)
-            if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakLearningType(previousNode)) {
-                event.preventDefault();
-                forceFocusToNode(previousNode)
-            }
+        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
+        if (isPeakLearningType(previousNode) && (selectionCollapsedAndAtStart)) {
+            forceFocusToNode(previousNode)
         }
-
-        if (!event.metaKey && event.key == "Backspace") {
-            let previousNode: Node | undefined = previous(editor as ReactEditor)
-            if (!previousNode) {
-                return
-            }
-
-            const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-            if (isPeakLearningType(previousNode) && (selectionCollapsedAndAtStart)) {
-                forceFocusToNode(previousNode)
-            }
-        }
-
-    };
+    }
 }
 

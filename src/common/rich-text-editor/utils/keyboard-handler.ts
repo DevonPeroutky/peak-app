@@ -4,9 +4,8 @@ import {
     toggleList
 } from "@udecode/slate-plugins";
 import {ReactEditor} from "slate-react";
-import {Dispatch} from "redux";
 
-export const baseKeyBindingHandler = (event: any, editor: ReactEditor, dispatch: Dispatch, currentPageId: string) => {
+export const baseKeyBindingHandler = (event: any, editor: ReactEditor) => {
     const currentPath = editor.selection?.anchor.path
     if (currentPath === undefined)  { return }
 

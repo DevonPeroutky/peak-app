@@ -25,42 +25,39 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
     store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
 }
 
-export const peakCodeEditorOnKeyDownHandler = () => {
+export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
+    if (!event.metaKey && event.key == "ArrowDown") {
+        const nextNode: Node | undefined = next(editor as ReactEditor)
 
-    return (event: any, editor: Editor) => {
-        if (!event.metaKey && event.key == "ArrowDown") {
-            const nextNode: Node | undefined = next(editor as ReactEditor)
+        if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
+            event.preventDefault()
+            forceFocusToNode(nextNode)
+        }
+    }
 
-            if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
-                event.preventDefault()
-                forceFocusToNode(nextNode)
-            }
+    if (!event.metaKey && (event.key == "ArrowUp")) {
+        // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
+        const [currNode, currPath] = Editor.above(editor)
+        const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+        // getPreviousNode(editor, currentLevel, editorLevel)
+        let previousNode: Node | undefined = previous(editor as ReactEditor)
+
+        if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
+            forceFocusToNode(previousNode)
+        }
+    }
+
+    if (!event.metaKey && event.key == "Backspace") {
+        let previousNode: Node | undefined = previous(editor as ReactEditor)
+        if (!previousNode) {
+            return
         }
 
-        if (!event.metaKey && (event.key == "ArrowUp")) {
-            // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
-            const [currNode, currPath] = Editor.above(editor)
-            const [currParent, currParentPath] = Editor.parent(editor, currPath)
-
-            // getPreviousNode(editor, currentLevel, editorLevel)
-            let previousNode: Node | undefined = previous(editor as ReactEditor)
-
-            if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isCustomPeakVoidElement(previousNode)) {
-                forceFocusToNode(previousNode)
-            }
+        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
+        if (previousNode.type === ELEMENT_CODE_BLOCK && (selectionCollapsedAndAtStart)) {
+            forceFocusToNode(previousNode)
         }
-
-        if (!event.metaKey && event.key == "Backspace") {
-            let previousNode: Node | undefined = previous(editor as ReactEditor)
-            if (!previousNode) {
-                return
-            }
-
-            const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-            if (previousNode.type === ELEMENT_CODE_BLOCK && (selectionCollapsedAndAtStart)) {
-                forceFocusToNode(previousNode)
-            }
-        }
-    };
+    }
 }
 

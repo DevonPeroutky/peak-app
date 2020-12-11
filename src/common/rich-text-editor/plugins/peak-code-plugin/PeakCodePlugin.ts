@@ -12,7 +12,7 @@ import {peakCodeEditorOnKeyDownHandler} from "./utils";
 export const PeakCodePlugin = (options?: CodeBlockPluginOptions): SlatePlugin => ({
     renderElement: renderPeakCodeElement(options),
     deserialize: deserializeCodeBlock(options),
-    onKeyDown: peakCodeEditorOnKeyDownHandler()
+    onKeyDown: peakCodeEditorOnKeyDownHandler
 });
 
 
