@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Peaker, PeakTopicNode} from "./userSlice";
 
 export interface DisplayPeaker {
     id: string,

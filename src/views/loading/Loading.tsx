@@ -2,9 +2,12 @@ import React, {useEffect, useState} from "react";
 import animationData from '../../assets/animations/mountain-with-sun.json';
 import {Lottie} from "@crello/react-lottie";
 import "./loading.scss"
+import {syncCurrentStateToLocalStorage} from "../../redux/localStoreSync";
+import {useCurrentUser} from "../../utils/hooks";
 
 export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void, thePromised: (() => Promise<void>)[]}) => {
     const [loaded, setLoaded] = useState(true);
+    const user = useCurrentUser()
 
     const { thePromised, isLoadingCallback } = props;
 
@@ -24,6 +27,8 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
         });
 
         Promise.all(callPromises).then(res => {
+            console.log(`Syncing user to locastorage`)
+            syncCurrentStateToLocalStorage(user.id)
             setLoaded(true);
         })
     }, []);

@@ -1,14 +1,11 @@
 import React, {useState} from 'react'
 import {Input, message} from "antd";
 import "./main-bar.scss";
-import {AppState} from "../../redux";
-import {connect} from "react-redux";
-import {Peaker} from "../../redux/userSlice";
 import GoogleProfileIcon from "../profile-dropdown/ProfileDropdown";
 import {SearchOutlined} from "@ant-design/icons/lib";
 import {OfflineAlert} from "../offline-alert/OfflineAlert";
 
-const MainBar = (props: { user: Peaker }) => {
+const MainBar = (props: {}) => {
     const [query, setQuery] = useState('');
 
     const search = () => {
@@ -32,5 +29,4 @@ const MainBar = (props: { user: Peaker }) => {
     )
 };
 
-const mapStateToProps = (state: AppState) => ({ user: state.user});
-export default connect(mapStateToProps, {})(MainBar);
+export default MainBar;

@@ -16,6 +16,5 @@ export const baseKeyBindingHandler = (event: any, editor: ReactEditor) => {
     if (event.shiftKey && event.key == '9') {
         toggleList(editor, { typeList: ELEMENT_OL })
     }
-
 }
 

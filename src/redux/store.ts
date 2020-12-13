@@ -1,4 +1,4 @@
-import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {combineReducers, configureStore, getDefaultMiddleware, createAction} from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import topics from "./topicSlice";
 import currentUser from "./userSlice";
@@ -8,10 +8,12 @@ import quickSwitcher from "./quickSwitcherSlice"
 import journal from "./journalSlice"
 import electron from "./electronSlice"
 import tags from "./tagSlice"
-import userAccounts from "./userAccountsSlice"
+import userAccounts, {DisplayPeaker} from "./userAccountsSlice"
 
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'
+import {AppState} from "./index";
+import {loadUserStateFromLocalStorage} from "./localStoreSync"; // defaults to localStorage for web
 
 const persistConfig = {
     key: 'root',
@@ -19,9 +21,17 @@ const persistConfig = {
     storage,
 };
 
-const rootReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, journal, electron, tags, userAccounts});
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const switch_user_accounts = createAction<DisplayPeaker>("switch_user_accounts")
+const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, journal, electron, tags, userAccounts});
+const rootReducer = (state, action) => {
+    if (action.type === "switch_user_accounts") {
+        const desired_user_account_id: string = action.payload.id
+        return loadUserStateFromLocalStorage(desired_user_account_id) as AppState
+    }
+    return appReducer(state, action)
+}
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 const middleware = [...getDefaultMiddleware(), logger];
 const store = configureStore({
     reducer: persistedReducer,

@@ -10,7 +10,7 @@ import {v4 as uuidv4} from "uuid";
 import axios from "axios"
 import config from "../../../../constants/environment-vars"
 import {useLinkedUserId} from "../../../../utils/hooks";
-import { addUserAccount } from 'src/redux/userAccountsSlice';
+import { addUserAccount } from '../../../../redux/userAccountsSlice';
 
 const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
     const { isDesktopLogin } = props

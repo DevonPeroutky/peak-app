@@ -152,7 +152,7 @@ export function convertPeakNodeToTreeNode(obj: PeakNode): TreeNodeNormal {
 }
 
 export const useUpdatePageInHierarchy = () => {
-    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.user.hierarchy);
+    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const usableHierarchy: PeakTopicNode[] = cloneDeep(currentHierarchy)
 
     return (newBody: Node[], topicId: string, pageId: string) => {

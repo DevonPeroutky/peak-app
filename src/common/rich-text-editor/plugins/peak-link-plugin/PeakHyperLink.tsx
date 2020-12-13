@@ -52,6 +52,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
     )
 }
 
+// @ts-ignore
 export const renderElementLink = ({ }: LinkPluginOptions = {}) => (props: RenderElementProps) => {
     if (props.element.type == ELEMENT_LINK) {
         return <PeakHyperLink {...props}/>

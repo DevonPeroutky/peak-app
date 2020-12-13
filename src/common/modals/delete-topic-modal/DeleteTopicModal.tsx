@@ -13,12 +13,13 @@ import {
 import cn from "classnames";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
+import {useCurrentUser} from "../../../utils/hooks";
 
 export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => {
     const { topicId, hovered } = props
     const dispatch = useDispatch()
     const history = useHistory()
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useCurrentUser()
     const topic: PeakTopic = useSelector<AppState, PeakTopic>(state => state.topics.find(t => t.id === topicId)!);
     const deleteTopicAndAllPages = () => {
         return axios.delete(`${backend_host_address}/api/v1/users/${user.id}/topics/${topic.id}`).then((res) => {

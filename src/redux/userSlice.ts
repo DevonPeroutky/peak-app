@@ -71,16 +71,11 @@ export const userSlice = createSlice({
         setUser(state, action: PayloadAction<Peaker>) {
             return action.payload
         },
-        switchAccounts(state, action: PayloadAction<string>) {
-            const desired_user_account_id = action.payload
-            console.log(`SWITCHING TO: ${desired_user_account_id}`)
-            return state
-        },
         setUserHierarchy(state, action: PayloadAction<PeakTopicNode[]>) {
             return { ...state, hierarchy: action.payload }
         }
     }
 });
 
-export const { setUser, setUserHierarchy} = userSlice.actions;
+export const { setUser, setUserHierarchy } = userSlice.actions;
 export default userSlice.reducer;

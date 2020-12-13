@@ -27,6 +27,7 @@ import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
 import {JOURNAL_PAGE_ID} from "../redux/journalSlice";
 import {useQuery} from "./urls";
+import {FutureRead} from "../redux/readingListSlice";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -46,6 +47,9 @@ export function useShouldCopyOver() {
 
 export function useCurrentUser() {
     return useSelector<AppState, Peaker>(state => state.currentUser);
+}
+export function useFutureReads() {
+    return useSelector<AppState, FutureRead[]>(state => state.futureReads);
 }
 
 export function useIsContextElectron() {

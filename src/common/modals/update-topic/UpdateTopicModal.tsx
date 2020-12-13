@@ -9,12 +9,13 @@ import { backend_host_address } from "../../../constants/constants";
 import {CompassOutlined, EditOutlined, InfoCircleOutlined} from "@ant-design/icons/lib";
 import cn from "classnames";
 import axios, {AxiosResponse} from "axios";
+import {useCurrentUser} from "../../../utils/hooks";
 
 export const UpdateTopicModal = (props: {topicId: string, hovered: boolean}) => {
     const { topicId, hovered } = props
 
     const dispatch = useDispatch()
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useCurrentUser()
     const topic: PeakTopic = useSelector<AppState, PeakTopic>(state => state.topics.find(t => t.id === topicId)!);
     const [visible, setVisibility] = useState(false);
     const [topicName, setTopicName] = useState(topic.name);
@@ -29,17 +30,17 @@ export const UpdateTopicModal = (props: {topicId: string, hovered: boolean}) => 
 
         if (topicName === '' || topicName === "") {
             message.warning("Topic can not be empty")
-            return
+            return null
         }
 
         if (topicName.length > 50) {
             message.warning("Topic name can not be more than 50 characters");
-            return
+            return null
         }
 
         if (!alphanumeric.test(topicName)) {
             message.warning("Topic name can only have Numbers, Letters, Spaces, Underscores, and Dashes")
-            return
+            return null
         }
 
         setLoading(true);

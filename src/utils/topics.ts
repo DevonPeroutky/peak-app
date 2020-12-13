@@ -8,7 +8,7 @@ import {movePage, PeakPage} from "../redux/topicSlice";
 import {updatePage} from "./requests";
 
 export function useMovePageToNewTopic() {
-    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.user.hierarchy);
+    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const usableHierarchy: PeakTopicNode[] = cloneDeep(currentHierarchy)
     const dispatch = useDispatch()
     const currentUser = useCurrentUser()

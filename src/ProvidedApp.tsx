@@ -5,13 +5,17 @@ import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
 import { HashRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";
-import { isAuthenticated } from "./redux/userSlice";
+import {isAuthenticated, Peaker} from "./redux/userSlice";
 import {useCurrentUser, useOnlineStatus} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
 import {LoggedIn} from "./views/logged-in/LoggedIn";
 import {PeakOffline} from "./views/offline/Offline";
 import {PeakTitle} from "./common/rich-text-editor/plugins/peak-title-plugin/peak-title/PeakTitle";
 import {PeakTimeline} from "./views/timeline/PeakTimeline";
+import {useUserAccounts} from "./utils/requests";
+import {DisplayPeaker} from "./redux/userAccountsSlice";
+import {syncCurrentStateToLocalStorage} from "./redux/localStoreSync";
+import {switch_user_accounts} from "./redux/store";
 
 const ProvidedApp = (props: {}) => {
     const dispatch = useDispatch()
