@@ -4,7 +4,7 @@ import "./main-bar.scss";
 import {AppState} from "../../redux";
 import {connect} from "react-redux";
 import {Peaker} from "../../redux/userSlice";
-import GoogleProfileIcon from "../google-profile-icon/GoogleProfileIcon";
+import GoogleProfileIcon from "../profile-dropdown/ProfileDropdown";
 import {SearchOutlined} from "@ant-design/icons/lib";
 import {OfflineAlert} from "../offline-alert/OfflineAlert";
 

@@ -9,27 +9,32 @@ import {backend_host_address} from "../../../../constants/constants";
 import {v4 as uuidv4} from "uuid";
 import axios from "axios"
 import config from "../../../../constants/environment-vars"
+import {useLinkedUserId} from "../../../../utils/hooks";
+import { addUserAccount } from 'src/redux/userAccountsSlice';
 
 const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
     const { isDesktopLogin } = props
     const oneTimeCode = uuidv4()
     const dispatch = useDispatch()
-    let history = useHistory();
+    const history = useHistory();
+
+    const linkedUserId: string | null = useLinkedUserId()
 
     const login = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         console.log(`Response from Google`)
         console.log(response);
         // @ts-ignore
-        console.log(response.wc);
         const bro = response as GoogleLoginResponse
-
-        // TODO: INVESTIGATE why we need this
         // @ts-ignore
-        const accessToken = (bro.accessToken) ? bro.accessToken : response.wc.access_token
+        const accessToken = bro.getAuthResponse(true).access_token
+        const id_token = bro.getAuthResponse().id_token
+        const customPeakPayload = (linkedUserId) ? {"oneTimeCode": oneTimeCode, "existing_peak_user_id": linkedUserId} : {"oneTimeCode": oneTimeCode}
+        const userPayload = { "id_token": id_token, "access_token": accessToken, "user": customPeakPayload}
 
-        axios.post(`${backend_host_address}/api/v1/users`, { "user": {...bro.profileObj, ...{"accessToken": accessToken}, "oneTimeCode": oneTimeCode} }).then((res) => {
+        axios.post(`${backend_host_address}/api/v1/users`, userPayload).then((res) => {
             const authedUser = res.data.data as Peaker
             dispatch(setUser(authedUser));
+            dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {
                 const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
                 window.location.replace(desktopDeepLinkUrl);

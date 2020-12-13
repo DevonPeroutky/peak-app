@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Peaker {
     id: string,
-    google_id: string,
+    peak_user_id: string,
     image_url: string,
     email: string,
     name: string,
@@ -50,14 +50,14 @@ export interface PeakTopicNode {
 }
 
 export const UNAUTHED_USER: Peaker = {
-    google_id: "-1",
+    id: "-1",
+    peak_user_id: "-1",
     image_url: "",
     email: "",
     name: "",
     given_name: "",
     access_token: "",
-    hierarchy: [],
-    id: "-1",
+    hierarchy: []
 };
 
 export function isAuthenticated(user: Peaker): boolean {
@@ -65,11 +65,16 @@ export function isAuthenticated(user: Peaker): boolean {
 }
 
 export const userSlice = createSlice({
-    name: 'user',
+    name: 'currentUser',
     initialState: UNAUTHED_USER,
     reducers: {
         setUser(state, action: PayloadAction<Peaker>) {
             return action.payload
+        },
+        switchAccounts(state, action: PayloadAction<string>) {
+            const desired_user_account_id = action.payload
+            console.log(`SWITCHING TO: ${desired_user_account_id}`)
+            return state
         },
         setUserHierarchy(state, action: PayloadAction<PeakTopicNode[]>) {
             return { ...state, hierarchy: action.payload }

@@ -23,7 +23,7 @@ import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
-import {loadPeakTags} from "../../utils/requests";
+import {loadAllUserAccounts, loadPeakTags} from "../../utils/requests";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -84,12 +84,14 @@ const PeakLayout = (props: {}) => {
                 dispatch(setUser(user))
             });
     };
-    
     const fetchTags = () => {
         return loadPeakTags(user.id)
     }
+    const fetchAllUserAccounts = () => {
+        return loadAllUserAccounts(user.id, user.peak_user_id)
+    }
 
-    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={[fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy, fetchTags]}/>
+    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={[fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy, fetchTags, fetchAllUserAccounts]}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

@@ -11,7 +11,6 @@ import {useDispatch} from "react-redux";
 import "./logout-button.scss"
 
 const LogoutButton = (props: { }) => {
-    const history = useHistory()
     const dispatch = useDispatch()
 
     const logoutWebapp = () => {
@@ -32,7 +31,7 @@ const LogoutButton = (props: { }) => {
     if (config.dist === ELECTRON) {
         return (
             <div className={"logout-row"}>
-                <LogoutOutlined/>
+                <LogoutOutlined className={"logout-row-icon"}/>
                 <a href={`${config.base_url}/#/welcome?logged-out-electron=true`} target="_blank" onClick={logoutElectron}>Logout</a>
             </div>
         )
@@ -42,7 +41,6 @@ const LogoutButton = (props: { }) => {
                clientId="261914177641-0gu5jam6arv5m6n95vdjmfu8hpa1kunj.apps.googleusercontent.com"
                render={ renderProps => (
                    <div className={"logout-row"}>
-                       <LogoutOutlined/>
                        <span onClick={renderProps.onClick}>Logout</span>
                    </div>
                )}

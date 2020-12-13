@@ -1,4 +1,4 @@
-import { PeakHierarchy } from "../redux/userSlice";
+import {Peaker, PeakHierarchy} from "../redux/userSlice";
 import axios from "axios";
 import {Node} from "slate";
 import {backend_host_address} from "../constants/constants";
@@ -7,6 +7,8 @@ import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-learning-plugin/component/PeakLearning";
+import {date} from "@storybook/addon-knobs";
+import {DisplayPeaker, setUserAccounts} from "../redux/userAccountsSlice";
 
 
 // Page
@@ -82,4 +84,24 @@ export function loadPeakTags(userId: string) {
 }
 export function useTags() {
     return useSelector<AppState, PeakTag[]>(state => state.tags);
+}
+
+
+// User Accounts
+function fetchAllUserAccounts(userId: string, peakUserId: string) {
+    return axios.get(`${backend_host_address}/api/v1/users/${userId}/list-all-accounts?peak_user_id=${peakUserId}`)
+}
+export function loadAllUserAccounts(userId: string, peakUserId: string) {
+    return fetchAllUserAccounts(userId, peakUserId).then(res => {
+        const userAccounts: DisplayPeaker[] = res.data.users as DisplayPeaker[]
+        console.log(`BROOOO`)
+        console.log(res)
+        store.dispatch(setUserAccounts(userAccounts))
+    }).catch(err => {
+        console.log(`DID NOT successfully load the accounts for user: ${userId}`)
+        console.log(err)
+    })
+}
+export function useUserAccounts() {
+    return useSelector<AppState, DisplayPeaker[]>(state => state.userAccounts);
 }

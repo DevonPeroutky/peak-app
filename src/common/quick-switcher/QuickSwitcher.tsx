@@ -8,11 +8,10 @@ import "./quick-switcher.scss"
 import {convertHierarchyToSearchableList} from "../../utils/hierarchy";
 import { cloneDeep} from "lodash";
 import { useHistory } from 'react-router-dom';
-import { SearchOutlined} from "@ant-design/icons/lib";
 import {renderPeakDisplayNodesInList} from "./quick-switch-item/QuickSwitchItem";
 
 const QuickSwitcher = (props: { }) => {
-    const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.user.hierarchy);
+    const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const isOpen = useSelector<AppState, boolean>(state => state.quickSwitcher.isOpen);
     const dispatch = useDispatch()
     const history = useHistory()
