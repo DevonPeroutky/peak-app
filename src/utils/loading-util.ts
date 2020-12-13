@@ -1,5 +1,5 @@
 import axios from "axios";
-import {backend_host_address} from "../constants/constants";
+import {backend_host_address, EXISTING_PEAK_USER_ID} from "../constants/constants";
 import {setTopics} from "../redux/topicSlice";
 import {setFutureReads} from "../redux/readingListSlice";
 import {addPages} from "../redux/wikiPageSlice";
@@ -10,7 +10,8 @@ import {useCurrentUser} from "./hooks";
 import {DisplayPeaker} from "../redux/userAccountsSlice";
 import {syncCurrentStateToLocalStorage} from "../redux/localStoreSync";
 import {switch_user_accounts} from "../redux/store";
-import { useHistory } from "react-router-dom";
+import {openSwitcher} from "../redux/quickSwitcherSlice";
+import {useEffect} from "react";
 
 export function useLoaderOfAllThings(): () => (() => Promise<void>)[] {
     const dispatch = useDispatch()
@@ -57,14 +58,41 @@ export function useLoaderOfAllThings(): () => (() => Promise<void>)[] {
 }
 
 export const useAccountSwitcher = () => {
-    const currentUser = useCurrentUser()
     const dispatch = useDispatch()
-    const history = useHistory()
-    return (selectedAccount: DisplayPeaker) => {
-        if (selectedAccount.id !== currentUser.id) {
-            syncCurrentStateToLocalStorage(currentUser.id)
-            dispatch(switch_user_accounts(selectedAccount))
-            history.push("/home/journal")
+    return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
+        if (selectedAccount.id !== currentAccountId) {
+            await syncCurrentStateToLocalStorage(currentAccountId)
+            await dispatch(switch_user_accounts(selectedAccount))
+            window.history.pushState({}, null, "/home/journal")
         }
     }
+}
+
+export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAccounts: DisplayPeaker[]}) => {
+    const { currentUserId, userAccounts } = props
+    const dispatch = useDispatch()
+    const switchAccounts = useAccountSwitcher()
+    const keyBindingHandler = (event: KeyboardEvent) => {
+        if (event.metaKey && event.key == 'k') {
+            dispatch(openSwitcher())
+        }
+
+        // Hotkey Switcher for accounts
+        if (event.metaKey && !event.shiftKey && isFinite(+event.key)) {
+            const numberPressed: number = +event.key
+            if (numberPressed < userAccounts.length && numberPressed >= 0 && userAccounts[numberPressed].id !== currentUserId) {
+                event.preventDefault()
+                const destUserAccount: DisplayPeaker = userAccounts[numberPressed]
+                switchAccounts(destUserAccount, currentUserId)
+            }
+        }
+    }
+
+    useEffect( () => {
+        window.addEventListener("keydown", keyBindingHandler);
+        return () => {
+            window.removeEventListener("keydown", keyBindingHandler)
+        }
+    }, [currentUserId])
+    return null
 }

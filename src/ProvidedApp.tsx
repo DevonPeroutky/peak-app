@@ -16,24 +16,50 @@ import {useUserAccounts} from "./utils/requests";
 import {DisplayPeaker} from "./redux/userAccountsSlice";
 import {syncCurrentStateToLocalStorage} from "./redux/localStoreSync";
 import {switch_user_accounts} from "./redux/store";
+import {KeybindingHandlerWrapper, useAccountSwitcher} from "./utils/loading-util";
 
 const ProvidedApp = (props: {}) => {
-    const dispatch = useDispatch()
-    const keyBindingHandler = (event: any) => {
-        if (event.metaKey && event.key == 'k') {
-            dispatch(openSwitcher())
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener("keydown", keyBindingHandler);
-        return () => {
-            window.removeEventListener("keydown", keyBindingHandler)
-        }
-    }, [])
+    // const dispatch = useDispatch()
+    const userAccounts: DisplayPeaker[] = useUserAccounts()
+    const user: Peaker = useCurrentUser()
+    // const userFetcher: () => Peaker = useFetchCurrentUser()
+    // const switchAccounts = useAccountSwitcher()
+    // const keyBindingHandler = (event: KeyboardEvent) => {
+    //     if (event.metaKey && event.key == 'k') {
+    //         dispatch(openSwitcher())
+    //     }
+    //
+    //     // Hotkey Switcher for accounts
+    //     if (event.metaKey && !event.shiftKey && isFinite(+event.key)) {
+    //         const numberPressed: number = +event.key
+    //         console.log(`---------------------`)
+    //         console.log(`Number PRessed: ${numberPressed}`)
+    //         console.log(`CURRENT USER: ${user.email}`)
+    //         console.log(`FUCKIN BITCH: ${user.email}`)
+    //         const thisBITCH = userFetcher()
+    //         console.log(userAccounts)
+    //         console.log(userAccounts[numberPressed])
+    //         if (numberPressed < userAccounts.length && numberPressed >= 0 && userAccounts[numberPressed].id !== user.id) {
+    //             event.preventDefault()
+    //             const destUserAccount: DisplayPeaker = userAccounts[numberPressed]
+    //             console.log(`REALLY DOING IT`)
+    //             console.log(destUserAccount)
+    //             switchAccounts(destUserAccount)
+    //         }
+    //     }
+    // }
+    //
+    // useEffect( () => {
+    //     console.log(`-----> CURRENT USER AS OF RIGHT NOW: ${user.email}`)
+    //     window.addEventListener("keydown", keyBindingHandler);
+    //     return () => {
+    //         window.removeEventListener("keydown", keyBindingHandler)
+    //     }
+    // }, [])
 
     return (
         <div className="App">
+            <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
             <Router>
                 <QuickSwitcher/>
                 <Switch>

@@ -26,6 +26,7 @@ const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiS
 const rootReducer = (state, action) => {
     if (action.type === "switch_user_accounts") {
         const desired_user_account_id: string = action.payload.id
+        console.log(`SWITCHING THE USER ACCOUNT TO: ${desired_user_account_id}`)
         return loadUserStateFromLocalStorage(desired_user_account_id) as AppState
     }
     return appReducer(state, action)

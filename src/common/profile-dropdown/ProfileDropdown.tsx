@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import "./profile-dropdown.scss"
-import {connect, useDispatch} from "react-redux";
 import {Dropdown, Menu, message} from 'antd';
 import {CheckOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
 import LogoutButton from "../login/logout/LogoutButton";
@@ -10,8 +9,6 @@ import {EXISTING_PEAK_USER_ID} from "../../constants/constants";
 import {useUserAccounts} from "../../utils/requests";
 import {DisplayPeaker} from "../../redux/userAccountsSlice";
 import { capitalize } from "lodash";
-import {syncCurrentStateToLocalStorage} from "../../redux/localStoreSync";
-import {switch_user_accounts} from "../../redux/store";
 import {useAccountSwitcher} from "../../utils/loading-util";
 
 export const ProfileDropdown = (props: {}) => {
@@ -51,7 +48,7 @@ const UserAccountRow = (props) => {
     }
 
     return (
-        <Menu.Item className={"peak-account-setting-row"} {...other} onClick={() => switchUserAccounts(userAccount)}>
+        <Menu.Item className={"peak-account-setting-row"} {...other} onClick={() => switchUserAccounts(userAccount, currentUser.id)}>
             <div className={"peak-account-row"} >
                 <div className={"peak-account-row-header"}>
                     <span>{userAccount.email}</span>

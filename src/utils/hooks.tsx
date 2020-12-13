@@ -48,6 +48,7 @@ export function useShouldCopyOver() {
 export function useCurrentUser() {
     return useSelector<AppState, Peaker>(state => state.currentUser);
 }
+
 export function useFutureReads() {
     return useSelector<AppState, FutureRead[]>(state => state.futureReads);
 }
