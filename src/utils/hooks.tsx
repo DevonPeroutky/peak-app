@@ -41,10 +41,6 @@ export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
 }
 
-export function useShouldCopyOver() {
-    return useSelector<AppState, boolean>(state => state.journal);
-}
-
 export function useCurrentUser() {
     return useSelector<AppState, Peaker>(state => state.currentUser);
 }
