@@ -36,6 +36,8 @@ export const useAccountSwitcher = () => {
     const dispatch = useDispatch()
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
         if (selectedAccount.id !== currentAccountId) {
+            // @ts-ignore
+            document.activeElement.blur()
             await syncCurrentStateToLocalStorage(currentAccountId)
             await dispatch(switch_user_accounts(selectedAccount))
             window.history.pushState({}, null, "/home/journal")
