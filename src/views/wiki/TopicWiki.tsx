@@ -16,7 +16,7 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {
     usePagePublisher,
     useDebounceWikiSaver,
-    useCurrentWikiPage,
+    useCurrentWikiPage, useDebouncePageTitleUpdater,
 } from '../../utils/hooks';
 import { equals } from "ramda";
 import {
@@ -34,6 +34,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     const dispatch = useDispatch();
     const publishPage = usePagePublisher();
     const savePageToDB = useDebounceWikiSaver();
+    const updatePageEverywhere = useDebouncePageTitleUpdater();
     const currentWikiPage = useCurrentWikiPage();
     const currentPageId: string = currentWikiPage.id;
 
@@ -93,18 +94,13 @@ const TopicWiki = (props: {topic_id: string}) => {
             const titleNode = Node.string(children[0])
             if (titleNode !== pageTitle) {
                 setPageTitle(titleNode)
-                updatePageTitleEverywhere(titleNode)
+                updatePageEverywhere(currentWikiPage.id, titleNode)
             }
 
             savePageToDB(newValue, titleNode, currentWikiPage.id);
             onChangeMention(editor);
         }
     }
-
-    const updatePageTitleEverywhere = (newTitle: string) => {
-        dispatch(updatePageTitle({ pageId: currentWikiPage.id, title: newTitle }));
-        dispatch(updatePageTitleInSidebar({ pageId: currentWikiPage.id, newTitle: newTitle }));
-    };
 
     return (
         <Slate

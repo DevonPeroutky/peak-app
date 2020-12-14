@@ -73,10 +73,7 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 // app.on('ready', createWindow);
 app.whenReady().then(() => {
-  const ret = globalShortcut.register('CommandOrControl+Shift+J', () => {
-    console.log('Electron loves global shortcuts!')
-    console.log(mainWindow)
-
+  const navigateToJournal = globalShortcut.register('CommandOrControl+Shift+J', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
@@ -87,7 +84,7 @@ app.whenReady().then(() => {
     mainWindow && mainWindow.show()
   })
 
-  if (!ret) {
+  if (!navigateToJournal) {
     console.log('Registration failed')
   }
 

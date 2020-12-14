@@ -13,19 +13,21 @@ import {
     updateJournalEntry,
     setJournalEntries,
     updateJournalEntries,
-    journalOrdering
+    journalOrdering, updatePageTitle
 } from "../redux/wikiPageSlice";
 import {Node} from "slate";
-import {backend_host_address} from "../constants/constants";
+import {backend_host_address, EXISTING_PEAK_USER_ID} from "../constants/constants";
 import axios, {AxiosResponse} from 'axios';
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
 import {isEmpty} from "ramda";
-import {PeakPage, PeakTopic, updateTopic} from "../redux/topicSlice";
+import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
 import {JOURNAL_PAGE_ID} from "../redux/journalSlice";
+import {useQuery} from "./urls";
+import {FutureRead} from "../redux/readingListSlice";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -39,12 +41,24 @@ export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
 }
 
-export function useShouldCopyOver() {
-    return useSelector<AppState, boolean>(state => state.journal);
+export function useCurrentUser() {
+    return useSelector<AppState, Peaker>(state => state.currentUser);
 }
 
-export function useCurrentUser() {
-    return useSelector<AppState, Peaker>(state => state.user);
+export function useFutureReads() {
+    return useSelector<AppState, FutureRead[]>(state => state.futureReads);
+}
+
+export function useIsContextElectron() {
+    const query = useQuery();
+    const desktopLoginParam: string | null = query.get("desktop-login")
+    return desktopLoginParam != null && desktopLoginParam == "true"
+}
+
+export function useLinkedUserId() {
+    const query = useQuery();
+    const linkedUserId: string | null = query.get(EXISTING_PEAK_USER_ID)
+    return linkedUserId
 }
 
 export function useTopics() {
@@ -154,7 +168,7 @@ export function usePagePublisher() {
 }
 
 export function useSavePageRequest() {
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
     const topics: PeakTopic[] = useTopics()
     const deriveNewHierarchy = useUpdatePageInHierarchy()
 
@@ -208,7 +222,7 @@ export function useDebounceWikiSaver() {
 // Journal Requests
 // --------------------------------------------------
 function useSaveJournalEntryRequest() {
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
     return (date: string, newValue: Node[]) => {
         return axios.put(`${backend_host_address}/api/v1/users/${user.id}/journal?date=${date}`, {
@@ -220,7 +234,7 @@ function useSaveJournalEntryRequest() {
 }
 
 function useBulkSaveJournalEntryRequest() {
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
     return (entries: JournalEntry[]) => {
         return axios.post(`${backend_host_address}/api/v1/users/${user.id}/bulk-update-journal`, {
@@ -276,7 +290,7 @@ export function useDebounceBulkJournalEntrySaver() {
 
 export function useFetchJournal() {
     const dispatch = useDispatch()
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.user);
+    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
     return (readOnly: boolean, date?: string | undefined, amount: number = 30) => {
         const searchDate = date ?? getCurrentFormattedDate()
@@ -296,3 +310,17 @@ export function useFetchJournal() {
 }
 
 
+const useUpdatePageTitleEverywhere = () => {
+    const dispatch = useDispatch()
+    return (currentWikiPageId: string, newTitle: string) => {
+        dispatch(updatePageTitle({ pageId: currentWikiPageId, title: newTitle }));
+        dispatch(updatePageTitleInSidebar({ pageId: currentWikiPageId, newTitle: newTitle }));
+    }
+};
+
+export function useDebouncePageTitleUpdater() {
+    const updatePageTitle = useUpdatePageTitleEverywhere();
+
+    // You need useCallback otherwise it's a different function signature each render?
+    return useCallback(debounce(updatePageTitle, 1000), [])
+}

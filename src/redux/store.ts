@@ -1,16 +1,12 @@
-import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {combineReducers, configureStore, getDefaultMiddleware, createAction} from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import topics from "./topicSlice";
-import user from "./userSlice";
-import futureReads from "./readingListSlice"
-import peakWikiState from "./wikiPageSlice"
 import quickSwitcher from "./quickSwitcherSlice"
-import journal from "./journalSlice"
 import electron from "./electronSlice"
-import tags from "./tagSlice"
+import { DisplayPeaker } from "./userAccountsSlice"
 
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'
+import {rootReducer, UserSpecificAppState} from "./rootReducer"; // defaults to localStorage for web
 
 const persistConfig = {
     key: 'root',
@@ -18,9 +14,7 @@ const persistConfig = {
     storage,
 };
 
-const rootReducer = combineReducers({ topics, user, futureReads, peakWikiState, quickSwitcher, journal, electron, tags});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 const middleware = [...getDefaultMiddleware(), logger];
 const store = configureStore({
     reducer: persistedReducer,

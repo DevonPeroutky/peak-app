@@ -42,7 +42,6 @@ import cn from "classnames";
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
 
-    const dispatch = useDispatch()
     const currentUser = useCurrentUser()
     const journalFetcher = useFetchJournal()
     const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
@@ -83,7 +82,7 @@ const PeakJournal = (props: { }) => {
             setJournalContent(bodyContent)
             setSelection(editor)
         })
-    }, [])
+    }, [currentUser.id])
 
     // Infinite Loading State
     const [lastLoadedDate, setLastLoadedDate] = useState<string>()

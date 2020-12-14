@@ -1,35 +1,25 @@
-import { useDispatch } from "react-redux";
-import { openSwitcher } from "./redux/quickSwitcherSlice";
 import React, { ReactNode, useEffect } from "react";
 import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
 import { HashRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";
-import { isAuthenticated } from "./redux/userSlice";
+import {isAuthenticated, Peaker} from "./redux/userSlice";
 import {useCurrentUser, useOnlineStatus} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
 import {LoggedIn} from "./views/logged-in/LoggedIn";
 import {PeakOffline} from "./views/offline/Offline";
-import {PeakTitle} from "./common/rich-text-editor/plugins/peak-title-plugin/peak-title/PeakTitle";
 import {PeakTimeline} from "./views/timeline/PeakTimeline";
+import {useUserAccounts} from "./utils/requests";
+import {DisplayPeaker} from "./redux/userAccountsSlice";
+import {KeybindingHandlerWrapper, useAccountSwitcher} from "./utils/loading-util";
 
 const ProvidedApp = (props: {}) => {
-    const dispatch = useDispatch()
-    const keyBindingHandler = (event: any) => {
-        if (event.metaKey && event.key == 'k') {
-            dispatch(openSwitcher())
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener("keydown", keyBindingHandler);
-        return () => {
-            window.removeEventListener("keydown", keyBindingHandler)
-        }
-    }, [])
+    const userAccounts: DisplayPeaker[] = useUserAccounts()
+    const user: Peaker = useCurrentUser()
 
     return (
         <div className="App">
+            <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
             <Router>
                 <QuickSwitcher/>
                 <Switch>

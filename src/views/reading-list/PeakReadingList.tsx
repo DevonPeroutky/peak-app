@@ -1,17 +1,16 @@
 import React, {useRef, useState} from 'react'
-import {AppState} from "../../redux";
-import {connect} from "react-redux";
-import {Peaker} from "../../redux/userSlice";
 import "./peak-reading-list.scss"
 import {message, Table} from "antd";
 import {deleteFutureRead, FutureRead} from "../../redux/readingListSlice";
 import PeakTagDisplay from "../../common/peak-tag-display/PeakTagDisplay";
 import useAxios from "axios-hooks";
 import {backend_host_address} from "../../constants/constants";
+import {useCurrentUser, useFutureReads} from "../../utils/hooks";
+import {Peaker} from "../../redux/userSlice";
 
-const PeakReadingList = (props: { user: Peaker, futureReads: FutureRead[], deleteFutureRead: (id: string) => void }) => {
-    const { futureReads } = props;
-    const [value, setValue] = useState('')
+const PeakReadingList = (props: { }) => {
+    const user: Peaker = useCurrentUser()
+    const futureReads: FutureRead[] = useFutureReads()
 
     const [{ data, loading, error }, deleteFutureReadItem] = useAxios(
         {
@@ -23,9 +22,9 @@ const PeakReadingList = (props: { user: Peaker, futureReads: FutureRead[], delet
     const deleteReadingListItem = (itemId: string) => {
         deleteFutureReadItem({
             method: "DELETE",
-            url: `/api/v1/users/${props.user.id}/future-reads/${itemId}`
+            url: `/api/v1/users/${user.id}/future-reads/${itemId}`
         }).then(res => {
-            props.deleteFutureRead(itemId)
+            deleteFutureRead(itemId)
             message.info("Deleted!")
         })
     };
@@ -83,6 +82,4 @@ const PeakReadingList = (props: { user: Peaker, futureReads: FutureRead[], delet
     )
 };
 
-const mapDispatchToProps = { deleteFutureRead };
-const mapStateToProps = (state: AppState) => ({ user: state.user, futureReads: state.futureReads });
-export default connect(mapStateToProps, mapDispatchToProps)(PeakReadingList);
+export default PeakReadingList;

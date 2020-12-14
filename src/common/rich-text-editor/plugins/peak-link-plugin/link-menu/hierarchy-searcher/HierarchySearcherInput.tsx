@@ -21,7 +21,7 @@ interface HierarchySearcherInputProps {
 }
 const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     const { setLinkText, setUrl, inputRef, currentUrl, textInputRef, isDropdownOpen, setDropdownState, currentText } = props
-    const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.user.hierarchy);
+    const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const [antList, setAntList] = useState<PeakDisplayNode[]>([])
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 

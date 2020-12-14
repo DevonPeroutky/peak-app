@@ -17,13 +17,15 @@ export const EditorContextBar = (props: {}) => {
 const PageEditingContext = (props: {}) => {
     const currentPage = useCurrentWikiPage()
 
-    if (currentPage.isSaving) {
+    if (currentPage && currentPage.isSaving) {
         return (
             <span className={"editing-status"}>Saving...</span>
         )
-    } else {
+    } else if (currentPage && !currentPage.isSaving) {
         return (
             <span className={"editing-status animated fadeOut saved"}>Saved <CheckOutlined className={"saved-check"}/></span>
         )
+    } else {
+        return null
     }
 }

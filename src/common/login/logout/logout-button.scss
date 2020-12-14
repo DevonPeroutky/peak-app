@@ -1,10 +1,11 @@
 .logout-row {
   display: flex;
   width: 100%;
-  justify-content: space-between;
   align-items: center;
 
+  .logout-row-icon {
+    margin-right: 8px;
+  }
+
   a { color: inherit; }
-
-
 }
