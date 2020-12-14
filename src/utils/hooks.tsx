@@ -13,7 +13,7 @@ import {
     updateJournalEntry,
     setJournalEntries,
     updateJournalEntries,
-    journalOrdering
+    journalOrdering, updatePageTitle
 } from "../redux/wikiPageSlice";
 import {Node} from "slate";
 import {backend_host_address, EXISTING_PEAK_USER_ID} from "../constants/constants";
@@ -21,7 +21,7 @@ import axios, {AxiosResponse} from 'axios';
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
 import {isEmpty} from "ramda";
-import {PeakPage, PeakTopic, updateTopic} from "../redux/topicSlice";
+import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
@@ -310,3 +310,17 @@ export function useFetchJournal() {
 }
 
 
+const useUpdatePageTitleEverywhere = () => {
+    const dispatch = useDispatch()
+    return (currentWikiPageId: string, newTitle: string) => {
+        dispatch(updatePageTitle({ pageId: currentWikiPageId, title: newTitle }));
+        dispatch(updatePageTitleInSidebar({ pageId: currentWikiPageId, newTitle: newTitle }));
+    }
+};
+
+export function useDebouncePageTitleUpdater() {
+    const updatePageTitle = useUpdatePageTitleEverywhere();
+
+    // You need useCallback otherwise it's a different function signature each render?
+    return useCallback(debounce(updatePageTitle, 1000), [])
+}
