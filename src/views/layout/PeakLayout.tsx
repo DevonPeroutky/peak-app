@@ -10,13 +10,13 @@ import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import { useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
+import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
-import {useLoaderOfAllThings} from "../../utils/loading-util";
+import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -24,9 +24,9 @@ const PeakLayout = (props: {}) => {
     const { topic_id } = useParams<{topic_id: string}>();
     const [isLoading, setLoading] = useState(true);
     const currentWikiPage = useCurrentWikiPage();
+    const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()
-    const loadAllTheThings = useLoaderOfAllThings()
 
     useEffect(() => {
         if (!isOnline) {
@@ -46,7 +46,13 @@ const PeakLayout = (props: {}) => {
         }
     }, [history.location.hash]) // Fires every time hash changes
 
-    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={loadAllTheThings()}/>
+    useEffect(() => {
+
+    })
+
+    const loadEverything: () => Promise<void> = () => loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
+
+    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={loadEverything}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

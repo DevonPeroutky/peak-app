@@ -52,7 +52,7 @@ const INITIAL_EDITING_STATE: PeakEditorState = {
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE,
 };
-const INITIAL_PAGE_STATE: PeakWikiPage = {
+export const INITIAL_PAGE_STATE: PeakWikiPage = {
     id: "-1",
     editorState: INITIAL_EDITING_STATE,
     body: [
@@ -64,7 +64,7 @@ const INITIAL_PAGE_STATE: PeakWikiPage = {
     title: '',
     isSaving: false
 };
-const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }} ;
+export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }} ;
 export interface JournalEntry {
     id: string
     entry_date: string,

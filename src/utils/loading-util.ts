@@ -1,60 +1,35 @@
-import axios from "axios";
-import {backend_host_address, EXISTING_PEAK_USER_ID} from "../constants/constants";
-import {setTopics} from "../redux/topicSlice";
-import {setFutureReads} from "../redux/readingListSlice";
-import {addPages} from "../redux/wikiPageSlice";
-import {setUser} from "../redux/userSlice";
-import {loadAllUserAccounts, loadPeakTags} from "./requests";
+import {fetchUserSpecificAppState, loadAllUserAccounts, loadPeakTags} from "./requests";
 import {useDispatch} from "react-redux";
-import {useCurrentUser} from "./hooks";
 import {DisplayPeaker} from "../redux/userAccountsSlice";
-import {syncCurrentStateToLocalStorage} from "../redux/localStoreSync";
-import {switch_user_accounts} from "../redux/store";
+import {syncCurrentStateToLocalStorage, writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
+import {store} from "../redux/store";
 import {openSwitcher} from "../redux/quickSwitcherSlice";
 import {useEffect} from "react";
+import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
 
-export function useLoaderOfAllThings(): () => (() => Promise<void>)[] {
-    const dispatch = useDispatch()
-    const user = useCurrentUser()
+export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
+    return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
+        const accounts: DisplayPeaker[] = res as DisplayPeaker[]
+        const activeAccount: DisplayPeaker = accounts.find(acc => acc.id === ogUserId)
+        const backgroundAccounts: DisplayPeaker[] = accounts.filter(acc => acc.id !== ogUserId)
 
-    const fetchAllTopics = () => {
-        return axios.get(`${backend_host_address}/api/v1/users/${user.id}/topics`)
-            .then(res => {
-                const topics = res.data.topics;
-                dispatch(setTopics(topics));
-            }).catch(() => {
-                console.log("ERROR")
-            });
-    };
-    const fetchEntireReadingList = () => {
-        return axios.get(`${backend_host_address}/api/v1/users/${user.id}/future-reads`)
-            .then(res => {
-                const readingList = res.data.data
-                dispatch(setFutureReads(readingList))
-            });
-    };
-    const fetchPages = () => {
-        return axios.get(`${backend_host_address}/api/v1/users/${user.id}/pages`)
-            .then(res => {
-                const wikiPages = res.data.pages;
-                dispatch(addPages(wikiPages))
-            });
-    };
-    const fetchHierarchy = () => {
-        return axios.get(`${backend_host_address}/api/v1/users/${user.id}`)
-            .then(res => {
-                const user = res.data.data;
-                dispatch(setUser(user))
-            });
-    };
-    const fetchTags = () => {
-        return loadPeakTags(user.id)
-    }
-    const fetchAllUserAccounts = () => {
-        return loadAllUserAccounts(user.id, user.peak_user_id)
-    }
+        // For Background Account --> Load, sync to localStorage in background
+        backgroundAccounts.forEach((acc) => {
+            console.log(`Loading entire world for:`)
+            console.log(acc)
+            fetchUserSpecificAppState(acc.id).then(userSpecificAppState => {
+                writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
+            })
+        })
 
-    return () => [fetchAllTopics, fetchEntireReadingList, fetchPages, fetchHierarchy, fetchTags, fetchAllUserAccounts]
+        // For Active Account --> Return a Promise that: Load, sync to localStorage, save to Redux
+        return fetchUserSpecificAppState(activeAccount.id).then(userSpecificAppState => {
+            console.log(`Loading the BIG DAWGGGGGG: `)
+            console.log(userSpecificAppState)
+            store.dispatch(load_active_user(userSpecificAppState))
+            writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
+        })
+    })
 }
 
 export const useAccountSwitcher = () => {
@@ -79,10 +54,12 @@ export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAcco
 
         // Hotkey Switcher for accounts
         if (event.metaKey && !event.shiftKey && isFinite(+event.key)) {
+            event.preventDefault()
             const numberPressed: number = +event.key
             if (numberPressed < userAccounts.length && numberPressed >= 0 && userAccounts[numberPressed].id !== currentUserId) {
-                event.preventDefault()
                 const destUserAccount: DisplayPeaker = userAccounts[numberPressed]
+                console.log(`DESTINATION ACCOUNT`)
+                console.log(destUserAccount)
                 switchAccounts(destUserAccount, currentUserId)
             }
         }
@@ -96,3 +73,4 @@ export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAcco
     }, [currentUserId])
     return null
 }
+

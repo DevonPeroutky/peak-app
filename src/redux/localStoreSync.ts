@@ -1,12 +1,19 @@
 import {store} from "./store";
-import {AppState} from "./index";
+import {AppState, GLOBAL_APP_KEYS} from "./index";
+import {UserSpecificAppState} from "./rootReducer";
+import {omit} from "ramda";
 
 export function syncCurrentStateToLocalStorage(userId: string): void {
     const currentState: AppState = store.getState()
-    localStorage.setItem(userId, JSON.stringify(currentState));
+    const userSpecificAppState = omit(GLOBAL_APP_KEYS, currentState) as UserSpecificAppState
+    writeUserAppStateToLocalStorage(userId, userSpecificAppState)
 }
 
-export function loadUserStateFromLocalStorage(userId: string): AppState {
-    return JSON.parse(localStorage.getItem(userId)) as AppState
+export function writeUserAppStateToLocalStorage(userId: string, userSpecificAppState: UserSpecificAppState): void {
+    localStorage.setItem(userId, JSON.stringify(userSpecificAppState));
+}
+
+export function loadUserStateFromLocalStorage(userId: string): UserSpecificAppState {
+    return JSON.parse(localStorage.getItem(userId)) as UserSpecificAppState
 }
 

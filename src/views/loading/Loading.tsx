@@ -2,13 +2,9 @@ import React, {useEffect, useState} from "react";
 import animationData from '../../assets/animations/mountain-with-sun.json';
 import {Lottie} from "@crello/react-lottie";
 import "./loading.scss"
-import {syncCurrentStateToLocalStorage} from "../../redux/localStoreSync";
-import {useCurrentUser} from "../../utils/hooks";
 
-export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void, thePromised: (() => Promise<void>)[]}) => {
+export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void, thePromised: () => Promise<any>}) => {
     const [loaded, setLoaded] = useState(true);
-    const user = useCurrentUser()
-
     const { thePromised, isLoadingCallback } = props;
 
     const defaultConfig = {
@@ -22,13 +18,8 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
 
     useEffect(() => {
         console.log(`USING THE LOADING PROMISES`)
-        const callPromises: Promise<any>[] = thePromised.map(function (callback) {
-            return callback()
-        });
-
-        Promise.all(callPromises).then(res => {
-            console.log(`Syncing user to locastorage`)
-            syncCurrentStateToLocalStorage(user.id)
+        thePromised().then(res => {
+            console.log(`THE PROMISES ARE LOADED`)
             setLoaded(true);
         })
     }, []);
