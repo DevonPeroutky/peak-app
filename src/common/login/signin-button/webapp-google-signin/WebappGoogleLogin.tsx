@@ -31,8 +31,10 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
         const customPeakPayload = (linkedUserId) ? {"oneTimeCode": oneTimeCode, "existing_peak_user_id": linkedUserId} : {"oneTimeCode": oneTimeCode}
         const userPayload = { "id_token": id_token, "access_token": accessToken, "user": customPeakPayload}
 
-        axios.post(`${backend_host_address}/api/v1/users`, userPayload).then((res) => {
-            const authedUser = res.data.data as Peaker
+        axios.post(`${backend_host_address}/api/v1/session/login`, userPayload).then((res) => {
+            const authedUser = res.data as Peaker
+            console.log(`NEW USERRRR`)
+            console.log(authedUser)
             dispatch(setUser(authedUser));
             dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {

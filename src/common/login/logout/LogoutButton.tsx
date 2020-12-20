@@ -13,17 +13,12 @@ import "./logout-button.scss"
 const LogoutButton = (props: { }) => {
     const dispatch = useDispatch()
 
-    const logoutWebapp = () => {
-        message.info('Logged Out!');
-        dispatch(setUser(UNAUTHED_USER))
-    };
-
     const handleLogoutFailure = () => {
         message.info('Failed to logout!');
         dispatch(setUser(UNAUTHED_USER))
     };
 
-    const logoutElectron = () => {
+    const logout = () => {
         message.info('Logged Out!');
         dispatch(setUser(UNAUTHED_USER))
     }
@@ -32,7 +27,7 @@ const LogoutButton = (props: { }) => {
         return (
             <div className={"logout-row"}>
                 <LogoutOutlined className={"logout-row-icon"}/>
-                <a href={`${config.base_url}/#/welcome?logged-out-electron=true`} target="_blank" onClick={logoutElectron}>Logout</a>
+                <a href={`${config.base_url}/#/welcome?logged-out-electron=true`} target="_blank" onClick={logout}>Logout</a>
             </div>
         )
     } else {
@@ -45,7 +40,7 @@ const LogoutButton = (props: { }) => {
                    </div>
                )}
                onFailure={handleLogoutFailure}
-               onLogoutSuccess={logoutWebapp}/>
+               onLogoutSuccess={logout}/>
        )
     }
 

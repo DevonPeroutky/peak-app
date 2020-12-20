@@ -99,7 +99,6 @@ export function loadAllUserAccounts(userId: string, peakUserId: string) {
     }).catch(err => {
         console.log(`DID NOT successfully load the accounts for user: ${userId}`)
         console.log(err)
-        return []
     })
 }
 export function useUserAccounts() {
