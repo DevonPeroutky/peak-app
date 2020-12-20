@@ -8,7 +8,7 @@ import "./update-topic-modal.scss";
 import { backend_host_address } from "../../../constants/constants";
 import {CompassOutlined, EditOutlined, InfoCircleOutlined} from "@ant-design/icons/lib";
 import cn from "classnames";
-import axios, {AxiosResponse} from "axios";
+import peakAxiosConfig from "../../../client/axiosConfig"
 import {useCurrentUser} from "../../../utils/hooks";
 
 export const UpdateTopicModal = (props: {topicId: string, hovered: boolean}) => {
@@ -44,7 +44,7 @@ export const UpdateTopicModal = (props: {topicId: string, hovered: boolean}) => 
         }
 
         setLoading(true);
-        return axios.put(`${backend_host_address}/api/v1/users/${user.id}/topics/${topic.id}`, {
+        return peakAxiosConfig.put(`/api/v1/users/${user.id}/topics/${topic.id}`, {
             "topic": {
                 color: "green",
                 name: topicName,

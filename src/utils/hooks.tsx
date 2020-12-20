@@ -16,8 +16,8 @@ import {
     journalOrdering, updatePageTitle
 } from "../redux/wikiPageSlice";
 import {Node} from "slate";
-import {backend_host_address, EXISTING_PEAK_USER_ID} from "../constants/constants";
-import axios, {AxiosResponse} from 'axios';
+import {EXISTING_PEAK_USER_ID} from "../constants/constants";
+import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
 import {isEmpty} from "ramda";
@@ -225,7 +225,7 @@ function useSaveJournalEntryRequest() {
     const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
     return (date: string, newValue: Node[]) => {
-        return axios.put(`${backend_host_address}/api/v1/users/${user.id}/journal?date=${date}`, {
+        return peakAxiosClient.put(`/api/v1/users/${user.id}/journal?date=${date}`, {
             "journal-entry": {
                 body: newValue,
             }
@@ -237,7 +237,7 @@ function useBulkSaveJournalEntryRequest() {
     const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
     return (entries: JournalEntry[]) => {
-        return axios.post(`${backend_host_address}/api/v1/users/${user.id}/bulk-update-journal`, {
+        return peakAxiosClient.post(`/api/v1/users/${user.id}/bulk-update-journal`, {
             "journal_entries": entries
         })
     }
@@ -294,8 +294,8 @@ export function useFetchJournal() {
 
     return (readOnly: boolean, date?: string | undefined, amount: number = 30) => {
         const searchDate = date ?? getCurrentFormattedDate()
-        return axios
-            .get(`${backend_host_address}/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
+        return peakAxiosClient
+            .get(`/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
             .then(res => {
                 const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
                 dispatch(setJournalEntries(sortedJournal))

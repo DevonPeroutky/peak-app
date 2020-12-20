@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import {Button, Modal, Input, Tooltip, message} from "antd";
 import {useDispatch} from "react-redux";
 import {addTopic, PeakTopic} from "../../../redux/topicSlice"
-import axios  from "axios";
 import "./add-topic-modal.scss";
-import { backend_host_address } from "../../../constants/constants";
+import peakAxiosClient from "../../../client/axiosConfig"
 import {useCurrentUser} from "../../../utils/hooks";
 import {PeakTopicNode, setUserHierarchy} from "../../../redux/userSlice";
 import {CompassOutlined, InfoCircleOutlined, PlusOutlined} from "@ant-design/icons/lib";
@@ -40,7 +39,7 @@ const AddTopicModal = (props: {}) => {
 
         setLoading(true);
 
-        axios.post(`${backend_host_address}/api/v1/users/${user.id}/topics`, {
+        peakAxiosClient.post(`/api/v1/users/${user.id}/topics`, {
             "topic": {
                 user_id: user.id,
                 color: "green",

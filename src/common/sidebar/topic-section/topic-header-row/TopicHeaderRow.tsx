@@ -5,8 +5,7 @@ import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";
 import {TITLE} from "../../../rich-text-editor/types";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import axios from "axios";
-import {backend_host_address} from "../../../../constants/constants";
+import peakAxiosClient from "../../../../client/axiosConfig"
 import {createPage, PeakWikiPage, setEditing} from "../../../../redux/wikiPageSlice";
 import {message} from "antd";
 import {DeleteTopicModal} from "../../../modals/delete-topic-modal/DeleteTopicModal";
@@ -27,7 +26,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
         const empty_title = { type: TITLE, children: [{ text: ''}] }
         const empty_paragraph = { type: ELEMENT_PARAGRAPH, children: [{ text: ''}] }
 
-        axios.post(`${backend_host_address}/api/v1/users/${props.user.id}/pages`, {
+        peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
                 body: [{ children: [empty_title, empty_paragraph] }],
                 topic_id: props.topic.id,

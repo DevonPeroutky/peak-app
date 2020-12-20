@@ -5,13 +5,12 @@ import { PeakTopic, deleteTopic} from "../../../redux/topicSlice"
 import {AppState} from "../../../redux";
 import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/userSlice";
 import "./delete-topic-modal.scss";
-import { backend_host_address } from "../../../constants/constants";
 import {
     DeleteOutlined,
     QuestionCircleOutlined
 } from "@ant-design/icons/lib";
 import cn from "classnames";
-import axios from "axios";
+import peakAxiosClient from "../../../client/axiosConfig"
 import {useHistory} from "react-router-dom";
 import {useCurrentUser} from "../../../utils/hooks";
 
@@ -22,7 +21,7 @@ export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => 
     const user: Peaker = useCurrentUser()
     const topic: PeakTopic = useSelector<AppState, PeakTopic>(state => state.topics.find(t => t.id === topicId)!);
     const deleteTopicAndAllPages = () => {
-        return axios.delete(`${backend_host_address}/api/v1/users/${user.id}/topics/${topic.id}`).then((res) => {
+        return peakAxiosClient.delete(`/api/v1/users/${user.id}/topics/${topic.id}`).then((res) => {
             const newHierarchy: PeakTopicNode[] = res.data.hierarchy
             dispatch(setUserHierarchy(newHierarchy));
             dispatch(deleteTopic(topic.id))

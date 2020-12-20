@@ -5,12 +5,11 @@ import React, {useState} from "react";
 import cn from "classnames";
 import "./page-context-bar.scss"
 import {message, Popconfirm, Switch} from 'antd';
-import useAxios from "axios-hooks";
+import peakAxiosClient from "../../client/axiosConfig"
 import {DeleteOutlined, EditOutlined, QuestionCircleOutlined} from "@ant-design/icons/lib";
 import {useHistory} from "react-router-dom";
 import { batch } from 'react-redux'
 import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
-import {backend_host_address} from "../../constants/constants";
 import {PeakTopicNode, setUserHierarchy} from "../../redux/userSlice";
 
 const PageContextBar = (props: {topicId: string}) => {
@@ -34,17 +33,8 @@ const PageContextBar = (props: {topicId: string}) => {
             </Popconfirm>
         </div>
 
-    const [_, deleteWikiPage] = useAxios(
-        {
-            method: "DELETE",
-            baseURL: backend_host_address,
-            url: `/api/v1/users/${user.id}/pages/${peakWikiPage.id}?topic_id=${topicId}`,
-        },
-        { manual: true }
-    );
-
     const deletePageEverywhere = () => {
-        deleteWikiPage().then((res) => {
+        peakAxiosClient.delete(`/api/v1/users/${user.id}/pages/${peakWikiPage.id}?topic_id=${topicId}`).then((res) => {
             message.info("Deleted the page!");
             const newHierarchy: PeakTopicNode[] = res.data.hierarchy
             history.push(determineNextLink(peakWikiPage.id));

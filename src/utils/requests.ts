@@ -1,7 +1,5 @@
 import {Peaker, PeakHierarchy} from "../redux/userSlice";
-import axios from "axios";
 import {Node} from "slate";
-import {backend_host_address} from "../constants/constants";
 import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/tagSlice";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
@@ -11,6 +9,7 @@ import {DisplayPeaker, setUserAccounts} from "../redux/userAccountsSlice";
 import {UserSpecificAppState} from "../redux/rootReducer";
 import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/wikiPageSlice";
 import {clone, omit} from "ramda";
+import peakAxiosClient from "../client/axiosConfig";
 
 // Page
 interface PeakPageParams {
@@ -19,7 +18,7 @@ interface PeakPageParams {
     body?: Node[]
 }
 export function updatePage(userId: string, pageId: string, updatedPageParams: PeakPageParams, hierarchy: PeakHierarchy) {
-    return axios.put(`${backend_host_address}/api/v1/users/${userId}/pages/${pageId}`, {
+    return peakAxiosClient.put(`/api/v1/users/${userId}/pages/${pageId}`, {
         "page": updatedPageParams,
         "hierarchy": hierarchy
     })
@@ -27,15 +26,15 @@ export function updatePage(userId: string, pageId: string, updatedPageParams: Pe
 
 // Tags
 function deleteTagRequest(userId: string, tagId: string) {
-    return axios.delete(`${backend_host_address}/api/v1/users/${userId}/tags/${tagId}`)
+    return peakAxiosClient.delete(`/api/v1/users/${userId}/tags/${tagId}`)
 }
 function createTagsRequest(userId: string, tags: PeakDisplayTag[]) {
-    return axios.post(`${backend_host_address}/api/v1/users/${userId}/tags`, {
+    return peakAxiosClient.post(`/api/v1/users/${userId}/tags`, {
         "tags": tags
     })
 }
 function loadTagsRequests(userId: string) {
-    return axios.get(`${backend_host_address}/api/v1/users/${userId}/tags`)
+    return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
 }
 
 export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<PeakTag[]> {
@@ -89,10 +88,13 @@ export function useTags() {
 
 // User Accounts
 function fetchAllUserAccounts(userId: string, peakUserId: string) {
-    return axios.get(`${backend_host_address}/api/v1/users/${userId}/list-all-accounts?peak_user_id=${peakUserId}`)
+    return peakAxiosClient.get(`/api/v1/users/${userId}/list-all-accounts?peak_user_id=${peakUserId}`)
 }
 export function loadAllUserAccounts(userId: string, peakUserId: string) {
     return fetchAllUserAccounts(userId, peakUserId).then(res => {
+        console.log(`FETCHED ALL THE USER ACCOUNTS`)
+        console.log(res)
+        console.log(res.data)
         const userAccounts: DisplayPeaker[] = res.data.users as DisplayPeaker[]
         store.dispatch(setUserAccounts(userAccounts))
         return userAccounts
@@ -108,7 +110,7 @@ export function useUserAccounts() {
 
 // Load UserSpecificAppState
 export function fetchUserSpecificAppState(userId: string): Promise<UserSpecificAppState> {
-    return axios.get(`${backend_host_address}/api/v1/users/${userId}/load-entire-state`).then(res => {
+    return peakAxiosClient.get(`/api/v1/users/${userId}/load-entire-state`).then(res => {
         const fatUser  = res.data
         const emptyWikiState: PeakWikiState = clone(INITIAL_WIKI_STATE)
 

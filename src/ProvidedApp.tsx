@@ -12,22 +12,6 @@ import {PeakTimeline} from "./views/timeline/PeakTimeline";
 import {useUserAccounts} from "./utils/requests";
 import {DisplayPeaker} from "./redux/userAccountsSlice";
 import {KeybindingHandlerWrapper, useAccountSwitcher} from "./utils/loading-util";
-import axios from "axios";
-
-axios.interceptors.response.use(function (response) {
-    // Do something with response data
-    console.log(`RUNNING THE INTERCEPTOR`)
-    return response;
-}, function (error) {
-    // Do something with response error
-    console.log(`RUNNING THE ERROR INTERCEPTOR`)
-    console.log(error.response)
-    console.log(error.response.data)
-    console.log(error.response.status)
-    window.location.href = "/"
-    localStorage.clear()
-    return Promise.reject(error);
-});
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()

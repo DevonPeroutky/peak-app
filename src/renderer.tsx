@@ -35,8 +35,7 @@ import './index.scss';
 import {Peaker, setUser} from "./redux/userSlice";
 import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/electronSlice";
 import {message} from "antd";
-import axios  from "axios";
-import {backend_host_address} from "./constants/constants";
+import peakAxiosClient from "./client/axiosConfig"
 import { store } from "./redux/store"
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
@@ -47,7 +46,7 @@ serviceWorker.register();
 ipcRenderer.on('login-user', (event, arg) => {
     console.log(`Fetch the user's token via this one-time code: ${arg}`)
 
-    axios.get(`${backend_host_address}/api/v1/load-user-with-oneTimeCode?one-time-code=${arg}`).then((res) => {
+    peakAxiosClient.get(`/api/v1/load-user-with-oneTimeCode?one-time-code=${arg}`).then((res) => {
         const authedUser = res.data.data as Peaker
         console.log(authedUser)
         store.dispatch(setUser(authedUser));
