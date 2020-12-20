@@ -46,8 +46,8 @@ serviceWorker.register();
 ipcRenderer.on('login-user', (event, arg) => {
     console.log(`Fetch the user's token via this one-time code: ${arg}`)
 
-    peakAxiosClient.get(`/api/v1/load-user-with-oneTimeCode?one-time-code=${arg}`).then((res) => {
-        const authedUser = res.data.data as Peaker
+    peakAxiosClient.get(`/api/v1/session/load-user-with-oneTimeCode?one-time-code=${arg}`).then((res) => {
+        const authedUser = res.data as Peaker
         console.log(authedUser)
         store.dispatch(setUser(authedUser));
         window.location.href = "/main_window#/home/journal"

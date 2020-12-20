@@ -6,28 +6,37 @@ import {LogoutOutlined} from "@ant-design/icons/lib";
 import {Menu, message} from "antd";
 import {UNAUTHED_USER} from "../../../redux/userSlice";
 import { setUser } from "../../../redux/userSlice";
-import { useHistory } from 'react-router-dom';
+import peakAxiosClient from "../../../client/axiosConfig"
 import {useDispatch} from "react-redux";
 import "./logout-button.scss"
+import {isElectron} from "../../../utils/environment";
+import { useHistory } from 'react-router-dom';
+
 
 const LogoutButton = (props: { }) => {
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const handleLogoutFailure = () => {
-        message.info('Failed to logout!');
+        message.info('Failed to logout! Let Devon know');
         dispatch(setUser(UNAUTHED_USER))
     };
 
     const logout = () => {
         message.info('Logged Out!');
+        peakAxiosClient.post(`/api/v1/session/logout`)
         dispatch(setUser(UNAUTHED_USER))
+        if (isElectron) {
+            // http://localhost:3000/main_window#/welcome
+            history.push(`/main_window#/welcome`)
+        }
     }
 
-    if (config.dist === ELECTRON) {
+    if (isElectron) {
         return (
             <div className={"logout-row"}>
                 <LogoutOutlined className={"logout-row-icon"}/>
-                <a href={`${config.base_url}/#/welcome?logged-out-electron=true`} target="_blank" onClick={logout}>Logout</a>
+                <span onClick={logout}>Logout</span>
             </div>
         )
     } else {

@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {backend_host_address} from "../constants/constants";
+import {isElectron} from "../utils/environment";
 
-// Next we make an 'instance' of it
-const authedAxiosClient = axios.create({
+const defaultConfig = {
     withCredentials: true,
     baseURL: backend_host_address
-});
+}
+const authedAxiosClient = axios.create(defaultConfig);
 
 axios.interceptors.response.use(function (response) {
     // Do something with response data
@@ -17,8 +18,8 @@ axios.interceptors.response.use(function (response) {
     console.log(error.response)
     console.log(error.response.data)
     console.log(error.response.status)
-    // window.location.href = "/"
-    // localStorage.clear()
+    window.location.href = "/"
+    localStorage.clear()
     return Promise.reject(error);
 });
 

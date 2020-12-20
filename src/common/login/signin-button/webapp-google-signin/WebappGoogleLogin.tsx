@@ -32,8 +32,6 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
 
         peakAxiosClient.post(`/api/v1/session/login`, userPayload).then((res) => {
             const authedUser = res.data as Peaker
-            console.log(`NEW USERRRR`)
-            console.log(authedUser)
             dispatch(setUser(authedUser));
             dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {

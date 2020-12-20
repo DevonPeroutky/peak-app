@@ -1,4 +1,4 @@
-import {Peaker, PeakHierarchy} from "../redux/userSlice";
+import {PeakHierarchy} from "../redux/userSlice";
 import {Node} from "slate";
 import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/tagSlice";
 import {store} from "../redux/store";
