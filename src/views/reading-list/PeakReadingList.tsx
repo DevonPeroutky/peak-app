@@ -1,29 +1,18 @@
-import React, {useRef, useState} from 'react'
+import React from 'react'
 import "./peak-reading-list.scss"
 import {message, Table} from "antd";
 import {deleteFutureRead, FutureRead} from "../../redux/readingListSlice";
 import PeakTagDisplay from "../../common/peak-tag-display/PeakTagDisplay";
-import useAxios from "axios-hooks";
-import {backend_host_address} from "../../constants/constants";
 import {useCurrentUser, useFutureReads} from "../../utils/hooks";
 import {Peaker} from "../../redux/userSlice";
+import peakAxiosClient from "../../client/axiosConfig"
 
 const PeakReadingList = (props: { }) => {
     const user: Peaker = useCurrentUser()
     const futureReads: FutureRead[] = useFutureReads()
 
-    const [{ data, loading, error }, deleteFutureReadItem] = useAxios(
-        {
-            baseURL: backend_host_address,
-        },
-        { manual: true }
-    );
-
     const deleteReadingListItem = (itemId: string) => {
-        deleteFutureReadItem({
-            method: "DELETE",
-            url: `/api/v1/users/${user.id}/future-reads/${itemId}`
-        }).then(res => {
+        peakAxiosClient.delete(`/api/v1/users/${user.id}/future-reads/${itemId}`).then(res => {
             deleteFutureRead(itemId)
             message.info("Deleted!")
         })

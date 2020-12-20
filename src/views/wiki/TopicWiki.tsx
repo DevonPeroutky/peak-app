@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import React, {useCallback, useMemo, useState} from 'react'
 import "./topic-wiki.scss"
 import {useDispatch} from "react-redux";
 import {
     setEditing,
     beginSavingPage,
-    updatePageTitle,
 } from "../../redux/wikiPageSlice";
-import {updatePageTitleInSidebar} from "../../redux/topicSlice"
 import 'antd/dist/antd.css';
 import {Slate, ReactEditor} from "slate-react";
 import {createEditor, Node} from "slate";

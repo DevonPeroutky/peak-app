@@ -5,9 +5,8 @@ import {Peaker, setUser} from "../../../../redux/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {message} from "antd";
-import {backend_host_address} from "../../../../constants/constants";
+import peakAxiosClient from "../../../../client/axiosConfig";
 import {v4 as uuidv4} from "uuid";
-import axios from "axios"
 import config from "../../../../constants/environment-vars"
 import {useLinkedUserId} from "../../../../utils/hooks";
 import { addUserAccount } from '../../../../redux/userAccountsSlice';
@@ -31,8 +30,8 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
         const customPeakPayload = (linkedUserId) ? {"oneTimeCode": oneTimeCode, "existing_peak_user_id": linkedUserId} : {"oneTimeCode": oneTimeCode}
         const userPayload = { "id_token": id_token, "access_token": accessToken, "user": customPeakPayload}
 
-        axios.post(`${backend_host_address}/api/v1/users`, userPayload).then((res) => {
-            const authedUser = res.data.data as Peaker
+        peakAxiosClient.post(`/api/v1/session/login`, userPayload).then((res) => {
+            const authedUser = res.data as Peaker
             dispatch(setUser(authedUser));
             dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {

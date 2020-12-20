@@ -12,13 +12,13 @@ import { ReadOutlined} from "@ant-design/icons/lib";
 
 import config from "../../constants/environment-vars"
 import {TopicSection} from "./topic-section/topic-page-group/TopicPageGroup";
+import {isElectron} from "../../utils/environment";
 const { Sider } = Layout;
 
 
 const PeakSidebar = (props: { }) => {
     const currentPageId = useCurrentPageId();
     const isFullscreen = useIsFullscreen()
-    const isElectron = config.dist === ELECTRON
     const topics = useTopics()
 
     return (

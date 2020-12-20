@@ -7,7 +7,7 @@ import {
     ELEMENT_H6,
     HeadingKeyOption,
     HeadingLevelsOption,
-    HeadingPluginOptionsValues, setDefaults,
+    HeadingPluginOptionsValues,
 } from "@udecode/slate-plugins";
 import {PeakHeading} from "./component/renderElementHeading";
 
