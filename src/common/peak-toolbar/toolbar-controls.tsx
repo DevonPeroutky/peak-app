@@ -20,7 +20,7 @@ import {
     HighlightOutlined, InfoCircleOutlined,
     ItalicOutlined, LinkOutlined, MinusOutlined, OrderedListOutlined, PictureOutlined, RightOutlined,
     StrikethroughOutlined, TableOutlined,
-    UnderlineOutlined, UnorderedListOutlined, BookOutlined
+    UnderlineOutlined, UnorderedListOutlined, BookOutlined, ReadOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
 import headingH1 from '@iconify/icons-gridicons/heading-h1';
@@ -34,7 +34,8 @@ import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
-import {createLearning} from "../rich-text-editor/plugins/peak-learning-plugin/utils";
+import {ELEMENT_PEAK_BOOK} from "../rich-text-editor/plugins/book-plugin/defaults";
+import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -167,8 +168,16 @@ const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
     icon: <BookOutlined className={"peak-editor-control-icon"}/>,
     description: "Record something you learned!",
     label: "Learning",
-    elementType: PEAK_LEARNING,
-    customFormat: (editor => createLearning(editor))
+    elementType: ELEMENT_PEAK_BOOK,
+    customFormat: (editor => insertCustomBlockElement(editor, PEAK_LEARNING))
+};
+const PEAK_BOOK_BLOCK: PeakEditorControlDisplay = {
+    controlType: "block",
+    icon: <ReadOutlined className={"peak-editor-control-icon"}/>,
+    description: "Take down a note from a book you are reading!",
+    label: "Book Note",
+    elementType: ELEMENT_PEAK_BOOK,
+    customFormat: (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK))
 };
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
@@ -263,6 +272,7 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     PEAK_CODE_BLOCK,
     PEAK_QUOTE,
     TABLE_MARK,
+    PEAK_BOOK_BLOCK,
     PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
     PEAK_LEARNING_BLOCK,

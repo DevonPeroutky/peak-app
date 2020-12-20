@@ -14,13 +14,13 @@ import {
 import {PeakEditorControl} from "../../../peak-toolbar/toolbar-controls";
 
 export const useNodeContentSelect = (
-    mentionables: PeakEditorControl[] = [],
+    nodeTypes: PeakEditorControl[] = [],
     { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}
 ) => {
     const [targetRange, setTargetRange] = useState<Range | null>(null);
     const [valueIndex, setValueIndex] = useState(0);
     const [search, setSearch] = useState('');
-    const values = mentionables
+    const values = nodeTypes
         .filter((c) => c.label.toLowerCase().includes(search.toLowerCase()))
         .slice(0, maxSuggestions);
 

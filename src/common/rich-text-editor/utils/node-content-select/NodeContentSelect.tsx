@@ -10,7 +10,7 @@ import {
     PortalBody
 } from "@udecode/slate-plugins";
 import {Range} from "slate";
-import {PeakEditorControl, PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
+import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {Tag} from "antd";
 import {trim} from "lodash";
 import "./node-content-select.scss"

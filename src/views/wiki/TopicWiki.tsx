@@ -18,14 +18,15 @@ import {
 } from '../../utils/hooks';
 import { equals } from "ramda";
 import {
-    EditablePlugins,
-    pipe,
+    EditablePlugins, MentionSelect,
+    pipe, useMention,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/toolbar-controls";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";
+import {TEST_BOOKS} from "../../common/rich-text-editor/plugins/book-plugin/defaults";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;

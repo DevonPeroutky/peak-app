@@ -1,0 +1,25 @@
+@import "../../../../constants/variables";
+.peak-learning-select-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+
+  .peak-tag-icon {
+    margin-right: 5px;
+    color: rgba(9, 30, 66, 0.25);
+  }
+}
+
+.peak-learning-select-option {
+  display: flex!important;
+  justify-content: space-between!important;
+  align-items: center;
+  width: 100%;
+
+  .peak-delete-learning-option {
+    &:hover {
+      color: $primary-blue;
+    }
+  }
+}
