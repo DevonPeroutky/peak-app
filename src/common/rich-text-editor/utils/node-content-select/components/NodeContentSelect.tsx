@@ -10,9 +10,9 @@ import {
     PortalBody
 } from "@udecode/slate-plugins";
 import {Range} from "slate";
-import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {Tag} from "antd";
 import {trim} from "lodash";
+import {PeakNodeSelectListItem} from "../types";
 import "./node-content-select.scss"
 
 export interface NodeContentSelectProps {
@@ -31,7 +31,7 @@ export interface NodeContentSelectProps {
     /**
      * List of mentionable items
      */
-    options: PeakEditorControlDisplay[];
+    options: PeakNodeSelectListItem[];
     /**
      * Index of the selected option
      */
@@ -39,7 +39,7 @@ export interface NodeContentSelectProps {
     /**
      * Callback called when clicking on a mention option
      */
-    onClickMention?: (editor: ReactEditor, option: PeakEditorControlDisplay) => void;
+    onClickMention?: (editor: ReactEditor, option: PeakNodeSelectListItem) => void;
 }
 
 const getClassNames = classNamesFunction<

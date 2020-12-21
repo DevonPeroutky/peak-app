@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import "./journal.scss"
 import {createEditor, Editor, Node, Range} from 'slate';
-import {ReactEditor, Slate, withReact} from 'slate-react';
+import {ReactEditor, Slate} from 'slate-react';
 import {
     EditablePlugins,
     pipe,
@@ -17,12 +17,11 @@ import {
 } from "../../utils/hooks";
 import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/toolbar-controls";
-import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
+import { NODE_CONTENT_LIST_ITEMS } from "../../common/peak-toolbar/toolbar-controls";
+import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
-import {useDispatch} from "react-redux";
 import {
-    EMPTY_JOURNAL_STATE, JOURNAL_NODE_LEVEL,
+    EMPTY_JOURNAL_STATE,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/constants";
@@ -38,6 +37,7 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
+import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -131,7 +131,7 @@ const PeakJournal = (props: { }) => {
         values,
         index,
         target,
-    } = useNodeContentSelect(NODE_CONTENT_TYPES, {
+    } = useNodeContentSelect(NODE_CONTENT_LIST_ITEMS, {
         maxSuggestions: 10,
         trigger: '/',
     });
@@ -215,8 +215,8 @@ interface InternalJournalProps {
     index: number,
     target: Range,
     search: string,
-    values: PeakEditorControl[]
-    onAddNodeContent: (editor: Editor, data: PeakEditorControl) => void
+    values: PeakNodeSelectListItem[]
+    onAddNodeContent: (editor: Editor, data: PeakNodeSelectListItem) => void
 }
 const Journal = (props: InternalJournalProps) => {
     const {
@@ -260,7 +260,7 @@ const Journal = (props: InternalJournalProps) => {
             <NodeContentSelect
                 at={target}
                 valueIndex={index}
-                options={values as PeakEditorControl[]}
+                options={values as PeakNodeSelectListItem[]}
                 onClickMention={onAddNodeContent}
             />
         </Slate>

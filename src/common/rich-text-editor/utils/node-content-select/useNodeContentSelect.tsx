@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Editor, Range, Transforms, Node } from 'slate';
+import {Editor, Path, Point, Range, Transforms} from 'slate';
 import {
     autoformatBlock,
     getNextIndex,
@@ -11,25 +11,54 @@ import {
     unwrapList,
     UseMentionOptions
 } from "@udecode/slate-plugins";
-import {PeakEditorControl} from "../../../peak-toolbar/toolbar-controls";
+import {PeakNodeSelectListItem} from "./types";
+import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
+import {PEAK_BOOK_SELECT_ITEM} from "../../plugins/book-plugin/defaults";
+import {BASIC_LIBRARY, createCreateNewBookListItem} from "./constants";
+import {isTextAfterTrigger} from "./utils";
 
 export const useNodeContentSelect = (
-    nodeTypes: PeakEditorControl[] = [],
     { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}
 ) => {
+    const [nodeSelectMode, setNodeSelectMode] = useState(true)
     const [targetRange, setTargetRange] = useState<Range | null>(null);
     const [valueIndex, setValueIndex] = useState(0);
+    const [menuItems, setMenuItems] = useState(NODE_CONTENT_LIST_ITEMS);
     const [search, setSearch] = useState('');
-    const values = nodeTypes
-        .filter((c) => c.label.toLowerCase().includes(search.toLowerCase()))
-        .slice(0, maxSuggestions);
+    const filterValues = () => {
+        const filteredValues: PeakNodeSelectListItem[] = menuItems
+             .filter((c) => c.title.toLowerCase().includes(search.toLowerCase()))
+             .slice(0, maxSuggestions);
+
+        const createNewItem: PeakNodeSelectListItem = createCreateNewBookListItem(search)
+        return (!nodeSelectMode && search) ? [...filteredValues, createNewItem] : filteredValues
+    }
+    const values = filterValues();
+
+    const resetNodeMenuItem = () => {
+        setNodeSelectMode(true)
+        setMenuItems(NODE_CONTENT_LIST_ITEMS)
+    }
 
     const onAddNodeContent = useCallback(
-        (editor: Editor, data: PeakEditorControl) => {
+        (editor: Editor, data: PeakNodeSelectListItem) => {
             if (targetRange !== null) {
-                Transforms.select(editor, targetRange);
-                insertNodeContent(editor, data, targetRange)
-                return setTargetRange(null);
+                if (data.elementType === PEAK_BOOK_SELECT_ITEM) {
+                    setSearch('')
+                    setMenuItems(BASIC_LIBRARY)
+                    setNodeSelectMode(false)
+                    Transforms.select(editor, targetRange);
+                    Transforms.insertText(editor, '/', { at: editor.selection! } )
+                    return setTargetRange(null);
+                } else {
+                    console.log(`INSERRRTTTINGGGGGG NEW THING`)
+                    console.log(targetRange)
+                    Transforms.select(editor, targetRange);
+                    Transforms.insertText(editor, '')
+                    insertNodeContent(editor, data, targetRange)
+                    resetNodeMenuItem()
+                    return setTargetRange(null);
+                }
             }
         },
         [options, targetRange]
@@ -48,15 +77,25 @@ export const useNodeContentSelect = (
                 }
                 if (e.key === 'Escape') {
                     e.preventDefault();
+                    resetNodeMenuItem();
+                    return setTargetRange(null);
+                }
+
+                if (e.key === 'Backspace' && search.length === 1) {
+                    resetNodeMenuItem();
                     return setTargetRange(null);
                 }
 
                 if (['Tab', 'Enter'].includes(e.key)) {
                     e.preventDefault();
+                    console.log(`CURRENT VALUES`)
+                    console.log(values)
                     if (values.length) {
+                        console.log(`WHAT IS SUP`)
                         onAddNodeContent(editor, values[valueIndex])
                         return false
                     } else {
+                        console.log(`INSERTING BREAK`)
                         Editor.insertBreak(editor)
                     }
                 }
@@ -67,7 +106,6 @@ export const useNodeContentSelect = (
             valueIndex,
             setValueIndex,
             targetRange,
-            setTargetRange,
             onAddNodeContent,
         ]
     );
@@ -78,24 +116,43 @@ export const useNodeContentSelect = (
 
             if (selection && isCollapsed(selection)) {
                 const cursor = Range.start(selection);
+                const atEnd: boolean = isPointAtWordEnd(editor, { at: cursor })
 
-                const { range, match: beforeMatch } = isWordAfterTrigger(editor, {
-                    at: cursor,
-                    trigger,
-                });
+                // If we are searching through books
+                if (!nodeSelectMode) {
+                    const { range, match: beforeMatch } = isTextAfterTrigger(editor, {at: cursor, trigger})
 
-                if (beforeMatch && isPointAtWordEnd(editor, { at: cursor })) {
-                    setTargetRange(range as Range);
-                    const [, word] = beforeMatch;
-                    setSearch(word);
-                    setValueIndex(0);
-                    return;
+                    if (atEnd && beforeMatch) {
+                        const [, word] = beforeMatch;
+                        const pointAtStartOfLine: Point = {path: range.focus.path, offset: 0}
+                        const rangePinnedToStartOfLine: Range = {anchor: pointAtStartOfLine, focus: range.focus}
+                        setTargetRange(rangePinnedToStartOfLine as Range);
+                        setSearch(word);
+                        setValueIndex(0);
+                        return
+                    }
+                }
+
+                // If we are searching through NodeTypes (The default menu)
+                if (nodeSelectMode) {
+                    const { range, match: beforeMatch } = isWordAfterTrigger(editor, {
+                        at: cursor,
+                        trigger,
+                    });
+
+                    if (atEnd && beforeMatch) {
+                        setTargetRange(range as Range);
+                        const [, word] = beforeMatch;
+                        setSearch(word);
+                        setValueIndex(0);
+                        return;
+                    }
                 }
             }
 
             setTargetRange(null);
         },
-        [setTargetRange, setSearch, setValueIndex, trigger]
+        [targetRange, setTargetRange, nodeSelectMode, setSearch, setValueIndex, trigger, search]
     );
 
     return {
@@ -111,7 +168,7 @@ export const useNodeContentSelect = (
 
 export const insertNodeContent = async (
     editor: Editor,
-    selectedOption: PeakEditorControl,
+    selectedOption: PeakNodeSelectListItem,
     targetRange: Range
 ) => {
     const rangeFromBlockStart = getRangeFromBlockStart(editor) as Range;

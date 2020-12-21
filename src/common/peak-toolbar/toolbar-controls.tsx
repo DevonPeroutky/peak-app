@@ -8,19 +8,35 @@ import {
     ELEMENT_H5,
     ELEMENT_IMAGE,
     ELEMENT_LINK,
-    ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL,
-    MARK_BOLD, MARK_CODE,
+    ELEMENT_OL,
+    ELEMENT_PARAGRAPH,
+    ELEMENT_UL,
+    MARK_BOLD,
+    MARK_CODE,
     MARK_ITALIC,
     MARK_STRIKETHROUGH,
-    MARK_UNDERLINE, toggleList, toggleMark,
+    MARK_UNDERLINE,
+    toggleList,
+    toggleMark,
 } from "@udecode/slate-plugins";
 import React, {ReactNode} from "react";
 import {
-    BoldOutlined, CodeOutlined,
-    HighlightOutlined, InfoCircleOutlined,
-    ItalicOutlined, LinkOutlined, MinusOutlined, OrderedListOutlined, PictureOutlined, RightOutlined,
-    StrikethroughOutlined, TableOutlined,
-    UnderlineOutlined, UnorderedListOutlined, BookOutlined, ReadOutlined
+    BoldOutlined,
+    CodeOutlined,
+    HighlightOutlined,
+    InfoCircleOutlined,
+    ItalicOutlined,
+    LinkOutlined,
+    MinusOutlined,
+    OrderedListOutlined,
+    PictureOutlined,
+    RightOutlined,
+    StrikethroughOutlined,
+    TableOutlined,
+    UnderlineOutlined,
+    UnorderedListOutlined,
+    BookOutlined,
+    ReadOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
 import headingH1 from '@iconify/icons-gridicons/heading-h1';
@@ -34,8 +50,10 @@ import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
-import {ELEMENT_PEAK_BOOK} from "../rich-text-editor/plugins/book-plugin/defaults";
+import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/book-plugin/defaults";
 import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
+import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
+import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -171,14 +189,21 @@ const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
     elementType: ELEMENT_PEAK_BOOK,
     customFormat: (editor => insertCustomBlockElement(editor, PEAK_LEARNING))
 };
-const PEAK_BOOK_BLOCK: PeakEditorControlDisplay = {
+const PEAK_BOOK_NOTE_SELECT_ITEM: PeakEditorControlDisplay = {
     controlType: "block",
     icon: <ReadOutlined className={"peak-editor-control-icon"}/>,
     description: "Take down a note from a book you are reading!",
     label: "Book Note",
-    elementType: ELEMENT_PEAK_BOOK,
-    customFormat: (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK))
+    elementType: PEAK_BOOK_SELECT_ITEM,
 };
+// const PEAK_BOOK_NOTE_BLOCK: PeakEditorControlDisplay = {
+//     controlType: "block",
+//     icon: <ReadOutlined className={"peak-editor-control-icon"}/>,
+//     description: "Take down a note from a book you are reading!",
+//     label: "Book Note",
+//     elementType: ELEMENT_PEAK_BOOK,
+//     customFormat: (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK))
+// };
 const DIVIDER_MARK: PeakEditorControlDisplay = {
     controlType: undefined,
     description: "Separate content with a horizontal line",
@@ -272,13 +297,15 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     PEAK_CODE_BLOCK,
     PEAK_QUOTE,
     TABLE_MARK,
-    PEAK_BOOK_BLOCK,
+    PEAK_BOOK_NOTE_SELECT_ITEM,
     PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
     PEAK_LEARNING_BLOCK,
     IMAGE_MARK
 ]
+export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = NODE_CONTENT_TYPES.map(convertEditorControlDisplayToNodeSelectListItem)
 
+// These three below are only used for Toolbar and are thus deprecated
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
 export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK, IMAGE_MARK];

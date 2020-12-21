@@ -25,6 +25,7 @@ export function previous(editor: ReactEditor): Node | undefined {
         const prevParent = Node.parent(editor, prevPath)
 
         // Refetch the node for Slate's bitchass
+        // TODO!!!!! Error: Cannot get the parent path of the root path [].
         const [curr, currPath] = Editor.above(editor)
         const currParent = Node.parent(editor, currPath)
 
