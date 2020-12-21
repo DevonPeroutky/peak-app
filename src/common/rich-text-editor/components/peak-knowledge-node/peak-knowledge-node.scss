@@ -1,7 +1,7 @@
-@import "../../../../../constants/variables";
+@import "../../../../constants/variables";
 
 $title-row-height: 30px;
-.peak-learning-container {
+.peak-knowledge-node-container {
   box-shadow: $peak-kn-box-shadow;
   padding: $peak-kn-padding;
   border: none;
@@ -36,4 +36,3 @@ $title-row-height: 30px;
     pointer-events:none;
   }
 }
-

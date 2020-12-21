@@ -13,7 +13,7 @@ import {
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
-import {PEAK_BOOK_SELECT_ITEM} from "../../plugins/book-plugin/defaults";
+import {PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-book-plugin/defaults";
 import {BASIC_LIBRARY, createCreateNewBookListItem} from "./constants";
 import {isTextAfterTrigger} from "./utils";
 
@@ -51,8 +51,6 @@ export const useNodeContentSelect = (
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
                 } else {
-                    console.log(`INSERRRTTTINGGGGGG NEW THING`)
-                    console.log(targetRange)
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
                     insertNodeContent(editor, data, targetRange)

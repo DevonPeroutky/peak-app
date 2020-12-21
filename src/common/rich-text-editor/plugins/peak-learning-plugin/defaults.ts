@@ -1,5 +1,5 @@
 import {BlockquotePluginOptionsValues} from "@udecode/slate-plugins";
-import {PeakLearning} from "./component/PeakLearning";
+import {PeakKnowledgeNode} from "../../components/peak-knowledge-node/PeakKnowledgeNode";
 
 export declare type PeakLearningKeyOption = 'learning';
 export const PEAK_LEARNING = "learning";
@@ -9,8 +9,8 @@ export const DEFAULTS_LEARNING: Record<
     BlockquotePluginOptionsValues
     > = {
     learning: {
-        component: PeakLearning,
-        type: "learning",
+        component: PeakKnowledgeNode,
+        type: PEAK_LEARNING,
         rootProps: {
             className: `slate-PLUGIN-peak-learning`,
             as: PEAK_LEARNING,

@@ -3,7 +3,7 @@ import {Editor, Node, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, unwrapList} from "@udecode/slate-plugins";
-import {ELEMENT_PEAK_BOOK} from "../plugins/book-plugin/defaults";
+import {ELEMENT_PEAK_BOOK} from "../plugins/peak-book-plugin/defaults";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -53,14 +53,12 @@ export function next(editor: ReactEditor): Node | undefined {
     return undefined
 }
 
-export function insertCustomBlockElement(editor: Editor, nodeType: string) {
-    unwrapList(editor);
-
-    // Transforms.removeNodes(editor)
+export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeProps?: {}) {
     Transforms.insertNodes(editor, [
         {
             type: nodeType,
-            children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH}]
+            children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
+            ...nodeProps,
         },
         {
             type: ELEMENT_PARAGRAPH,
@@ -68,6 +66,12 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string) {
         }
     ]);
 }
+
+export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
+    return (editor: Editor) => insertCustomBlockElement(editor, nodeType, nodeProps)
+}
+
+
 
 export function isPeakKnowledgeNoteType(n: Node): boolean {
     return [PEAK_LEARNING, ELEMENT_PEAK_BOOK].includes(n.type as string)

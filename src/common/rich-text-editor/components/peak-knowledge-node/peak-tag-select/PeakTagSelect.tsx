@@ -1,18 +1,18 @@
-import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../redux/tagSlice";
+import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../redux/tagSlice";
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
-import {createPeakTags, deletePeakTag, useTags} from "../../../../utils/requests";
-import {useCurrentUser, useCurrentWikiPage} from "../../../../utils/hooks";
+import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
+import {useCurrentUser, useCurrentWikiPage} from "../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
-import {calculateNextColor} from "../../plugins/peak-learning-plugin/utils";
+import {calculateNextColor} from "../../../plugins/peak-learning-plugin/utils";
 import {Editor, Node, Transforms} from "slate";
-import {forceFocusToNode, reEnterDown} from "../../utils/external-editor-utils";
-import {PEAK_LEARNING} from "../../plugins/peak-learning-plugin/defaults";
+import {forceFocusToNode, reEnterDown} from "../../../utils/external-editor-utils";
+import {PEAK_LEARNING} from "../../../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
+import {setEditorFocusToNode} from "../../../../../redux/wikiPageSlice";
 import {Empty, Select, Tag} from "antd";
-import {capitalize_and_truncate} from "../../../../utils/strings";
+import {capitalize_and_truncate} from "../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
 const { Option } = Select;
@@ -137,7 +137,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     return (
-        <div className={"peak-learning-select-container"} data-slate-editor >
+        <div className={"peak-learning-select-container"} data-slate-editor>
             <TagOutlined className={"peak-tag-icon"}/>
             <Select
                 onClick={() => {

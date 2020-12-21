@@ -36,7 +36,8 @@ import {
     UnderlineOutlined,
     UnorderedListOutlined,
     BookOutlined,
-    ReadOutlined
+    ReadOutlined,
+    BulbOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
 import headingH1 from '@iconify/icons-gridicons/heading-h1';
@@ -50,7 +51,7 @@ import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
-import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/book-plugin/defaults";
+import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-book-plugin/defaults";
 import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
@@ -183,7 +184,7 @@ const PEAK_CALLOUT_BLOCK: PeakEditorControlDisplay = {
 };
 const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
     controlType: "block",
-    icon: <BookOutlined className={"peak-editor-control-icon"}/>,
+    icon: <BulbOutlined className={"peak-editor-control-icon"}/>,
     description: "Record something you learned!",
     label: "Learning",
     elementType: ELEMENT_PEAK_BOOK,
@@ -191,7 +192,7 @@ const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
 };
 const PEAK_BOOK_NOTE_SELECT_ITEM: PeakEditorControlDisplay = {
     controlType: "block",
-    icon: <ReadOutlined className={"peak-editor-control-icon"}/>,
+    icon: <BookOutlined className={"peak-editor-control-icon"}/>,
     description: "Take down a note from a book you are reading!",
     label: "Book Note",
     elementType: PEAK_BOOK_SELECT_ITEM,
@@ -297,10 +298,10 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     PEAK_CODE_BLOCK,
     PEAK_QUOTE,
     TABLE_MARK,
-    PEAK_BOOK_NOTE_SELECT_ITEM,
     PEAK_CALLOUT_BLOCK,
     DIVIDER_MARK,
     PEAK_LEARNING_BLOCK,
+    PEAK_BOOK_NOTE_SELECT_ITEM,
     IMAGE_MARK
 ]
 export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = NODE_CONTENT_TYPES.map(convertEditorControlDisplayToNodeSelectListItem)

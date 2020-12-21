@@ -52,8 +52,8 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 import {DEFAULTS_LEARNING, PEAK_LEARNING} from "./plugins/peak-learning-plugin/defaults";
 import {PeakLearningPlugin} from "./plugins/peak-learning-plugin/PeakLearningPlugin";
-import {DEFAULTS_PEAK_BOOK, ELEMENT_PEAK_BOOK} from "./plugins/book-plugin/defaults";
-import {PeakBookNotePlugin} from "./plugins/book-plugin/PeakBookPlugin";
+import {DEFAULTS_PEAK_BOOK, ELEMENT_PEAK_BOOK} from "./plugins/peak-book-plugin/defaults";
+import {PeakBookNotePlugin} from "./plugins/peak-book-plugin/PeakBookPlugin";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -164,6 +164,7 @@ const baseDraggableComponentOptions = [
     defaultOptions.blockquote,
     defaultOptions.code_block,
     defaultOptions.learning,
+    defaultOptions.peak_book_note,
     defaultOptions.p
 ]
 const baseNormalizers = [
