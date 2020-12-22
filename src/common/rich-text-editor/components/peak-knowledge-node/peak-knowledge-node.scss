@@ -1,14 +1,16 @@
 @import "../../../../constants/variables";
 
 $title-row-height: 30px;
+$margin-top: 20px;
 .peak-knowledge-node-container {
+  margin-top: $margin-top;
   box-shadow: $peak-kn-box-shadow;
   padding: $peak-kn-padding;
   border: none;
 
   .peak-learning-title-row {
     position: absolute;
-    top: calc(-#{$title-row-height / 2});
+    top: calc(-#{$title-row-height / 2} + #{$margin-top});
     display: flex;
     align-items: center;
     background-color: $background-color;
@@ -26,7 +28,7 @@ $title-row-height: 30px;
   &.empty::after {
     position: absolute;
     color: $placeholder-text-color;
-    top: 0;
+    top: $margin-top;
     cursor: text;
     content: "Write down something that caught your attention....";
     display: flex;

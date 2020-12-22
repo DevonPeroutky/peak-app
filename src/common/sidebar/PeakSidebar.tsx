@@ -1,18 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import 'antd/dist/antd.css';
-import "./peak-sidebar.scss";
-import {Layout, Menu, Divider, message} from 'antd';
+import React from 'react'
+import {Layout, Menu} from 'antd';
 import { PeakLogo } from "../logo/PeakLogo";
 import AddTopicModal from "../modals/add-topic/AddTopicModal";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import cn from "classnames"
 import {useCurrentPageId, useIsFullscreen, useTopics} from "../../utils/hooks";
-import {ELECTRON} from "../../constants/constants";
-import { ReadOutlined} from "@ant-design/icons/lib";
-
-import config from "../../constants/environment-vars"
+import {MenuOutlined} from "@ant-design/icons/lib";
 import {TopicSection} from "./topic-section/topic-page-group/TopicPageGroup";
 import {isElectron} from "../../utils/environment";
+import 'antd/dist/antd.css';
+import "./peak-sidebar.scss";
 const { Sider } = Layout;
 
 
@@ -32,7 +29,7 @@ const PeakSidebar = (props: { }) => {
                 <Menu.Item key="home/journal">
                     {/*<Link to={`${match.url}/journal`}>*/}
                     <Link to="/home/journal">
-                        <ReadOutlined />Journal
+                        <MenuOutlined/>Journal
                     </Link>
                 </Menu.Item>
             </Menu>
