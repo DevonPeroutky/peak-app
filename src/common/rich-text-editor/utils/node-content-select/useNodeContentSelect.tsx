@@ -36,6 +36,7 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const resetNodeMenuItem = () => {
+        console.log(`Resetting the Node Menu Item`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
     }
@@ -79,7 +80,7 @@ export const useNodeContentSelect = (
                     return setTargetRange(null);
                 }
 
-                if (e.key === 'Backspace' && search.length === 1) {
+                if (e.key === 'Backspace' && search.length === 0) {
                     resetNodeMenuItem();
                     return setTargetRange(null);
                 }

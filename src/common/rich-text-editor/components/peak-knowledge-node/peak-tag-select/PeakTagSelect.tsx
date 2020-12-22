@@ -79,7 +79,6 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     }
 
     const leaveDown = () => {
-        console.log("LEAVING Down")
         reEnterDown(editor, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
     }
 
@@ -88,7 +87,6 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
-        console.log("LEAVING UP")
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
             forceFocusToNode(lastChildNode)
         } else {

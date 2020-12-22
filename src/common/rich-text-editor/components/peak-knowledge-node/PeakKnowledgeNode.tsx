@@ -16,8 +16,6 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const tags = element.selected_tags as PeakTag[]
     const isEmpty: boolean = isNodeEmpty(element)
 
-    console.log(element)
-
     return (
         <div className={cn("peak-knowledge-node-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
             <KnowledgeTitleRow elementType={element.type as string} label={element.title as string | undefined}/>
@@ -31,14 +29,14 @@ const KnowledgeTitleRow = (props: {elementType: string, label: string | undefine
     const { elementType, label } = props
     if (elementType === PEAK_LEARNING) {
         return (
-            <div className={"peak-learning-title-row"} contentEditable={false}>
+            <div className={"peak-knowledge-title-row learning"} contentEditable={false}>
                 <BulbOutlined className={"learning-title-row-icon"}/>
                 <span>Learning</span>
            </div>
         )
     } else {
         return (
-            <div className={"peak-learning-title-row"} contentEditable={false}>
+            <div className={"peak-knowledge-title-row book"} contentEditable={false}>
                 <ReadOutlined className={"learning-title-row-icon"}/>
                 <span>{capitalize_and_truncate(label)}</span>
             </div>

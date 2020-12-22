@@ -37,9 +37,7 @@ export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => 
             title="Delete the Topic？This will delete all of the pages in the topic"
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => deleteTopicAndAllPages()}>
-            <DeleteOutlined
-                className={cn("delete-topic-icon", hovered ? "visible" : "")}
-            />
+            <DeleteOutlined className={cn("delete-topic-icon", hovered ? "visible" : "")}/>
         </Popconfirm>
     )
 };
