@@ -14,9 +14,12 @@ export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any)
 
 export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     const currentPath = editor.selection?.anchor.path
-    if (currentPath === undefined)  { return }
     const reactEditor: ReactEditor = editor as ReactEditor
-    if (currentPath && !event.metaKey && event.key == "ArrowDown") {
+
+    const isCollapsed = Range.isCollapsed(editor.selection)
+    const worthEvaluating: boolean = currentPath && isCollapsed && !event.metaKey
+
+    if (worthEvaluating && event.key == "ArrowDown") {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
@@ -25,7 +28,7 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
             forceFocusToNode(currParent)
         }
     }
-    if (currentPath && !event.metaKey && (event.key == "ArrowUp")) {
+    if (worthEvaluating && event.key == "ArrowUp") {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
