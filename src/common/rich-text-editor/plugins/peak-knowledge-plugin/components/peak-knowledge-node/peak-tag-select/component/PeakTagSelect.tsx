@@ -11,10 +11,10 @@ import {forceFocusToNode, reEnterDown} from "../../../../../../utils/external-ed
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {setEditorFocusToNode} from "../../../../../../../../redux/slices/wikiPageSlice";
 import {Empty, Select, Tag} from "antd";
-import {isPeakKnowledgeNoteType} from "../../../../../../utils/base-utils";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
+import {isPeakKnowledgeNoteType} from "../../../../peak-knowledge-node-utils";
 const { Option } = Select;
 
 export interface PeakDisplayTag {

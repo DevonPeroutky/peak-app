@@ -5,7 +5,7 @@ import {
     SlatePlugin,
 } from "@udecode/slate-plugins";
 import {DEFAULTS_PEAK_KNOWLEDGE} from "./defaults";
-import {knowledgeNodeOnKeyDownHandler} from "../../utils/peak-knowledge-node-utils";
+import {knowledgeNodeOnKeyDownHandler} from "./peak-knowledge-node-utils";
 import { RenderElementProps } from "slate-react";
 
 export const PeakKnowledgePlugin = (options?: any): SlatePlugin => ({
