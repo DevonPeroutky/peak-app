@@ -17,8 +17,6 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     if (currentPath === undefined)  { return }
     const reactEditor: ReactEditor = editor as ReactEditor
     if (currentPath && !event.metaKey && event.key == "ArrowDown") {
-        console.log(`GOING DOWN`)
-
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
@@ -27,7 +25,6 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
             forceFocusToNode(currParent)
         }
     }
-
     if (currentPath && !event.metaKey && (event.key == "ArrowUp")) {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
@@ -40,18 +37,6 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
             const previousNodePath: number[] = ReactEditor.findPath(reactEditor, previousNode)
             Transforms.select(editor, previousNodePath)
             Transforms.collapse(editor, { edge: 'end' });
-        }
-    }
-
-    if (currentPath && !event.metaKey && event.key == "Backspace") {
-        let previousNode: Node | undefined = previous(editor as ReactEditor)
-        if (!previousNode) {
-            return
-        }
-
-        const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
-        if (isPeakKnowledgeNoteType(previousNode) && (selectionCollapsedAndAtStart)) {
-            forceFocusToNode(previousNode)
         }
     }
 }
