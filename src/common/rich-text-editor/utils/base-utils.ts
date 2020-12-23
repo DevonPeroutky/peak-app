@@ -1,9 +1,9 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {isEqual} from "lodash";
-import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {ELEMENT_PEAK_BOOK} from "../plugins/peak-book-plugin/defaults";
+import {PEAK_LEARNING} from "../plugins/peak-knowledge-plugin/constants";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path

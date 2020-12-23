@@ -4,9 +4,9 @@ import cn from 'classnames';
 import {BulbOutlined, ReadOutlined} from "@ant-design/icons/lib";
 import {PeakTag} from "../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../plugins/journal-entry-plugin/journal-entry/JournalEntry";
-import {PeakTagSelect} from "./peak-tag-select/PeakTagSelect";
-import {PEAK_LEARNING} from "../../plugins/peak-learning-plugin/defaults";
+import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../utils/strings";
+import {PEAK_LEARNING} from "../../plugins/peak-knowledge-plugin/constants";
 import "./peak-knowledge-node.scss"
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {

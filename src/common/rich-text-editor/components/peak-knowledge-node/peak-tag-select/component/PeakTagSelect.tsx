@@ -1,19 +1,19 @@
-import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../redux/slices/tagSlice";
+import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../redux/slices/tagSlice";
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
-import {createPeakTags, deletePeakTag, useTags} from "../../../../../utils/requests";
-import {useCurrentUser, useCurrentWikiPage} from "../../../../../utils/hooks";
+import {createPeakTags, deletePeakTag, useTags} from "../../../../../../utils/requests";
+import {useCurrentUser, useCurrentWikiPage} from "../../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
-import {calculateNextColor} from "../../../plugins/peak-learning-plugin/utils";
+import {calculateNextColor} from "../utils";
 import {Editor, Node, Transforms} from "slate";
-import {forceFocusToNode, reEnterDown} from "../../../utils/external-editor-utils";
-import {PEAK_LEARNING} from "../../../plugins/peak-learning-plugin/defaults";
+import {forceFocusToNode, reEnterDown} from "../../../../utils/external-editor-utils";
+import {PEAK_LEARNING} from "../../../../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {setEditorFocusToNode} from "../../../../../redux/slices/wikiPageSlice";
+import {setEditorFocusToNode} from "../../../../../../redux/slices/wikiPageSlice";
 import {Empty, Select, Tag} from "antd";
-import {isPeakKnowledgeNoteType} from "../../../utils/base-utils";
-import {capitalize_and_truncate} from "../../../../../utils/strings";
+import {isPeakKnowledgeNoteType} from "../../../../utils/base-utils";
+import {capitalize_and_truncate} from "../../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
 const { Option } = Select;

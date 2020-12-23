@@ -4,7 +4,7 @@ import cn from "classnames";
 import {PeakTag} from "../../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 import "./peak-book-note.scss"
-import {PeakTagSelect} from "../../../components/peak-knowledge-node/peak-tag-select/PeakTagSelect";
+import {PeakTagSelect} from "../../../components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 
 export const PeakBookNote = (props: RenderElementProps) => {
     const { element } = props
