@@ -77,10 +77,6 @@ const NodeContentSelectBase = ({
             }
         }
     }, [editor, at]);
-
-    console.log(`OPTIONS`)
-    console.log(options.length)
-    console.log(nodeContentSelectMode)
     if (!at || (nodeContentSelectMode && options.length === 0)) {
         return null;
     }

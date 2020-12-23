@@ -17,7 +17,6 @@ import {
 } from "../../utils/hooks";
 import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import { NODE_CONTENT_LIST_ITEMS } from "../../common/peak-toolbar/toolbar-controls";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {
@@ -124,14 +123,15 @@ const PeakJournal = (props: { }) => {
 
     // TODO: Refactor these two into a single export for Peak Editors
     const {
+        values,
+        onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
-        onAddNodeContent,
         search,
-        values,
         index,
         target,
-    } = useNodeContentSelect(NODE_CONTENT_LIST_ITEMS, {
+        nodeContentSelectMode
+    } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
@@ -177,6 +177,7 @@ const PeakJournal = (props: { }) => {
                 target={target}
                 search={search}
                 values={values}
+                nodeContentSelectMode={nodeContentSelectMode}
                 onAddNodeContent={onAddNodeContent}/>
 
         }
@@ -217,6 +218,7 @@ interface InternalJournalProps {
     search: string,
     values: PeakNodeSelectListItem[]
     onAddNodeContent: (editor: Editor, data: PeakNodeSelectListItem) => void
+    nodeContentSelectMode: boolean
 }
 const Journal = (props: InternalJournalProps) => {
     const {
@@ -230,6 +232,7 @@ const Journal = (props: InternalJournalProps) => {
         index,
         target,
         values,
+        nodeContentSelectMode,
         search,
         onAddNodeContent
     } = props
@@ -260,8 +263,9 @@ const Journal = (props: InternalJournalProps) => {
             <NodeContentSelect
                 at={target}
                 valueIndex={index}
-                options={values as PeakNodeSelectListItem[]}
+                options={values}
                 onClickMention={onAddNodeContent}
+                nodeContentSelectMode={nodeContentSelectMode}
             />
         </Slate>
     )

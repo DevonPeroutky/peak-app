@@ -17,6 +17,7 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     if (currentPath === undefined)  { return }
     const reactEditor: ReactEditor = editor as ReactEditor
     if (currentPath && !event.metaKey && event.key == "ArrowDown") {
+        console.log(`GOING DOWN`)
 
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
@@ -30,6 +31,8 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     if (currentPath && !event.metaKey && (event.key == "ArrowUp")) {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
+
+        console.log(`GOING DOWN`)
 
         const previousNode: Node | undefined = previous(reactEditor)
         if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakKnowledgeNoteType(previousNode)) {

@@ -12,6 +12,7 @@ import {PEAK_LEARNING} from "../../../plugins/peak-learning-plugin/defaults";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {setEditorFocusToNode} from "../../../../../redux/slices/wikiPageSlice";
 import {Empty, Select, Tag} from "antd";
+import {isPeakKnowledgeNoteType} from "../../../utils/base-utils";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
@@ -79,12 +80,12 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     }
 
     const leaveDown = () => {
-        reEnterDown(editor, (n: Node) => n.type === PEAK_LEARNING && n.id === nodeId)
+        reEnterDown(editor, (n: Node) => isPeakKnowledgeNoteType(n) && n.id === nodeId)
     }
 
     // TODO: Why can't this be re-enter up?
     const leaveUp = () => {
-        const [theNode, path] = Editor.nodes(editor, { match: n => n.type === PEAK_LEARNING && n.id === nodeId, at: []});
+        const [theNode, path] = Editor.nodes(editor, { match: n => isPeakKnowledgeNoteType(n) && n.id === nodeId, at: []});
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {

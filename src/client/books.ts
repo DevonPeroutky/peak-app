@@ -3,15 +3,8 @@ import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {addBook, deleteBook, PeakBook, setBooks} from "../redux/slices/booksSlice";
 import {store} from "../redux/store";
-import {insertCustomBlockElement} from "../common/rich-text-editor/utils/base-utils";
-import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-book-plugin/defaults";
-import {Editor} from "slate";
+import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/utils/node-content-select/utils";
 import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
-import {ReadOutlined} from "@ant-design/icons/lib";
-import {
-    convertPeakBookToNodeSelectListItem,
-    insertBookElementCallback
-} from "../common/rich-text-editor/utils/node-content-select/utils";
 
 // Requests
 function createBookRequest(userId: string, book: {title: string}) {

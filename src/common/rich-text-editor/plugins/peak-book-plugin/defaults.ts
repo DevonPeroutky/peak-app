@@ -1,5 +1,5 @@
-import {BlockquotePluginOptionsValues} from "@udecode/slate-plugins";
 import {PeakKnowledgeNode} from "../../components/peak-knowledge-node/PeakKnowledgeNode";
+import {BlockquotePluginOptionsValues} from "@udecode/slate-plugins";
 
 export declare type PeakLearningKeyOption = 'peak_book_note';
 export const ELEMENT_PEAK_BOOK = "peak_book_note";
