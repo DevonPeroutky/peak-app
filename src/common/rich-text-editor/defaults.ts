@@ -5,14 +5,22 @@ import {
     BoldPlugin,
     CodePlugin,
     DEFAULTS_ALIGN,
-    DEFAULTS_BLOCKQUOTE, DEFAULTS_BOLD, DEFAULTS_CODE, DEFAULTS_CODE_BLOCK, DEFAULTS_HEADING,
-    DEFAULTS_IMAGE, DEFAULTS_ITALIC,
+    DEFAULTS_BLOCKQUOTE,
+    DEFAULTS_BOLD,
+    DEFAULTS_CODE,
+    DEFAULTS_IMAGE,
+    DEFAULTS_ITALIC,
     DEFAULTS_LIST,
     DEFAULTS_MEDIA_EMBED,
     DEFAULTS_MENTION,
-    DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
-    ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH, ExitBreakPlugin,
-    getSelectableElement, HeadingPlugin,
+    DEFAULTS_PARAGRAPH,
+    DEFAULTS_STRIKETHROUGH,
+    DEFAULTS_SUBSUPSCRIPT,
+    DEFAULTS_UNDERLINE,
+    ELEMENT_BLOCKQUOTE,
+    ELEMENT_PARAGRAPH,
+    ExitBreakPlugin,
+    getSelectableElement,
     ImagePlugin,
     isBlockAboveEmpty,
     isSelectionAtBlockStart,
@@ -27,7 +35,10 @@ import {
     UnderlinePlugin,
     withAutoformat,
     withImageUpload,
-    withLink, withList, withNodeID, withTrailingNode,
+    withLink,
+    withList,
+    withNodeID,
+    withTrailingNode,
 } from "@udecode/slate-plugins";
 import {autoformatRules, withAutoReplace} from "./plugins/withAutoReplace";
 import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/PeakHeadingPlugin";
@@ -41,6 +52,8 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 import {DEFAULTS_LEARNING, PEAK_LEARNING} from "./plugins/peak-learning-plugin/defaults";
 import {PeakLearningPlugin} from "./plugins/peak-learning-plugin/PeakLearningPlugin";
+import {DEFAULTS_PEAK_BOOK, ELEMENT_PEAK_BOOK} from "./plugins/peak-book-plugin/defaults";
+import {PeakBookNotePlugin} from "./plugins/peak-book-plugin/PeakBookPlugin";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -60,6 +73,7 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
     ...setDefaults(DEFAULTS_LEARNING, {}),
+    ...setDefaults(DEFAULTS_PEAK_BOOK, {}),
 };
 
 const styleDraggableOptions = ({ type, level, component, ...options}: DraggableNodeConfig) => (
@@ -97,7 +111,7 @@ const baseBehaviorPlugins = [
             {
                 hotkey: 'enter',
                 query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT, PEAK_LEARNING],
+                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
                 },
             },
         ],
@@ -131,7 +145,8 @@ const basePlugins = [
     PeakCodePlugin,
     PeakLinkPlugin,
     PeakCalloutPlugin,
-    PeakLearningPlugin
+    PeakLearningPlugin,
+    PeakBookNotePlugin
 ];
 
 const baseDraggableComponentOptions = [
@@ -149,6 +164,7 @@ const baseDraggableComponentOptions = [
     defaultOptions.blockquote,
     defaultOptions.code_block,
     defaultOptions.learning,
+    defaultOptions.peak_book_note,
     defaultOptions.p
 ]
 const baseNormalizers = [
@@ -170,7 +186,7 @@ const snowflakePlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
                         filter: (entry => {
                             const [node, path] = Array.from(entry)
                             return path.length === level + 2
@@ -181,7 +197,7 @@ const snowflakePlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
                         filter: (entry => {
                             const [node, path] = Array.from(entry)
                             return path.length === level + 1

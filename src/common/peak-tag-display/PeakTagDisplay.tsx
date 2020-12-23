@@ -2,7 +2,7 @@ import React from 'react'
 import {Tag} from "antd";
 import {AppState} from "../../redux";
 import {connect} from "react-redux";
-import {PeakTopic} from "../../redux/topicSlice";
+import {PeakTopic} from "../../redux/slices/topicSlice";
 import { capitalize } from "lodash";
 
 const PeakTagDisplay = (props: { topicId: string, topics: PeakTopic[] }) => {

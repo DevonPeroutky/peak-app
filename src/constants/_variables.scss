@@ -6,6 +6,7 @@ $text-accent-color: rgba(42, 49, 53, .4);
 $gray-accent-color: #E6ECF1;
 $c-accent-color: rgb(235, 236, 240);
 $placeholder-text-color: #bfbfbf;
+$background-color: #FFF;
 
 
 // ---------
@@ -13,7 +14,7 @@ $placeholder-text-color: #bfbfbf;
 // ---------
 $sidebar-border-right: 1px solid $gray-accent-color;
 //$sidebar-background-color: #F5F7F9;
-$sidebar-background-color: #FFF;
+$sidebar-background-color: $background-color;
 $sidebar-width: 15%;
 $sidebar-padding: 15px;
 $fullscreen-sidebar-width: 20%;
@@ -48,4 +49,14 @@ $main-bar-height: 55px;
 // Colors
 // -------------
 $primary-blue: #1890ff;
+$primary-green: #389e0d;
 $c-gray: #f4f5f7;
+
+
+
+// ---------------
+// Knowledge Nodes
+// ---------------
+$peak-kn-box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+$peak-kn-padding-top: 16px;
+$peak-kn-padding: $peak-kn-padding-top 24px;

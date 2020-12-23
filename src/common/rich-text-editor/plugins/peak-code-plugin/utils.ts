@@ -1,15 +1,15 @@
 import {Editor, Node, Range, Transforms} from "slate";
 import {ELEMENT_CODE_BLOCK, ELEMENT_LI, ELEMENT_PARAGRAPH, isSelectionAtBlockStart} from "@udecode/slate-plugins";
 import {store} from "../../../../redux/store";
-import {setEditorFocusToNode} from "../../../../redux/wikiPageSlice";
-import {isCustomPeakVoidElement, next, previous} from "../../utils/base-utils";
+import {setEditorFocusToNode} from "../../../../redux/slices/wikiPageSlice";
+import {insertCustomBlockElement, next, previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
 
-    // Transforms.removeNodes(editor)
+    Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, [
         {
             type: ELEMENT_CODE_BLOCK,
@@ -27,7 +27,10 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
 
 export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
     const currentPath = editor.selection?.anchor.path
-    if (currentPath && !event.metaKey && event.key == "ArrowDown") {
+    const isCollapsed = Range.isCollapsed(editor.selection)
+    const worthEvaluating: boolean = currentPath && isCollapsed && !event.metaKey
+
+    if (worthEvaluating && event.key == "ArrowDown") {
         const nextNode: Node | undefined = next(editor as ReactEditor)
 
         if (nextNode && nextNode.type === ELEMENT_CODE_BLOCK) {
@@ -36,7 +39,7 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
         }
     }
 
-    if (currentPath && !event.metaKey && (event.key == "ArrowUp")) {
+    if (worthEvaluating && (event.key == "ArrowUp")) {
         // The 'Parent' is the current Node, because the current Node is just a leaf, because Slate.....
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
@@ -49,7 +52,7 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
         }
     }
 
-    if (currentPath && !event.metaKey && event.key == "Backspace") {
+    if (worthEvaluating && event.key == "Backspace") {
         let previousNode: Node | undefined = previous(editor as ReactEditor)
         if (!previousNode) {
             return

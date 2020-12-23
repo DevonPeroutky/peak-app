@@ -3,7 +3,7 @@ import {Dropdown, Menu, message, Select} from "antd";
 import cn from "classnames";
 import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
 import {all, any, equals} from "ramda"
-import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/wikiPageSlice";
+import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/slices/wikiPageSlice";
 import {Editor, Transforms, Node} from 'slate';
 import {useJournal} from "../../../../../utils/hooks";
 import {FileSyncOutlined} from "@ant-design/icons/lib";

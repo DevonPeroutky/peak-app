@@ -1,0 +1,47 @@
+@import "../../../../constants/variables";
+
+$title-row-height: 30px;
+$margin-top: 20px;
+.peak-knowledge-node-container {
+  margin-top: $margin-top;
+  box-shadow: $peak-kn-box-shadow;
+  padding: $peak-kn-padding;
+  border: none;
+
+  .peak-knowledge-title-row {
+    position: absolute;
+    top: calc(-#{$title-row-height / 2} + #{$margin-top} + 1px);
+    display: flex;
+    align-items: center;
+    background-color: $background-color;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: $title-row-height;
+    color: $placeholder-text-color;
+    user-select: none;
+
+    .learning-title-row-icon {
+      margin-right: 5px;
+    }
+
+    &.book {
+      color: $primary-blue;
+    }
+    &.learning {
+      color: $primary-green;
+    }
+  }
+
+  &.empty::after {
+    position: absolute;
+    color: $placeholder-text-color;
+    top: $margin-top;
+    cursor: text;
+    content: "Write down something that caught your attention....";
+    display: flex;
+    align-items: center;
+    line-height: inherit;
+    padding-top: calc(#{$peak-kn-padding-top} + 5px);
+    pointer-events:none;
+  }
+}

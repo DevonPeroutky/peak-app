@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
-import { setEditing, deletePage } from "../../redux/wikiPageSlice";
-import {removePageFromTopic, PeakPage} from "../../redux/topicSlice"
+import { setEditing, deletePage } from "../../redux/slices/wikiPageSlice";
+import {removePageFromTopic, PeakPage} from "../../redux/slices/topicSlice"
 import React, {useState} from "react";
 import cn from "classnames";
 import "./page-context-bar.scss"
@@ -10,7 +10,7 @@ import {DeleteOutlined, EditOutlined, QuestionCircleOutlined} from "@ant-design/
 import {useHistory} from "react-router-dom";
 import { batch } from 'react-redux'
 import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
-import {PeakTopicNode, setUserHierarchy} from "../../redux/userSlice";
+import {PeakTopicNode, setUserHierarchy} from "../../redux/slices/userSlice";
 
 const PageContextBar = (props: {topicId: string}) => {
     const { topicId } = props

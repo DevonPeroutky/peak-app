@@ -1,7 +1,7 @@
 @import "../../../constants/variables";
 .delete-topic-icon {
   cursor: pointer;
-  display: none;
+  display: none!important;
 
   &.visible {
     display: inline;

@@ -72,6 +72,16 @@ $section-heading-size: 1.3rem;
       font-size: 14px;
       letter-spacing: .25px;
     }
+
+    .journal-layers-icon {
+      width: 20px;
+
+      &:hover{
+        color: $primary-blue;
+        background-color: $primary-blue;
+        fill: $primary-blue;
+      }
+    }
   }
 
   .topics-header {

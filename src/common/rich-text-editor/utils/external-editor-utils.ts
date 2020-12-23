@@ -1,11 +1,15 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
-import {isAtLastLineOfLearning} from "../plugins/peak-learning-plugin/utils";
 import {store} from "../../../redux/store";
-import {setEditorFocusToNode} from "../../../redux/wikiPageSlice";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
+import {setEditorFocusToNode} from "../../../redux/slices/wikiPageSlice";
 import {getCurrentPageId} from "../../../utils/links";
+import {isAtLastLineOfPeakKnowledgeNode} from "./peak-knowledge-node-utils";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {isPeakKnowledgeNoteType} from "./base-utils";
+
+export function isNodeTypeExternalEditor(n: Node) {
+    return [ELEMENT_CODE_BLOCK].includes(n.type as string)
+}
 
 // TODO: This shouldn't require last line of learning knowledge
 export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => boolean) {
@@ -15,7 +19,7 @@ export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => bool
     const [currNode, currNodePath] = match
     console.log(`RE-ENTERING DOWN`)
     console.log(currNode)
-    if (isAtLastLineOfLearning(editor, match)) {
+    if (isAtLastLineOfPeakKnowledgeNode(editor, match)) {
         const [currParent, currParentPath] = Editor.parent(editor, currNodePath)
         console.log(`WE LAST LINE OF LEARNING`)
         console.log(currParent)
@@ -34,7 +38,7 @@ export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => bool
     console.log(`NEXT NODE`)
     console.log(nextNode)
 
-    if (nextNode.type === ELEMENT_CODE_BLOCK) {
+    if (isNodeTypeExternalEditor(nextNode)) {
         forceFocusToNode(nextNode)
     } else {
         Transforms.select(editor, nextNodePath)
@@ -60,11 +64,11 @@ export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolea
     })
     const [previousParent, previousParentPath] = Editor.parent(editor, previousNodePath)
 
-    if (previousParent && currParent && previousParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING) {
+    if (previousParent && currParent && isPeakKnowledgeNoteType(previousParent) && !isPeakKnowledgeNoteType(currParent)) {
         Transforms.select(editor, previousParentPath)
         Transforms.collapse(editor, { edge: "end"})
         ReactEditor.focus(editor)
-    } else if (previousNode.type === ELEMENT_CODE_BLOCK) {
+    } else if (isNodeTypeExternalEditor(previousNode)) {
         forceFocusToNode(previousNode)
     } else {
         Transforms.select(editor, previousNodePath)

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { message, Popconfirm} from "antd";
 import { useDispatch, useSelector} from "react-redux";
-import { PeakTopic, deleteTopic} from "../../../redux/topicSlice"
+import { PeakTopic, deleteTopic} from "../../../redux/slices/topicSlice"
 import {AppState} from "../../../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/userSlice";
+import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/userSlice";
 import "./delete-topic-modal.scss";
 import {
     DeleteOutlined,
@@ -37,9 +37,7 @@ export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => 
             title="Delete the Topic？This will delete all of the pages in the topic"
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => deleteTopicAndAllPages()}>
-            <DeleteOutlined
-                className={cn("delete-topic-icon", hovered ? "visible" : "")}
-            />
+            <DeleteOutlined className={cn("delete-topic-icon", hovered ? "visible" : "")}/>
         </Popconfirm>
     )
 };

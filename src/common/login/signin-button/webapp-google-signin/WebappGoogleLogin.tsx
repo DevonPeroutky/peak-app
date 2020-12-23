@@ -1,7 +1,7 @@
 import React from 'react'
 import GoogleLogin, {GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
 import "./google-signin-button.scss"
-import {Peaker, setUser} from "../../../../redux/userSlice";
+import {Peaker, setUser} from "../../../../redux/slices/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {message} from "antd";
@@ -9,7 +9,7 @@ import peakAxiosClient from "../../../../client/axiosConfig";
 import {v4 as uuidv4} from "uuid";
 import config from "../../../../constants/environment-vars"
 import {useLinkedUserId} from "../../../../utils/hooks";
-import { addUserAccount } from '../../../../redux/userAccountsSlice';
+import { addUserAccount } from '../../../../redux/slices/userAccountsSlice';
 
 const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
     const { isDesktopLogin } = props

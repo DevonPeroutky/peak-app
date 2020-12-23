@@ -2,7 +2,8 @@ import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {PEAK_LEARNING} from "../plugins/peak-learning-plugin/defaults";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {ELEMENT_PEAK_BOOK} from "../plugins/peak-book-plugin/defaults";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -24,10 +25,11 @@ export function previous(editor: ReactEditor): Node | undefined {
         const prevParent = Node.parent(editor, prevPath)
 
         // Refetch the node for Slate's bitchass
+        // TODO!!!!! Error: Cannot get the parent path of the root path [].
         const [curr, currPath] = Editor.above(editor)
         const currParent = Node.parent(editor, currPath)
 
-        previousNode = (prevParent && (prevParent.type === PEAK_LEARNING && currParent.type !== PEAK_LEARNING)) ? prevParent : prev
+        previousNode = (prevParent && (isPeakKnowledgeNoteType(prevParent) && !isPeakKnowledgeNoteType(currParent))) ? prevParent : prev
     }
     return previousNode
 }
@@ -51,6 +53,24 @@ export function next(editor: ReactEditor): Node | undefined {
     return undefined
 }
 
-export function isCustomPeakVoidElement(node: Node): boolean {
-    return [ELEMENT_CODE_BLOCK, PEAK_LEARNING].includes(node.type as string)
+export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeProps?: {}) {
+    Transforms.insertNodes(editor, [
+        {
+            type: nodeType,
+            children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
+            ...nodeProps,
+        },
+        {
+            type: ELEMENT_PARAGRAPH,
+            children: [{text: ''}]
+        }
+    ]);
 }
+export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
+    return (editor: Editor) => insertCustomBlockElement(editor, nodeType, nodeProps)
+}
+
+export function isPeakKnowledgeNoteType(n: Node): boolean {
+    return [PEAK_LEARNING, ELEMENT_PEAK_BOOK].includes(n.type as string)
+}
+

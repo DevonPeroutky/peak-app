@@ -9,7 +9,7 @@ import {unWrapLink, upsertLink} from "../link-util";
 import {AlignLeftOutlined} from "@ant-design/icons/lib";
 import {DisplayLinkMenu} from "./link-menu-body/display-link-menu/DisplayLinkMenu";
 import HierarchySearcherInput from "./hierarchy-searcher/HierarchySearcherInput";
-import {PeakHyperlinkState, closeLinkMenu} from "../../../../../redux/wikiPageSlice";
+import {PeakHyperlinkState, closeLinkMenu} from "../../../../../redux/slices/wikiPageSlice";
 import {upsertLinkAtSelection} from "@udecode/slate-plugins";
 
 interface LinkMenuProps {

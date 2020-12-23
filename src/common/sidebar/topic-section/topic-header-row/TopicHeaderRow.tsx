@@ -1,12 +1,12 @@
-import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/topicSlice";
-import {Peaker} from "../../../../redux/userSlice";
+import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
+import {Peaker} from "../../../../redux/slices/userSlice";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";
 import {TITLE} from "../../../rich-text-editor/types";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import peakAxiosClient from "../../../../client/axiosConfig"
-import {createPage, PeakWikiPage, setEditing} from "../../../../redux/wikiPageSlice";
+import {createPage, PeakWikiPage, setEditing} from "../../../../redux/slices/wikiPageSlice";
 import {message} from "antd";
 import {DeleteTopicModal} from "../../../modals/delete-topic-modal/DeleteTopicModal";
 import {UpdateTopicModal} from "../../../modals/update-topic/UpdateTopicModal";

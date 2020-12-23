@@ -7,6 +7,7 @@ export const capitalize_and_truncate = (
     ending: string = "...",
     all_words: boolean = true
 ) => {
+    if (!str) return str
     const capitalizedString: string = (all_words) ? str.split(" ").map(s => capitalize(s)).join(" ") : capitalize(str)
     return truncate(capitalizedString, {
         'length': length,

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {Button, Modal, Input, Tooltip, message} from "antd";
 import {useDispatch} from "react-redux";
-import {addTopic, PeakTopic} from "../../../redux/topicSlice"
+import {addTopic, PeakTopic} from "../../../redux/slices/topicSlice"
 import "./add-topic-modal.scss";
 import peakAxiosClient from "../../../client/axiosConfig"
 import {useCurrentUser} from "../../../utils/hooks";
-import {PeakTopicNode, setUserHierarchy} from "../../../redux/userSlice";
+import {PeakTopicNode, setUserHierarchy} from "../../../redux/slices/userSlice";
 import {CompassOutlined, InfoCircleOutlined, PlusOutlined} from "@ant-design/icons/lib";
 
 const AddTopicModal = (props: {}) => {

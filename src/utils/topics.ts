@@ -1,10 +1,10 @@
 import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
-import {PeakStructureNode, PeakTopicNode, setUserHierarchy} from "../redux/userSlice";
+import {PeakStructureNode, PeakTopicNode, setUserHierarchy} from "../redux/slices/userSlice";
 import {cloneDeep} from "lodash";
 import {useCurrentUser} from "./hooks";
 import {message, notification} from "antd";
-import {movePage, PeakPage} from "../redux/topicSlice";
+import {movePage, PeakPage} from "../redux/slices/topicSlice";
 import {updatePage} from "./requests";
 
 export function useMovePageToNewTopic() {

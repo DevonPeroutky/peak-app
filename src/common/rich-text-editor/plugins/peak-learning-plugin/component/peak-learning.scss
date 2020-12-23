@@ -1,9 +1,27 @@
 @import "../../../../../constants/variables";
-$padding-top: 16px;
+
+$title-row-height: 30px;
 .peak-learning-container {
-  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
-  padding: 16px 24px;
+  box-shadow: $peak-kn-box-shadow;
+  padding: $peak-kn-padding;
   border: none;
+
+  .peak-learning-title-row {
+    position: absolute;
+    top: calc(-#{$title-row-height / 2});
+    display: flex;
+    align-items: center;
+    background-color: $background-color;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: $title-row-height;
+    color: $placeholder-text-color;
+    user-select: none;
+
+    .learning-title-row-icon {
+      margin-right: 5px;
+    }
+  }
 
   &.empty::after {
     position: absolute;
@@ -14,32 +32,8 @@ $padding-top: 16px;
     display: flex;
     align-items: center;
     line-height: inherit;
-    padding-top: calc(#{$padding-top} + 3px);
+    padding-top: calc(#{$peak-kn-padding-top} + 5px);
     pointer-events:none;
   }
-
-  .peak-learning-select-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 16px;
-
-    .peak-tag-icon {
-      margin-right: 5px;
-      color: rgba(9, 30, 66, 0.25);
-    }
-  }
 }
 
-.peak-learning-select-option {
-  display: flex!important;
-  justify-content: space-between!important;
-  align-items: center;
-  width: 100%;
-
-  .peak-delete-learning-option {
-    &:hover {
-      color: $primary-blue;
-    }
-  }
-}

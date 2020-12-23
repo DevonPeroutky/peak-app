@@ -6,6 +6,15 @@
   align-items: center;
   min-width: 350px;
 
+  .inline-select-item-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px!important;
+    height: 40px!important;
+    font-size: 32px;
+    margin-right: 12px;
+  }
   .peak-editor-control-icon {
     display: flex;
     justify-content: center;
@@ -52,5 +61,9 @@
 
 .peak-node-content-item-selected {
   background-color: #f4f5f7!important;
+}
 
+.ant-empty.empty-books {
+  padding: 20px 40px;
+  color: rgba(0,0,0,.25);
 }

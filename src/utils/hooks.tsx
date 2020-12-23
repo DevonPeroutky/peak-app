@@ -2,7 +2,7 @@ import {useLocation} from "react-router-dom";
 import {message, notification} from "antd";
 import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../redux/userSlice";
+import {Peaker, PeakTopicNode, setUserHierarchy} from "../redux/slices/userSlice";
 import {
     setEditing,
     PeakWikiState,
@@ -14,20 +14,20 @@ import {
     setJournalEntries,
     updateJournalEntries,
     journalOrdering, updatePageTitle
-} from "../redux/wikiPageSlice";
+} from "../redux/slices/wikiPageSlice";
 import {Node} from "slate";
 import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
 import {isEmpty} from "ramda";
-import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/topicSlice";
+import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
-import {JOURNAL_PAGE_ID} from "../redux/journalSlice";
+import {JOURNAL_PAGE_ID} from "../redux/slices/journalSlice";
 import {useQuery} from "./urls";
-import {FutureRead} from "../redux/readingListSlice";
+import {FutureRead} from "../redux/slices/readingListSlice";
 const R = require('ramda');
 
 // --------------------------------------------------

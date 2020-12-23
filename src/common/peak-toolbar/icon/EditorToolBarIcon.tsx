@@ -14,7 +14,7 @@ import {
 } from "@udecode/slate-plugins";
 import { PeakEditorControlDisplay} from "../toolbar-controls";
 import { capitalize } from "lodash";
-import {PeakWikiPage} from "../../../redux/wikiPageSlice";
+import {PeakWikiPage} from "../../../redux/slices/wikiPageSlice";
 import {useCurrentWikiPage} from "../../../utils/hooks";
 
 export const EditorToolBarIcon = (props: {

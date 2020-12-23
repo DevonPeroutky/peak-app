@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {AutoComplete, Input, Modal} from "antd";
 import { useSelector} from "react-redux";
 import { AppState} from "../../../../../../redux";
-import {PeakDisplayNode, PeakTopicNode} from "../../../../../../redux/userSlice";
+import {PeakDisplayNode, PeakTopicNode} from "../../../../../../redux/slices/userSlice";
 import {convertHierarchyToSearchableList} from "../../../../../../utils/hierarchy";
 import { cloneDeep} from "lodash";
 import {renderPeakDisplayNodesInList} from "../../../../../quick-switcher/quick-switch-item/QuickSwitchItem";
@@ -26,7 +26,7 @@ const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
     useEffect(() => {
-        console.log(`USING THE LINK MENU useEFFECT`)
+        // console.log(`USING THE LINK MENU useEFFECT`)
         if (hierarchy) {
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy))
             setAntList(derivedAntList)

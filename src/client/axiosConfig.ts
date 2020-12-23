@@ -8,18 +8,13 @@ const defaultConfig = {
 }
 const authedAxiosClient = axios.create(defaultConfig);
 
-axios.interceptors.response.use(function (response) {
-    // Do something with response data
-    console.log(`RUNNING THE INTERCEPTOR`)
+authedAxiosClient.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    // Do something with response error
-    console.log(`RUNNING THE ERROR INTERCEPTOR`)
-    console.log(error.response)
-    console.log(error.response.data)
-    console.log(error.response.status)
-    window.location.href = "/"
-    localStorage.clear()
+    if (error.response.status === 401) {
+        window.location.href = "/"
+        localStorage.clear()
+    }
     return Promise.reject(error);
 });
 

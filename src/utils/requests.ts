@@ -1,15 +1,15 @@
-import {PeakHierarchy} from "../redux/userSlice";
+import {PeakHierarchy} from "../redux/slices/userSlice";
 import {Node} from "slate";
-import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/tagSlice";
+import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/slices/tagSlice";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
-import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-learning-plugin/component/PeakLearning";
-import {DisplayPeaker, setUserAccounts} from "../redux/userAccountsSlice";
+import {DisplayPeaker, setUserAccounts} from "../redux/slices/userAccountsSlice";
 import {UserSpecificAppState} from "../redux/rootReducer";
-import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/wikiPageSlice";
+import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/slices/wikiPageSlice";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
+import {PeakDisplayTag} from "../common/rich-text-editor/components/peak-knowledge-node/peak-tag-select/PeakTagSelect";
 
 // Page
 interface PeakPageParams {
@@ -54,7 +54,6 @@ export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<
     return new Promise(function(resolve, reject) {
         resolve([]);
     });
-
 }
 export function deletePeakTag(userId: string, tagId: string): Promise<string> {
     if (tagId === STUB_TAG_ID) {

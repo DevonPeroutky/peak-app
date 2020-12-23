@@ -2,7 +2,7 @@ import {TopicHeaderRow} from "../topic-header-row/TopicHeaderRow";
 import {capitalize_and_truncate} from "../../../../utils/strings";
 import React  from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
-import {PeakPage, PeakTopic} from "../../../../redux/topicSlice";
+import {PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
 import {DropTargetMonitor, useDrag, useDrop} from "react-dnd";
 import cn from "classnames";
 import {Link, useHistory} from "react-router-dom";

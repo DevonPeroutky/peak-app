@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import "./journal.scss"
 import {createEditor, Editor, Node, Range} from 'slate';
-import {ReactEditor, Slate, withReact} from 'slate-react';
+import {ReactEditor, Slate} from 'slate-react';
 import {
     EditablePlugins,
     pipe,
@@ -17,12 +17,10 @@ import {
 } from "../../utils/hooks";
 import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/toolbar-controls";
-import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
+import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
-import {useDispatch} from "react-redux";
 import {
-    EMPTY_JOURNAL_STATE, JOURNAL_NODE_LEVEL,
+    EMPTY_JOURNAL_STATE,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/constants";
@@ -30,7 +28,7 @@ import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
 } from "../../common/rich-text-editor/editors/journal/utils";
-import {JournalEntry, PeakWikiPage} from "../../redux/wikiPageSlice";
+import {JournalEntry, PeakWikiPage} from "../../redux/slices/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
@@ -38,6 +36,7 @@ import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import  { equals } from "ramda";
 import cn from "classnames";
+import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -124,14 +123,15 @@ const PeakJournal = (props: { }) => {
 
     // TODO: Refactor these two into a single export for Peak Editors
     const {
+        values,
+        onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
-        onAddNodeContent,
         search,
-        values,
         index,
         target,
-    } = useNodeContentSelect(NODE_CONTENT_TYPES, {
+        nodeContentSelectMode
+    } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
@@ -177,6 +177,7 @@ const PeakJournal = (props: { }) => {
                 target={target}
                 search={search}
                 values={values}
+                nodeContentSelectMode={nodeContentSelectMode}
                 onAddNodeContent={onAddNodeContent}/>
 
         }
@@ -215,8 +216,9 @@ interface InternalJournalProps {
     index: number,
     target: Range,
     search: string,
-    values: PeakEditorControl[]
-    onAddNodeContent: (editor: Editor, data: PeakEditorControl) => void
+    values: PeakNodeSelectListItem[]
+    onAddNodeContent: (editor: Editor, data: PeakNodeSelectListItem) => void
+    nodeContentSelectMode: boolean
 }
 const Journal = (props: InternalJournalProps) => {
     const {
@@ -230,6 +232,7 @@ const Journal = (props: InternalJournalProps) => {
         index,
         target,
         values,
+        nodeContentSelectMode,
         search,
         onAddNodeContent
     } = props
@@ -260,8 +263,9 @@ const Journal = (props: InternalJournalProps) => {
             <NodeContentSelect
                 at={target}
                 valueIndex={index}
-                options={values as PeakEditorControl[]}
+                options={values}
                 onClickMention={onAddNodeContent}
+                nodeContentSelectMode={nodeContentSelectMode}
             />
         </Slate>
     )

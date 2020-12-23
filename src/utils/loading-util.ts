@@ -1,9 +1,9 @@
 import {fetchUserSpecificAppState, loadAllUserAccounts, loadPeakTags} from "./requests";
 import {useDispatch} from "react-redux";
-import {DisplayPeaker} from "../redux/userAccountsSlice";
+import {DisplayPeaker} from "../redux/slices/userAccountsSlice";
 import {syncCurrentStateToLocalStorage, writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
 import {store} from "../redux/store";
-import {openSwitcher} from "../redux/quickSwitcherSlice";
+import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
 import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
 
@@ -21,10 +21,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
                 writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
             })
         })
-        console.log('ACCOUNT SITUATION')
-        console.log(accounts)
-        console.log(activeAccount)
-        console.log(backgroundAccounts)
 
         // For Active Account --> Return a Promise that: Load, sync to localStorage, save to Redux
         return fetchUserSpecificAppState(activeAccount.id).then(userSpecificAppState => {

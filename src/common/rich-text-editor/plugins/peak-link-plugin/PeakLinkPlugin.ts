@@ -6,7 +6,7 @@ import {
 } from "@udecode/slate-plugins";
 import renderElementLink from "./PeakHyperLink";
 import {Editor, Node, Range} from "slate";
-import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu, PeakHyperlinkState} from "../../../../redux/wikiPageSlice";
+import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu, PeakHyperlinkState} from "../../../../redux/slices/wikiPageSlice";
 import {store} from "../../../../redux/store";
 import {getCurrentPageId} from "../../../../utils/links";
 

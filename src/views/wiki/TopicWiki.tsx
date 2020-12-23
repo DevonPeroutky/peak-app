@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {
     setEditing,
     beginSavingPage,
-} from "../../redux/wikiPageSlice";
+} from "../../redux/slices/wikiPageSlice";
 import 'antd/dist/antd.css';
 import {Slate, ReactEditor} from "slate-react";
 import {createEditor, Node} from "slate";
@@ -21,11 +21,10 @@ import {
     EditablePlugins,
     pipe,
 } from "@udecode/slate-plugins";
-import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../common/peak-toolbar/toolbar-controls";
-import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/NodeContentSelect";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";
+import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -39,18 +38,23 @@ const TopicWiki = (props: {topic_id: string}) => {
     const [wikiPageContent, setWikiPageContent] = useState<Node[]>(currentWikiPage.body as Node[])
     const [pageTitle, setPageTitle] = useState(currentWikiPage.title)
 
+    // PeakInlineSelect nonsense
     const {
+        values,
+        onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
-        onAddNodeContent,
         search,
-        values,
         index,
         target,
-    } = useNodeContentSelect(NODE_CONTENT_TYPES, {
+        nodeContentSelectMode
+    } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
+    const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
+        return onKeyDownMention(event, editor)
+    }, [index, search, target])
 
     useHotkeys('e, command+s', (event, handler) => {
         switch (handler.key) {
@@ -65,22 +69,20 @@ const TopicWiki = (props: {topic_id: string}) => {
         }
     }, {}, [currentPageId]);
 
-    const keyBindingHandler = useCallback((event: any) => {
+    const defaultKeyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor)
 
         if (event.metaKey && event.key == 's') {
             event.preventDefault();
             publishPage()
         }
-        return onKeyDownMention(event, editor)
-    }, [index, search, target])
+    }, [])
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...wikiNormalizers), []);
 
     const updatePageContent = (newValue: Node[]) => {
-        console.log(editor.selection)
-        if (!equals(newValue, currentWikiPage.body)) {
+        if (!equals(newValue, wikiPageContent)) {
             if (!currentWikiPage.isSaving) {
                 dispatch(beginSavingPage({pageId: currentPageId}));
             }
@@ -114,7 +116,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins
-                        onKeyDown={[keyBindingHandler]}
+                        onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
                         onKeyDownDeps={[index, search, target]}
                         key={`${currentPageId}-${currentWikiPage.editorState.isEditing}`}
                         plugins={wikiPlugins}
@@ -131,8 +133,9 @@ const TopicWiki = (props: {topic_id: string}) => {
                     <NodeContentSelect
                         at={target}
                         valueIndex={index}
-                        options={values as PeakEditorControl[]}
+                        options={values}
                         onClickMention={onAddNodeContent}
+                        nodeContentSelectMode={nodeContentSelectMode}
                     />
                 </div>
             </div>
