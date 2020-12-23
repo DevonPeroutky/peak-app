@@ -14,7 +14,7 @@ import {Empty, Select, Tag} from "antd";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
-import {isPeakKnowledgeNoteType} from "../../../../peak-knowledge-node-utils";
+import {isPeakKnowledgeNoteType} from "../../../../utils";
 const { Option } = Select;
 
 export interface PeakDisplayTag {

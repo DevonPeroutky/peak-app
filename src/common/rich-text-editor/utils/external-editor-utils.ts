@@ -6,7 +6,7 @@ import {getCurrentPageId} from "../../../utils/links";
 import {
     isAtLastLineOfPeakKnowledgeNode,
     isPeakKnowledgeNoteType
-} from "../plugins/peak-knowledge-plugin/peak-knowledge-node-utils";
+} from "../plugins/peak-knowledge-plugin/utils";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 
 export function isNodeTypeExternalEditor(n: Node) {

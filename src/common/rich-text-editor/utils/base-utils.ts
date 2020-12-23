@@ -2,7 +2,7 @@ import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/peak-knowledge-node-utils";
+import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/utils";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
