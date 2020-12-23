@@ -22,9 +22,9 @@ function fetchBooksRequest(userId: string) {
 }
 
 // Requests + Reduxs
-export function loadPeakTags(userId: string) {
+export function loadPeakBook(userId: string) {
     return fetchBooksRequest(userId).then(res => {
-        const books = res.data.tags as PeakBook[]
+        const books = res.data.book as PeakBook[]
         store.dispatch(setBooks(books))
     }).catch(err => {
         console.log(`DID NOT successfully load the books for user: ${userId}`)

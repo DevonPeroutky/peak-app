@@ -21,10 +21,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
                 writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
             })
         })
-        console.log('ACCOUNT SITUATION')
-        console.log(accounts)
-        console.log(activeAccount)
-        console.log(backgroundAccounts)
 
         // For Active Account --> Return a Promise that: Load, sync to localStorage, save to Redux
         return fetchUserSpecificAppState(activeAccount.id).then(userSpecificAppState => {

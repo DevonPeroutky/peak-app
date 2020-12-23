@@ -56,7 +56,6 @@ const TopicWiki = (props: {topic_id: string}) => {
         return onKeyDownMention(event, editor)
     }, [index, search, target])
 
-
     useHotkeys('e, command+s', (event, handler) => {
         switch (handler.key) {
             case 'command+s':

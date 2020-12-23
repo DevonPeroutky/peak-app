@@ -14,6 +14,7 @@ import {Empty, Tag} from "antd";
 import {trim} from "lodash";
 import {PeakNodeSelectListItem} from "../types";
 import "./node-content-select.scss"
+import {capitalize_and_truncate} from "../../../../../utils/strings";
 
 export interface NodeContentSelectProps {
     /**
@@ -116,7 +117,7 @@ export const OptionList = ({options, valueIndex, classNames, onClickMention, edi
                            {option.icon}
                            <div className={"node-content-item"}>
                                <div className={"node-content-item-body"}>
-                                   <div className={"node-title"}>{option.label}</div>
+                                   <div className={"node-title"}>{capitalize_and_truncate(option.label)}</div>
                                    <div className={"node-description"}>{option.description}</div>
                                </div>
                                {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}

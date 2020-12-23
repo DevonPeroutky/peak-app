@@ -9,6 +9,7 @@ import {UserSpecificAppState} from "../redux/rootReducer";
 import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/slices/wikiPageSlice";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
+import {PeakDisplayTag} from "../common/rich-text-editor/components/peak-knowledge-node/peak-tag-select/PeakTagSelect";
 
 // Page
 interface PeakPageParams {
