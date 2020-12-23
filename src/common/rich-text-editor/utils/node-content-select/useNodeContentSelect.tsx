@@ -13,14 +13,20 @@ import {
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
-import {PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-book-plugin/defaults";
-import {BASIC_LIBRARY, createCreateNewBookListItem} from "./constants";
-import {isTextAfterTrigger} from "./utils";
+import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-book-plugin/defaults";
+import {createCreateNewBookListItem} from "./constants";
+import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
+import {createNewPeakBook, useBooks} from "../../../../client/books";
+import {useCurrentUser} from "../../../../utils/hooks";
 
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}
 ) => {
-    const [nodeSelectMode, setNodeSelectMode] = useState(true)
+    const currentUser = useCurrentUser()
+    const booksSelectItems: PeakNodeSelectListItem[] = useBooks().map(convertPeakBookToNodeSelectListItem)
+
+    // "Component" State
+    const [nodeContentSelectMode, setNodeSelectMode] = useState(true)
     const [targetRange, setTargetRange] = useState<Range | null>(null);
     const [valueIndex, setValueIndex] = useState(0);
     const [menuItems, setMenuItems] = useState(NODE_CONTENT_LIST_ITEMS);
@@ -31,12 +37,12 @@ export const useNodeContentSelect = (
              .slice(0, maxSuggestions);
 
         const createNewItem: PeakNodeSelectListItem = createCreateNewBookListItem(search)
-        return (!nodeSelectMode && search) ? [...filteredValues, createNewItem] : filteredValues
+        return (!nodeContentSelectMode && search) ? [...filteredValues, createNewItem] : filteredValues
     }
     const values = filterValues();
 
     const resetNodeMenuItem = () => {
-        console.log(`Resetting the Node Menu Item`)
+        console.log(`RESETTING`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
     }
@@ -46,7 +52,7 @@ export const useNodeContentSelect = (
             if (targetRange !== null) {
                 if (data.elementType === PEAK_BOOK_SELECT_ITEM) {
                     setSearch('')
-                    setMenuItems(BASIC_LIBRARY)
+                    setMenuItems(booksSelectItems)
                     setNodeSelectMode(false)
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
@@ -54,9 +60,20 @@ export const useNodeContentSelect = (
                 } else {
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
-                    insertNodeContent(editor, data, targetRange)
-                    resetNodeMenuItem()
-                    return setTargetRange(null);
+
+                    // IF CREATING A NEW BOOK
+                    // We need to insert w/The ID
+                    if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1") {
+                        createNewPeakBook(currentUser.id, data.title).then((newPeakBookItem) => {
+                            insertNodeContent(editor, newPeakBookItem, targetRange)
+                            resetNodeMenuItem()
+                            return setTargetRange(null);
+                        })
+                    } else {
+                        insertNodeContent(editor, data, targetRange)
+                        resetNodeMenuItem()
+                        return setTargetRange(null);
+                    }
                 }
             }
         },
@@ -87,14 +104,10 @@ export const useNodeContentSelect = (
 
                 if (['Tab', 'Enter'].includes(e.key)) {
                     e.preventDefault();
-                    console.log(`CURRENT VALUES`)
-                    console.log(values)
                     if (values.length) {
-                        console.log(`WHAT IS SUP`)
                         onAddNodeContent(editor, values[valueIndex])
                         return false
                     } else {
-                        console.log(`INSERTING BREAK`)
                         Editor.insertBreak(editor)
                     }
                 }
@@ -118,7 +131,11 @@ export const useNodeContentSelect = (
                 const atEnd: boolean = isPointAtWordEnd(editor, { at: cursor })
 
                 // If we are searching through books
-                if (!nodeSelectMode) {
+                if (!nodeContentSelectMode) {
+                    if (cursor.offset === 0) {
+                        resetNodeMenuItem()
+                    }
+
                     const { range, match: beforeMatch } = isTextAfterTrigger(editor, {at: cursor, trigger})
 
                     if (atEnd && beforeMatch) {
@@ -133,7 +150,7 @@ export const useNodeContentSelect = (
                 }
 
                 // If we are searching through NodeTypes (The default menu)
-                if (nodeSelectMode) {
+                if (nodeContentSelectMode) {
                     const { range, match: beforeMatch } = isWordAfterTrigger(editor, {
                         at: cursor,
                         trigger,
@@ -151,7 +168,7 @@ export const useNodeContentSelect = (
 
             setTargetRange(null);
         },
-        [targetRange, setTargetRange, nodeSelectMode, setSearch, setValueIndex, trigger, search]
+        [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search]
     );
 
     return {
@@ -162,6 +179,7 @@ export const useNodeContentSelect = (
         onChangeMention,
         onKeyDownMention,
         onAddNodeContent,
+        nodeContentSelectMode
     };
 };
 

@@ -7,7 +7,7 @@ import config from "../../constants/environment-vars";
 import {useCurrentUser, useIsContextElectron} from "../../utils/hooks";
 import {EXISTING_PEAK_USER_ID} from "../../constants/constants";
 import {useUserAccounts} from "../../utils/requests";
-import {DisplayPeaker} from "../../redux/userAccountsSlice";
+import {DisplayPeaker} from "../../redux/slices/userAccountsSlice";
 import { capitalize } from "lodash";
 import {useAccountSwitcher} from "../../utils/loading-util";
 

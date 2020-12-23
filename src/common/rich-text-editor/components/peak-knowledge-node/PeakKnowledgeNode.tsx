@@ -2,7 +2,7 @@ import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import React from "react";
 import cn from 'classnames';
 import {BulbOutlined, ReadOutlined} from "@ant-design/icons/lib";
-import {PeakTag} from "../../../../redux/tagSlice";
+import {PeakTag} from "../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../plugins/journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/PeakTagSelect";
 import {PEAK_LEARNING} from "../../plugins/peak-learning-plugin/defaults";

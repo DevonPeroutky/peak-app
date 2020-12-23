@@ -1,7 +1,7 @@
 import {RenderElementProps, useSlate} from "slate-react";
 import {useCurrentWikiPage} from "../../../../utils/hooks";
 import {useDispatch} from "react-redux";
-import {openEditLinkMenu, PeakHyperlinkState} from "../../../../redux/wikiPageSlice";
+import {openEditLinkMenu, PeakHyperlinkState} from "../../../../redux/slices/wikiPageSlice";
 import React from "react";
 import {ELEMENT_LINK, LinkPluginOptions} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";

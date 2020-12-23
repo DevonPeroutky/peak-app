@@ -10,7 +10,7 @@ import {
     PortalBody
 } from "@udecode/slate-plugins";
 import {Range} from "slate";
-import {Tag} from "antd";
+import {Empty, Tag} from "antd";
 import {trim} from "lodash";
 import {PeakNodeSelectListItem} from "../types";
 import "./node-content-select.scss"
@@ -40,6 +40,8 @@ export interface NodeContentSelectProps {
      * Callback called when clicking on a mention option
      */
     onClickMention?: (editor: ReactEditor, option: PeakNodeSelectListItem) => void;
+    /** True if the menu is currently on the default menu of node types*/
+    nodeContentSelectMode: boolean;
 }
 
 const getClassNames = classNamesFunction<
@@ -54,6 +56,7 @@ const NodeContentSelectBase = ({
                                       options,
                                       valueIndex,
                                       onClickMention,
+                                      nodeContentSelectMode,
                                       ...props
                                   }: NodeContentSelectProps) => {
     const classNames = getClassNames(styles, {
@@ -64,7 +67,7 @@ const NodeContentSelectBase = ({
     const editor = useSlate();
 
     useEffect(() => {
-        if (at && options.length > 0) {
+        if (at) {
             const el = ref.current;
             const domRange = ReactEditor.toDOMRange(editor, at);
             const rect = domRange.getBoundingClientRect();
@@ -73,50 +76,62 @@ const NodeContentSelectBase = ({
                 el.style.left = `${rect.left + window.pageXOffset}px`;
             }
         }
-    }, [options.length, editor, at]);
+    }, [editor, at]);
 
-    if (!at || !options.length) {
+    console.log(`OPTIONS`)
+    console.log(options.length)
+    console.log(nodeContentSelectMode)
+    if (!at || (nodeContentSelectMode && options.length === 0)) {
         return null;
     }
 
     return (
         <PortalBody>
             <div ref={ref} className={classNames.root} {...props}>
-                {options.map((option, i) => (
-                    <div
-                        key={`${i}${option.label}`}
-                        className={
-                            i === valueIndex
-                                ? `${classNames.mentionItemSelected} peak-node-content-item-selected`
-                                : classNames.mentionItem
-                        }
-                        onMouseDown={getPreventDefaultHandler(
-                            onClickMention,
-                            editor,
-                            option
-                        )}
-                    >
-                        <div className={"node-content-select-item-container"}>
-                            {option.icon}
-                            <div className={"node-content-item"}>
-                                <div className={"node-content-item-body"}>
-                                    <div className={"node-title"}>{option.label}</div>
-                                    <div className={"node-description"}>{option.description}</div>
-                                </div>
-                                {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                <OptionList options={options} valueIndex={valueIndex} classNames={classNames} onClickMention={onClickMention} editor={editor}/>
             </div>
         </PortalBody>
     );
 };
 
-export const NodeContentSelect = styled<
-    NodeContentSelectProps,
-    MentionSelectStyleProps,
-    MentionSelectStyles
-    >(NodeContentSelectBase, getMentionSelectStyles, undefined, {
-    scope: 'MentionSelect',
-});
+export const OptionList = ({options, valueIndex, classNames, onClickMention, editor}) => {
+    if (options.length === 0) {
+        return (
+            <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
+        )
+    } else {
+        return (
+           <>
+               {options.map((option, i) => (
+                   <div
+                       key={`${i}${option.label}`}
+                       className={
+                           i === valueIndex
+                               ? `${classNames.mentionItemSelected} peak-node-content-item-selected`
+                               : classNames.mentionItem
+                       }
+                       onMouseDown={getPreventDefaultHandler(
+                           onClickMention,
+                           editor,
+                           option
+                       )}
+                   >
+                       <div className={"node-content-select-item-container"}>
+                           {option.icon}
+                           <div className={"node-content-item"}>
+                               <div className={"node-content-item-body"}>
+                                   <div className={"node-title"}>{option.label}</div>
+                                   <div className={"node-description"}>{option.description}</div>
+                               </div>
+                               {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
+                           </div>
+                       </div>
+                   </div>
+               ))}
+           </>
+        )
+    }
+
+}
+
+export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);

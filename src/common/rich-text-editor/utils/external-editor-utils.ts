@@ -1,7 +1,7 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {store} from "../../../redux/store";
-import {setEditorFocusToNode} from "../../../redux/wikiPageSlice";
+import {setEditorFocusToNode} from "../../../redux/slices/wikiPageSlice";
 import {getCurrentPageId} from "../../../utils/links";
 import {isAtLastLineOfPeakKnowledgeNode} from "./peak-knowledge-node-utils";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";

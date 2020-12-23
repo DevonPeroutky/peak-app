@@ -1,6 +1,6 @@
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import React from "react";
-import {PeakTag} from "../../../../../redux/tagSlice";
+import {PeakTag} from "../../../../../redux/slices/tagSlice";
 import cn from 'classnames';
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "../../../components/peak-knowledge-node/peak-tag-select/PeakTagSelect";

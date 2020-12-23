@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {
     setEditing,
     beginSavingPage,
-} from "../../redux/wikiPageSlice";
+} from "../../redux/slices/wikiPageSlice";
 import 'antd/dist/antd.css';
 import {Slate, ReactEditor} from "slate-react";
 import {createEditor, Node} from "slate";
@@ -47,6 +47,7 @@ const TopicWiki = (props: {topic_id: string}) => {
         search,
         index,
         target,
+        nodeContentSelectMode
     } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
@@ -135,6 +136,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                         valueIndex={index}
                         options={values}
                         onClickMention={onAddNodeContent}
+                        nodeContentSelectMode={nodeContentSelectMode}
                     />
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import cn from "classnames";
-import {PeakTag} from "../../../../../redux/tagSlice";
+import {PeakTag} from "../../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../journal-entry-plugin/journal-entry/JournalEntry";
 import "./peak-book-note.scss"
 import {PeakTagSelect} from "../../../components/peak-knowledge-node/peak-tag-select/PeakTagSelect";

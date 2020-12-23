@@ -29,7 +29,7 @@ import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
 } from "../../common/rich-text-editor/editors/journal/utils";
-import {JournalEntry, PeakWikiPage} from "../../redux/wikiPageSlice";
+import {JournalEntry, PeakWikiPage} from "../../redux/slices/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";

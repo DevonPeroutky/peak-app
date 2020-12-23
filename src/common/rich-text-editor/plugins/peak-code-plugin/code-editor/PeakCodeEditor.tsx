@@ -11,13 +11,13 @@ import {
     useDebounceBulkJournalEntrySaver
 } from '../../../../../utils/hooks';
 import { useDispatch } from 'react-redux';
-import {updatePageContents, setEditorFocusToNode, JournalEntry} from '../../../../../redux/wikiPageSlice';
+import {updatePageContents, setEditorFocusToNode, JournalEntry} from '../../../../../redux/slices/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
 import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, toggleNodeType} from "@udecode/slate-plugins";
 import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
-import {JOURNAL_PAGE_ID} from "../../../../../redux/journalSlice";
+import {JOURNAL_PAGE_ID} from "../../../../../redux/slices/journalSlice";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;

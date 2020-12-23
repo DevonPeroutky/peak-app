@@ -1,12 +1,11 @@
-import {combineReducers, configureStore, getDefaultMiddleware, createAction} from "@reduxjs/toolkit";
+import {configureStore, getDefaultMiddleware, createAction} from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import quickSwitcher from "./quickSwitcherSlice"
-import electron from "./electronSlice"
-import { DisplayPeaker } from "./userAccountsSlice"
+import quickSwitcher from "./slices/quickSwitcherSlice"
+import electron from "./slices/electronSlice"
 
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import {rootReducer, UserSpecificAppState} from "./rootReducer"; // defaults to localStorage for web
+import {rootReducer} from "./rootReducer"; // defaults to localStorage for web
 
 const persistConfig = {
     key: 'root',

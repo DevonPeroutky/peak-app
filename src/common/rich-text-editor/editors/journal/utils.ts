@@ -1,4 +1,4 @@
-import {JournalEntry} from "../../../../redux/wikiPageSlice";
+import {JournalEntry} from "../../../../redux/slices/wikiPageSlice";
 import {Node} from "slate";
 import {JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER} from "../../types";
 

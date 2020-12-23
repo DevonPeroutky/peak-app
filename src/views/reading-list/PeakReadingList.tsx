@@ -1,10 +1,10 @@
 import React from 'react'
 import "./peak-reading-list.scss"
 import {message, Table} from "antd";
-import {deleteFutureRead, FutureRead} from "../../redux/readingListSlice";
+import {deleteFutureRead, FutureRead} from "../../redux/slices/readingListSlice";
 import PeakTagDisplay from "../../common/peak-tag-display/PeakTagDisplay";
 import {useCurrentUser, useFutureReads} from "../../utils/hooks";
-import {Peaker} from "../../redux/userSlice";
+import {Peaker} from "../../redux/slices/userSlice";
 import peakAxiosClient from "../../client/axiosConfig"
 
 const PeakReadingList = (props: { }) => {

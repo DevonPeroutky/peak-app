@@ -32,8 +32,8 @@ import React from "react";
 import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
-import {Peaker, setUser} from "./redux/userSlice";
-import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/electronSlice";
+import {Peaker, setUser} from "./redux/slices/userSlice";
+import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/slices/electronSlice";
 import {message} from "antd";
 import peakAxiosClient from "./client/axiosConfig"
 import { store } from "./redux/store"
