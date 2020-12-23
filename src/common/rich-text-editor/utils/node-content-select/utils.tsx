@@ -4,9 +4,9 @@ import {PeakNodeSelectListItem} from "./types";
 import {Editor, Point, Range} from "slate";
 import {escapeRegExp, getText} from "@udecode/slate-plugins";
 import {PeakBook} from "../../../../redux/slices/booksSlice";
-import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-book-plugin/defaults";
 import {insertCustomBlockElement} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
+import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
 
 export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditorControlDisplay): PeakNodeSelectListItem {
     return {

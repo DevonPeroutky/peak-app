@@ -1,10 +1,12 @@
 import {
-    getRenderElement,
+    getRenderElements,
+    RenderNodeOptions,
     setDefaults,
     SlatePlugin,
 } from "@udecode/slate-plugins";
 import {DEFAULTS_PEAK_KNOWLEDGE} from "./defaults";
 import {knowledgeNodeOnKeyDownHandler} from "../../utils/peak-knowledge-node-utils";
+import { RenderElementProps } from "slate-react";
 
 export const PeakKnowledgePlugin = (options?: any): SlatePlugin => ({
     renderElement: renderPeakKnowledgeNode(options),
@@ -13,9 +15,8 @@ export const PeakKnowledgePlugin = (options?: any): SlatePlugin => ({
 
 const renderPeakKnowledgeNode = (
     options?: any
-) => {
-    console.log(`THE OPTIONS`)
-    console.log(options)
+) => (props: RenderElementProps) => {
     const { learning, peak_book_note } = setDefaults(options, DEFAULTS_PEAK_KNOWLEDGE);
-    return getRenderElement(learning);
+    const renderElementsOptions: Required<RenderNodeOptions>[] = [learning, peak_book_note];
+    return getRenderElements(renderElementsOptions)(props);
 };

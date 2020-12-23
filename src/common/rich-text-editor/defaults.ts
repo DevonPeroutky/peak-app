@@ -50,11 +50,9 @@ import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defa
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
-import {DEFAULTS_PEAK_BOOK, ELEMENT_PEAK_BOOK} from "./plugins/peak-book-plugin/defaults";
-import {PeakBookNotePlugin} from "./plugins/peak-book-plugin/PeakBookPlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {DEFAULTS_PEAK_KNOWLEDGE} from "./plugins/peak-knowledge-plugin/defaults";
-import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
+import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -73,7 +71,6 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_CODE, {}),
     ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
-    ...setDefaults(DEFAULTS_PEAK_BOOK, {}),
     ...setDefaults(DEFAULTS_PEAK_KNOWLEDGE, {}),
 };
 
@@ -146,7 +143,6 @@ const basePlugins = [
     PeakCodePlugin,
     PeakLinkPlugin,
     PeakCalloutPlugin,
-    PeakBookNotePlugin,
     PeakKnowledgePlugin
 ];
 

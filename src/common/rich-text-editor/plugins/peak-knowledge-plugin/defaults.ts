@@ -1,4 +1,4 @@
-import {PeakKnowledgeNode} from "../../components/peak-knowledge-node/PeakKnowledgeNode";
+import {PeakKnowledgeNode} from "./components/peak-knowledge-node/PeakKnowledgeNode";
 import {BlockquotePluginOptionsValues} from "@udecode/slate-plugins";
 import {PeakKnowledgeKeyOption} from "./types";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./constants";

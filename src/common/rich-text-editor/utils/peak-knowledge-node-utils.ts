@@ -4,6 +4,8 @@ import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "./external-editor-utils";
 import {ELEMENT_LI, isSelectionAtBlockStart} from "@udecode/slate-plugins";
 
+// TODO MOVE ALL OF THIS TO KNOWLEDGE-PLUGIN!
+
 // TDOD: THIS DOES NOT WORK WITH LISTS.
 export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any): boolean {
     const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
