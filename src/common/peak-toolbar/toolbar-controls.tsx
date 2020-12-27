@@ -50,11 +50,10 @@ import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plu
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
-import {PEAK_LEARNING} from "../rich-text-editor/plugins/peak-learning-plugin/defaults";
-import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-book-plugin/defaults";
 import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
+import {PEAK_LEARNING, ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined

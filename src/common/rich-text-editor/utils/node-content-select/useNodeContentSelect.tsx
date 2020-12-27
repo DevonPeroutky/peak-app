@@ -13,11 +13,11 @@ import {
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
-import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-book-plugin/defaults";
 import {createCreateNewBookListItem} from "./constants";
 import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
 import {createNewPeakBook, useBooks} from "../../../../client/books";
 import {useCurrentUser} from "../../../../utils/hooks";
+import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}

@@ -1,8 +1,11 @@
 import {Editor, Node, Range, Transforms} from "slate";
-import {isPeakKnowledgeNoteType, previous} from "./base-utils";
+import {previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
-import {forceFocusToNode} from "./external-editor-utils";
+import {forceFocusToNode} from "../../utils/external-editor-utils";
 import {ELEMENT_LI, isSelectionAtBlockStart} from "@udecode/slate-plugins";
+import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./constants";
+
+// TODO MOVE ALL OF THIS TO KNOWLEDGE-PLUGIN!
 
 // TDOD: THIS DOES NOT WORK WITH LISTS.
 export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any): boolean {
@@ -42,4 +45,8 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
             Transforms.collapse(editor, { edge: 'end' });
         }
     }
+}
+
+export function isPeakKnowledgeNoteType(n: Node): boolean {
+    return [PEAK_LEARNING, ELEMENT_PEAK_BOOK].includes(n.type as string)
 }

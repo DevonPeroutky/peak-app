@@ -1,8 +1,8 @@
 import React from "react";
 import {PeakNodeSelectListItem} from "./types";
-import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-book-plugin/defaults";
-import {insertCustomBlockElement, insertCustomBlockElementCallback} from "../base-utils";
+import {insertCustomBlockElementCallback} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
+import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
 
 export function createCreateNewBookListItem(currSearch: string): PeakNodeSelectListItem {
     return {

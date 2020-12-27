@@ -3,9 +3,11 @@ import {Editor, Node, Transforms} from "slate";
 import {store} from "../../../redux/store";
 import {setEditorFocusToNode} from "../../../redux/slices/wikiPageSlice";
 import {getCurrentPageId} from "../../../utils/links";
-import {isAtLastLineOfPeakKnowledgeNode} from "./peak-knowledge-node-utils";
+import {
+    isAtLastLineOfPeakKnowledgeNode,
+    isPeakKnowledgeNoteType
+} from "../plugins/peak-knowledge-plugin/utils";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {isPeakKnowledgeNoteType} from "./base-utils";
 
 export function isNodeTypeExternalEditor(n: Node) {
     return [ELEMENT_CODE_BLOCK].includes(n.type as string)
@@ -75,7 +77,6 @@ export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolea
         Transforms.collapse(editor, {edge: 'end'} )
         ReactEditor.focus(editor)
     }
-
 }
 
 export function forceFocusToNode(slateNode: Node, focus: boolean = true) {
