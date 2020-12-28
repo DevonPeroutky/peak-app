@@ -6,9 +6,9 @@
     "author": "Devon Peroutky",
     "version": "0.0.1",
     "icons": {
-        "16": "assets/halo-16.png",
-        "48": "assets/halo-48.png",
-        "128": "assets/halo-128.png"
+        "16": "assets/peak-16.png",
+        "48": "assets/peak-48.png",
+        "128": "assets/peak-128.png"
     },
     "permissions": ["storage", "contextMenus", "activeTab", "tabs", "http://localhost/*", "identity"],
     "browser_action": {
