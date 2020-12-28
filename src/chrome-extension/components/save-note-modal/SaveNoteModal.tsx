@@ -2,6 +2,8 @@ import {Button, Modal} from "antd";
 import React, {useState} from "react";
 import {HeartOutlined} from '@ant-design/icons';
 import 'antd/lib/modal/style/index.css';
+import "./save-note-modal.scss"
+import {capitalize_and_truncate} from "../../../utils/strings";
 
 const { confirm } = Modal;
 export function showSaveNoteModal() {
@@ -10,7 +12,7 @@ export function showSaveNoteModal() {
         title: 'Save notes!',
         zIndex: 2147483646,
         icon: <HeartOutlined twoToneColor={"blue"}/>,
-        content: 'Put the Rich Text Editor here!',
+        content: <span className="test">{capitalize_and_truncate("Put the Rich Text Editor here!")}</span>,
         okText: 'Submit',
         onOk() {
             return new Promise((resolve, reject) => {

@@ -1,16 +1,16 @@
 {
     "name": "Peak",
+    "manifest_version": 2,
+    "description": "Based off of https://github.com/sivertschou/react-typescript-chrome-extension-boilerplate",
     "key": "eiilkgojneaombphoehpmiclaknkfpdb",
     "author": "Devon Peroutky",
     "version": "0.0.1",
-    "description": "Hello, Darkness my old friend.",
     "icons": {
         "16": "assets/halo-16.png",
         "48": "assets/halo-48.png",
         "128": "assets/halo-128.png"
     },
     "permissions": ["storage", "contextMenus", "activeTab", "tabs", "http://localhost/*", "identity"],
-    "manifest_version": 2,
     "browser_action": {
         "default_popup": "index.html",
         "default_title": "Open the popup"
@@ -19,12 +19,11 @@
     "content_scripts" : [
         {
             "matches": [ "<all_urls>" ],
-            "css": ["/static/css/app.css", "/static/css/content.css"],
-            "js": ["/static/js/content.js"]
+            "js": ["content.js"]
         }
     ],
     "background": {
-        "scripts": ["/static/js/background.js"]
+        "scripts": ["background.js"]
     },
     "oauth2": {
         "client_id": "261914177641-3jo4ronmd775i0fl4sbav4ojuq0t4oa0.apps.googleusercontent.com",

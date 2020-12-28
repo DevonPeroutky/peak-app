@@ -8,7 +8,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
-    "noEmit": true,
+//    "noEmit": true,
     "strict": false,
     "noUnusedLocals": false,
     "baseUrl": ".",

@@ -99,7 +99,7 @@ const saveToReadingList = (title: string, url: string, userId: string) => {
                     className={"save-no-topic-button"}
                     icon={<ReadOutlined twoToneColor="white"/>}
                     onClick={() => {notification.close(key)}}>Save without a Topic</Button>
-                <Button ghost type={"danger"} onClick={() => deleteFutureRead(userId, futureReadId, key)} icon={<DeleteTwoTone twoToneColor="red"/>}>Discard</Button>
+                <Button ghost danger onClick={() => deleteFutureRead(userId, futureReadId, key)} icon={<DeleteTwoTone twoToneColor="red"/>}>Discard</Button>
             </div>
         </div>)
     };
@@ -107,7 +107,7 @@ const saveToReadingList = (title: string, url: string, userId: string) => {
     const descriptionAlreadyAdded = (futureReadId: string) => {
         return (<div className={"add-topic-body"}>
             <div className={"button-row"}>
-                <Button ghost type={"danger"} onClick={() => deleteFutureRead(userId, futureReadId, key)} icon={<DeleteTwoTone twoToneColor="red"/>}>Remove Page</Button>
+                <Button ghost danger onClick={() => deleteFutureRead(userId, futureReadId, key)} icon={<DeleteTwoTone twoToneColor="red"/>}>Remove Page</Button>
             </div>
         </div>)
     };
