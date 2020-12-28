@@ -5,6 +5,7 @@
   "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
   "scripts": {
+    "extension:build": "INLINE_RUNTIME_CHUNK=false node scripts/build.js",
     "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
     "webapp:prod": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
     "electron:dev": "REACT_APP_DIST=electron REACT_APP_ENV=dev electron-forge start",
@@ -61,6 +62,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/chrome": "^0.0.127",
     "@types/classnames": "^2.2.10",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/immutability-helper": "^2.6.3",

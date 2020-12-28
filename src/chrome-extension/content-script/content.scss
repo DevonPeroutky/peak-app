@@ -1,0 +1,28 @@
+.ant-notification {
+  z-index: 2147483646!important;
+
+  .save-to-peak-notification {
+    z-index: 2147483646!important;
+
+    .add-topic-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      .button-row {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 10px;
+
+        .save-no-topic-button {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .ant-notification-notice-description {
+      margin-top: 10px;
+      margin-left: 4px;
+    }
+  }
+}

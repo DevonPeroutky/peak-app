@@ -26,7 +26,8 @@
     "isolatedModules": true
   },
   "include": [
-    "src/electron/**/*"
+    "src/electron/**/*",
+    "src/chrome-extension/**/*"
   ],
   "extends": "./node_modules/electron-webpack/tsconfig-base.json"
 }

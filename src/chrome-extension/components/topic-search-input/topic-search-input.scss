@@ -1,0 +1,16 @@
+.search-input {
+  width: 100%;
+  min-width: 100%;
+  z-index: 2147483647!important;
+
+  .ant-select-selector {
+    padding-left: 11px!important;
+    padding-right: 0px!important;
+    width: auto!important;
+    max-width: 100%!important;
+  }
+}
+
+.ant-select-dropdown {
+  z-index: 2147483647!important;
+}
