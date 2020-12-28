@@ -12,7 +12,7 @@ export function showSaveNoteModal() {
         title: 'Save notes!',
         zIndex: 2147483646,
         icon: <HeartOutlined twoToneColor={"blue"}/>,
-        content: <span className="test">{capitalize_and_truncate("Put the Rich Text Editor here!")}</span>,
+        content: <span className="test">{capitalize_and_truncate("Put the SWAG Rich Text Editor here!")}</span>,
         okText: 'Submit',
         onOk() {
             return new Promise((resolve, reject) => {

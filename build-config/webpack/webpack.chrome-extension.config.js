@@ -25,6 +25,7 @@ const config = {
     devServer: {
         contentBase: "../../dist",
     },
+    devtool: 'cheap-module-source-map',
     plugins: plugins,
 };
 

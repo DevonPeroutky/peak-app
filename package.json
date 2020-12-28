@@ -5,7 +5,7 @@
   "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
   "scripts": {
-    "extension:dev": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development",
+    "extension:dev": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
     "extension:build": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
     "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
     "webapp:prod": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
