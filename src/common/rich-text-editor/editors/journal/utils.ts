@@ -20,6 +20,7 @@ export function convertJournalEntryToSlateNodes(journalEntry: JournalEntry): Nod
 }
 
 export function convertSlateNodeToJournalEntry(journalEntrySlateNode: Node, userId: string): JournalEntry {
+    // @ts-ignore
     return {
         userId: userId,
         entry_date: journalEntrySlateNode.entry_date,

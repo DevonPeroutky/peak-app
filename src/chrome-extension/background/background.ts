@@ -1,8 +1,11 @@
 import axios from 'axios';
-import {sendCurrentPageToReadingListMessage, onActiveTab} from "../utils/messageUtil";
-import {popOffPage, saveToWiki} from "../utils/tabUtils";
 import {ChromeUser} from "../utils/constants/models";
 import {loadUserRequest} from "../../client/user";
+import {Peaker} from "../../redux/slices/userSlice";
+import {loadTagsRequests} from "../../client/tags";
+import {PeakTag} from "../../redux/slices/tagSlice";
+import {closeDrawer, openNoteModal} from "../utils/stateUtils";
+import {onActiveTab} from "../utils/messageUtil";
 const R = require('ramda');
 
 var userId: string = "";
@@ -22,11 +25,12 @@ chrome.identity.getAuthToken({
         const chrome_user: ChromeUser = r.data as ChromeUser;
         console.log(chrome_user)
         loadUserRequest(chrome_user.id).then(r => {
-            const chrome_user= r.data.data.id;
-            chrome.storage.sync.set({user: r.data.data});
-            userId = chrome_user
-        })
-
+            const user: Peaker = r.data.data as Peaker;
+            console.log(user)
+            console.log(`Syncing user: ${chrome_user} to chrome storage`)
+            chrome.storage.sync.set({ user: user });
+            userId = user.id
+        }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
     }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
 });
 
@@ -47,14 +51,8 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.commands.onCommand.addListener(function(command) {
     console.log(`Command: ${command}`);
     switch (command) {
-        case "add-to-reading-list":
-            onActiveTab(R.partial(sendCurrentPageToReadingListMessage, [userId]));
-            break;
-        case "pop-from-reading-list":
-            popOffPage(userId)
-            break;
         case "save-page":
-            saveToWiki(userId)
+            openNoteModal(userId)
             break;
         default:
             console.log(`Command: ${command} ???`);
@@ -65,11 +63,12 @@ chrome.commands.onCommand.addListener(function(command) {
 // Startup
 // --------------------------------
 chrome.storage.sync.get("user", function (obj) {
-    // console.log(`LOADING user on startup?`);
     console.log(obj);
-    // console.log(`The user: ${obj.user.id}`);
-    // if (obj.id)
-    // const saveToUserReadingList = R.partial(saveToReadingList, [obj.user.id]);
-    // chrome.contextMenus.onClicked.addListener(saveToUserReadingList);
+    console.log(`The user: ${obj.user.id}`);
+    loadTagsRequests(obj.user.id).then(res => {
+        const returned_tags: PeakTag[] = res.data.tags
+        chrome.storage.sync.set({ tags: returned_tags})
+    })
+    closeDrawer()
 });
 chrome.commands.getAll(console.log);

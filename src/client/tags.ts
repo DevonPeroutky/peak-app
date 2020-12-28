@@ -13,7 +13,7 @@ function createTagsRequest(userId: string, tags: PeakDisplayTag[]) {
         "tags": tags
     })
 }
-function loadTagsRequests(userId: string) {
+export function loadTagsRequests(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
 }
 

@@ -1,48 +1,38 @@
-import {Button, Modal} from "antd";
+import {Drawer} from "antd";
 import React, {useState} from "react";
-import {HeartOutlined} from '@ant-design/icons';
 import 'antd/lib/modal/style/index.css';
+import 'antd/lib/drawer/style/index.css';
+import {PeakTag} from "../../../redux/slices/tagSlice";
+import {Peaker} from "../../../redux/slices/userSlice";
+import {closeDrawer} from "../../utils/stateUtils";
 import "./save-note-modal.scss"
-import {capitalize_and_truncate} from "../../../utils/strings";
 
-const { confirm } = Modal;
-export function showSaveNoteModal() {
-    confirm({
-        className: "save-notes-modal",
-        title: 'Save notes!',
-        zIndex: 2147483646,
-        icon: <HeartOutlined twoToneColor={"blue"}/>,
-        content: <span className="test">{capitalize_and_truncate("Put the SWAG Rich Text Editor here!")}</span>,
-        okText: 'Submit',
-        onOk() {
-            return new Promise((resolve, reject) => {
-                setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-            }).catch(() => console.log('Oops errors!'));
-        },
-        onCancel() {},
-    });
+export interface SaveNoteDrawerProps {
+    user: Peaker
+    tags: PeakTag[]
+    visible: boolean
 }
+export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
+    const { user, tags, visible} = props
+    const [currentTags, setTags] = useState<PeakTag[]>(tags)
 
-export const SaveNoteModal = (props: {}) => {
-    const [isVisible, setVisibility] = useState(false)
+    console.log(`VISIBLE: ${visible}`)
 
     return (
-        <div>
-            <Button onClick={() => setVisibility(true)} type={"ghost"}>Show Modal</Button>
-            <Modal
-                title="Title"
-                visible={isVisible}
-                zIndex={2147483646}
-                forceRender={true}
-                onOk = { () => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    }).catch(() => console.log('Oops errors!'));
-                }}
-                onCancel = { () => setVisibility(false)}>
-                <p>HEllo</p>
-            </Modal>
-        </div>
+        <Drawer
+            title="Basic Drawer"
+            className="peak-note-drawer"
+            placement="right"
+            closable={true}
+            onClose={closeDrawer}
+            keyboard={true}
+            maskClosable={false}
+            mask={false}
+            destroyOnClose={true}
+            visible={visible}
+        >
+            <p>Some contents...</p>
+            {currentTags.map(t => <span key={t.id}>{t.title}</span>)}
+        </Drawer>
     )
-
 }

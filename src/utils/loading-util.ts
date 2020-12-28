@@ -1,4 +1,4 @@
-import {fetchUserSpecificAppState, loadAllUserAccounts, loadPeakTags} from "./requests";
+import {fetchUserSpecificAppState, loadAllUserAccounts} from "./requests";
 import {useDispatch} from "react-redux";
 import {DisplayPeaker} from "../redux/slices/userAccountsSlice";
 import {syncCurrentStateToLocalStorage, writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
