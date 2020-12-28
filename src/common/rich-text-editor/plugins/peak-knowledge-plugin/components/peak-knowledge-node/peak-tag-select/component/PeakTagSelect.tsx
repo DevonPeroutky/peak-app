@@ -1,7 +1,7 @@
 import {PeakTag, STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tagSlice";
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
-import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../utils/requests";
+import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
 import {useCurrentUser, useCurrentWikiPage} from "../../../../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
