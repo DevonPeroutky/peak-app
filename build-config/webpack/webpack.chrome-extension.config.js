@@ -9,12 +9,16 @@ rules.push({
     use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
 });
 
+rules.push({
+    test: /\.svg$/,
+    use: "file-loader",
+})
+
 const config = {
     entry: {
         content: path.join(__dirname, "../../src/chrome-extension/content-script/content.tsx"),
         background: path.join(__dirname, "../../src/chrome-extension/background/background.ts"),
     },
-    output: { path: path.join(__dirname, "../../dist"), filename: "[name].js" },
     module: { rules },
     resolve: {
         modules: ['../../node_modules', './node_modules'],

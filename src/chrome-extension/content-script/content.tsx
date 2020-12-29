@@ -40,7 +40,7 @@ function createDrawer(tab: Tab) {
     chrome.storage.sync.get(function (data) {
         const props: SaveNoteDrawerProps = {
             ...data,
-            url: tab.url,
+            pageUrl: tab.url,
             favIconUrl: tab.favIconUrl,
             pageTitle: tab.title,
             visible: data[tabId],

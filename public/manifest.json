@@ -61,5 +61,8 @@
             "description": "Read",
             "global": true
         }
-    }
+    },
+    "web_accessible_resources": [
+        "assets/*"
+    ]
 }

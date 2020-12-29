@@ -4,16 +4,6 @@ import {Link} from "react-router-dom";
 import cn from "classnames";
 const peak = require('../../assets/logos/peak.svg');
 
-export const ChromeExtensionPeakLogo = (props: { className?: string }) => {
-    const specifiedClassName: string = (props.className) ? props.className : ""
-    return (
-        <div
-            className={cn("peak-logo-wrapper")}>
-            <img className={cn("peak-logo-img", specifiedClassName)} src={peak} alt={"Peak"}/>
-        </div>
-    )
-};
-
 export const PeakLogo = (props: { className?: string }) => {
     const specifiedClassName: string = (props.className) ? props.className : ""
     return (

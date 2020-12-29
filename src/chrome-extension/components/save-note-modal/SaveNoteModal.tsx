@@ -5,12 +5,14 @@ import 'antd/lib/drawer/style/index.css';
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import {Peaker} from "../../../redux/slices/userSlice";
 import "./save-note-modal.scss"
-import {ChromeExtensionPeakLogo, PeakLogo} from "../../../common/logo/PeakLogo";
+import cn from "classnames";
+// @ts-ignore
+import logo from "../../../assets/logos/grayscale-with-sun.svg";
 
 export interface SaveNoteDrawerProps {
     user: Peaker
     pageTitle: string
-    url: string
+    pageUrl: string
     favIconUrl: string
     tags: PeakTag[]
     visible: boolean
@@ -43,9 +45,14 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 }
 
 const DrawerTitle = (props) => {
+    const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
+    console.log(`THE URL ${baseUrl}`)
     return (
         <div>
-            <ChromeExtensionPeakLogo/>
+            <div
+                className={cn("peak-logo-wrapper")}>
+                <img className={cn("peak-logo-img")} src={baseUrl} alt={"Peak"}/>
+            </div>
             <span>Save this page</span>
         </div>
     )
