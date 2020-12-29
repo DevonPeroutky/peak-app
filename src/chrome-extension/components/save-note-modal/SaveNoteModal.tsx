@@ -48,11 +48,8 @@ const DrawerTitle = (props) => {
     const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
     console.log(`THE URL ${baseUrl}`)
     return (
-        <div>
-            <div
-                className={cn("peak-logo-wrapper")}>
-                <img className={cn("peak-logo-img")} src={baseUrl} alt={"Peak"}/>
-            </div>
+        <div className={"drawer-title-row"}>
+            <img className={cn("peak-chrome-ext-logo")} src={baseUrl} alt={"Peak"}/>
             <span>Save this page</span>
         </div>
     )
