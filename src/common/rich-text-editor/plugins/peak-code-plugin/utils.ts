@@ -27,7 +27,7 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
 
 export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
     const currentPath = editor.selection?.anchor.path
-    const isCollapsed = Range.isCollapsed(editor.selection)
+    const isCollapsed = editor.selection && Range.isCollapsed(editor.selection)
     const worthEvaluating: boolean = currentPath && isCollapsed && !event.metaKey
 
     if (worthEvaluating && event.key == "ArrowDown") {

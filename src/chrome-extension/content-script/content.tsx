@@ -5,7 +5,7 @@ import "./content.scss";
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
-import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteModal";
+import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteDrawer";
 import Tab = chrome.tabs.Tab;
 import {ChromeExtMessage, MessageType, SavePageMessage} from "../constants/models";
 
@@ -13,6 +13,7 @@ import {ChromeExtMessage, MessageType, SavePageMessage} from "../constants/model
 // Mount Drawer to DOM
 // ---------------------------------------------------
 chrome.storage.sync.get(function (data) {
+    console.log(`----------> MOUNTING THE MODALLLL`)
     const app = document.createElement('div');
     app.id = "my-extension-root";
     document.body.appendChild(app);
@@ -32,8 +33,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 });
 
 function openDrawer(currTab: Tab): void {
-    console.log(`CURRENT TAB`)
-    console.log(currTab)
     function createDrawer(tab: Tab) {
         const tabId: string = tab.id.toString()
         chrome.storage.sync.get(function (data) {
@@ -47,11 +46,12 @@ function openDrawer(currTab: Tab): void {
             } as SaveNoteDrawerProps
 
             const app = document.getElementById('my-extension-root')
+            console.log(app)
             ReactDOM.render(<SaveNoteDrawer {...props} />, app)
         });
     }
 
-    chrome.storage.sync.set({[currTab.id]: true}, () =>createDrawer(currTab))
+    chrome.storage.sync.set({[currTab.id]: true}, () => createDrawer(currTab))
 }
 
 function removeDrawer(key: string) {
@@ -79,3 +79,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             break;
     }
 });
+
+// console.log(`CHROME EXTENSION??? ${isChromeExtension}`)
+// store.dispatch(createPage({ pageId: CHROME_EXTENSION, newPage: INITIAL_CHROME_EXT_STATE}))

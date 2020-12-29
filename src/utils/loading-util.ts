@@ -15,8 +15,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
 
         // For Background Account --> Load, sync to localStorage in background
         backgroundAccounts.forEach((acc) => {
-            console.log(`Loading entire world for:`)
-            console.log(acc)
             fetchUserSpecificAppState(acc.id).then(userSpecificAppState => {
                 writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
             })
@@ -24,8 +22,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
 
         // For Active Account --> Return a Promise that: Load, sync to localStorage, save to Redux
         return fetchUserSpecificAppState(activeAccount.id).then(userSpecificAppState => {
-            console.log(`Loading the BIG DAWGGGGGG: `)
-            console.log(userSpecificAppState)
             store.dispatch(load_active_user(userSpecificAppState))
             writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
         })

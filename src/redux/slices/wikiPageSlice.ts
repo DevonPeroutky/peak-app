@@ -3,8 +3,9 @@ import {Range} from "slate/dist/interfaces/range";
 import {Node} from "slate";
 import {differenceWith, omit, uniqBy} from "ramda";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/constants";
+import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/config";
 import {JOURNAL_PAGE_ID} from "./journalSlice";
+import {CHROME_EXTENSION} from "../../common/rich-text-editor/editors/chrome-extension/constants";
 const R = require('ramda');
 
 interface CodeEditorFocusState {
@@ -52,19 +53,23 @@ const INITIAL_EDITING_STATE: PeakEditorState = {
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE,
 };
+
 export const INITIAL_PAGE_STATE: PeakWikiPage = {
     id: "-1",
     editorState: INITIAL_EDITING_STATE,
     body: [
         {
-            type: ELEMENT_PARAGRAPH,
-            children: [{ text: '' }],
-        },
+            children: [{ type: ELEMENT_PARAGRAPH, children: [{ text: ''}] }],
+        }
     ],
     title: '',
     isSaving: false
 };
-export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }} ;
+
+const INITIAL_JOURNAL_STATE: PeakWikiPage = {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }
+export const INITIAL_CHROME_EXT_STATE: PeakWikiPage = {...INITIAL_PAGE_STATE, id: CHROME_EXTENSION }
+
+export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: INITIAL_JOURNAL_STATE, [CHROME_EXTENSION]: INITIAL_CHROME_EXT_STATE } ;
 export interface JournalEntry {
     id: string
     entry_date: string,
@@ -197,7 +202,6 @@ export const {
     endSavingPage,
     setEditorFocusToNode,
     setJournalEntries,
-    addNewJournalEntry,
     updateJournalEntry,
     updateJournalEntries
 } = wikiPageSlice.actions;

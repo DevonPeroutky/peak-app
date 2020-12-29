@@ -6,7 +6,7 @@ import {
 import {
     setEditorPlugins,
     setEditorNormalizers
-} from "../../defaults";
+} from "../../base_config";
 import {withEditableJournalEntry} from "../../plugins/journal-entry-plugin/withEditableJournalEntry";
 import {JOURNAL_ENTRY_HEADER} from "../../types";
 import {JournalEntry} from "../../../../redux/slices/wikiPageSlice";

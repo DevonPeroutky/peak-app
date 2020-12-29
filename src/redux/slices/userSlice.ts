@@ -61,7 +61,6 @@ export const UNAUTHED_USER: Peaker = {
 };
 
 export function isAuthenticated(user: Peaker): boolean {
-    console.log(`IS AUTHENTICATED: ${user.id}`)
     return user.id !== "-1"
 }
 

@@ -24,8 +24,10 @@
     .peak-language-select {
       display: flex;
       text-align: left;
+      background: none!important;
 
       .ant-select-selector {
+        background: none!important;
         padding-left: 0;
         padding-right: 0;
         border: 0;

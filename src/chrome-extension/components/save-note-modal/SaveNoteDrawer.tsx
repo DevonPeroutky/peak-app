@@ -21,9 +21,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const { tags, closeDrawer, visible } = props
     const [currentTags, setTags] = useState<PeakTag[]>(tags || [])
 
-    console.log(`VISIBLE: ${visible}`)
-    console.log(props)
-
     return (
         <Drawer
             title={<DrawerTitle/>}
@@ -32,14 +29,13 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             closable={true}
             onClose={closeDrawer}
             keyboard={true}
+            width={"300px"}
             maskClosable={false}
             mask={false}
             destroyOnClose={true}
             visible={visible || false}
         >
-            <p>Some contents...</p>
             <SaveNoteEditor/>
-            {currentTags.map(t => <span key={t.id}>{t.title}</span>)}
         </Drawer>
     )
 }

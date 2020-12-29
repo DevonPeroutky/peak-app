@@ -1,9 +1,11 @@
 import {equals} from "ramda";
+import {isChromeExtension} from "./environment";
+import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
 
 // Get the current page id without a hook
 export function getCurrentPageId(): string | undefined {
-    console.log(`DA CURRENT LOCATION`)
-    console.log(window.location)
+    console.log(`CHROME EXTENSION??? ${isChromeExtension}`)
+    if (isChromeExtension) { return CHROME_EXTENSION }
 
     const hash: string[] = window.location.hash.split("/")
 

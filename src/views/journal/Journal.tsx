@@ -23,7 +23,7 @@ import {
     EMPTY_JOURNAL_STATE,
     journalNormalizers,
     journalPlugins
-} from "../../common/rich-text-editor/editors/journal/constants";
+} from "../../common/rich-text-editor/editors/journal/config";
 import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry

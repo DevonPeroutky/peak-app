@@ -28,6 +28,7 @@ import {updatePage} from "./requests";
 import {JOURNAL_PAGE_ID} from "../redux/slices/journalSlice";
 import {useQuery} from "./urls";
 import {FutureRead} from "../redux/slices/readingListSlice";
+import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -39,6 +40,10 @@ export function useOnlineStatus() {
 
 export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
+}
+
+export function useChromeExtEditorState() {
+    return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[CHROME_EXTENSION]);
 }
 
 export function useCurrentUser() {
