@@ -15,9 +15,7 @@ const config = {
         background: path.join(__dirname, "../../src/chrome-extension/background/background.ts"),
     },
     output: { path: path.join(__dirname, "../../dist"), filename: "[name].js" },
-    module: {
-        rules: rules,
-    },
+    module: { rules },
     resolve: {
         modules: ['../../node_modules', './node_modules'],
         extensions: [".js", ".jsx", ".tsx", ".ts"],

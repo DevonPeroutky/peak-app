@@ -1,6 +1,6 @@
 import {loadTagsRequests} from "../../client/tags";
 import {PeakTag} from "../../redux/slices/tagSlice";
-import {MessageType, SavePageMessage} from "./constants/models";
+import {MessageType, SavePageMessage} from "../constants/models";
 
 type Tab = chrome.tabs.Tab;
 export const onActiveTab = (callback: (t: Tab) => any) => {

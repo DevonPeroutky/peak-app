@@ -7,7 +7,7 @@ import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
 import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteModal";
 import Tab = chrome.tabs.Tab;
-import {ChromeExtMessage, MessageType, SavePageMessage} from "../utils/constants/models";
+import {ChromeExtMessage, MessageType, SavePageMessage} from "../constants/models";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM

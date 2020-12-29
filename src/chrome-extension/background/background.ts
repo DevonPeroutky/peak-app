@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ChromeUser} from "../utils/constants/models";
+import {ChromeUser} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
 import {loadTags, resetState, saveToWiki} from "../utils/tabUtil";

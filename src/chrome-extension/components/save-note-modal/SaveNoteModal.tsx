@@ -5,7 +5,7 @@ import 'antd/lib/drawer/style/index.css';
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import {Peaker} from "../../../redux/slices/userSlice";
 import "./save-note-modal.scss"
-import {PeakTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
+import {ChromeExtensionPeakLogo, PeakLogo} from "../../../common/logo/PeakLogo";
 
 export interface SaveNoteDrawerProps {
     user: Peaker
@@ -25,7 +25,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 
     return (
         <Drawer
-            title="Save this page"
+            title={<DrawerTitle/>}
             className="peak-note-drawer"
             placement="right"
             closable={true}
@@ -40,4 +40,14 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             {currentTags.map(t => <span key={t.id}>{t.title}</span>)}
         </Drawer>
     )
+}
+
+const DrawerTitle = (props) => {
+    return (
+        <div>
+            <ChromeExtensionPeakLogo/>
+            <span>Save this page</span>
+        </div>
+    )
+
 }
