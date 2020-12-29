@@ -2,11 +2,7 @@ import axios from 'axios';
 import {ChromeUser} from "../utils/constants/models";
 import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
-import {loadTagsRequests} from "../../client/tags";
-import {PeakTag} from "../../redux/slices/tagSlice";
-import {closeDrawer, openNoteModal} from "../utils/stateUtils";
-import {onActiveTab} from "../utils/messageUtil";
-const R = require('ramda');
+import {loadTags, resetState, saveToWiki} from "../utils/tabUtil";
 
 var userId: string = "";
 
@@ -52,7 +48,7 @@ chrome.commands.onCommand.addListener(function(command) {
     console.log(`Command: ${command}`);
     switch (command) {
         case "save-page":
-            openNoteModal(userId)
+            saveToWiki(userId)
             break;
         default:
             console.log(`Command: ${command} ???`);
@@ -65,10 +61,6 @@ chrome.commands.onCommand.addListener(function(command) {
 chrome.storage.sync.get("user", function (obj) {
     console.log(obj);
     console.log(`The user: ${obj.user.id}`);
-    loadTagsRequests(obj.user.id).then(res => {
-        const returned_tags: PeakTag[] = res.data.tags
-        chrome.storage.sync.set({ tags: returned_tags})
-    })
-    closeDrawer()
+    resetState()
 });
 chrome.commands.getAll(console.log);
