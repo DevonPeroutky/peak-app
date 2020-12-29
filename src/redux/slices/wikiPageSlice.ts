@@ -33,7 +33,7 @@ export interface PeakWikiState {
     [key: string]: PeakWikiPage;
 }
 
-const INITIAL_LINK_STATE: PeakHyperlinkState = {
+export const INITIAL_LINK_STATE: PeakHyperlinkState = {
     currentLinkUrl: '',
     currentSelection: null,
     currentHyperLinkId: '',

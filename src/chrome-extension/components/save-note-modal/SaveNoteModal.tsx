@@ -6,8 +6,7 @@ import {PeakTag} from "../../../redux/slices/tagSlice";
 import {Peaker} from "../../../redux/slices/userSlice";
 import "./save-note-modal.scss"
 import cn from "classnames";
-// @ts-ignore
-import logo from "../../../assets/logos/grayscale-with-sun.svg";
+import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 
 export interface SaveNoteDrawerProps {
     user: Peaker
@@ -39,6 +38,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             visible={visible || false}
         >
             <p>Some contents...</p>
+            <SaveNoteEditor/>
             {currentTags.map(t => <span key={t.id}>{t.title}</span>)}
         </Drawer>
     )
@@ -46,7 +46,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 
 const DrawerTitle = (props) => {
     const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
-    console.log(`THE URL ${baseUrl}`)
     return (
         <div className={"drawer-title-row"}>
             <img className={cn("peak-chrome-ext-logo")} src={baseUrl} alt={"Peak"}/>

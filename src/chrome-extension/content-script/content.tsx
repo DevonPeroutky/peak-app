@@ -18,6 +18,8 @@ chrome.storage.sync.get(function (data) {
     document.body.appendChild(app);
     ReactDOM.render(<SaveNoteDrawer {...data as SaveNoteDrawerProps} />, app)
 });
+
+// Debugging state changes
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (const key in changes) {
         const storageChange = changes[key];
@@ -32,24 +34,24 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 function openDrawer(currTab: Tab): void {
     console.log(`CURRENT TAB`)
     console.log(currTab)
+    function createDrawer(tab: Tab) {
+        const tabId: string = tab.id.toString()
+        chrome.storage.sync.get(function (data) {
+            const props: SaveNoteDrawerProps = {
+                ...data,
+                pageUrl: tab.url,
+                favIconUrl: tab.favIconUrl,
+                pageTitle: tab.title,
+                visible: data[tabId],
+                closeDrawer: () => removeDrawer(tabId),
+            } as SaveNoteDrawerProps
+
+            const app = document.getElementById('my-extension-root')
+            ReactDOM.render(<SaveNoteDrawer {...props} />, app)
+        });
+    }
+
     chrome.storage.sync.set({[currTab.id]: true}, () =>createDrawer(currTab))
-}
-
-function createDrawer(tab: Tab) {
-    const tabId: string = tab.id.toString()
-    chrome.storage.sync.get(function (data) {
-        const props: SaveNoteDrawerProps = {
-            ...data,
-            pageUrl: tab.url,
-            favIconUrl: tab.favIconUrl,
-            pageTitle: tab.title,
-            visible: data[tabId],
-            closeDrawer: () => removeDrawer(tabId),
-        } as SaveNoteDrawerProps
-
-        const app = document.getElementById('my-extension-root')
-        ReactDOM.render(<SaveNoteDrawer {...props} />, app)
-    });
 }
 
 function removeDrawer(key: string) {

@@ -1,26 +1,16 @@
 import React, {useCallback, useMemo, useState} from 'react'
 import "./topic-wiki.scss"
 import {useDispatch} from "react-redux";
-import {
-    setEditing,
-    beginSavingPage,
-} from "../../redux/slices/wikiPageSlice";
+import { setEditing, beginSavingPage } from "../../redux/slices/wikiPageSlice";
 import 'antd/dist/antd.css';
 import {Slate, ReactEditor} from "slate-react";
 import {createEditor, Node} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import {useHotkeys} from "react-hotkeys-hook";
-import {
-    usePagePublisher,
-    useDebounceWikiSaver,
-    useCurrentWikiPage, useDebouncePageTitleUpdater,
-} from '../../utils/hooks';
+import { usePagePublisher, useDebounceWikiSaver, useCurrentWikiPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
 import { equals } from "ramda";
-import {
-    EditablePlugins,
-    pipe,
-} from "@udecode/slate-plugins";
+import { EditablePlugins, pipe } from "@udecode/slate-plugins";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/constants";

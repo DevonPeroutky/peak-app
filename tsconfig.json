@@ -8,7 +8,6 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
-//    "noEmit": true,
     "strict": false,
     "noUnusedLocals": false,
     "baseUrl": ".",
@@ -23,7 +22,8 @@
     ],
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "noEmit": true
   },
   "include": [
     "src/electron/**/*",

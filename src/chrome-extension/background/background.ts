@@ -4,7 +4,8 @@ import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
 import {loadTags, resetState, saveToWiki} from "../utils/tabUtil";
 
-var userId: string = "";
+// TODO CHANGE THIS <-------
+var userId: string = "108703174669232421421";
 
 // --------------------------------
 // Fetch User Auth Token
