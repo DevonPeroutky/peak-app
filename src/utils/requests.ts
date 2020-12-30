@@ -1,6 +1,5 @@
 import {PeakHierarchy} from "../redux/slices/userSlice";
 import {Node} from "slate";
-import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/slices/tagSlice";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
@@ -9,7 +8,6 @@ import {UserSpecificAppState} from "../redux/rootReducer";
 import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/slices/wikiPageSlice";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
-import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 
 // Page
 interface PeakPageParams {

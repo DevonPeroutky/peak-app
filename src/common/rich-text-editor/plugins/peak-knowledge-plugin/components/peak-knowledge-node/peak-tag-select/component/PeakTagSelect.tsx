@@ -17,13 +17,6 @@ import "./peak-tag-select.scss"
 import {isPeakKnowledgeNoteType} from "../../../../utils";
 const { Option } = Select;
 
-export interface PeakDisplayTag {
-    id: string
-    title: string
-    color?: string
-    label?: string
-}
-
 // TODO: MERGE THESE TWO
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
     const { nodeId, nodePath, selected_tags } = props
@@ -34,8 +27,8 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const currentWikiPage = useCurrentWikiPage();
-    const [tags, setTags] = useState<PeakDisplayTag[]>(existingTags)
-    const [displaySelectedTags, setSelectedTags] = useState<PeakDisplayTag[]>(selected_tags)
+    const [tags, setTags] = useState<PeakTag[]>(existingTags)
+    const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
     const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
@@ -48,12 +41,12 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
             setSelectedTags([...displaySelectedTags, existingTag])
         } else {
             const newColor: string = calculateNextColor(tags)
-            const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
+            const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setSelectedTags([...displaySelectedTags, newTag])
         }
     }
     const onDeselect = (displayLabel: LabeledValue) => {
-        const newTagList: PeakDisplayTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
+        const newTagList: PeakTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
         // User clicked on the X of the tag, without ever focusing
         if (!shouldFocus) {
             Transforms.setNodes(editor, {selected_tags: newTagList}, { at: nodePath })
@@ -72,9 +65,9 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
             (event.key === "ArrowDown") ? leaveDown() : leaveUp()
         }
     }
-    const deleteTag = (displayTag: PeakDisplayTag) => {
+    const deleteTag = (displayTag: PeakTag) => {
         deletePeakTag(currentUser.id, displayTag.id).then(res => {
-            const newTagList: PeakDisplayTag[] = tags.filter(t => t.id !== res)
+            const newTagList: PeakTag[] = tags.filter(t => t.id !== res)
             setTags(newTagList)
         })
     }
@@ -105,11 +98,11 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         lockFocus(false)
         setDropdownState(false)
 
-        const hotSwap = (ogList: PeakDisplayTag[], fullList: PeakTag[]) => {
+        const hotSwap = (ogList: PeakTag[], fullList: PeakTag[]) => {
             return ogList.map(tag => (tag.id === STUB_TAG_ID) ? fullList.find(t => t.title === tag.title) as PeakTag : tag)
         }
         createPeakTags(currentUser.id, displaySelectedTags).then(createdTags => {
-            const newSelected: PeakDisplayTag[] = hotSwap(displaySelectedTags, createdTags)
+            const newSelected: PeakTag[] = hotSwap(displaySelectedTags, createdTags)
             setTags([...tags, ...createdTags])
             setSelectedTags(newSelected)
             Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
@@ -128,12 +121,12 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         );
     }
 
-    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
+    const CREATE_NEW_TAG_OPTION: PeakTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = [...tags, ...displaySelectedTags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
-    const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+    const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>
@@ -195,11 +188,10 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
  * @constructor
  */
 export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void }) => {
-    const { selected_tags, existing_tags } = props
+    const { selected_tags, setSelectedTags, existing_tags } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
-    const [tags, setTags] = useState<PeakDisplayTag[]>(existing_tags)
-    const [displaySelectedTags, setSelectedTags] = useState<PeakDisplayTag[]>(selected_tags)
+    const [tags, setTags] = useState<PeakTag[]>(existing_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
     function tagRender(props) {
@@ -212,28 +204,35 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         );
     }
 
-    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakDisplayTag[] = tags.filter(o => !selected_tags.map(t => t.id).includes(o.id));
+    const CREATE_NEW_TAG_OPTION: PeakTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakTag[] = tags.filter(o => !selected_tags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = [...tags, ...selected_tags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
-    const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+    const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     const onSelect = (displayLabel: LabeledValue) => {
         const existingTag = tags.find(t => t.title === (displayLabel.value))
+        console.log(`SELECTING`)
+        console.log(displayLabel)
         if (existingTag) {
-            setSelectedTags([...displaySelectedTags, existingTag])
+            console.log(`Adding this tag to selected`)
+            setSelectedTags([...selected_tags, existingTag])
         } else {
+            console.log(`Creating and adding the tag`)
             const newColor: string = calculateNextColor(tags)
-            const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
-            setSelectedTags([...displaySelectedTags, newTag])
+            const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
+            setSelectedTags([...selected_tags, newTag])
         }
     }
     const onDeselect = (displayLabel: LabeledValue) => {
-        const newTagList: PeakDisplayTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
+        const newTagList: PeakTag[] = selected_tags.filter(tag => tag.title !== displayLabel.value as string)
         setSelectedTags(newTagList)
         setCurrentSearch("")
     }
+
+    console.log(`SELECTED TAGS`)
+    console.log(selected_tags)
 
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>
@@ -254,7 +253,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 }}
                 optionLabelProp="value"
                 mode="multiple"
-                value={displaySelectedTags.map(t => {
+                value={selected_tags.map(t => {
                     return { value: t.title, label: t.color } as LabeledValue
                 })}
                 labelInValue={true}

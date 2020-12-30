@@ -1,7 +1,7 @@
 import {TAG_COLORS} from "./constants";
-import {PeakDisplayTag} from "./component/PeakTagSelect";
+import {PeakTag} from "../../../../../../../redux/slices/tagSlice";
 
-export const calculateNextColor = (tags: PeakDisplayTag[]) => {
+export const calculateNextColor = (tags: PeakTag[]) => {
     if ( tags.length === 0 ) return TAG_COLORS[0]
 
     const currColorIndex = TAG_COLORS.indexOf(tags[0].color)

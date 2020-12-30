@@ -1,5 +1,4 @@
 import peakAxiosClient from "./axiosConfig";
-import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/slices/tagSlice";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
@@ -8,7 +7,7 @@ import {AppState} from "../redux";
 function deleteTagRequest(userId: string, tagId: string) {
     return peakAxiosClient.delete(`/api/v1/users/${userId}/tags/${tagId}`)
 }
-function createTagsRequest(userId: string, tags: PeakDisplayTag[]) {
+function createTagsRequest(userId: string, tags: PeakTag[]) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/tags`, {
         "tags": tags
     })
@@ -17,8 +16,8 @@ export function loadTagsRequests(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
 }
 
-export function futureCreatePeakTags(userId: string, selectedTags: PeakDisplayTag[]) {
-    const tagsToBeCreated: PeakDisplayTag[] = selectedTags.filter(t => t.id === STUB_TAG_ID)
+export function futureCreatePeakTags(userId: string, selectedTags: PeakTag[]) {
+    const tagsToBeCreated: PeakTag[] = selectedTags.filter(t => t.id === STUB_TAG_ID)
     if (tagsToBeCreated.length > 0) {
         return createTagsRequest(userId, tagsToBeCreated)
     }
@@ -27,9 +26,9 @@ export function futureCreatePeakTags(userId: string, selectedTags: PeakDisplayTa
     });
 }
 
-export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<PeakTag[]> {
+export function createPeakTags(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
     console.log(`ACTUAlLY CREATING THE TAGS`)
-    const tagsToBeCreated: PeakDisplayTag[] = tags.filter(t => t.id === STUB_TAG_ID)
+    const tagsToBeCreated: PeakTag[] = tags.filter(t => t.id === STUB_TAG_ID)
     if (tagsToBeCreated.length > 0) {
         return createTagsRequest(userId, tagsToBeCreated).then(res => {
             const created_tags: PeakTag[] = res.data.tags as PeakTag[]

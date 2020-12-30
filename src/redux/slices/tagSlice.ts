@@ -5,9 +5,9 @@ export const TEMP_HOLDER = "create-new-tag-item"
 export interface PeakTag {
     id: string
     title: string
-    inserted_at: string
+    inserted_at?: string
     label?: string
-    color: string
+    color?: string
 }
 const emptyTagList: PeakTag[] = []
 

@@ -58,7 +58,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
                 <SaveNoteEditor content={body} setContent={setBody}/>
                 <Divider/>
                 <div className="peak-note-drawer-footer">
-                    <TagSelect selected_tags={[]} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+                    <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
                     <Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={onSubmit}>Save Note...</Button>
                 </div>
             </div>
