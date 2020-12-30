@@ -20,7 +20,6 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {
-    EMPTY_JOURNAL_STATE,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/config";
@@ -37,6 +36,7 @@ import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugin
 import  { equals } from "ramda";
 import cn from "classnames";
 import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";
+import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/constants";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"

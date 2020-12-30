@@ -6,6 +6,7 @@ import {loadTags, resetState, saveToWiki} from "../utils/tabUtil";
 
 // TODO CHANGE THIS <-------
 var userId: string = "108703174669232421421";
+// THIS TO
 
 // --------------------------------
 // Fetch User Auth Token

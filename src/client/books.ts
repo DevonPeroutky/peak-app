@@ -5,12 +5,14 @@ import {addBook, deleteBook, PeakBook, setBooks} from "../redux/slices/booksSlic
 import {store} from "../redux/store";
 import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/utils/node-content-select/utils";
 import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
+import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 
 // Requests
 function createBookRequest(userId: string, book: {title: string}) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
         "book": {
             title: book.title,
+            note_type: ELEMENT_PEAK_BOOK
         }
     })
 }

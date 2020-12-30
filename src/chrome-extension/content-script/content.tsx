@@ -32,21 +32,21 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     }
 });
 
-function openDrawer(currTab: Tab): void {
+function openDrawer(currTab: Tab, userId: string): void {
     function createDrawer(tab: Tab) {
         const tabId: string = tab.id.toString()
         chrome.storage.sync.get(function (data) {
             const props: SaveNoteDrawerProps = {
-                ...data,
+                userId: userId,
                 pageUrl: tab.url,
                 favIconUrl: tab.favIconUrl,
                 pageTitle: tab.title,
+                tags: data["tags"],
                 visible: data[tabId],
                 closeDrawer: () => removeDrawer(tabId),
             } as SaveNoteDrawerProps
 
             const app = document.getElementById('my-extension-root')
-            console.log(app)
             ReactDOM.render(<SaveNoteDrawer {...props} />, app)
         });
     }
@@ -74,7 +74,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             chrome.storage.sync.get(function (data) {
                 console.log(data)
-                openDrawer(openDrawerMessage.tab)
+                openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id)
             });
             break;
     }

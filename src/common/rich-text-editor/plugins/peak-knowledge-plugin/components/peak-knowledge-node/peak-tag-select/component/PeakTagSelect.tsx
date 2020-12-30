@@ -25,7 +25,6 @@ export interface PeakDisplayTag {
 }
 
 // TODO: MERGE THESE TWO
-
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
     const { nodeId, nodePath, selected_tags } = props
     const dispatch = useDispatch()
@@ -195,7 +194,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
  * @param props
  * @constructor
  */
-export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[] }) => {
+export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void }) => {
     const { selected_tags, existing_tags } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
@@ -214,10 +213,10 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
     }
 
     const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
+    const filteredTags: PeakDisplayTag[] = tags.filter(o => !selected_tags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
-    const isExistingTag: boolean = [...tags, ...displaySelectedTags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
+    const isExistingTag: boolean = [...tags, ...selected_tags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
     const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     const onSelect = (displayLabel: LabeledValue) => {

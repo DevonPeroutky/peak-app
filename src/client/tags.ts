@@ -17,6 +17,16 @@ export function loadTagsRequests(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
 }
 
+export function futureCreatePeakTags(userId: string, selectedTags: PeakDisplayTag[]) {
+    const tagsToBeCreated: PeakDisplayTag[] = selectedTags.filter(t => t.id === STUB_TAG_ID)
+    if (tagsToBeCreated.length > 0) {
+        return createTagsRequest(userId, tagsToBeCreated)
+    }
+    return new Promise(function(resolve, reject) {
+        resolve([]);
+    });
+}
+
 export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<PeakTag[]> {
     console.log(`ACTUAlLY CREATING THE TAGS`)
     const tagsToBeCreated: PeakDisplayTag[] = tags.filter(t => t.id === STUB_TAG_ID)
