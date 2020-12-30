@@ -1,5 +1,5 @@
 .peak-note-drawer {
-  z-index: 2147483647;
+  z-index: 2147483645;
   outline: none!important;
 
   .drawer-title-row {
@@ -18,4 +18,38 @@
     }
   }
 
+  .page-peak-note-title-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .page-peak-favicon {
+      height: 25px;
+      width: auto;
+      margin-right: 12px;
+    }
+
+    .page-peak-title-input {
+      padding-left: 0px!important;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
+
+  .peak-note-drawer-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+
+    .peak-note-drawer-footer {
+      display: flex;
+      flex-direction: column;
+      min-height: 20%;
+      justify-content: space-between;
+      flex: 1 1 auto;
+    }
+
+  }
 }

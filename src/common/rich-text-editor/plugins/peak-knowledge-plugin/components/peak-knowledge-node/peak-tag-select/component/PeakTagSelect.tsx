@@ -24,6 +24,8 @@ export interface PeakDisplayTag {
     label?: string
 }
 
+// TODO: MERGE THESE TWO
+
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
     const { nodeId, nodePath, selected_tags } = props
     const dispatch = useDispatch()
@@ -155,6 +157,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
                 }}
                 optionLabelProp="value"
                 mode="multiple"
+                dropdownClassName={"peak-tag-select-dropdown"}
                 value={displaySelectedTags.map(t => {
                     return { value: t.title, label: t.color } as LabeledValue
                 })}
@@ -186,3 +189,92 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     )
 }
 
+/**
+ * - Show Tag Icon or not?
+ * - optional event handlers inputs
+ * @param props
+ * @constructor
+ */
+export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[] }) => {
+    const { selected_tags, existing_tags } = props
+    const mainRef = useRef(null);
+    const [open, setDropdownState] = useState(false);
+    const [tags, setTags] = useState<PeakDisplayTag[]>(existing_tags)
+    const [displaySelectedTags, setSelectedTags] = useState<PeakDisplayTag[]>(selected_tags)
+    const [currentSearch, setCurrentSearch] = useState<string>("")
+
+    function tagRender(props) {
+        const { label, value, closable, onClose } = props;
+
+        return (
+            <Tag color={label} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
+                {capitalize_and_truncate(value)}
+            </Tag>
+        );
+    }
+
+    const CREATE_NEW_TAG_OPTION: PeakDisplayTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
+    const filteredTags: PeakDisplayTag[] = tags.filter(o => !displaySelectedTags.map(t => t.id).includes(o.id));
+
+    const isEmptyInput: boolean = currentSearch.length === 0
+    const isExistingTag: boolean = [...tags, ...displaySelectedTags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined
+    const renderedTagList: PeakDisplayTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
+
+    const onSelect = (displayLabel: LabeledValue) => {
+        const existingTag = tags.find(t => t.title === (displayLabel.value))
+        if (existingTag) {
+            setSelectedTags([...displaySelectedTags, existingTag])
+        } else {
+            const newColor: string = calculateNextColor(tags)
+            const newTag: PeakDisplayTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
+            setSelectedTags([...displaySelectedTags, newTag])
+        }
+    }
+    const onDeselect = (displayLabel: LabeledValue) => {
+        const newTagList: PeakDisplayTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
+        setSelectedTags(newTagList)
+        setCurrentSearch("")
+    }
+
+    return (
+        <div className={"peak-learning-select-container"} data-slate-editor>
+            <Select
+                onClick={() => {
+                    setDropdownState(true)
+                    // TODO: lockFocus(true)
+                }}
+                ref={mainRef}
+                open={open}
+                onBlur={() => setDropdownState(false)}
+                onFocus={() => {
+                    setDropdownState(true)
+                }}
+                onSearch={(value) => {
+                    setDropdownState(true)
+                    setCurrentSearch(value)
+                }}
+                optionLabelProp="value"
+                mode="multiple"
+                value={displaySelectedTags.map(t => {
+                    return { value: t.title, label: t.color } as LabeledValue
+                })}
+                labelInValue={true}
+                bordered={false}
+                placeholder="Tag this information for later"
+                onSelect={onSelect}
+                dropdownClassName={"peak-tag-select-dropdown"}
+                onDeselect={onDeselect}
+                notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
+                tagRender={tagRender}
+                style={{ width: '100%' }}>
+                {renderedTagList.map(tag => (
+                    <Option key={tag.id} value={tag.title as string}>
+                        <div className={"peak-learning-select-option"}>
+                            <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
+                        </div>
+                    </Option>
+                ))}
+            </Select>
+        </div>
+    )
+}

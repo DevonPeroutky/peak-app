@@ -6,10 +6,7 @@ import {createEditor, Node} from "slate";
 import {equals} from "ramda";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {INITIAL_PAGE_STATE} from "../../../../redux/slices/wikiPageSlice";
-import {
-    chromeExtensionNormalizers,
-    chromeExtensionPlugins
-} from "../../../../common/rich-text-editor/editors/chrome-extension/config";
+import { chromeExtensionNormalizers, chromeExtensionPlugins } from "../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {CHROME_EXTENSION} from "../../../../common/rich-text-editor/editors/chrome-extension/constants";
 
 export const SaveNoteEditor = (props) => {
@@ -30,21 +27,18 @@ export const SaveNoteEditor = (props) => {
             value={content}
             onChange={updatePageContent}>
             <div className="peak-note-editor-container">
-                <div className={"peak-rich-text-editor-container"}>
-                    <EditablePlugins
-                        autoFocus
-                        onKeyDown={[baseKeyBindingHandler]}
-                        key={CHROME_EXTENSION}
-                        plugins={chromeExtensionPlugins}
-                        placeholder="Drop some knowledge..."
-                        spellCheck={true}
-                        style={{
-                            textAlign: "left",
-                            flex: "1 1 auto",
-                            minHeight: "100%"
-                        }}
-                    />
-                </div>
+                <EditablePlugins
+                    autoFocus
+                    onKeyDown={[baseKeyBindingHandler]}
+                    key={CHROME_EXTENSION}
+                    plugins={chromeExtensionPlugins}
+                    placeholder="Drop some knowledge..."
+                    spellCheck={true}
+                    style={{
+                        textAlign: "left",
+                        flex: "1 1 auto",
+                    }}
+                />
             </div>
         </Slate>
     )

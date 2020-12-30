@@ -9,17 +9,23 @@
     margin-right: 5px;
     color: rgba(9, 30, 66, 0.25);
   }
+
 }
 
-.peak-learning-select-option {
-  display: flex!important;
-  justify-content: space-between!important;
-  align-items: center;
-  width: 100%;
+.peak-tag-select-dropdown {
+  z-index: 2147483646!important;
 
-  .peak-delete-learning-option {
-    &:hover {
-      color: $primary-blue;
+  .peak-learning-select-option {
+    display: flex!important;
+    justify-content: space-between!important;
+    align-items: center;
+    width: 100%;
+
+    .peak-delete-learning-option {
+      &:hover {
+        color: $primary-blue;
+      }
     }
   }
+
 }

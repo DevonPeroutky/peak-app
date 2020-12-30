@@ -19,7 +19,7 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     const currentPath = editor.selection?.anchor.path
     const reactEditor: ReactEditor = editor as ReactEditor
 
-    const isCollapsed = Range.isCollapsed(editor.selection)
+    const isCollapsed = editor.selection && Range.isCollapsed(editor.selection)
     const worthEvaluating: boolean = currentPath && isCollapsed && !event.metaKey
 
     if (worthEvaluating && event.key == "ArrowDown") {
