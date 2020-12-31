@@ -213,13 +213,9 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
 
     const onSelect = (displayLabel: LabeledValue) => {
         const existingTag = tags.find(t => t.title === (displayLabel.value))
-        console.log(`SELECTING`)
-        console.log(displayLabel)
         if (existingTag) {
-            console.log(`Adding this tag to selected`)
             setSelectedTags([...selected_tags, existingTag])
         } else {
-            console.log(`Creating and adding the tag`)
             const newColor: string = calculateNextColor(tags)
             const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setSelectedTags([...selected_tags, newTag])
@@ -230,9 +226,6 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         setSelectedTags(newTagList)
         setCurrentSearch("")
     }
-
-    console.log(`SELECTED TAGS`)
-    console.log(selected_tags)
 
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>

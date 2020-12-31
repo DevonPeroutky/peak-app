@@ -33,7 +33,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         })
 
         const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
-        createWebNoteRequest(userId, newWebNote).then(res => {
+        createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
             message.success("Saved your note!")
         }).then(res => {
             closeDrawer()

@@ -11,7 +11,7 @@ const authedAxiosClient = axios.create(defaultConfig);
 authedAxiosClient.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
         window.location.href = "/"
         localStorage.clear()
     }
