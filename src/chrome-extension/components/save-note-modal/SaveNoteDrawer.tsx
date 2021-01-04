@@ -8,13 +8,13 @@ import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 import { CheckOutlined } from "@ant-design/icons";
-import {createWebNoteRequest} from "../../../client/webNotes";
-import {futureCreatePeakTags} from "../../../client/tags";
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
+import {sendSubmitNoteMessage} from "../../content-script/content";
 
 export interface SaveNoteDrawerProps {
     userId: string
+    tabId: number
     pageTitle: string
     pageUrl: string
     favIconUrl: string
@@ -23,21 +23,36 @@ export interface SaveNoteDrawerProps {
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl } = props
+    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
 
-    const onSubmit = () => {
-        futureCreatePeakTags(userId, selectedTags).catch(res => {
-            message.warn("Failed to create the new tags. Let Devon know")
-        })
+    // const onSubmit = () => {
+    //     futureCreatePeakTags(userId, selectedTags).catch(res => {
+    //         message.warn("Failed to create the new tags. Let Devon know")
+    //     })
+    //
+    //     const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
+    //     createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
+    //         message.success("Saved your note!")
+    //     }).then(res => {
+    //         closeDrawer()
+    //     })
+    // }
 
-        const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
-        createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
-            message.success("Saved your note!")
-        }).then(res => {
-            closeDrawer()
-        })
+    const sendSubmitMessage = () => {
+        // console.log(`SUBMITTING THE MESSAGE`)
+        // const message = {
+        //     "userId": userId,
+        //     "selectedTags": selectedTags,
+        //     "body": body,
+        //     "pageTitle": pageTitle,
+        //     "pageUrl": pageUrl,
+        //     "favIconUrl": favIconUrl,
+        //     "tabId": tabId
+        // };
+        // chrome.tabs.sendMessage(tabId, message, closeDrawer);
+        sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawer)
     }
 
     return (
@@ -59,7 +74,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
                 <Divider/>
                 <div className="peak-note-drawer-footer">
                     <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
-                    <Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={onSubmit}>Save Note...</Button>
+                    <Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>
                 </div>
             </div>
         </Drawer>

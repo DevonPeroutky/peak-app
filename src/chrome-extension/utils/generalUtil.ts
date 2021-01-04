@@ -1,6 +1,5 @@
-import {loadTagsRequests} from "../../client/tags";
-import {PeakTag} from "../../redux/slices/tagSlice";
-import {MessageType, SavePageMessage} from "../constants/models";
+import {sendOpenSavePageDrawerMessage} from "./messageUtil";
+import {loadTags} from "./tagUtil";
 
 type Tab = chrome.tabs.Tab;
 export const onActiveTab = (callback: (t: Tab) => any) => {
@@ -33,22 +32,8 @@ export function saveToWiki(userId: string) {
     })
 };
 
-const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string) => {
-    const message: SavePageMessage = {
-        "message_type": MessageType.SaveToPeak,
-        "user_id": userId,
-        "tab": activeTab
-    };
-    chrome.tabs.sendMessage(activeTab.id, message);
-};
 
 export function resetState() {
     chrome.storage.sync.clear(() => console.log(`Reset the state`))
 }
 
-export function loadTags(userId: string) {
-    return loadTagsRequests(userId).then(res => {
-        const returned_tags: PeakTag[] = res.data.tags
-        chrome.storage.sync.set({ tags: returned_tags})
-    })
-}

@@ -68,7 +68,6 @@ const PeakJournal = (props: { }) => {
             setLoading(false)
             const thisIsBad = res as JournalEntry[]
             if (!thisIsBad) {
-                setJournalContent(emptyState)
                 return
             }
             const slateJournalNodes = thisIsBad.flatMap(convertJournalEntryToSlateNodes)
@@ -76,6 +75,10 @@ const PeakJournal = (props: { }) => {
 
             const [lastDateLoaded] = thisIsBad.map(je => je.entry_date).slice(-1)
             setLastLoadedDate(lastDateLoaded)
+
+            console.log(journalContent)
+            console.log(`Setting Journal Content`)
+            console.log(bodyContent)
 
             // @ts-ignore
             setJournalContent(bodyContent)

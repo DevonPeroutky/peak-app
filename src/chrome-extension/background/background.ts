@@ -1,12 +1,13 @@
 import axios from 'axios';
-import {ChromeUser} from "../constants/models";
+import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
-import {loadTags, resetState, saveToWiki} from "../utils/tabUtil";
+import {resetState, saveToWiki} from "../utils/generalUtil";
+import {submitNote} from "../utils/noteUtil";
 
 // TODO CHANGE THIS <-------
 var userId: string = "108703174669232421421";
-// THIS TO
+// var userId: string = "";
 
 // --------------------------------
 // Fetch User Auth Token
@@ -66,3 +67,29 @@ chrome.storage.sync.get("user", function (obj) {
     resetState()
 });
 chrome.commands.getAll(console.log);
+
+
+// --------------------------------
+// Messages
+// --------------------------------
+chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
+    console.log(`Received Message: ${request.message_type}`);
+    switch (request.message_type) {
+        case MessageType.PostFromBackgroundScript:
+            console.log(`POSTing to the backend!`)
+            console.log(request)
+            const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
+            submitNote(
+                submitNodeMessage.userId,
+                submitNodeMessage.selectedTags,
+                submitNodeMessage.pageTitle,
+                submitNodeMessage.favIconUrl,
+                submitNodeMessage.body,
+                submitNodeMessage.pageUrl
+            ).then(res => {
+                // TODO: IF THIS WORKS --> Remove the closeDrawer message
+                sendResponse({ closeDrawer: submitNodeMessage.tabId })
+            })
+            break;
+    }
+});

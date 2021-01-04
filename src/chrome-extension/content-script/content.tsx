@@ -6,8 +6,10 @@ import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
 import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteDrawer";
+import {ChromeExtMessage, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import Tab = chrome.tabs.Tab;
-import {ChromeExtMessage, MessageType, SavePageMessage} from "../constants/models";
+import {PeakTag} from "../../redux/slices/tagSlice";
+import {Node} from "slate";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -62,6 +64,20 @@ function removeDrawer(key: string) {
     })
 }
 
+export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[], closeDrawer: () => void) => {
+    const message: SubmitNoteMessage = {
+        "message_type": MessageType.PostFromBackgroundScript,
+        "userId": userId,
+        "selectedTags": selectedTags,
+        "body": body,
+        "pageTitle": pageTitle,
+        "pageUrl": pageUrl,
+        "favIconUrl": favIconUrl,
+        "tabId": tabId
+    };
+    chrome.runtime.sendMessage(message, closeDrawer);
+};
+
 // ---------------------------------------------------
 // Listen for Messages
 // ---------------------------------------------------
@@ -72,13 +88,18 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             console.log(`Opening the DRAWER!`)
             console.log(request)
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
-            chrome.storage.sync.get(function (data) {
-                console.log(data)
-                openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id)
-            });
+            openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id)
             break;
+        case MessageType.CloseDrawer:
+            console.log(`Closing the DRAWER`)
+            console.log(request)
+            const closeDrawerMessage: SavePageMessage = request as SavePageMessage;
+            removeDrawer(closeDrawerMessage.tab.id.toString())
     }
 });
 
 // console.log(`CHROME EXTENSION??? ${isChromeExtension}`)
 // store.dispatch(createPage({ pageId: CHROME_EXTENSION, newPage: INITIAL_CHROME_EXT_STATE}))
+
+
+
