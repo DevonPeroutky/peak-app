@@ -22,6 +22,10 @@ export interface ChromeExtMessage {
     message_type: MessageType
 }
 
+export interface MessageUserMessage extends ChromeExtMessage {
+    message: string
+}
+
 export interface SavePageMessage extends ChromeExtMessage {
     user_id: string,
     tab: Tab

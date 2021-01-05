@@ -1,5 +1,6 @@
-import {sendOpenSavePageDrawerMessage} from "./messageUtil";
+import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
 import {loadTags} from "./tagUtil";
+import {message} from "antd";
 
 type Tab = chrome.tabs.Tab;
 export const onActiveTab = (callback: (t: Tab) => any) => {
@@ -23,11 +24,13 @@ export const onActiveTab = (callback: (t: Tab) => any) => {
 export function saveToWiki(userId: string) {
     console.log(`Saving to wiki!`);
 
-    // TODO: MOVE THIS TO CONTENT SIDE OF THINGS
-    loadTags(userId).then(res => {
-        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
-            const activeTab: Tab = tabs[0];
+    // Needs to be done in background script so the origin is the chrome extension and not the page we are on.
+    chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+        const activeTab: Tab = tabs[0];
+        loadTags(userId).then(res => {
             sendOpenSavePageDrawerMessage(activeTab, userId)
+        }).catch(err => {
+            sendMessageToUser(activeTab.id, "Failed to load your tags. Tell Devon.")
         });
     })
 };

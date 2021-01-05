@@ -27,32 +27,19 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
 
-    // const onSubmit = () => {
-    //     futureCreatePeakTags(userId, selectedTags).catch(res => {
-    //         message.warn("Failed to create the new tags. Let Devon know")
-    //     })
-    //
-    //     const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
-    //     createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
-    //         message.success("Saved your note!")
-    //     }).then(res => {
-    //         closeDrawer()
-    //     })
-    // }
+    const closeDrawerOnSuccess = (response) => {
+        console.log(`THE RESPONSE`)
+        console.log(response)
+        if (!response) {
+            message.error("Unable to save your note. Tell Devon.")
+        } else {
+            message.success("Saved!")
+        }
+        closeDrawer()
+    }
 
     const sendSubmitMessage = () => {
-        // console.log(`SUBMITTING THE MESSAGE`)
-        // const message = {
-        //     "userId": userId,
-        //     "selectedTags": selectedTags,
-        //     "body": body,
-        //     "pageTitle": pageTitle,
-        //     "pageUrl": pageUrl,
-        //     "favIconUrl": favIconUrl,
-        //     "tabId": tabId
-        // };
-        // chrome.tabs.sendMessage(tabId, message, closeDrawer);
-        sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawer)
+        sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawerOnSuccess)
     }
 
     return (

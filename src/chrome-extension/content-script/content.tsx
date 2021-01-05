@@ -6,10 +6,17 @@ import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
 import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteDrawer";
-import {ChromeExtMessage, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
+import {
+    ChromeExtMessage,
+    MessageType,
+    MessageUserMessage,
+    SavePageMessage,
+    SubmitNoteMessage
+} from "../constants/models";
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
+import {message} from "antd";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -64,7 +71,7 @@ function removeDrawer(key: string) {
     })
 }
 
-export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[], closeDrawer: () => void) => {
+export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[], closeDrawer: (res) => void) => {
     const message: SubmitNoteMessage = {
         "message_type": MessageType.PostFromBackgroundScript,
         "userId": userId,
@@ -95,11 +102,13 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             console.log(request)
             const closeDrawerMessage: SavePageMessage = request as SavePageMessage;
             removeDrawer(closeDrawerMessage.tab.id.toString())
+            break;
+        case MessageType.Message_User:
+            console.log(`Message the user`)
+            console.log(request)
+            const messageUser: MessageUserMessage = request as MessageUserMessage;
+            message.error(messageUser.message)
     }
 });
-
-// console.log(`CHROME EXTENSION??? ${isChromeExtension}`)
-// store.dispatch(createPage({ pageId: CHROME_EXTENSION, newPage: INITIAL_CHROME_EXT_STATE}))
-
 
 

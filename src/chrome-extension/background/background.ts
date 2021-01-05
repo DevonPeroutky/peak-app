@@ -4,6 +4,7 @@ import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
 import {resetState, saveToWiki} from "../utils/generalUtil";
 import {submitNote} from "../utils/noteUtil";
+import {sendMessageToUser} from "../utils/messageUtil";
 
 // TODO CHANGE THIS <-------
 var userId: string = "108703174669232421421";
@@ -88,7 +89,11 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 submitNodeMessage.pageUrl
             ).then(res => {
                 // TODO: IF THIS WORKS --> Remove the closeDrawer message
+                console.log(`SENDING A VALID RESPONSE!!!`)
+                // HOW TO SEND THIS ASYNC??
                 sendResponse({ closeDrawer: submitNodeMessage.tabId })
+            }).catch(err => {
+                sendMessageToUser(submitNodeMessage.tabId, "Failed to save your note. Tell Devon.")
             })
             break;
     }
