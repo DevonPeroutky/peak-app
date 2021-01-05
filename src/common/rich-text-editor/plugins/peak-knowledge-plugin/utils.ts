@@ -1,9 +1,9 @@
-import {Editor, Node, Range, Transforms} from "slate";
-import {previous} from "../../utils/base-utils";
-import {ReactEditor} from "slate-react";
-import {forceFocusToNode} from "../../utils/external-editor-utils";
-import {ELEMENT_LI, isSelectionAtBlockStart} from "@udecode/slate-plugins";
-import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./constants";
+import { Editor, Node, Range, Transforms  } from "slate";
+import { previous } from "../../utils/base-utils";
+import { ReactEditor } from "slate-react";
+import { forceFocusToNode } from "../../utils/external-editor-utils";
+import { ELEMENT_LI } from "@udecode/slate-plugins";
+import { PEAK_KNOWLEDGE_TYPES } from "./constants";
 
 // TODO MOVE ALL OF THIS TO KNOWLEDGE-PLUGIN!
 
@@ -12,6 +12,8 @@ export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any)
     const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
     const [currParent, currParentPath] = Editor.parent(editor, currPath)
     const [lastChildNode] = currParent.children.slice(-1)
+    console.log(`CURR PARENT`)
+    console.log(currParent)
     return isPeakKnowledgeNoteType(currParent) && lastChildNode.id === currNode.id
 }
 
@@ -25,8 +27,10 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     if (worthEvaluating && event.key == "ArrowDown") {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
+        console.log(`GOING DOWN`)
 
         if (isAtLastLineOfPeakKnowledgeNode(editor)) {
+            console.log(`WE ARE AT END OF THE KNOWLEDGE NODE`)
             event.preventDefault();
             forceFocusToNode(currParent)
         }
@@ -35,10 +39,12 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
-        console.log(`GOING DOWN`)
+        console.log(`GOING UP`)
 
         const previousNode: Node | undefined = previous(reactEditor)
+        console.log(previousNode)
         if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakKnowledgeNoteType(previousNode)) {
+            console.log(`WE ARE DIRECTLY BELOW A KNOWLEDGE NODE`)
             event.preventDefault();
             const previousNodePath: number[] = ReactEditor.findPath(reactEditor, previousNode)
             Transforms.select(editor, previousNodePath)
@@ -48,5 +54,5 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
 }
 
 export function isPeakKnowledgeNoteType(n: Node): boolean {
-    return [PEAK_LEARNING, ELEMENT_PEAK_BOOK].includes(n.type as string)
+    return PEAK_KNOWLEDGE_TYPES.includes(n.type as string)
 }

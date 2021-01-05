@@ -13,7 +13,7 @@ export function createWebNoteRequest(userId: string, web_note: { title: string, 
             body: web_note.body,
             url: web_note.url,
             icon_url: web_note.favIconUrl,
-            note_type: ELEMENT_WEB_NOTE
+            note_type: ELEMENT_WEB_NOTE,
         },
         "entry_date": currentDate
     })

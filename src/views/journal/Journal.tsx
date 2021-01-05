@@ -76,10 +76,6 @@ const PeakJournal = (props: { }) => {
             const [lastDateLoaded] = thisIsBad.map(je => je.entry_date).slice(-1)
             setLastLoadedDate(lastDateLoaded)
 
-            console.log(journalContent)
-            console.log(`Setting Journal Content`)
-            console.log(bodyContent)
-
             // @ts-ignore
             setJournalContent(bodyContent)
             setSelection(editor)
@@ -239,6 +235,9 @@ const Journal = (props: InternalJournalProps) => {
         search,
         onAddNodeContent
     } = props
+
+    console.log(`Journal Content`)
+    console.log(journalContent)
 
     return (
         <Slate

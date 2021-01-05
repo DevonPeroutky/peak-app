@@ -28,6 +28,8 @@ export function previous(editor: ReactEditor): Node | undefined {
         const [curr, currPath] = Editor.above(editor)
         const currParent = Node.parent(editor, currPath)
 
+        console.log(`PrevParent`)
+        console.log(prevParent)
         previousNode = (prevParent && (isPeakKnowledgeNoteType(prevParent) && !isPeakKnowledgeNoteType(currParent))) ? prevParent : prev
     }
     return previousNode
@@ -68,8 +70,3 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
 export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
     return (editor: Editor) => insertCustomBlockElement(editor, nodeType, nodeProps)
 }
-
-// TODO MOVE TO KNOWLEDGE-PLUGIN!
-// export function isPeakKnowledgeNoteType(n: Node): boolean {
-//     return [PEAK_LEARNING, ELEMENT_PEAK_BOOK].includes(n.type as string)
-// }
