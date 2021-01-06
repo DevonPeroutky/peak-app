@@ -28,7 +28,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
-                body: [{ children: [empty_title, empty_paragraph] }],
+                body: [{ children: [empty_title, empty_paragraph]}],
                 topic_id: props.topic.id,
                 title: "",
                 privacy_level: "private",

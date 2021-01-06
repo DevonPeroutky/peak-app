@@ -93,7 +93,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     }
 
     console.log(`BROOO`)
-    console.log(wikiPageContent)
+    console.log(JSON.stringify(wikiPageContent))
 
     return (
         <Slate

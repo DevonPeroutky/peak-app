@@ -125,6 +125,7 @@ const baseDraggableComponentOptions = [
     defaultOptions.code_block,
     defaultOptions.learning,
     defaultOptions.peak_book_note,
+    defaultOptions.peak_web_note,
     defaultOptions.p
 ]
 const baseNormalizers = [
