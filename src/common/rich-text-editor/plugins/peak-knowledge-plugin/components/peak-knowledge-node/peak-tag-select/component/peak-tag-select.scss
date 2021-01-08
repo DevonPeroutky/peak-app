@@ -3,11 +3,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
+  width: 100%;
+  height: 32px;
 
   .peak-tag-icon {
     margin-right: 5px;
     color: rgba(9, 30, 66, 0.25);
+  }
+
+  .ant-select-selector {
+    position: relative!important;
+    padding-left: 0!important;
+    //height: 24px!important;
+    //line-height: 24px!important;
+
+    .ant-select-selection-search {
+      margin-left: 0;
+
+      input {
+        outline: none;
+        border: none;
+        padding-left: 0px;
+        box-shadow: none;
+      }
+    }
+
+    .ant-select-selection-placeholder {
+      display: flex;
+      color: $placeholder-text-color!important;
+      left: 0;
+    }
   }
 
 }

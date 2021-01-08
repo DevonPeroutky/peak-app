@@ -227,6 +227,15 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         setCurrentSearch("")
     }
 
+    const onKeyDown = (event) => {
+        if (open && event.key === "Escape") {
+            event.stopPropagation()
+            event.preventDefault()
+            setCurrentSearch('')
+            setDropdownState(false)
+        }
+    }
+
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>
             <Select
@@ -251,7 +260,8 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 })}
                 labelInValue={true}
                 bordered={false}
-                placeholder="Tag this information for later"
+                onInputKeyDown={onKeyDown}
+                placeholder="Tab to start selecting tags"
                 onSelect={onSelect}
                 dropdownClassName={"peak-tag-select-dropdown"}
                 onDeselect={onDeselect}

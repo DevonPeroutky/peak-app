@@ -47,7 +47,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             title={<PageTitle {...props}/>}
             className="peak-note-drawer"
             placement="right"
-            closable={true}
+            closable={false}
             onClose={closeDrawer}
             keyboard={true}
             width={"300px"}
@@ -60,7 +60,9 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
                 <SaveNoteEditor content={body} setContent={setBody}/>
                 <Divider/>
                 <div className="peak-note-drawer-footer">
-                    <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+                    <div className="peak-note-footer-header-container">
+                        <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+                    </div>
                     <Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>
                 </div>
             </div>
