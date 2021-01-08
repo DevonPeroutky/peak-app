@@ -30,6 +30,9 @@ $margin-top: 20px;
     &.learning {
       color: $primary-green;
     }
+    &.web {
+      color: $primary-red;
+    }
   }
 
   &.empty::after {

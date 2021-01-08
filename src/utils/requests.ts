@@ -34,9 +34,6 @@ export function loadAllUserAccounts(userId: string, peakUserId: string) {
         const userAccounts: DisplayPeaker[] = res.data.users as DisplayPeaker[]
         store.dispatch(setUserAccounts(userAccounts))
         return userAccounts
-    }).catch(err => {
-        console.log(`DID NOT successfully load the accounts for user: ${userId}`)
-        console.log(err)
     })
 }
 export function useUserAccounts() {

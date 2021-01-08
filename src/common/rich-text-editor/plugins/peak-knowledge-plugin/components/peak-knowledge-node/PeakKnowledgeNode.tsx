@@ -6,8 +6,9 @@ import {PeakTag} from "../../../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../../../utils/strings";
-import {PEAK_LEARNING} from "../../constants";
+import {ELEMENT_WEB_NOTE, PEAK_LEARNING} from "../../constants";
 import "./peak-knowledge-node.scss"
+const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const { element } = props
@@ -33,6 +34,13 @@ const KnowledgeTitleRow = (props: {elementType: string, label: string | undefine
                 <BulbOutlined className={"learning-title-row-icon"}/>
                 <span>Learning</span>
            </div>
+        )
+    } else if (elementType === ELEMENT_WEB_NOTE) {
+        return (
+            <div className={"peak-knowledge-title-row web"} contentEditable={false}>
+                <img src={bookmark} className={"learning-title-row-icon"}/>
+                <span>{capitalize_and_truncate(label)}</span>
+            </div>
         )
     } else {
         return (

@@ -25,6 +25,9 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
             store.dispatch(load_active_user(userSpecificAppState))
             writeUserAppStateToLocalStorage(userSpecificAppState.currentUser.id, userSpecificAppState)
         })
+    }).catch(err => {
+        console.log(`DID NOT successfully load the accounts for user: ${ogUserId}`)
+        console.log(err)
     })
 }
 
