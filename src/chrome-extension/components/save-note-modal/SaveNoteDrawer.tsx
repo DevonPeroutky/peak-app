@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
 import 'antd/lib/divider/style/index.css';
+import 'antd/dist/antd.css';
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
