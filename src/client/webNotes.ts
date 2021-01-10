@@ -4,7 +4,8 @@ import {Node} from "slate";
 import {PeakTag} from "../redux/slices/tagSlice";
 import {getCurrentFormattedDate} from "../utils/time";
 
-export function createWebNoteRequest(userId: string, web_note: { title: string, url: string, favIconUrl: string, body: Node[]}, selected_tags: PeakTag[]) {
+// TODO: APPEND TAGS TO BODY
+export function createWebNoteRequest(userId: string, web_note: { title: string, url: string, favIconUrl: string, body: Node[] }, selected_tags: PeakTag[]) {
     const currentDate = getCurrentFormattedDate()
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
         "note": {

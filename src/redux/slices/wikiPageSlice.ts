@@ -59,7 +59,7 @@ export const INITIAL_PAGE_STATE: PeakWikiPage = {
     editorState: INITIAL_EDITING_STATE,
     body: [
         {
-            children: [{ type: ELEMENT_PARAGRAPH, children: [{ text: ''}] }],
+            children: [{ type: ELEMENT_PARAGRAPH, children: [{ text: ''}], id: 4}],
         }
     ],
     title: '',

@@ -17,12 +17,13 @@ import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
-import {Node} from "slate";
+import {Editor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
-import {sendSubmitNoteMessage} from "../../content-script/content";
+import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 import {SUBMITTING_STATE} from "../../constants/constants";
+import {edit} from "ace-builds";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -31,32 +32,63 @@ export interface SaveNoteDrawerProps {
     pageUrl: string
     favIconUrl: string
     tags: PeakTag[]
+    nodesToAppend: Node[]
     visible: boolean
     submittingState: SUBMITTING_STATE
     shouldSubmit: boolean
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState } = props
+    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState, nodesToAppend } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
+    const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
     const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
+    // const isEmpty = body.children[0].text === '' && body.node.children.length === 1
+
+    console.log(`PAGE TITLE: ${editedPageTitle} (${pageTitle})`)
 
     useEffect(() => {
         if (shouldSubmit) {
+            console.log(`Submitting!!!`)
+            console.log(selectedTags)
+            console.log(editedPageTitle)
             setCurrentSubmitState("submitting")
-            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body)
+            sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
 
     useEffect(() => {
-        console.log(`Setting stage from: ${currentSubmitState} --> ${submittingState}`)
+        console.log(`SETTING THE PAGE TITLE (${editedPageTitle}) --> (${pageTitle})`)
+        setPageTitle(pageTitle)
+    }, [pageTitle])
+
+    useEffect(() => {
         setCurrentSubmitState(submittingState)
     }, [submittingState])
 
+    // useEffect(() => {
+    //     console.log(`MAybe append BODY?`)
+    //     if (nodesToAppend) {
+    //         console.log(`Appending nodes to BODY!`)
+    //         console.log(nodesToAppend)
+    //         console.log(body)
+    //         console.log(JSON.stringify(body))
+    //         console.log(JSON.stringify(INITIAL_PAGE_STATE.body))
+    //         console.log(JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body))
+    //         const newBody = (JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)) ? nodesToAppend : body.concat(nodesToAppend)
+    //         setBody(newBody)
+    //     }
+    // }, [nodesToAppend])
+
+    const updateThatBody = (newBod: Node[]) => {
+        setBody(newBod)
+        syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
+    }
+
     return (
         <Drawer
-            title={<PageTitle {...props}/>}
+            title={<PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>}
             className="peak-note-drawer"
             placement="right"
             closable={false}
@@ -70,14 +102,13 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         >
             <>
                 <div className="peak-note-drawer-body">
-                    <SaveNoteEditor content={body} setContent={setBody}/>
+                    <SaveNoteEditor content={body} setContent={updateThatBody}/>
                     <div className="peak-note-drawer-tag-section">
                         <h2 className="peak-note-drawer-header">Tags</h2>
                         <div className="peak-note-tag-section-container">
                             <TagsOutlined/>
                             <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
                         </div>
-                        {/*<Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>*/}
                     </div>
                 </div>
                 <PeakDrawerFooter submittingState={currentSubmitState}/>
@@ -86,18 +117,22 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     )
 }
 
-const PageTitle = (props: {pageTitle: string, favIconUrl: string, closeDrawer: () => void}) => {
-    const { pageTitle, favIconUrl, closeDrawer } = props
+const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle: string) => void, favIconUrl: string, closeDrawer: () => void}) => {
+    const { editedPageTitle, setPageTitle, favIconUrl, closeDrawer } = props
     const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPageTitle(e.target.value)
+    }
+
     return (
         <div className={"page-peak-note-title-container"}>
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
-            <Input className={"page-peak-title-input"} bordered={false} defaultValue={pageTitle}/>
+            <Input className={"page-peak-title-input"} bordered={false} value={editedPageTitle} onChange={onChange}/>
             <SkippableCloseIcon closeDrawer={closeDrawer} />
         </div>
     )
 }
-
 
 const SkippableCloseIcon = (props: { closeDrawer: () => void}) => {
     const { closeDrawer }  = props

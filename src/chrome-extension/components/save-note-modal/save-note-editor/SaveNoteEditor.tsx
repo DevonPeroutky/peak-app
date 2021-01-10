@@ -20,6 +20,9 @@ export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: 
         }
     }
 
+    console.log(`The CONTENT`)
+    console.log(content)
+
     return (
         <Slate
             editor={editor}

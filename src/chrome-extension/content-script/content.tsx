@@ -17,8 +17,9 @@ import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {message} from "antd";
-import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {ACTIVE_DRAWER_STATE_KEY, ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
+import {addSelectionAsBlockQuote} from "../utils/editorUtils";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -65,8 +66,8 @@ function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
         ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     }
 
-    chrome.storage.sync.get(ACTIVE_TAB_KEY, (data) => {
-        chrome.storage.sync.set({"activeTab": currTab.id}, () => {
+    chrome.storage.sync.get([ACTIVE_TAB_KEY], (data) => {
+        chrome.storage.sync.set({[ACTIVE_TAB_KEY]: currTab.id}, () => {
             const activeTabId: number = data[ACTIVE_TAB_KEY]
             const alreadyOpen: boolean = currTab.id === activeTabId
             createDrawer(activeTabId, alreadyOpen)
@@ -114,7 +115,30 @@ function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
             })
         })
     })
+}
 
+function rerenderDrawer(nodesToAppend: Node[]) {
+    chrome.storage.sync.get(null, data => {
+        const state: SubmitNoteMessage = data[ACTIVE_DRAWER_STATE_KEY]
+        const tags: PeakTag[] = data["tags"]
+
+        const props: SaveNoteDrawerProps = {
+            userId: state.userId,
+            pageUrl: state.pageUrl,
+            favIconUrl: state.favIconUrl,
+            pageTitle: state.pageTitle,
+            tags: tags,
+            visible: true,
+            tabId: state.tabId,
+            shouldSubmit: false,
+            submittingState: "submitted",
+            nodesToAppend: nodesToAppend,
+            closeDrawer: () => removeDrawer(),
+        } as SaveNoteDrawerProps
+
+        const app = document.getElementById('my-extension-root')
+        ReactDOM.render(<SaveNoteDrawer {...props} />, app)
+    })
 }
 
 export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
@@ -129,6 +153,20 @@ export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTag
         "tabId": tabId
     };
     chrome.runtime.sendMessage(message);
+};
+
+export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
+    const message: SubmitNoteMessage = {
+        "message_type": MessageType.PostFromBackgroundScript,
+        "userId": userId,
+        "selectedTags": selectedTags,
+        "body": body,
+        "pageTitle": pageTitle,
+        "pageUrl": pageUrl,
+        "favIconUrl": favIconUrl,
+        "tabId": tabId
+    };
+    chrome.storage.sync.set({ [ACTIVE_DRAWER_STATE_KEY]: message})
 };
 
 // ---------------------------------------------------
@@ -172,12 +210,17 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     }
 });
 
+var body = ""
 document.addEventListener('mouseup', (event) => {
     const selection = document.getSelection()
     if (!selection.isCollapsed) {
         const text = window.getSelection().toString();
         console.log(`Submit this text`)
         console.log(text)
+        const nodes: Node[] = addSelectionAsBlockQuote(text)
+        rerenderDrawer(nodes)
+    } else {
+        body = ""
     }
 });
 
