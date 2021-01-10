@@ -70,7 +70,6 @@ chrome.storage.sync.get("user", function (obj) {
 });
 chrome.commands.getAll(console.log);
 
-
 // --------------------------------
 // Messages
 // --------------------------------
@@ -91,12 +90,10 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             ).then(res => {
                 // TODO: IF THIS WORKS --> Remove the closeDrawer message
                 console.log(`SENDING A VALID RESPONSE!!!`)
-                // HOW TO SEND THIS ASYNC??
-                sendResponse({ closeDrawer: submitNodeMessage.tabId })
+                sendMessageToUser(submitNodeMessage.tabId, "success", "Saved your note")
             }).catch(err => {
                 console.log(`I HAVE TO FUCKING CATCH?!??!`)
-                sendMessageToUser(submitNodeMessage.tabId, "Failed to save your note. Tell Devon.")
+                sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon.")
             })
-            break;
     }
 });

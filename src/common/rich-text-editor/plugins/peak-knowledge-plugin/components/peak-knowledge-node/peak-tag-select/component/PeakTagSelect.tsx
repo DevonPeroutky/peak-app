@@ -266,7 +266,8 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 onSelect={onSelect}
                 dropdownClassName={"peak-tag-select-dropdown"}
                 onDeselect={onDeselect}
-                notFoundContent={<Empty description={"No more tags. Create more or save the note!"}/>}
+                // notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
+                notFoundContent={<span>No more tags. Press 'Escape' to exit with arrow keys</span>}
                 tagRender={tagRender}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (

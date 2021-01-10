@@ -28,6 +28,10 @@ chrome.storage.sync.get(function (data) {
     app.id = "my-extension-root";
     document.body.appendChild(app);
     ReactDOM.render(<SaveNoteDrawer {...data as SaveNoteDrawerProps} />, app)
+
+    chrome.storage.sync.remove([ACTIVE_TAB_KEY], () => {
+        console.log(`Cleared the ACTIVE_TAB_KEY`)
+    })
 });
 
 // Debugging state changes
@@ -51,6 +55,7 @@ function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
             pageTitle: currTab.title,
             tags: tags,
             visible: true,
+            tabId: currTab.id,
             shouldSubmit: shouldSubmit,
             closeDrawer: () => removeDrawer(),
         } as SaveNoteDrawerProps
@@ -116,7 +121,21 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             console.log(`Message the user`)
             console.log(request)
             const messageUser: MessageUserMessage = request as MessageUserMessage;
-            message.error(messageUser.message)
+
+            switch (messageUser.message_theme) {
+                case "error":
+                    message.error(messageUser.message)
+                    break;
+                case "info":
+                    message.info(messageUser.message)
+                    break;
+                case "success":
+                    message.success(messageUser.message)
+                    break;
+                case "warning":
+                    message.warning(messageUser.message)
+                    break;
+            }
     }
 });
 

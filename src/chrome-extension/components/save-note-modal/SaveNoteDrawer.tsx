@@ -11,7 +11,7 @@ import 'antd/lib/menu/style/index.css';
 import 'antd/lib/icon/style/index.css';
 import 'antd/lib/tag/style/index.css';
 import 'antd/lib/auto-complete/style/index.css';
-import 'antd/lib/empty/style/css';
+// import 'antd/lib/empty/style/css'; This fuck up the styling for everything
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
@@ -39,22 +39,10 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
 
     useEffect(() => {
-        console.log(`SUBmitting?? ${shouldSubmit}`)
         if (shouldSubmit) {
-            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawerOnSuccess)
+            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawer)
         }
     }, [shouldSubmit])
-
-    const closeDrawerOnSuccess = (response) => {
-        console.log(`THE RESPONSE`)
-        console.log(response)
-        if (!response) {
-            message.error("Unable to save your note. Tell Devon.")
-        } else {
-            message.success("Saved!")
-        }
-        closeDrawer()
-    }
 
     return (
         <Drawer

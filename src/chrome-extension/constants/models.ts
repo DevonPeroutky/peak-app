@@ -1,6 +1,7 @@
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
+import {ANT_MESSAGE_THEME} from "./constants";
 
 export interface ChromeUser {
     id: string
@@ -24,6 +25,7 @@ export interface ChromeExtMessage {
 
 export interface MessageUserMessage extends ChromeExtMessage {
     message: string
+    message_theme: ANT_MESSAGE_THEME
 }
 
 export interface SavePageMessage extends ChromeExtMessage {
