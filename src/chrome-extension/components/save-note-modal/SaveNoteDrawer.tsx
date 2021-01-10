@@ -19,7 +19,7 @@ import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowled
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage} from "../../content-script/content";
-import {TagsOutlined} from "@ant-design/icons/lib";
+import {CloseCircleOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 
 export interface SaveNoteDrawerProps {
@@ -87,13 +87,25 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     )
 }
 
-const PageTitle = (props: {pageTitle: string, favIconUrl: string}) => {
-    const { pageTitle, favIconUrl } = props
+const PageTitle = (props: {pageTitle: string, favIconUrl: string, closeDrawer: () => void}) => {
+    const { pageTitle, favIconUrl, closeDrawer } = props
     const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
     return (
         <div className={"page-peak-note-title-container"}>
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input className={"page-peak-title-input"} bordered={false} defaultValue={pageTitle}/>
+            <SkippableCloseIcon closeDrawer={closeDrawer} />
         </div>
+    )
+}
+
+
+const SkippableCloseIcon = (props: { closeDrawer: () => void}) => {
+    const { closeDrawer }  = props
+    const baseUrl = chrome.runtime.getURL("../../../assets/icons/gray-close.svg")
+    return (
+        <>
+            <img className={"peak-close-icon"} src={baseUrl} onClick={closeDrawer}/>
+        </>
     )
 }

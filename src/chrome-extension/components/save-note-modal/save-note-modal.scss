@@ -36,6 +36,14 @@ $drawer-title-height: 45px;
         padding-top: 4px!important;
         padding-bottom: 4px!important;
       }
+
+      .peak-close-icon {
+        cursor: pointer;
+        position: absolute;
+        width: 16px;
+        right: 5px;
+        top: 5px;
+      }
     }
   }
 
