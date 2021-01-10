@@ -64,7 +64,7 @@ chrome.commands.onCommand.addListener(function(command) {
 // --------------------------------
 chrome.storage.sync.get("user", function (obj) {
     console.log(obj);
-    console.log(`The user: ${obj.user.id}`);
+    // console.log(`The user: ${obj.user.id}`);
     resetState()
 });
 chrome.commands.getAll(console.log);

@@ -1,17 +1,26 @@
-import {Button, Divider, Drawer, Input, message} from "antd";
+import {Drawer, Input, message} from "antd";
 import React, {useState} from "react";
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
 import 'antd/lib/divider/style/index.css';
-import 'antd/dist/antd.css';
+import 'antd/lib/select/style/index.css';
+import 'antd/lib/input/style/index.css';
+import 'antd/lib/dropdown/style/index.css';
+import 'antd/lib/list/style/index.css';
+import 'antd/lib/menu/style/index.css';
+import 'antd/lib/icon/style/index.css';
+import 'antd/lib/tag/style/index.css';
+import 'antd/lib/auto-complete/style/index.css';
+import 'antd/lib/empty/style/css';
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
-import { CheckOutlined } from "@ant-design/icons";
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage} from "../../content-script/content";
+import {TagsOutlined} from "@ant-design/icons/lib";
+import {PeakLogo} from "../../../common/logo/PeakLogo";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -57,16 +66,23 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             destroyOnClose={true}
             visible={visible || false}
         >
-            <div className="peak-note-drawer-body">
-                <SaveNoteEditor content={body} setContent={setBody}/>
-                <Divider/>
-                <div className="peak-note-drawer-footer">
-                    <div className="peak-note-footer-header-container">
-                        <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+            <>
+                <div className="peak-note-drawer-body">
+                    <SaveNoteEditor content={body} setContent={setBody}/>
+                    <div className="peak-note-drawer-tag-section">
+                        <h2 className="peak-note-drawer-header">Tags</h2>
+                        <div className="peak-note-tag-section-container">
+                            <TagsOutlined/>
+                            <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+                        </div>
+                        {/*<Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>*/}
                     </div>
-                    <Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>
                 </div>
-            </div>
+                <div className={"peak-note-drawer-footer"}>
+                    <PeakLogo/>
+                    <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+                </div>
+            </>
         </Drawer>
     )
 }

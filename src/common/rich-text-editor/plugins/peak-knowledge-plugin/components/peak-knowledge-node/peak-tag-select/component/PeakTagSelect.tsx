@@ -231,6 +231,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         if (open && event.key === "Escape") {
             event.stopPropagation()
             event.preventDefault()
+            console.log(`CLOSING THE SHOP`)
             setCurrentSearch('')
             setDropdownState(false)
         }
@@ -265,7 +266,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 onSelect={onSelect}
                 dropdownClassName={"peak-tag-select-dropdown"}
                 onDeselect={onDeselect}
-                notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
+                notFoundContent={<Empty description={"No more tags. Create more or save the note!"}/>}
                 tagRender={tagRender}
                 style={{ width: '100%' }}>
                 {renderedTagList.map(tag => (
