@@ -172,4 +172,12 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     }
 });
 
+document.addEventListener('mouseup', (event) => {
+    const selection = document.getSelection()
+    if (!selection.isCollapsed) {
+        const text = window.getSelection().toString();
+        console.log(`Submit this text`)
+        console.log(text)
+    }
+});
 
