@@ -1,4 +1,4 @@
-import {Drawer, Input, message} from "antd";
+import {Drawer, Input, message, Spin} from "antd";
 import React, {useEffect, useState} from "react";
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
@@ -11,6 +11,7 @@ import 'antd/lib/menu/style/index.css';
 import 'antd/lib/icon/style/index.css';
 import 'antd/lib/tag/style/index.css';
 import 'antd/lib/auto-complete/style/index.css';
+import 'antd/lib/spin/style/index.css';
 // import 'antd/lib/empty/style/css'; This fuck up the styling for everything
 import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
@@ -19,8 +20,9 @@ import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowled
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage} from "../../content-script/content";
-import {TagsOutlined} from "@ant-design/icons/lib";
+import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
+import {SUBMITTING_STATE} from "../../constants/constants";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -30,19 +32,27 @@ export interface SaveNoteDrawerProps {
     favIconUrl: string
     tags: PeakTag[]
     visible: boolean
+    submittingState: SUBMITTING_STATE
     shouldSubmit: boolean
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit } = props
+    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+    const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
 
     useEffect(() => {
         if (shouldSubmit) {
-            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawer)
+            setCurrentSubmitState("submitting")
+            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
+
+    useEffect(() => {
+        console.log(`Setting stage from: ${currentSubmitState} --> ${submittingState}`)
+        setCurrentSubmitState(submittingState)
+    }, [submittingState])
 
     return (
         <Drawer
@@ -70,10 +80,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
                         {/*<Button type={"primary"} shape={"round"} icon={<CheckOutlined/>} onClick={sendSubmitMessage}>Save Note...</Button>*/}
                     </div>
                 </div>
-                <div className={"peak-note-drawer-footer"}>
-                    <PeakLogo/>
-                    <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
-                </div>
+                <PeakDrawerFooter submittingState={currentSubmitState}/>
             </>
         </Drawer>
     )
@@ -100,4 +107,30 @@ const SkippableCloseIcon = (props: { closeDrawer: () => void}) => {
             <img className={"peak-close-icon"} src={baseUrl} onClick={closeDrawer}/>
         </>
     )
+}
+
+const PeakDrawerFooter = (props: {submittingState: SUBMITTING_STATE}) => {
+    const { submittingState } = props
+
+    switch (submittingState) {
+        case "submitting":
+            return (
+                <div className={"peak-note-drawer-footer"}>
+                    <span className={"submitting result-span"}><Spin className={"peak-spinner"}/> Saving</span>
+                </div>
+            )
+        case "submitted":
+            return (
+                <div className={"peak-note-drawer-footer"}>
+                    <span className={"success result-span"}><CheckOutlined className={"saved-check"}/> Saved</span>
+                </div>
+            )
+        default:
+            return (
+                <div className={"peak-note-drawer-footer"}>
+                    <PeakLogo/>
+                    <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+                </div>
+            )
+    }
 }

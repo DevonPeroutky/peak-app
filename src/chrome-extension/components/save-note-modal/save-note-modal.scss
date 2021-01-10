@@ -101,6 +101,25 @@ $drawer-title-height: 45px;
         horiz-align: center;
         text-align: center;
       }
+
+      .result-span {
+
+        &.success {
+          color: $primary-green;
+
+          .saved-check {
+            margin-right: 14px;
+          }
+        }
+
+        &.submitting {
+          color: $primary-blue;
+        }
+
+        .peak-spinner {
+          margin-right: 14px;
+        }
+      }
     }
   }
 }

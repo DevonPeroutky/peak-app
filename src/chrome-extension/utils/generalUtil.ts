@@ -35,7 +35,7 @@ export function saveToWiki(userId: string) {
                 sendOpenSavePageDrawerMessage(activeTab, userId, tags)
             })
         }).catch(err => {
-            sendMessageToUser(activeTab.id, "Failed to load your tags. Tell Devon.")
+            sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
         });
     })
 };
@@ -45,3 +45,6 @@ export function resetState() {
     chrome.storage.sync.clear(() => console.log(`Reset the state`))
 }
 
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

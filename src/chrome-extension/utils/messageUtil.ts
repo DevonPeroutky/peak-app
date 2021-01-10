@@ -1,4 +1,8 @@
-import {ChromeExtMessage, MessageType, MessageUserMessage, SavePageMessage} from "../constants/models";
+import {
+    MessageType,
+    MessageUserMessage,
+    SavePageMessage, SubmitNoteMessage
+} from "../constants/models";
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {ANT_MESSAGE_THEME} from "../constants/constants";
@@ -13,25 +17,12 @@ export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, ta
     chrome.tabs.sendMessage(activeTab.id, message);
 };
 
-// export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
-//     const message: SubmitNoteMessage = {
-//         "message_type": MessageType.PostFromBackgroundScript,
-//         "userId": userId,
-//         "selectedTags": selectedTags,
-//         "body": body,
-//         "pageTitle": pageTitle,
-//         "pageUrl": pageUrl,
-//         "favIconUrl": favIconUrl,
-//         "tabId": tabId
-//     };
-//     chrome.tabs.sendMessage(tabId, message);
-// };
-
-export const sendClosePageDrawerMessage = (activeTab: Tab, userId: string) => {
-    const message: ChromeExtMessage = {
-        "message_type": MessageType.CloseDrawer,
+export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage) => {
+    const message: SubmitNoteMessage = {
+        ...ogMessage,
+        "message_type": MessageType.SuccessfullySavedNote
     };
-    chrome.tabs.sendMessage(activeTab.id, message);
+    chrome.tabs.sendMessage(ogMessage.tabId, message);
 };
 
 export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageBody: string) => {

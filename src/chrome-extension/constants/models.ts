@@ -14,7 +14,7 @@ export enum MessageType {
     Message_User,
     Notify_User,
     SaveToPeak,
-    CloseDrawer,
+    SuccessfullySavedNote,
     PostFromBackgroundScript,
     AddToReadingList
 }
@@ -43,3 +43,4 @@ export interface SubmitNoteMessage extends ChromeExtMessage {
     body: Node[],
     tabId: number
 }
+

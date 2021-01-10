@@ -18,6 +18,7 @@ import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {message} from "antd";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {sleep} from "../utils/generalUtil";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -65,15 +66,16 @@ function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
     }
 
     chrome.storage.sync.get(ACTIVE_TAB_KEY, (data) => {
-        console.log(`Current Tab ID: ${currTab.id}`)
-        console.log(`WHAT IS IN STORAGE`)
-        console.log(data)
         chrome.storage.sync.set({"activeTab": currTab.id}, () => {
             const activeTabId: number = data[ACTIVE_TAB_KEY]
-            console.log(`TAGS: `)
-            console.log(tags)
             const alreadyOpen: boolean = currTab.id === activeTabId
             createDrawer(activeTabId, alreadyOpen)
+        })
+    })
+
+    chrome.storage.sync.set({"tags": tags}, () => {
+        chrome.storage.sync.get(null, data => {
+            console.log(data)
         })
     })
 
@@ -86,7 +88,36 @@ function removeDrawer() {
     })
 }
 
-export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[], closeDrawer: (res) => void) => {
+function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
+    chrome.storage.sync.get(["tags"], data => {
+        const tags: PeakTag[] = data["tags"]
+
+        const props: SaveNoteDrawerProps = {
+            userId: message.userId,
+            pageUrl: message.pageUrl,
+            favIconUrl: message.favIconUrl,
+            pageTitle: message.pageTitle,
+            tags: tags,
+            visible: true,
+            tabId: message.tabId,
+            shouldSubmit: false,
+            submittingState: "submitted",
+            closeDrawer: () => removeDrawer(),
+        } as SaveNoteDrawerProps
+
+        sleep(500).then(() => {
+            const app = document.getElementById('my-extension-root')
+            ReactDOM.render(<SaveNoteDrawer {...props} />, app)
+
+            sleep(500).then(() => {
+                removeDrawer()
+            })
+        })
+    })
+
+}
+
+export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
     const message: SubmitNoteMessage = {
         "message_type": MessageType.PostFromBackgroundScript,
         "userId": userId,
@@ -97,7 +128,7 @@ export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTag
         "favIconUrl": favIconUrl,
         "tabId": tabId
     };
-    chrome.runtime.sendMessage(message, closeDrawer);
+    chrome.runtime.sendMessage(message);
 };
 
 // ---------------------------------------------------
@@ -112,10 +143,11 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
             break;
-        case MessageType.CloseDrawer:
-            console.log(`Closing the DRAWER`)
+        case MessageType.SuccessfullySavedNote:
+            console.log(`SUCCESSFULLY SAVED TO PEAK`)
             console.log(request)
-            removeDrawer()
+            const saveAndCloseDrawerMessage: SubmitNoteMessage = request as SubmitNoteMessage;
+            removeDrawerWithSavedMessage(saveAndCloseDrawerMessage)
             break;
         case MessageType.Message_User:
             console.log(`Message the user`)
@@ -125,6 +157,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             switch (messageUser.message_theme) {
                 case "error":
                     message.error(messageUser.message)
+                    removeDrawer()
                     break;
                 case "info":
                     message.info(messageUser.message)

@@ -3,8 +3,6 @@ import {message} from "antd";
 import {createWebNoteRequest} from "../../client/webNotes";
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
-import {sendClosePageDrawerMessage} from "./messageUtil";
-import Tab = chrome.tabs.Tab;
 
 export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string) => {
     futureCreatePeakTags(userId, selectedTags).catch(res => {
