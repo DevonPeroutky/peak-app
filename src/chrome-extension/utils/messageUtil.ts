@@ -1,10 +1,12 @@
-import {MessageType, MessageUserMessage, SavePageMessage} from "../constants/models";
+import {ChromeExtMessage, MessageType, MessageUserMessage, SavePageMessage} from "../constants/models";
 import Tab = chrome.tabs.Tab;
+import {PeakTag} from "../../redux/slices/tagSlice";
 
-export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string) => {
+export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, tags: PeakTag[]) => {
     const message: SavePageMessage = {
         "message_type": MessageType.SaveToPeak,
         "user_id": userId,
+        "tags": tags,
         "tab": activeTab
     };
     chrome.tabs.sendMessage(activeTab.id, message);
@@ -25,10 +27,8 @@ export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string) =>
 // };
 
 export const sendClosePageDrawerMessage = (activeTab: Tab, userId: string) => {
-    const message: SavePageMessage = {
+    const message: ChromeExtMessage = {
         "message_type": MessageType.CloseDrawer,
-        "user_id": userId,
-        "tab": activeTab
     };
     chrome.tabs.sendMessage(activeTab.id, message);
 };

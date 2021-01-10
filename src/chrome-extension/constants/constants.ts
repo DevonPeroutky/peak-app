@@ -1,0 +1,1 @@
+export const ACTIVE_TAB_KEY = "activeTab"

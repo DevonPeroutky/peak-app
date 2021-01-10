@@ -27,8 +27,13 @@ export function saveToWiki(userId: string) {
     // Needs to be done in background script so the origin is the chrome extension and not the page we are on.
     chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
         const activeTab: Tab = tabs[0];
-        loadTags(userId).then(res => {
-            sendOpenSavePageDrawerMessage(activeTab, userId)
+        loadTags(userId).then(tags => {
+            console.log(`THE TAG RESPONSE`)
+            console.log(tags)
+            chrome.storage.sync.set({ "tags": tags}, () => {
+                console.log(`DID IT SETTTTT??!?!?!?`)
+                sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+            })
         }).catch(err => {
             sendMessageToUser(activeTab.id, "Failed to load your tags. Tell Devon.")
         });

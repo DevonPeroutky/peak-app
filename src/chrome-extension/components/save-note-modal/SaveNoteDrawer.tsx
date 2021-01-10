@@ -1,5 +1,5 @@
 import {Drawer, Input, message} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
 import 'antd/lib/divider/style/index.css';
@@ -19,7 +19,7 @@ import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowled
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage} from "../../content-script/content";
-import {CloseCircleOutlined, TagsOutlined} from "@ant-design/icons/lib";
+import {TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 
 export interface SaveNoteDrawerProps {
@@ -30,12 +30,20 @@ export interface SaveNoteDrawerProps {
     favIconUrl: string
     tags: PeakTag[]
     visible: boolean
+    shouldSubmit: boolean
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl } = props
+    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+
+    useEffect(() => {
+        console.log(`SUBmitting?? ${shouldSubmit}`)
+        if (shouldSubmit) {
+            sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawerOnSuccess)
+        }
+    }, [shouldSubmit])
 
     const closeDrawerOnSuccess = (response) => {
         console.log(`THE RESPONSE`)
@@ -46,10 +54,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             message.success("Saved!")
         }
         closeDrawer()
-    }
-
-    const sendSubmitMessage = () => {
-        sendSubmitNoteMessage(tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body, closeDrawerOnSuccess)
     }
 
     return (

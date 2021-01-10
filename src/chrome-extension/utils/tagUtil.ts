@@ -1,9 +1,9 @@
 import {loadTagsRequests} from "../../client/tags";
 import {PeakTag} from "../../redux/slices/tagSlice";
+import {AxiosResponse} from "axios";
 
-export function loadTags(userId: string) {
+export function loadTags(userId: string): Promise<PeakTag[]> {
     return loadTagsRequests(userId).then(res => {
-        const returned_tags: PeakTag[] = res.data.tags
-        chrome.storage.sync.set({ tags: returned_tags})
+        return res.data.tags
     })
 }

@@ -17,6 +17,7 @@ import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {message} from "antd";
+import {ACTIVE_TAB_KEY} from "../constants/constants";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -41,31 +42,40 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     }
 });
 
-function openDrawer(currTab: Tab, userId: string): void {
-    function createDrawer(tab: Tab) {
-        const tabId: string = tab.id.toString()
-        chrome.storage.sync.get(function (data) {
-            const props: SaveNoteDrawerProps = {
-                userId: userId,
-                pageUrl: tab.url,
-                favIconUrl: tab.favIconUrl,
-                pageTitle: tab.title,
-                tags: data["tags"],
-                visible: data[tabId],
-                closeDrawer: () => removeDrawer(tabId),
-            } as SaveNoteDrawerProps
+function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
+    function createDrawer(activeTabId: number, shouldSubmit: boolean) {
+        const props: SaveNoteDrawerProps = {
+            userId: userId,
+            pageUrl: currTab.url,
+            favIconUrl: currTab.favIconUrl,
+            pageTitle: currTab.title,
+            tags: tags,
+            visible: true,
+            shouldSubmit: shouldSubmit,
+            closeDrawer: () => removeDrawer(),
+        } as SaveNoteDrawerProps
 
-            const app = document.getElementById('my-extension-root')
-            ReactDOM.render(<SaveNoteDrawer {...props} />, app)
-        });
+        const app = document.getElementById('my-extension-root')
+        ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     }
 
-    chrome.storage.sync.set({[currTab.id]: true}, () => createDrawer(currTab))
+    chrome.storage.sync.get(ACTIVE_TAB_KEY, (data) => {
+        console.log(`Current Tab ID: ${currTab.id}`)
+        console.log(`WHAT IS IN STORAGE`)
+        console.log(data)
+        chrome.storage.sync.set({"activeTab": currTab.id}, () => {
+            const activeTabId: number = data[ACTIVE_TAB_KEY]
+            console.log(`TAGS: `)
+            console.log(tags)
+            const alreadyOpen: boolean = currTab.id === activeTabId
+            createDrawer(activeTabId, alreadyOpen)
+        })
+    })
+
 }
 
-function removeDrawer(key: string) {
-    console.log(`REMOVING THE THING: ${key}`)
-    chrome.storage.sync.remove([key], () => {
+function removeDrawer() {
+    chrome.storage.sync.remove([ACTIVE_TAB_KEY], () => {
         console.log(`SUCCESS?`)
         unmountComponentAtNode(document.getElementById('my-extension-root'))
     })
@@ -95,13 +105,12 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             console.log(`Opening the DRAWER!`)
             console.log(request)
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
-            openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id)
+            openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
             break;
         case MessageType.CloseDrawer:
             console.log(`Closing the DRAWER`)
             console.log(request)
-            const closeDrawerMessage: SavePageMessage = request as SavePageMessage;
-            removeDrawer(closeDrawerMessage.tab.id.toString())
+            removeDrawer()
             break;
         case MessageType.Message_User:
             console.log(`Message the user`)

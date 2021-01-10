@@ -7,8 +7,8 @@ import {submitNote} from "../utils/noteUtil";
 import {sendMessageToUser} from "../utils/messageUtil";
 
 // TODO CHANGE THIS <-------
-var userId: string = "108703174669232421421";
-// var userId: string = "";
+// var userId: string = "108703174669232421421";
+var userId: string = "";
 
 // --------------------------------
 // Fetch User Auth Token
@@ -21,17 +21,18 @@ chrome.identity.getAuthToken({
         return;
     }
     console.log(`Token: ${token}`)
-    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
-        const chrome_user: ChromeUser = r.data as ChromeUser;
-        console.log(chrome_user)
-        loadUserRequest(chrome_user.id).then(r => {
-            const user: Peaker = r.data.data as Peaker;
-            console.log(user)
-            console.log(`Syncing user: ${chrome_user} to chrome storage`)
-            chrome.storage.sync.set({ user: user });
-            userId = user.id
-        }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
-    }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
+
+        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
+            const chrome_user: ChromeUser = r.data as ChromeUser;
+            console.log(chrome_user)
+            loadUserRequest(chrome_user.id).then(r => {
+                const user: Peaker = r.data.data as Peaker;
+                console.log(user)
+                console.log(`Syncing user: ${chrome_user} to chrome storage`)
+                chrome.storage.sync.set({ user: user });
+                userId = user.id
+            }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
+        }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
 });
 
 // --------------------------------
@@ -65,7 +66,7 @@ chrome.commands.onCommand.addListener(function(command) {
 chrome.storage.sync.get("user", function (obj) {
     console.log(obj);
     // console.log(`The user: ${obj.user.id}`);
-    resetState()
+    // resetState()
 });
 chrome.commands.getAll(console.log);
 
@@ -93,6 +94,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 // HOW TO SEND THIS ASYNC??
                 sendResponse({ closeDrawer: submitNodeMessage.tabId })
             }).catch(err => {
+                console.log(`I HAVE TO FUCKING CATCH?!??!`)
                 sendMessageToUser(submitNodeMessage.tabId, "Failed to save your note. Tell Devon.")
             })
             break;

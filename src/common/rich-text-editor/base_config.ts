@@ -139,8 +139,6 @@ const baseNormalizers = [
     withNodeID(),
     withAutoReplace,
 ];
-console.log(`THE BASE OPTIONS`)
-console.log(baseOptions)
 
 export const snowflakePlugins = (level: number) => {
     return [

@@ -28,6 +28,7 @@ export interface MessageUserMessage extends ChromeExtMessage {
 
 export interface SavePageMessage extends ChromeExtMessage {
     user_id: string,
+    tags: PeakTag[],
     tab: Tab
 }
 
