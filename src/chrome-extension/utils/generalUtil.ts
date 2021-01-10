@@ -24,6 +24,8 @@ export const onActiveTab = (callback: (t: Tab) => any) => {
 export function saveToWiki(userId: string) {
     console.log(`Saving to wiki!`);
 
+    chrome.tabs.executeScript({ file: 'content.js'});
+
     // Needs to be done in background script so the origin is the chrome extension and not the page we are on.
     chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
         const activeTab: Tab = tabs[0];
