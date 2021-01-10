@@ -12,7 +12,8 @@ export interface ChromeUser {
 
 export enum MessageType {
     Message_User,
-    Notify_User,
+    Ping,
+    Pong,
     SaveToPeak,
     SuccessfullySavedNote,
     PostFromBackgroundScript,

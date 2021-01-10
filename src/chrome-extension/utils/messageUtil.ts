@@ -33,3 +33,4 @@ export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME
     }
     chrome.tabs.sendMessage(tabId, message);
 }
+

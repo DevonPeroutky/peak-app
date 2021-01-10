@@ -13,13 +13,13 @@ import {
     SavePageMessage,
     SubmitNoteMessage
 } from "../constants/models";
-import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {message} from "antd";
 import {ACTIVE_DRAWER_STATE_KEY, ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
 import {addSelectionAsBlockQuote} from "../utils/editorUtils";
+import Tab = chrome.tabs.Tab;
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -187,11 +187,13 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const saveAndCloseDrawerMessage: SubmitNoteMessage = request as SubmitNoteMessage;
             removeDrawerWithSavedMessage(saveAndCloseDrawerMessage)
             break;
+        case MessageType.Ping:
+            console.log(`RECEIVED THE PING!`)
+            sendResponse({ message_type: MessageType.Pong })
+            // chrome.runtime.sendMessage({ message_type: MessageType.Pong });
+            break;
         case MessageType.Message_User:
-            console.log(`Message the user`)
-            console.log(request)
             const messageUser: MessageUserMessage = request as MessageUserMessage;
-
             switch (messageUser.message_theme) {
                 case "error":
                     message.error(messageUser.message)

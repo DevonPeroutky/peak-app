@@ -46,20 +46,14 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
     // const isEmpty = body.children[0].text === '' && body.node.children.length === 1
 
-    console.log(`PAGE TITLE: ${editedPageTitle} (${pageTitle})`)
-
     useEffect(() => {
         if (shouldSubmit) {
-            console.log(`Submitting!!!`)
-            console.log(selectedTags)
-            console.log(editedPageTitle)
             setCurrentSubmitState("submitting")
             sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
 
     useEffect(() => {
-        console.log(`SETTING THE PAGE TITLE (${editedPageTitle}) --> (${pageTitle})`)
         setPageTitle(pageTitle)
     }, [pageTitle])
 

@@ -2,13 +2,13 @@ import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../redux/slices/userSlice";
-import {resetState, saveToWiki} from "../utils/generalUtil";
 import {submitNote} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
+import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
 
 // TODO CHANGE THIS <-------
-// var userId: string = "108703174669232421421";
-var userId: string = "";
+var userId: string = "108703174669232421421";
+// var userId: string = "";
 
 // --------------------------------
 // Fetch User Auth Token
@@ -50,25 +50,14 @@ chrome.runtime.onInstalled.addListener(function() {
 // Listen for HotKey commands
 // --------------------------------
 chrome.commands.onCommand.addListener(function(command) {
-    console.log(`Command: ${command}`);
     switch (command) {
         case "save-page":
-            saveToWiki(userId)
+            injectContentScriptOpenDrawer(userId)
             break;
         default:
             console.log(`Command: ${command} ???`);
     }
 });
-
-// --------------------------------
-// Startup
-// --------------------------------
-chrome.storage.sync.get("user", function (obj) {
-    console.log(obj);
-    // console.log(`The user: ${obj.user.id}`);
-    // resetState()
-});
-chrome.commands.getAll(console.log);
 
 // --------------------------------
 // Messages
@@ -77,8 +66,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     console.log(`Received Message: ${request.message_type}`);
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
-            console.log(`POSTing to the backend!`)
-            console.log(request)
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
             submitNote(
                 submitNodeMessage.userId,
