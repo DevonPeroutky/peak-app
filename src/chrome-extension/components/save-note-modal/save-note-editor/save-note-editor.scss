@@ -5,5 +5,19 @@
   .peak-note-editor {
     height: 100%;
     border: none!important;
+
+    .peak-ul {
+      list-style-type: disc!important;
+      list-style-position: outside!important;
+    }
+
+    .peak-ol {
+      list-style-type: decimal!important;
+      list-style-position: outside!important;
+    }
+
+    .peak-li::marker {
+        color: black!important;
+    }
   }
 }

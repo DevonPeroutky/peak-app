@@ -6,7 +6,7 @@ import {
     DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
     setDefaults
 } from "@udecode/slate-plugins";
-import {PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
+import {PEAK_LIST_SPECIFIC_STYLE, PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 import {DEFAULTS_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
@@ -18,7 +18,7 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_BLOCKQUOTE, {}),
     ...setDefaults(DEFAULTS_IMAGE, {}),
     ...setDefaults(DEFAULTS_MEDIA_EMBED, {}),
-    ...setDefaults(DEFAULTS_LIST, {}),
+    ...setDefaults(PEAK_LIST_SPECIFIC_STYLE, DEFAULTS_LIST),
     ...setDefaults(DEFAULTS_ALIGN, {}),
     ...setDefaults(DEFAULTS_BOLD, {}),
     ...setDefaults(DEFAULTS_ITALIC, {}),
