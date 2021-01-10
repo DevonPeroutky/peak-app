@@ -28,7 +28,6 @@ import {withHistory} from "slate-history";
 import {autoformatRules, withAutoReplace} from "../../plugins/withAutoReplace";
 
 export const NODE_LEVEL: number = 1
-
 const basePlugins = [
     ParagraphPlugin,
     CodePlugin,
@@ -63,14 +62,8 @@ const defaultStyleOptions = ({ type, rootProps, ...options}: StyledNodeConfig) =
 const levelAwareConfig = baseOptions.map(sup => {
     return {...sup, level: NODE_LEVEL}
 })
-console.log(`NEXT LEVEL CONFIG`)
-console.log(levelAwareConfig)
 const wtf = levelAwareConfig.map(defaultStyleOptions)
-console.log(`WTF`)
-console.log(wtf)
-console.log(defaultOptions)
 const options = { ...defaultOptions, ...Object.fromEntries(wtf) }
-console.log(options)
 const plugins = basePlugins.map(plugin => plugin(options))
 
 const baseNormalizers = [

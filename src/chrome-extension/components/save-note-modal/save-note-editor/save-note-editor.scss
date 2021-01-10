@@ -9,15 +9,34 @@
     .peak-ul {
       list-style-type: disc!important;
       list-style-position: outside!important;
+
+      .peak-li {
+        list-style-type: disc!important;
+        font-size: 1.2em;
+      }
+
+      .peak-li::marker {
+        color: black!important;
+      }
     }
 
     .peak-ol {
       list-style-type: decimal!important;
       list-style-position: outside!important;
+
+      .peak-li {
+        list-style-type: decimal!important;
+      }
+
+      .peak-li::marker {
+        color: black!important;
+      }
     }
 
-    .peak-li::marker {
-        color: black!important;
+
+    .li::marker {
+      font-size: 1.2em;
+      color: black!important;
     }
   }
 }
