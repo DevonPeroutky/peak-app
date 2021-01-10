@@ -46,6 +46,14 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
     // const isEmpty = body.children[0].text === '' && body.node.children.length === 1
 
+    const isEmpty = () => {
+        console.log(body)
+        console.log(JSON.stringify(body))
+        console.log(JSON.stringify(INITIAL_PAGE_STATE.body))
+        console.log(JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body))
+        return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)
+    }
+
     useEffect(() => {
         if (shouldSubmit) {
             setCurrentSubmitState("submitting")
@@ -61,19 +69,16 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         setCurrentSubmitState(submittingState)
     }, [submittingState])
 
-    // useEffect(() => {
-    //     console.log(`MAybe append BODY?`)
-    //     if (nodesToAppend) {
-    //         console.log(`Appending nodes to BODY!`)
-    //         console.log(nodesToAppend)
-    //         console.log(body)
-    //         console.log(JSON.stringify(body))
-    //         console.log(JSON.stringify(INITIAL_PAGE_STATE.body))
-    //         console.log(JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body))
-    //         const newBody = (JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)) ? nodesToAppend : body.concat(nodesToAppend)
-    //         setBody(newBody)
-    //     }
-    // }, [nodesToAppend])
+    useEffect(() => {
+        if (nodesToAppend) {
+            if (isEmpty()) {
+                setBody([{children: nodesToAppend}])
+            } else {
+                const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
+                setBody([{children: newBodyChildren}])
+            }
+        }
+    }, [nodesToAppend])
 
     const updateThatBody = (newBod: Node[]) => {
         setBody(newBod)
