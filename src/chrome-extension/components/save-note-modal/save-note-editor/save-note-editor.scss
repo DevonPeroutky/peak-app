@@ -6,6 +6,10 @@
     height: 100%;
     border: none!important;
 
+    blockquote::before {
+      display: none!important;
+    }
+
     .peak-ul {
       list-style-type: disc!important;
       list-style-position: outside!important;
