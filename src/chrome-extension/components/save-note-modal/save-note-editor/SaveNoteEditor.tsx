@@ -5,7 +5,7 @@ import {EditablePlugins, pipe} from "@udecode/slate-plugins";
 import {createEditor, Node} from "slate";
 import {equals} from "ramda";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
-import { chromeExtensionNormalizers, chromeExtensionPlugins } from "../../../../common/rich-text-editor/editors/chrome-extension/config";
+import { chromeExtensionPlugins } from "../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {CHROME_EXTENSION} from "../../../../common/rich-text-editor/editors/chrome-extension/constants";
 
 export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void, editor: ReactEditor }) => {
@@ -16,9 +16,6 @@ export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: 
             setContent(newValue)
         }
     }
-
-    console.log(`The CONTENT`)
-    console.log(content)
 
     return (
         <Slate

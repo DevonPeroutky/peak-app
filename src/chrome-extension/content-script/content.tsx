@@ -173,22 +173,16 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
 // Listen for Messages
 // ---------------------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
-    console.log(`Received Message: ${request.message_type}`);
     switch (request.message_type) {
         case MessageType.SaveToPeak:
-            console.log(`Opening the DRAWER!`)
-            console.log(request)
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
             break;
         case MessageType.SuccessfullySavedNote:
-            console.log(`SUCCESSFULLY SAVED TO PEAK`)
-            console.log(request)
             const saveAndCloseDrawerMessage: SubmitNoteMessage = request as SubmitNoteMessage;
             removeDrawerWithSavedMessage(saveAndCloseDrawerMessage)
             break;
         case MessageType.Ping:
-            console.log(`RECEIVED THE PING!`)
             sendResponse({ message_type: MessageType.Pong })
             // chrome.runtime.sendMessage({ message_type: MessageType.Pong });
             break;
@@ -217,8 +211,6 @@ document.addEventListener('mouseup', (event) => {
     const selection = document.getSelection()
     if (!selection.isCollapsed) {
         const text = window.getSelection().toString();
-        console.log(`Submit this text`)
-        console.log(text)
         const nodes: Node[] = addSelectionAsBlockQuote(text)
         rerenderDrawer(nodes)
     } else {

@@ -63,7 +63,6 @@ chrome.commands.onCommand.addListener(function(command) {
 // Messages
 // --------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
-    console.log(`Received Message: ${request.message_type}`);
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
