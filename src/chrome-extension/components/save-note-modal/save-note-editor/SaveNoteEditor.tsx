@@ -8,11 +8,8 @@ import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/k
 import { chromeExtensionNormalizers, chromeExtensionPlugins } from "../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {CHROME_EXTENSION} from "../../../../common/rich-text-editor/editors/chrome-extension/constants";
 
-export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void }) => {
-    const { content, setContent } = props
-
-    // @ts-ignore
-    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
+export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void, editor: ReactEditor }) => {
+    const { content, setContent, editor } = props
 
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, content)) {

@@ -1,5 +1,5 @@
 import {Drawer, Input, message, Spin} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
 import 'antd/lib/divider/style/index.css';
@@ -17,13 +17,16 @@ import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
-import {Editor, Node} from "slate";
+import {createEditor, Editor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 import {SUBMITTING_STATE} from "../../constants/constants";
 import {edit} from "ace-builds";
+import {ReactEditor} from "slate-react";
+import {pipe} from "@udecode/slate-plugins";
+import {chromeExtensionNormalizers} from "../../../common/rich-text-editor/editors/chrome-extension/config";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -44,13 +47,11 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
     const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
-    // const isEmpty = body.children[0].text === '' && body.node.children.length === 1
+
+    // @ts-ignore
+    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
 
     const isEmpty = () => {
-        console.log(body)
-        console.log(JSON.stringify(body))
-        console.log(JSON.stringify(INITIAL_PAGE_STATE.body))
-        console.log(JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body))
         return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)
     }
 
@@ -70,7 +71,8 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     }, [submittingState])
 
     useEffect(() => {
-        if (nodesToAppend) {
+        const editorHasFocus: boolean = ReactEditor.isFocused(editor)
+        if (nodesToAppend && !editorHasFocus) {
             if (isEmpty()) {
                 setBody([{children: nodesToAppend}])
             } else {
@@ -101,7 +103,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         >
             <>
                 <div className="peak-note-drawer-body">
-                    <SaveNoteEditor content={body} setContent={updateThatBody}/>
+                    <SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>
                     <div className="peak-note-drawer-tag-section">
                         <h2 className="peak-note-drawer-header">Tags</h2>
                         <div className="peak-note-tag-section-container">
