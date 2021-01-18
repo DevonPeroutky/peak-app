@@ -1,7 +1,7 @@
 import {
     BlockquotePlugin, BoldPlugin,
     CodePlugin,
-    ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin,
+    ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin, LinkPlugin,
     ListPlugin,
     ParagraphPlugin,
     SlatePlugin, StrikethroughPlugin, UnderlinePlugin, withAutoformat, withImageUpload,
@@ -38,6 +38,7 @@ const basePlugins = [
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
+    LinkPlugin,
     PeakHeadingPlugin,
     PeakCalloutPlugin
 ]
