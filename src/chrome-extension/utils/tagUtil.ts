@@ -1,13 +1,6 @@
-import {loadTagsRequests} from "../../client/tags";
-import {PeakTag} from "../../redux/slices/tagSlice";
 import {addTagsToState} from "./storageUtils";
-import {sendOpenSavePageDrawerMessage} from "./messageUtil";
-
-// export function fetchTags(userId: string): Promise<PeakTag[]> {
-//     return loadTagsRequests(userId).then(res => {
-//         return res.data.tags
-//     })
-// }
+import {PeakTag} from "../../types";
+import {loadTagsRequests} from "../../client/tags-base";
 
 export function loadTags(userId: string): Promise<PeakTag[]> {
     return loadTagsRequests(userId).then(res => {

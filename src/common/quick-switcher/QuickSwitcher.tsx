@@ -3,7 +3,7 @@ import {AutoComplete, Modal } from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { AppState} from "../../redux";
 import { closeSwitcher } from "../../redux/slices/quickSwitcherSlice";
-import {PeakDisplayNode, PeakNode, PeakTopicNode} from "../../redux/slices/userSlice";
+import {PeakDisplayNode, PeakNode, PeakTopicNode} from "../../redux/slices/user/userSlice";
 import "./quick-switcher.scss"
 import {convertHierarchyToSearchableList} from "../../utils/hierarchy";
 import { cloneDeep} from "lodash";

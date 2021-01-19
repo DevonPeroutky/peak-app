@@ -6,9 +6,10 @@ import {
 } from "@udecode/slate-plugins";
 import renderElementLink from "./PeakHyperLink";
 import {Editor, Node, Range} from "slate";
-import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu, PeakHyperlinkState} from "../../../../redux/slices/wikiPageSlice";
+import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu} from "../../../../redux/slices/wikiPageSlice";
 import {store} from "../../../../redux/store";
 import {getCurrentPageId} from "../../../../utils/links";
+import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 
 export const PeakLinkPlugin = (options?: any): SlatePlugin => {
     const { link } = setDefaults(options, DEFAULTS_LINK);

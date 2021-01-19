@@ -1,8 +1,8 @@
-import {futureCreatePeakTags} from "../../client/tags";
 import {message} from "antd";
 import {createWebNoteRequest} from "../../client/webNotes";
-import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
+import {PeakTag} from "../../types";
+import {futureCreatePeakTags} from "../../client/tags-base";
 
 export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string) => {
     futureCreatePeakTags(userId, selectedTags).catch(res => {

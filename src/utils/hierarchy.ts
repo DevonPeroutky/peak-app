@@ -1,6 +1,6 @@
 import { Node } from "slate";
 import { keyBy, transform, isObject} from "lodash";
-import {PeakDisplayNode, PeakNode, PeakNodeType, PeakStructureNode, PeakTopicNode} from "../redux/slices/userSlice";
+import {PeakDisplayNode, PeakNode, PeakNodeType, PeakStructureNode, PeakTopicNode} from "../redux/slices/user/types";
 import { useSelector} from "react-redux";
 import { AppState} from "../redux";
 import { cloneDeep} from "lodash";

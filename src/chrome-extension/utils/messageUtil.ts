@@ -4,8 +4,8 @@ import {
     SavePageMessage, SubmitNoteMessage
 } from "../constants/models";
 import Tab = chrome.tabs.Tab;
-import {PeakTag} from "../../redux/slices/tagSlice";
 import {ANT_MESSAGE_THEME} from "../constants/constants";
+import {PeakTag} from "../../types";
 
 export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, tags: PeakTag[]) => {
     const message: SavePageMessage = {

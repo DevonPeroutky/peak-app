@@ -1,7 +1,7 @@
 import Tab = chrome.tabs.Tab;
-import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {ANT_MESSAGE_THEME} from "./constants";
+import {PeakTag} from "../../types";
 
 export interface ChromeUser {
     id: string

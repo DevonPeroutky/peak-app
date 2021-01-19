@@ -1,5 +1,5 @@
-import {PeakTag} from "../../redux/slices/tagSlice";
 import { uniqBy } from "ramda";
+import {PeakTag} from "../../types";
 
 export const TAGS_KEY = "tags"
 

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const JOURNAL_PAGE_ID = "journal"
 export const journalSlice = createSlice({
     name: 'journal',
     initialState: false,

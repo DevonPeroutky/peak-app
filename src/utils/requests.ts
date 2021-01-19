@@ -1,13 +1,15 @@
-import {PeakHierarchy} from "../redux/slices/userSlice";
+import {PeakHierarchy} from "../redux/slices/user/types";
 import {Node} from "slate";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {DisplayPeaker, setUserAccounts} from "../redux/slices/userAccountsSlice";
 import {UserSpecificAppState} from "../redux/rootReducer";
-import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/slices/wikiPageSlice";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
+import {INITIAL_WIKI_STATE} from "../redux/slices/wikiPageSlice";
+import {INITIAL_PAGE_STATE} from "../constants/editor";
+import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
 
 // Page
 interface PeakPageParams {

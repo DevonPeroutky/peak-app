@@ -1,14 +1,16 @@
 import {loadUserStateFromLocalStorage} from "./localStoreSync";
-import currentUser, {Peaker, PeakTopicNode} from "./slices/userSlice";
+import currentUser from "./slices/user/userSlice";
 import {combineReducers, createAction} from "@reduxjs/toolkit";
 import topics, {PeakTopic} from "./slices/topicSlice";
 import futureReads, {FutureRead} from "./slices/readingListSlice";
-import peakWikiState, {INITIAL_PAGE_STATE, PeakWikiPage, PeakWikiState} from "./slices/wikiPageSlice";
+import peakWikiState from "./slices/wikiPageSlice";
 import quickSwitcher from "./slices/quickSwitcherSlice";
 import electron from "./slices/electronSlice";
-import tags, {PeakTag} from "./slices/tagSlice";
+import tags from "./slices/tags/tagSlice";
 import books, {PeakBook} from "./slices/booksSlice";
 import userAccounts, {DisplayPeaker} from "./slices/userAccountsSlice";
+import {PeakWikiState} from "../constants/wiki-types";
+import {Peaker, PeakTag} from "../types";
 
 export interface UserSpecificAppState {
     currentUser: Peaker

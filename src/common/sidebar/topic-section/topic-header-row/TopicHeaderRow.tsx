@@ -1,5 +1,5 @@
 import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
-import {Peaker} from "../../../../redux/slices/userSlice";
+import {Peaker} from "../../../../redux/slices/user/userSlice";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";

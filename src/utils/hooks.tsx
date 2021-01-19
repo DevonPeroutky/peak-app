@@ -2,18 +2,16 @@ import {useLocation} from "react-router-dom";
 import {message, notification} from "antd";
 import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../redux/slices/userSlice";
+import { setUserHierarchy} from "../redux/slices/user/userSlice";
 import {
     setEditing,
-    PeakWikiState,
     endSavingPage,
     updatePageContents,
-    PeakWikiPage,
-    JournalEntry,
     updateJournalEntry,
     setJournalEntries,
     updateJournalEntries,
-    journalOrdering, updatePageTitle
+    journalOrdering,
+    updatePageTitle
 } from "../redux/slices/wikiPageSlice";
 import {Node} from "slate";
 import {EXISTING_PEAK_USER_ID} from "../constants/constants";
@@ -25,10 +23,14 @@ import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../red
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
-import {JOURNAL_PAGE_ID} from "../redux/slices/journalSlice";
 import {useQuery} from "./urls";
 import {FutureRead} from "../redux/slices/readingListSlice";
 import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
+import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
+import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
+import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
+import {Peaker} from "../types";
+import {PeakTopicNode} from "../redux/slices/user/types";
 const R = require('ramda');
 
 // --------------------------------------------------

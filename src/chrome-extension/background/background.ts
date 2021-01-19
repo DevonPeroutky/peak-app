@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import {Peaker} from "../../redux/slices/userSlice";
 import {submitNote} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
 import {loadTags} from "../utils/tagUtil";
 import {setItemInChromeState} from "../utils/storageUtils";
+import {Peaker} from "../../types";
 
 // TODO CHANGE THIS <-------
 // var userId: string = "108703174669232421421";

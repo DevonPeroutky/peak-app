@@ -1,12 +1,11 @@
 import {PeakTopic} from "./slices/topicSlice";
-import {Peaker} from "./slices/userSlice";
 import {FutureRead} from "./slices/readingListSlice";
-import {PeakWikiState} from "./slices/wikiPageSlice";
 import {QuickSwitcherState} from "./slices/quickSwitcherSlice";
 import {ElectronState} from "./slices/electronSlice";
-import {PeakTag} from "./slices/tagSlice";
 import {DisplayPeaker} from "./slices/userAccountsSlice";
 import {PeakBook} from "./slices/booksSlice";
+import {PeakWikiState} from "../constants/wiki-types";
+import {Peaker, PeakTag} from "../types";
 
 export const GLOBAL_APP_KEYS = ["electron", "quickSwitcher", "userAccounts"]
 

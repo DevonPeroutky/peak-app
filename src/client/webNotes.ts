@@ -1,8 +1,8 @@
 import peakAxiosClient from "./axiosConfig";
 import {ELEMENT_WEB_NOTE} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {Node} from "slate";
-import {PeakTag} from "../redux/slices/tagSlice";
 import {getCurrentFormattedDate} from "../utils/time";
+import {PeakTag} from "../types";
 
 // TODO: APPEND TAGS TO BODY
 export function createWebNoteRequest(userId: string, web_note: { title: string, url: string, favIconUrl: string, body: Node[] }, selected_tags: PeakTag[]) {

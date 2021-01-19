@@ -32,7 +32,7 @@ import React from "react";
 import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
-import {Peaker, setUser} from "./redux/slices/userSlice";
+import {Peaker, setUser} from "./redux/slices/user/userSlice";
 import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/slices/electronSlice";
 import {message} from "antd";
 import peakAxiosClient from "./client/axiosConfig"

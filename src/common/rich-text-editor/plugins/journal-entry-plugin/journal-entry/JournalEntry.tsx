@@ -3,7 +3,6 @@ import {Dropdown, Menu, message, Select} from "antd";
 import cn from "classnames";
 import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
 import {all, any, equals} from "ramda"
-import {JournalEntry, PeakWikiPage, updateJournalEntries} from "../../../../../redux/slices/wikiPageSlice";
 import {Editor, Transforms, Node} from 'slate';
 import {useJournal} from "../../../../../utils/hooks";
 import {FileSyncOutlined} from "@ant-design/icons/lib";
@@ -12,6 +11,8 @@ import {JOURNAL_ENTRY} from "../../../types";
 import {convertJournalEntryToSlateNodes} from "../../../editors/journal/utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
 import "./journal-entry.scss";
+import {PeakWikiPage} from "../../../../../constants/wiki-types";
+import {JournalEntry} from "../../../editors/journal/types";
 
 export const isNodeEmpty = (node: Node) => {
     const theChildren: Node[] = node.children as Node[]

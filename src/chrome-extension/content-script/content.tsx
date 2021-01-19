@@ -13,7 +13,6 @@ import {
     SavePageMessage,
     SubmitNoteMessage
 } from "../constants/models";
-import {PeakTag} from "../../redux/slices/tagSlice";
 import {Node} from "slate";
 import {message} from "antd";
 import {ACTIVE_DRAWER_STATE_KEY, ACTIVE_TAB_KEY} from "../constants/constants";
@@ -21,6 +20,7 @@ import {sleep} from "../utils/generalUtil";
 import {addSelectionAsBlockQuote} from "../utils/editorUtils";
 import Tab = chrome.tabs.Tab;
 import {setItemInChromeState, TAGS_KEY} from "../utils/storageUtils";
+import {PeakTag} from "../../types";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM

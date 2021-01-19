@@ -2,12 +2,12 @@ import React from "react";
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import cn from 'classnames';
 import {BulbOutlined, ReadOutlined} from "@ant-design/icons/lib";
-import {PeakTag} from "../../../../../../redux/slices/tagSlice";
 import {isNodeEmpty} from "../../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../../../utils/strings";
 import {ELEMENT_WEB_NOTE, PEAK_LEARNING} from "../../constants";
 import "./peak-knowledge-node.scss"
+import {PeakTag} from "../../../../../../types";
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {

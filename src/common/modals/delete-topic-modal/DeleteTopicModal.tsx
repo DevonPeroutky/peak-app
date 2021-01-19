@@ -3,7 +3,7 @@ import { message, Popconfirm} from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { PeakTopic, deleteTopic} from "../../../redux/slices/topicSlice"
 import {AppState} from "../../../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/userSlice";
+import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/user/userSlice";
 import "./delete-topic-modal.scss";
 import {
     DeleteOutlined,

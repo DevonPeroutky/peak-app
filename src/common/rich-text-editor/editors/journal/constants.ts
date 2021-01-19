@@ -1,5 +1,7 @@
-import {JournalEntry} from "../../../../redux/slices/wikiPageSlice";
 import {getCurrentFormattedDate} from "../../../../utils/time";
+import {JournalEntry} from "./types";
+
+export const JOURNAL_PAGE_ID = "journal"
 
 export const EMPTY_JOURNAL_STATE: JournalEntry[] = [{
     id: "initial-journal-placeholder-node. This should never be in Redux or Postgres",

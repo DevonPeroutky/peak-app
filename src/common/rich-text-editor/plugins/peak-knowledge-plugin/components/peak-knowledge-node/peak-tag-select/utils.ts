@@ -1,5 +1,5 @@
 import {TAG_COLORS} from "./constants";
-import {PeakTag} from "../../../../../../../redux/slices/tagSlice";
+import {PeakTag} from "../../../../../../../types";
 
 export const calculateNextColor = (tags: PeakTag[]) => {
     if ( tags.length === 0 ) return TAG_COLORS[0]

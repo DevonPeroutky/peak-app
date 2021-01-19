@@ -1,6 +1,6 @@
-import {JournalEntry} from "../../../../redux/slices/wikiPageSlice";
 import {Node} from "slate";
 import {JOURNAL_ENTRY, JOURNAL_ENTRY_HEADER} from "../../types";
+import {JournalEntry} from "./types";
 
 export function convertJournalEntryToSlateNodes(journalEntry: JournalEntry): Node[] {
     return [

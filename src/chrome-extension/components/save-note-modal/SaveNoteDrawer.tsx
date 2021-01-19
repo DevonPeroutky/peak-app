@@ -1,5 +1,6 @@
 import {Drawer, Input, message, Spin} from "antd";
 import React, {useEffect, useMemo, useState} from "react";
+// import 'antd/lib/empty/style/css'; This fuck up the styling for everything
 import 'antd/lib/modal/style/index.css';
 import 'antd/lib/drawer/style/index.css';
 import 'antd/lib/divider/style/index.css';
@@ -12,13 +13,9 @@ import 'antd/lib/icon/style/index.css';
 import 'antd/lib/tag/style/index.css';
 import 'antd/lib/auto-complete/style/index.css';
 import 'antd/lib/spin/style/index.css';
-// import 'antd/lib/empty/style/css'; This fuck up the styling for everything
-import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
-import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 import {createEditor, Node} from "slate";
-import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
@@ -26,6 +23,9 @@ import {SUBMITTING_STATE} from "../../constants/constants";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../common/rich-text-editor/editors/chrome-extension/config";
+import {INITIAL_PAGE_STATE} from "../../../constants/editor";
+import {PeakTag} from "../../../types";
+import {TagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 
 export interface SaveNoteDrawerProps {
     userId: string
