@@ -1,7 +1,7 @@
 import {PeakTag} from "../../redux/slices/tagSlice";
 import { uniqBy } from "ramda";
 
-const TAGS_KEY = "tags"
+export const TAGS_KEY = "tags"
 
 export const addTagsToState = (tags: PeakTag[], callbackFunc: () => void) => {
     console.log(`Adding tags`)
@@ -19,7 +19,4 @@ export const addTagsToState = (tags: PeakTag[], callbackFunc: () => void) => {
             callbackFunc()
         })
     })
-}
-
-export const getItemFromChromeState = (key: string[]) => {
 }
