@@ -17,13 +17,12 @@ import {PeakTag} from "../../../redux/slices/tagSlice";
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import { TagSelect } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
-import {createEditor, Editor, Node} from "slate";
+import {createEditor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../redux/slices/wikiPageSlice";
 import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 import {SUBMITTING_STATE} from "../../constants/constants";
-import {edit} from "ace-builds";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../common/rich-text-editor/editors/chrome-extension/config";

@@ -5,6 +5,7 @@ import {Peaker} from "../../redux/slices/userSlice";
 import {submitNote} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
+import {loadTags} from "../utils/tagUtil";
 
 // TODO CHANGE THIS <-------
 var userId: string = "108703174669232421421";
@@ -22,17 +23,21 @@ chrome.identity.getAuthToken({
     }
     console.log(`Token: ${token}`)
 
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
-            const chrome_user: ChromeUser = r.data as ChromeUser;
-            console.log(chrome_user)
-            loadUserRequest(chrome_user.id).then(r => {
+    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
+        const chrome_user: ChromeUser = r.data as ChromeUser;
+        console.log(chrome_user)
+        loadUserRequest(chrome_user.id)
+            .then(r => {
                 const user: Peaker = r.data.data as Peaker;
                 console.log(user)
                 console.log(`Syncing user: ${chrome_user} to chrome storage`)
                 chrome.storage.sync.set({ user: user });
                 userId = user.id
+
+                loadTags(chrome_user.id)
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
-        }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
+
+    }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
 });
 
 // --------------------------------
@@ -59,9 +64,9 @@ chrome.commands.onCommand.addListener(function(command) {
     }
 });
 
-// --------------------------------
-// Messages
-// --------------------------------
+// ---------------------------------------
+// Listen for Messages from Content Script
+// ---------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
