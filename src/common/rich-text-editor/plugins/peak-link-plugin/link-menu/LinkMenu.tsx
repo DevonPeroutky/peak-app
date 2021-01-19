@@ -71,11 +71,12 @@ const LinkMenu = (props: LinkMenuProps) => {
 
         await selectLink()
         const domSelection = window.getSelection();
+        if (!domSelection || domSelection.rangeCount < 1) return;
         const domRange = domSelection!.getRangeAt(0);
         const rect = domRange.getBoundingClientRect();
         el.style.opacity = "1";
-        el.style.top = `${(rect.top) + 25}px`;
         el.style.left = `${rect.left + window.pageXOffset - 1}px`;
+        el.style.top = `${rect.bottom + window.pageYOffset + 5}px`;
     }
 
     useEffect(() => {
