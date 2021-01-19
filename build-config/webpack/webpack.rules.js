@@ -37,16 +37,6 @@ module.exports = [
     ],
   },
   {
-    test: /\.(svg|ico|icns)$/,
-    loader: "file-loader",
-    options: {
-      esModule: false,
-      name: "[path][name].[hash].[ext]",
-      publicPath: "..", // move up from 'main_window'
-      context: "src", // set relative working folder to src
-    },
-  },
-  {
     test: /\.(jpg|png|woff|woff2|eot|ttf)$/,
     loader: "url-loader",
     options: {

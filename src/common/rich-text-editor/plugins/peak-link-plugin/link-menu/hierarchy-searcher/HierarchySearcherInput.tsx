@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {AutoComplete, Input, Modal} from "antd";
 import { useSelector} from "react-redux";
 import { AppState} from "../../../../../../redux";
-import {PeakDisplayNode, PeakTopicNode} from "../../../../../../redux/slices/userSlice";
+import {PeakDisplayNode, PeakTopicNode} from "../../../../../../redux/slices/user/types";
 import {convertHierarchyToSearchableList} from "../../../../../../utils/hierarchy";
 import { cloneDeep} from "lodash";
 import {renderPeakDisplayNodesInList} from "../../../../../quick-switcher/quick-switch-item/QuickSwitchItem";

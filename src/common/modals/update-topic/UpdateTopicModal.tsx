@@ -3,7 +3,7 @@ import {Button, Modal, Input, Tooltip, message} from "antd";
 import {connect, useDispatch, useSelector} from "react-redux";
 import {updateTopic, PeakTopic, addTopic} from "../../../redux/slices/topicSlice"
 import {AppState} from "../../../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/userSlice";
+import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/user/userSlice";
 import "./update-topic-modal.scss";
 import { backend_host_address } from "../../../constants/constants";
 import {CompassOutlined, EditOutlined, InfoCircleOutlined} from "@ant-design/icons/lib";

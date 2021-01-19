@@ -1,6 +1,6 @@
 import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
-import {PeakStructureNode, PeakTopicNode, setUserHierarchy} from "../redux/slices/userSlice";
+import {PeakStructureNode, PeakTopicNode, setUserHierarchy} from "../redux/slices/user/userSlice";
 import {cloneDeep} from "lodash";
 import {useCurrentUser} from "./hooks";
 import {message, notification} from "antd";

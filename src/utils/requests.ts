@@ -1,15 +1,15 @@
-import {PeakHierarchy} from "../redux/slices/userSlice";
+import {PeakHierarchy} from "../redux/slices/user/types";
 import {Node} from "slate";
-import {addTags, deleteTag, PeakTag, setTags, STUB_TAG_ID} from "../redux/slices/tagSlice";
 import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {DisplayPeaker, setUserAccounts} from "../redux/slices/userAccountsSlice";
 import {UserSpecificAppState} from "../redux/rootReducer";
-import {INITIAL_PAGE_STATE, INITIAL_WIKI_STATE, PeakWikiPage, PeakWikiState} from "../redux/slices/wikiPageSlice";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
-import {PeakDisplayTag} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
+import {INITIAL_WIKI_STATE} from "../redux/slices/wikiPageSlice";
+import {INITIAL_PAGE_STATE} from "../constants/editor";
+import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
 
 // Page
 interface PeakPageParams {
@@ -24,67 +24,6 @@ export function updatePage(userId: string, pageId: string, updatedPageParams: Pe
     })
 }
 
-// Tags
-function deleteTagRequest(userId: string, tagId: string) {
-    return peakAxiosClient.delete(`/api/v1/users/${userId}/tags/${tagId}`)
-}
-function createTagsRequest(userId: string, tags: PeakDisplayTag[]) {
-    return peakAxiosClient.post(`/api/v1/users/${userId}/tags`, {
-        "tags": tags
-    })
-}
-function loadTagsRequests(userId: string) {
-    return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
-}
-
-export function createPeakTags(userId: string, tags: PeakDisplayTag[]): Promise<PeakTag[]> {
-    console.log(`ACTUAlLY CREATING THE TAGS`)
-    const tagsToBeCreated: PeakDisplayTag[] = tags.filter(t => t.id === STUB_TAG_ID)
-    if (tagsToBeCreated.length > 0) {
-        return createTagsRequest(userId, tagsToBeCreated).then(res => {
-            const created_tags: PeakTag[] = res.data.tags as PeakTag[]
-            store.dispatch(addTags(created_tags))
-            return created_tags
-        }).catch(err => {
-            console.log(`DID NOT successfully create the tags`)
-            console.log(err)
-            return []
-        })
-    }
-    return new Promise(function(resolve, reject) {
-        resolve([]);
-    });
-}
-export function deletePeakTag(userId: string, tagId: string): Promise<string> {
-    if (tagId === STUB_TAG_ID) {
-        return new Promise(function(resolve, reject) {
-            resolve(tagId);
-        });
-    } else {
-        return deleteTagRequest(userId, tagId).then(res => {
-            store.dispatch(deleteTag(tagId))
-            return tagId
-        }).catch(err => {
-            console.log(`DID NOT successfully delete the tag: ${tagId}`)
-            console.log(err)
-            return tagId
-        })
-    }
-
-}
-export function loadPeakTags(userId: string) {
-    return loadTagsRequests(userId).then(res => {
-        const tags: PeakTag[] = res.data.tags as PeakTag[]
-        store.dispatch(setTags(tags))
-    }).catch(err => {
-        console.log(`DID NOT successfully load the tags for user: ${userId}`)
-        console.log(err)
-    })
-}
-export function useTags() {
-    return useSelector<AppState, PeakTag[]>(state => state.tags);
-}
-
 // User Accounts
 function fetchAllUserAccounts(userId: string, peakUserId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/list-all-accounts?peak_user_id=${peakUserId}`)
@@ -97,9 +36,6 @@ export function loadAllUserAccounts(userId: string, peakUserId: string) {
         const userAccounts: DisplayPeaker[] = res.data.users as DisplayPeaker[]
         store.dispatch(setUserAccounts(userAccounts))
         return userAccounts
-    }).catch(err => {
-        console.log(`DID NOT successfully load the accounts for user: ${userId}`)
-        console.log(err)
     })
 }
 export function useUserAccounts() {

@@ -19,7 +19,6 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
     useEffect(() => {
         console.log(`USING THE LOADING PROMISES`)
         thePromised().then(res => {
-            console.log(`THE PROMISES ARE LOADED`)
             setLoaded(true);
         })
     }, []);

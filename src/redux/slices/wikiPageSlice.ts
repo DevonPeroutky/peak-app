@@ -1,44 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {Range} from "slate/dist/interfaces/range";
 import {Node} from "slate";
 import {differenceWith, omit, uniqBy} from "ramda";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/constants";
-import {JOURNAL_PAGE_ID} from "./journalSlice";
+import {CHROME_EXTENSION} from "../../common/rich-text-editor/editors/chrome-extension/constants";
+import {
+    INITIAL_CHROME_EXT_STATE, INITIAL_EDITING_STATE,
+    INITIAL_JOURNAL_STATE,
+    INITIAL_LINK_STATE,
+    INITIAL_PAGE_STATE,
+} from "../../constants/editor";
+import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
+import {JOURNAL_PAGE_ID} from "../../common/rich-text-editor/editors/journal/constants";
+import {PeakEditorState, PeakHyperlinkState, PeakWikiPage, PeakWikiState} from "../../constants/wiki-types";
 const R = require('ramda');
-
-interface CodeEditorFocusState {
-    [key: string]: boolean
-};
-export interface PeakHyperlinkState {
-    currentLinkUrl: string,
-    currentSelection: Range | null,
-    currentText: string
-    currentHyperLinkId: string,
-};
-export interface PeakEditorState {
-    isEditing: boolean,
-    focusMap: CodeEditorFocusState,
-    showLinkMenu: boolean,
-    currentLinkState: PeakHyperlinkState,
-};
-export interface PeakWikiPage {
-    id: string,
-    body: Node[] | JournalEntry[],
-    title: string,
-    editorState: PeakEditorState,
-    isSaving: boolean
-}
-export interface PeakWikiState {
-    [key: string]: PeakWikiPage;
-}
-
-const INITIAL_LINK_STATE: PeakHyperlinkState = {
-    currentLinkUrl: '',
-    currentSelection: null,
-    currentHyperLinkId: '',
-    currentText: ''
-};
 
 const INITIAL_EDITOR_STATE: PeakEditorState = {
     isEditing: false,
@@ -46,30 +20,8 @@ const INITIAL_EDITOR_STATE: PeakEditorState = {
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE
 };
-const INITIAL_EDITING_STATE: PeakEditorState = {
-    isEditing: true,
-    focusMap: {},
-    showLinkMenu: false,
-    currentLinkState: INITIAL_LINK_STATE,
-};
-export const INITIAL_PAGE_STATE: PeakWikiPage = {
-    id: "-1",
-    editorState: INITIAL_EDITING_STATE,
-    body: [
-        {
-            type: ELEMENT_PARAGRAPH,
-            children: [{ text: '' }],
-        },
-    ],
-    title: '',
-    isSaving: false
-};
-export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }} ;
-export interface JournalEntry {
-    id: string
-    entry_date: string,
-    body: any,
-}
+
+export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: INITIAL_JOURNAL_STATE, [CHROME_EXTENSION]: INITIAL_CHROME_EXT_STATE } ;
 export const journalOrdering = (a: JournalEntry, b: JournalEntry) => {
     return (a.entry_date <= b.entry_date) ? 1 : -1
 };
@@ -197,7 +149,6 @@ export const {
     endSavingPage,
     setEditorFocusToNode,
     setJournalEntries,
-    addNewJournalEntry,
     updateJournalEntry,
     updateJournalEntries
 } = wikiPageSlice.actions;

@@ -186,7 +186,7 @@ const PEAK_LEARNING_BLOCK: PeakEditorControlDisplay = {
     icon: <BulbOutlined className={"peak-editor-control-icon"}/>,
     description: "Record something you learned!",
     label: "Learning",
-    elementType: ELEMENT_PEAK_BOOK,
+    elementType: PEAK_LEARNING,
     customFormat: (editor => insertCustomBlockElement(editor, PEAK_LEARNING))
 };
 const PEAK_BOOK_NOTE_SELECT_ITEM: PeakEditorControlDisplay = {

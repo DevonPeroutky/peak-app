@@ -13,6 +13,10 @@ const AUTO_REPLACE: { [key: string]: string } = {
     '-->': '→',
     '<--': '←',
 };
+// const MARKDOWN_LINK_REGEX = /^\[([\w\s\d]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#]+)\)$/
+const MARKDOWN_LINK_REGEX = /\[([^\[]+)\](\(.*\))/gm
+// const myMatch = string.match(regex)
+
 
 export const withAutoReplace = <T extends Editor>(editor: T) => {
     const { insertText } = editor;
@@ -32,6 +36,14 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 
             const beforeText = Editor.string(editor, range);
             const found = Object.keys(AUTO_REPLACE).find(matcher => beforeText.endsWith(matcher));
+            // const markdown_link = beforeText.match(MARKDOWN_LINK_REGEX)
+            // console.log(`HYYYY`)
+            // console.log(beforeText)
+            // console.log(markdown_link)
+            //
+            // if (markdown_link) {
+            //     console.log('WE GOT A LINK')
+            // }
 
             if (found) {
                 const afterText = AUTO_REPLACE[found];

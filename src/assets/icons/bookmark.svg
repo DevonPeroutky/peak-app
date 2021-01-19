@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="15px" viewBox="0 0 9 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Bookmark (1)</title>
+    <g id="Topic-View" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home---TimeLine" transform="translate(-438.000000, -328.000000)">
+            <g id="Timeline" transform="translate(376.000000, 191.000000)">
+                <g id="Event-2" transform="translate(45.000000, 126.000000)">
+                    <g id="Bookmark-(1)" transform="translate(17.000000, 11.000000)">
+                        <polygon id="Path" fill="#FF5A67" points="2 2.0001 9 2.0001 9 15.0001 5.5 13.0001 2 15.0001"></polygon>
+                        <polygon id="Path" stroke="#373449" stroke-linecap="square" stroke-linejoin="round" points="0.5 0.5001 7.5 0.5001 7.5 13.5001 4 11.5001 0.5 13.5001"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

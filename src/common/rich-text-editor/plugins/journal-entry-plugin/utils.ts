@@ -21,7 +21,6 @@ export const useSelectFirstJournalEntry = () => {
             })
 
             if (node && Node.string(node[0])) {
-                console.log(`Bruh`)
                 Transforms.select(editor, node[1])
                 Transforms.collapse(editor, {edge: "end"})
                 // TODO: Detect IF there should be a new line

@@ -1,5 +1,5 @@
 import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
-import {Peaker} from "../../../../redux/slices/userSlice";
+import {Peaker} from "../../../../redux/slices/user/userSlice";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";
@@ -28,7 +28,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
-                body: [{ children: [empty_title, empty_paragraph] }],
+                body: [{ children: [empty_title, empty_paragraph]}],
                 topic_id: props.topic.id,
                 title: "",
                 privacy_level: "private",

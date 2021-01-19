@@ -5,7 +5,7 @@ import {addTopic, PeakTopic} from "../../../redux/slices/topicSlice"
 import "./add-topic-modal.scss";
 import peakAxiosClient from "../../../client/axiosConfig"
 import {useCurrentUser} from "../../../utils/hooks";
-import {PeakTopicNode, setUserHierarchy} from "../../../redux/slices/userSlice";
+import {PeakTopicNode, setUserHierarchy} from "../../../redux/slices/user/userSlice";
 import {CompassOutlined, InfoCircleOutlined, PlusOutlined} from "@ant-design/icons/lib";
 
 const AddTopicModal = (props: {}) => {

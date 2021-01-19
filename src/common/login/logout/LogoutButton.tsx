@@ -4,8 +4,8 @@ import {ELECTRON} from "../../../constants/constants";
 import {GoogleLogout} from "react-google-login";
 import {LogoutOutlined} from "@ant-design/icons/lib";
 import {Menu, message} from "antd";
-import {UNAUTHED_USER} from "../../../redux/slices/userSlice";
-import { setUser } from "../../../redux/slices/userSlice";
+import {UNAUTHED_USER} from "../../../redux/slices/user/userSlice";
+import { setUser } from "../../../redux/slices/user/userSlice";
 import peakAxiosClient from "../../../client/axiosConfig"
 import {useDispatch} from "react-redux";
 import "./logout-button.scss"

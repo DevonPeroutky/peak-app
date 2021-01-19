@@ -4,7 +4,7 @@ import {message, Table} from "antd";
 import {deleteFutureRead, FutureRead} from "../../redux/slices/readingListSlice";
 import PeakTagDisplay from "../../common/peak-tag-display/PeakTagDisplay";
 import {useCurrentUser, useFutureReads} from "../../utils/hooks";
-import {Peaker} from "../../redux/slices/userSlice";
+import {Peaker} from "../../redux/slices/user/userSlice";
 import peakAxiosClient from "../../client/axiosConfig"
 
 const PeakReadingList = (props: { }) => {

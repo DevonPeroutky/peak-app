@@ -20,15 +20,22 @@ $margin-top: 20px;
     color: $placeholder-text-color;
     user-select: none;
 
-    .learning-title-row-icon {
+    .title-row-icon {
       margin-right: 5px;
+
+      &.book {
+        color: $primary-blue;
+      }
+      &.learning {
+        color: $primary-green;
+      }
+      &.web {
+        color: $primary-red;
+      }
     }
 
-    &.book {
-      color: $primary-blue;
-    }
-    &.learning {
-      color: $primary-green;
+    .knowledge-label {
+      color: $text-color;
     }
   }
 

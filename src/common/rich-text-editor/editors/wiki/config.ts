@@ -5,10 +5,10 @@ import {
     withInlineVoid,
     withNormalizeTypes
 } from "@udecode/slate-plugins";
-import {JOURNAL_ENTRY_HEADER, TITLE} from "../../types";
+import {TITLE} from "../../types";
 import {
     setEditorNormalizers, setEditorPlugins,
-} from "../../defaults";
+} from "../../base_config";
 
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
@@ -20,5 +20,5 @@ export const wikiNormalizers = setEditorNormalizers(nodeLevel, [
     withNormalizeTypes({
         rules: [{ path: [0, 0], strictType: TITLE }],
     }),
-    withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER] })
+    withInlineVoid({ plugins: wikiPlugins, voidTypes: [ELEMENT_CODE_BLOCK] })
 ])

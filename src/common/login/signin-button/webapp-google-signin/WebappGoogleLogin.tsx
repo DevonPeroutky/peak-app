@@ -1,7 +1,7 @@
 import React from 'react'
 import GoogleLogin, {GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
 import "./google-signin-button.scss"
-import {Peaker, setUser} from "../../../../redux/slices/userSlice";
+import {Peaker, setUser} from "../../../../redux/slices/user/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {message} from "antd";

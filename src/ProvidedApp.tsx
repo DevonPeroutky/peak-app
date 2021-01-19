@@ -3,15 +3,15 @@ import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
 import { HashRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";
-import {isAuthenticated, Peaker} from "./redux/slices/userSlice";
-import {useCurrentUser, useOnlineStatus} from "./utils/hooks";
+import {isAuthenticated, Peaker} from "./redux/slices/user/userSlice";
+import {useCurrentUser} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
 import {LoggedIn} from "./views/logged-in/LoggedIn";
 import {PeakOffline} from "./views/offline/Offline";
 import {PeakTimeline} from "./views/timeline/PeakTimeline";
 import {useUserAccounts} from "./utils/requests";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
-import {KeybindingHandlerWrapper, useAccountSwitcher} from "./utils/loading-util";
+import {KeybindingHandlerWrapper} from "./utils/loading-util";
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()

@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {Editor, Node, NodeEntry, Path, Point, Transforms} from 'slate';
-import {
-    useEditor,
-    ReactEditor,
-} from 'slate-react'
+import { Node} from 'slate';
+import { useEditor } from 'slate-react'
 import {
     useCurrentWikiPage,
     useSavePageRequest,
@@ -11,13 +8,14 @@ import {
     useDebounceBulkJournalEntrySaver
 } from '../../../../../utils/hooks';
 import { useDispatch } from 'react-redux';
-import {updatePageContents, setEditorFocusToNode, JournalEntry} from '../../../../../redux/slices/wikiPageSlice';
+import {updatePageContents} from '../../../../../redux/slices/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
-import {ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, toggleNodeType} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, toggleNodeType} from "@udecode/slate-plugins";
 import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
-import {JOURNAL_PAGE_ID} from "../../../../../redux/slices/journalSlice";
+import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
+import {JournalEntry} from "../../../editors/journal/types";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
