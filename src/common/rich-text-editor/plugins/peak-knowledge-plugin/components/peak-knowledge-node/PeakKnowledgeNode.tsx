@@ -31,22 +31,22 @@ const KnowledgeTitleRow = (props: {elementType: string, label: string | undefine
     if (elementType === PEAK_LEARNING) {
         return (
             <div className={"peak-knowledge-title-row learning"} contentEditable={false}>
-                <BulbOutlined className={"learning-title-row-icon"}/>
-                <span>Learning</span>
+                <BulbOutlined className={"title-row-icon learning"}/>
+                <span className={"knowledge-label"}>Learning</span>
            </div>
         )
     } else if (elementType === ELEMENT_WEB_NOTE) {
         return (
             <div className={"peak-knowledge-title-row web"} contentEditable={false}>
-                <img src={bookmark} className={"learning-title-row-icon"}/>
-                <span>{capitalize_and_truncate(label)}</span>
+                <img src={bookmark} className={"title-row-icon web"}/>
+                <span className={"knowledge-label"}>{capitalize_and_truncate(label, 125)}</span>
             </div>
         )
     } else {
         return (
             <div className={"peak-knowledge-title-row book"} contentEditable={false}>
-                <ReadOutlined className={"learning-title-row-icon"}/>
-                <span>{capitalize_and_truncate(label)}</span>
+                <ReadOutlined className={"title-row-icon book"}/>
+                <span className={"knowledge-label"}>{capitalize_and_truncate(label, 125)}</span>
             </div>
         )
     }
