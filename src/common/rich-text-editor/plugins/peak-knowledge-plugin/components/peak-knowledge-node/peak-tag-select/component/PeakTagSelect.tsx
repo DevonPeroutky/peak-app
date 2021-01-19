@@ -15,9 +15,9 @@ import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
 import "./peak-tag-select.scss"
 import {isPeakKnowledgeNoteType} from "../../../../utils";
+import cn from 'classnames';
 const { Option } = Select;
 
-// TODO: MERGE THESE TWO
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
     const { nodeId, nodePath, selected_tags } = props
     const dispatch = useDispatch()
@@ -246,7 +246,9 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 }}
                 ref={mainRef}
                 open={open}
-                onBlur={() => setDropdownState(false)}
+                onBlur={() => {
+                    setDropdownState(false)
+                }}
                 onFocus={() => {
                     setDropdownState(true)
                 }}
@@ -264,7 +266,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                 onInputKeyDown={onKeyDown}
                 placeholder="Tab to start selecting tags"
                 onSelect={onSelect}
-                dropdownClassName={"peak-tag-select-dropdown"}
+                dropdownClassName={cn("peak-tag-select-dropdown", (open) ? "" : "closed")}
                 onDeselect={onDeselect}
                 // notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
                 notFoundContent={<span>No more tags. Press 'Escape' to exit with arrow keys</span>}

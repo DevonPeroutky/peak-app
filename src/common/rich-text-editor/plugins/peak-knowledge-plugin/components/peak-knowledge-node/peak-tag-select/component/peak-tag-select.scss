@@ -40,6 +40,10 @@
   z-index: 2147483646!important;
   pointer-events: auto!important;
 
+  &.closed {
+    display: none!important;
+  }
+
   .ant-select-item-option-content {
     display: flex;
     align-items: center;
