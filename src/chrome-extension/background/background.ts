@@ -6,10 +6,11 @@ import {submitNote} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
 import {loadTags} from "../utils/tagUtil";
+import {setItemInChromeState} from "../utils/storageUtils";
 
 // TODO CHANGE THIS <-------
-var userId: string = "108703174669232421421";
-// var userId: string = "";
+// var userId: string = "108703174669232421421";
+var userId: string = "";
 
 // --------------------------------
 // Fetch User Auth Token
@@ -31,7 +32,7 @@ chrome.identity.getAuthToken({
                 const user: Peaker = r.data.data as Peaker;
                 console.log(user)
                 console.log(`Syncing user: ${chrome_user} to chrome storage`)
-                chrome.storage.sync.set({ user: user });
+                setItemInChromeState("user", user)
                 userId = user.id
 
                 loadTags(chrome_user.id)

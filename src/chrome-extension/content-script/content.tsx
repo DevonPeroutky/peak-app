@@ -20,6 +20,7 @@ import {ACTIVE_DRAWER_STATE_KEY, ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
 import {addSelectionAsBlockQuote} from "../utils/editorUtils";
 import Tab = chrome.tabs.Tab;
+import {setItemInChromeState, TAGS_KEY} from "../utils/storageUtils";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -67,18 +68,14 @@ function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
     }
 
     chrome.storage.sync.get([ACTIVE_TAB_KEY], (data) => {
-        chrome.storage.sync.set({[ACTIVE_TAB_KEY]: currTab.id}, () => {
+        setItemInChromeState(ACTIVE_TAB_KEY, currTab.id, () => {
             const activeTabId: number = data[ACTIVE_TAB_KEY]
             const alreadyOpen: boolean = currTab.id === activeTabId
             createDrawer(activeTabId, alreadyOpen)
         })
     })
 
-    chrome.storage.sync.set({"tags": tags}, () => {
-        chrome.storage.sync.get(null, data => {
-            console.log(data)
-        })
-    })
+    setItemInChromeState(TAGS_KEY, tags)
 
 }
 
@@ -166,7 +163,7 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
         "favIconUrl": favIconUrl,
         "tabId": tabId
     };
-    chrome.storage.sync.set({ [ACTIVE_DRAWER_STATE_KEY]: message})
+    setItemInChromeState(ACTIVE_DRAWER_STATE_KEY, message)
 };
 
 // ---------------------------------------------------

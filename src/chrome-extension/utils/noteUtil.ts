@@ -13,10 +13,4 @@ export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: s
     return createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
         message.success("Saved your note!")
     })
-    // .then(res => {
-    //     chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
-    //         const activeTab: Tab = tabs[0];
-    //         sendClosePageDrawerMessage(activeTab, userId)
-    //     });
-    // })
 }

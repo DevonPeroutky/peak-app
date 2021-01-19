@@ -1,5 +1,5 @@
 import {Node} from "slate";
-import {ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {ELEMENT_BLOCKQUOTE} from "@udecode/slate-plugins";
 import moment from "moment";
 
 export const addSelectionAsBlockQuote = (text: string) => {
