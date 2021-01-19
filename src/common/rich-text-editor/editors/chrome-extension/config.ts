@@ -4,25 +4,18 @@ import {
     ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin, LinkPlugin,
     ListPlugin,
     ParagraphPlugin,
-    SlatePlugin, StrikethroughPlugin, UnderlinePlugin, withAutoformat, withImageUpload,
+    StrikethroughPlugin, UnderlinePlugin, withAutoformat, withImageUpload,
     withInlineVoid, withLink, withList, withNodeID, withTrailingNode
 } from "@udecode/slate-plugins";
 import {
     baseBehaviorPlugins,
     baseOptions,
-    setEditorNormalizers,
-    setEditorPlugins,
     snowflakePlugins
 } from "../../base_config";
 import {PeakHeadingPlugin} from "../../plugins/peak-heading-plugin/PeakHeadingPlugin";
-import {PeakCodePlugin} from "../../plugins/peak-code-plugin/PeakCodePlugin";
-import {PeakLinkPlugin} from "../../plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "../../plugins/peak-callout-plugin/PeakCalloutPlugin";
-import {PeakKnowledgePlugin} from "../../plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {defaultOptions} from "../../defaults";
-import {JOURNAL_ENTRY_HEADER, SlateNormalizer, StyledNodeConfig} from "../../types";
-import {withEditableJournalEntry} from "../../plugins/journal-entry-plugin/withEditableJournalEntry";
-import {JOURNAL_NODE_LEVEL, journalPlugins} from "../journal/config";
+import {StyledNodeConfig} from "../../types";
 import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {autoformatRules, withAutoReplace} from "../../plugins/withAutoReplace";
@@ -81,7 +74,7 @@ const baseNormalizers = [
 const normalizers = [
     ...baseNormalizers,
     withList(options),
-    withInlineVoid({ plugins: journalPlugins, voidTypes: [ELEMENT_CODE_BLOCK] }),
+    withInlineVoid({ plugins: plugins, voidTypes: [ELEMENT_CODE_BLOCK] }),
     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 })
 ]
 

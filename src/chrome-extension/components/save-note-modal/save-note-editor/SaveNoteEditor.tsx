@@ -1,5 +1,5 @@
 import "./save-note-editor.scss"
-import React, {useMemo, useState} from "react";
+import React from "react";
 import {Slate, ReactEditor} from "slate-react";
 import {EditablePlugins, pipe} from "@udecode/slate-plugins";
 import {createEditor, Node} from "slate";
