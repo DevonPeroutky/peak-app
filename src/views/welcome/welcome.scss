@@ -1,3 +1,5 @@
+@import "../../constants/variables";
+
 .welcome-page-container {
   height: 100%;
   width: 100%;
@@ -25,9 +27,13 @@
     //box-shadow: rgba(9, 30, 66, 0.31) 0px 0px 1px, rgba(9, 30, 66, 0.25) 0px 4px 8px -2px;
 
     .welcome-logo {
-      margin-bottom: 25px;
       height: 100px!important;
       width: 100%;
+
+    }
+    .peak-subtitle {
+      margin-bottom: 75px;
+      color: rgba(9, 109, 217, .69)!important;
     }
   }
 }

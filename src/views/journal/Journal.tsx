@@ -27,7 +27,6 @@ import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
 } from "../../common/rich-text-editor/editors/journal/utils";
-import {JournalEntry, PeakWikiPage} from "../../redux/slices/wikiPageSlice";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
@@ -37,6 +36,8 @@ import  { equals } from "ramda";
 import cn from "classnames";
 import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";
 import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/constants";
+import {PeakWikiPage} from "../../constants/wiki-types";
+import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"

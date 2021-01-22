@@ -9,8 +9,8 @@ import {unWrapLink, upsertLink} from "../link-util";
 import {AlignLeftOutlined} from "@ant-design/icons/lib";
 import {DisplayLinkMenu} from "./link-menu-body/display-link-menu/DisplayLinkMenu";
 import HierarchySearcherInput from "./hierarchy-searcher/HierarchySearcherInput";
-import {PeakHyperlinkState, closeLinkMenu} from "../../../../../redux/slices/wikiPageSlice";
-import {upsertLinkAtSelection} from "@udecode/slate-plugins";
+import {closeLinkMenu} from "../../../../../redux/slices/wikiPageSlice";
+import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 
 interface LinkMenuProps {
     showLinkMenu: boolean
@@ -71,11 +71,12 @@ const LinkMenu = (props: LinkMenuProps) => {
 
         await selectLink()
         const domSelection = window.getSelection();
+        if (!domSelection || domSelection.rangeCount < 1) return;
         const domRange = domSelection!.getRangeAt(0);
         const rect = domRange.getBoundingClientRect();
         el.style.opacity = "1";
-        el.style.top = `${(rect.top) + 25}px`;
         el.style.left = `${rect.left + window.pageXOffset - 1}px`;
+        el.style.top = `${rect.bottom + window.pageYOffset + 5}px`;
     }
 
     useEffect(() => {

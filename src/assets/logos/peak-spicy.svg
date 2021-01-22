@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="582px" height="206px" viewBox="0 0 582 206" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Spicy Copy</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#096DD9" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="-8.02262713%" x2="50%" y2="89.6644294%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD-Copy" transform="translate(-835.000000, -1142.000000)">
+            <g id="Spicy-Copy" transform="translate(835.000000, 1142.000000)">
+                <g id="K" transform="translate(456.000000, 40.000000)" stroke="#096DD9" stroke-linecap="square" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line-Copy-2"></line>
+                    <line x1="14" y1="58" x2="84.377193" y2="0.5" id="Line-4"></line>
+                    <line x1="14" y1="116" x2="84.377193" y2="58.5" id="Line-4-Copy" transform="translate(49.500000, 87.000000) scale(1, -1) translate(-49.500000, -87.000000) "></line>
+                </g>
+                <g id="A" transform="translate(306.000000, 39.000000)">
+                    <rect id="Rectangle" x="0" y="0" width="100" height="131"></rect>
+                    <g id="A-Copy-2" transform="translate(0.000000, 1.000000)">
+                        <polygon id="Triangle" stroke="url(#linearGradient-1)" stroke-width="2" fill="url(#linearGradient-1)" stroke-linejoin="round" points="1 135 50 0 99 135"></polygon>
+                        <polygon id="Triangle-Copy" stroke="#FFFFFF" stroke-width="2" fill="#FFFFFF" points="1 135 50 20 99 135"></polygon>
+                        <polygon id="Rectangle" fill="#FFFFFF" points="3.83774184 130 98.1856524 130 100 137 -1.77635684e-13 137"></polygon>
+                    </g>
+                </g>
+                <g id="E" transform="translate(172.000000, 40.000000)" stroke="#096DD9" stroke-linecap="square" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line-Copy"></line>
+                    <line x1="17.7444444" y1="0.5" x2="83.2555556" y2="0.5" id="Line-2"></line>
+                    <line x1="17.7444444" y1="115.5" x2="83.2555556" y2="115.5" id="Line-2-Copy"></line>
+                    <line x1="17.559322" y1="57.5" x2="63.5" y2="57.5" id="Line-3"></line>
+                </g>
+                <g id="P" transform="translate(38.000000, 40.000000)" stroke="#096DD9" stroke-width="3">
+                    <line x1="0.5" y1="0.5" x2="0.5" y2="115.5" id="Line" stroke-linecap="square"></line>
+                    <path d="M17,72 C24.1625497,72 34.4155875,72 47.7591135,72 C67.7744024,72 84,55.882251 84,36 C84,16.117749 67.7744024,0 47.7591135,0 L17,0" id="Oval"></path>
+                </g>
+                <rect id="Rectangle" fill="url(#linearGradient-2)" x="0" y="0" width="582" height="206"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
