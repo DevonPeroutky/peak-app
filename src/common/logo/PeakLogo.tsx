@@ -3,7 +3,7 @@ import "./peak-logo.scss"
 import {Link} from "react-router-dom";
 import cn from "classnames";
 import {isChromeExtension} from "../../utils/environment";
-const peak = require('../../assets/logos/peak.svg');
+const peak = require('../../assets/logos/peak-spicy.svg');
 
 export const PeakLogo = (props: { className?: string }) => {
     const specifiedClassName: string = (props.className) ? props.className : ""

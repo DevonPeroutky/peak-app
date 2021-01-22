@@ -1,11 +1,11 @@
 import React from 'react'
-import {PeakLogo} from "../../common/logo/PeakLogo";
 import "./welcome.scss"
 import config from "../../constants/environment-vars"
 import DesktopGoogleLogin from "../../common/login/signin-button/desktop-google-login/DesktopGoogleLogin";
 import {ELECTRON} from "../../constants/constants";
 import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
 import {useLocation, useParams } from 'react-router-dom';
+import {PeakLogo} from "../../common/logo/PeakLogo";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -22,6 +22,7 @@ export const PeakWelcome = (props: {}) => {
         <div className={"welcome-page-container"}>
             <div className={"welcome-container"}>
                 <PeakLogo className={"welcome-logo"}/>
+                <h2 className="peak-subtitle">Learn. Share. Grow.</h2>
                 { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow || loggedOutFlow}/> }
             </div>
         </div>

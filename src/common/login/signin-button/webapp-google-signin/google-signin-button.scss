@@ -1,3 +1,32 @@
 .peak-google-login-button {
+  cursor: pointer;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px!important;
+  padding: 0px 32px!important;
+  background: inherit;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 16px -4px!important;
+  border: 1px solid rgb(240, 237, 237)!important;
+  font-size: 13px;
+  width: 225px;
+  height: 40px;
+  font-weight: 500;
 
+  .peak-google-login-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+  }
+
+  span {
+    flex-grow: 1;
+    text-align: left;
+    color: rgba(20, 20, 50, .69);
+  }
+
+  &:hover {
+    background-color: rgb(250, 249, 249)!important;
+  }
 }

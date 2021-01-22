@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 import GoogleLogin, {GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
 import "./google-signin-button.scss"
-import {Peaker, setUser} from "../../../../redux/slices/user/userSlice";
+import {setUser} from "../../../../redux/slices/user/userSlice";
 import {connect, useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {message} from "antd";
@@ -10,11 +10,13 @@ import {v4 as uuidv4} from "uuid";
 import config from "../../../../constants/environment-vars"
 import {useLinkedUserId} from "../../../../utils/hooks";
 import { addUserAccount } from '../../../../redux/slices/userAccountsSlice';
+import {Peaker} from "../../../../types";
+const loginLogo = require('../../../../assets/icons/google-login.svg');
 
 const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
     const { isDesktopLogin } = props
     const oneTimeCode = uuidv4()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const linkedUserId: string | null = useLinkedUserId()
@@ -58,10 +60,15 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
         <GoogleLogin
             clientId="261914177641-0gu5jam6arv5m6n95vdjmfu8hpa1kunj.apps.googleusercontent.com"
             buttonText="Sign in with Google"
+            render={renderProps => (
+                <button className="peak-google-login-button" onClick={renderProps.onClick}>
+                    <img className="peak-google-login-icon" src={loginLogo}/>
+                    <span>Sign in with Google</span>
+                </button>
+            )}
             onSuccess={login}
             onFailure={failedResponseFromGoogle}
             theme={"light"}
-            className="peak-google-login-button"
             cookiePolicy={'single_host_origin'}
         />
     )
