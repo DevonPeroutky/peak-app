@@ -241,9 +241,9 @@ function useSaveJournalEntryRequest() {
 }
 
 function useBulkSaveJournalEntryRequest() {
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
 
-    return (entries: JournalEntry[]) => {
+    return (entries: JournalEntry[], user: Peaker) => {
+        console.log(`The current user is ${user.email} --> ${user.id}`)
         return peakAxiosClient.post(`/api/v1/users/${user.id}/bulk-update-journal`, {
             "journal_entries": entries
         })
@@ -272,9 +272,9 @@ export function useJournalSaver() {
 function useBulkJournalEntrySaver() {
     const dispatch = useDispatch();
     const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
-    return (entries: JournalEntry[]) => {
-
-        return bulkSaveJournalEntry(entries)
+    return (entries: JournalEntry[], user: Peaker) => {
+        console.log(`REQUESTING with ${user.email}`)
+        return bulkSaveJournalEntry(entries, user)
             .then((res) => {
                 const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
                 batch(() => {

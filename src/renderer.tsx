@@ -32,11 +32,13 @@ import React from "react";
 import App from "./App";
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
-import {Peaker, setUser} from "./redux/slices/user/userSlice";
+import {setUser} from "./redux/slices/user/userSlice";
 import {enterFullscreen, leaveFullscreen, journalHotkeyPressed, setOffline, setOnline} from "./redux/slices/electronSlice";
 import {message} from "antd";
 import peakAxiosClient from "./client/axiosConfig"
 import { store } from "./redux/store"
+import {Peaker} from "./types";
+import {loadEntireWorldForAllAccounts} from "./utils/loading-util";
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 ReactDOM.render(<App/>, document.getElementById('root'));
@@ -54,6 +56,11 @@ ipcRenderer.on('login-user', (event, arg) => {
     }).catch(() => {
         message.error("Error logging you into Peak. Please let Devon know");
     })
+})
+
+ipcRenderer.on('add-user', (event, arg) => {
+    console.log(`LOAD ALL THE USERS`)
+    window.location.href = `/main_window#/temp-desktop-login`
 })
 
 ipcRenderer.on('fullscreen', (event, arg) => {

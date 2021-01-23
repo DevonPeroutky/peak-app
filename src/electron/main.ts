@@ -122,9 +122,13 @@ app.on('activate', () => {
 // Handle Deep Links
 deeplink.on('received', (link: string) => {
   const [base_url, returned_code] = link.split("returned-code=")
+  console.log(`RECEIVED`)
+  console.log(base_url)
+
+  const channel = (link.includes("returned-code")) ? 'login-user' : 'add-user'
 
   mainWindow = BrowserWindow.getAllWindows()[0]
 
   // TODO: Verify returned_code
-  mainWindow && mainWindow.webContents.send('login-user', returned_code)
+  mainWindow && mainWindow.webContents.send(channel, returned_code)
 });

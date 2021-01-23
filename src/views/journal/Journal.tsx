@@ -154,7 +154,7 @@ const PeakJournal = (props: { }) => {
             const newEntries: JournalEntry[] = rawSlateNodes.filter(n => n.type === JOURNAL_ENTRY).map(slateNode => convertSlateNodeToJournalEntry(slateNode, currentUser.id))
 
             const modifiedEntries = newEntries.filter((je, index) => JSON.stringify(je.body) !== JSON.stringify(journalEntries[index].body))
-            saveBulkJournalEntries(modifiedEntries)
+            saveBulkJournalEntries(modifiedEntries, currentUser)
             onChangeMention(editor);
         }
     }

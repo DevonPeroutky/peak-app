@@ -5,7 +5,7 @@ import {
     useCurrentWikiPage,
     useSavePageRequest,
     useDebounceWikiSaver,
-    useDebounceBulkJournalEntrySaver
+    useDebounceBulkJournalEntrySaver, useCurrentUser
 } from '../../../../../utils/hooks';
 import { useDispatch } from 'react-redux';
 import {updatePageContents} from '../../../../../redux/slices/wikiPageSlice';
@@ -23,6 +23,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     const matchFunc = (n: Node) => n.type === ELEMENT_CODE_BLOCK && n.id === element.id
 
     // Hooks
+    const currentUser = useCurrentUser()
     const currentWikiPage = useCurrentWikiPage();
     const dispatch = useDispatch();
     const savePageToDB = useSavePageRequest();
@@ -80,7 +81,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
                 // @ts-ignore
                 const updatedJournalBody = responsibleJournalEntry.body.map(n => (n.id && n.id === props.element.id) ? {...n, ...payload} : n)
                 const newJournalEntry: JournalEntry = {...responsibleJournalEntry, body: updatedJournalBody}
-                saveBulkJournalEntries([newJournalEntry])
+                saveBulkJournalEntries([newJournalEntry], currentUser)
             }
         }
     }

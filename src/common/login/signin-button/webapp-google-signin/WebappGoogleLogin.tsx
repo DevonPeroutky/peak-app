@@ -13,11 +13,13 @@ import { addUserAccount } from '../../../../redux/slices/userAccountsSlice';
 import {Peaker} from "../../../../types";
 const loginLogo = require('../../../../assets/icons/google-login.svg');
 
-const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
-    const { isDesktopLogin } = props
+const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boolean }) => {
+    const { isDesktopLogin, addAccountFlow } = props
     const oneTimeCode = uuidv4()
     const dispatch = useDispatch();
     const history = useHistory();
+
+    console.log(`Add account flow: ${addAccountFlow}`)
 
     const linkedUserId: string | null = useLinkedUserId()
 
@@ -37,9 +39,16 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean }) => {
             dispatch(setUser(authedUser));
             dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {
-                const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
-                window.location.replace(desktopDeepLinkUrl);
-                history.push(`/logged-in?one-time-code=${oneTimeCode}`);
+                if (addAccountFlow) {
+                    const desktopDeepLinkUrl = `${config.protocol}://temp-desktop-login`
+                    console.log(`SENDING THEM TO: ${desktopDeepLinkUrl}`)
+                    window.location.replace(desktopDeepLinkUrl);
+                    history.push(`/logged-in?one-time-code=${oneTimeCode}`);
+                } else {
+                    const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
+                    window.location.replace(desktopDeepLinkUrl);
+                    history.push(`/logged-in?one-time-code=${oneTimeCode}`);
+                }
             } else {
                 history.push(`/home/journal`);
             }
