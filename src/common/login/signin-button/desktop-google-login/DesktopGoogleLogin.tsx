@@ -10,7 +10,6 @@ const DesktopGoogleLogin = (props: { }) => {
         <Button className="peak-electron-welcome-button" type="primary" icon={<GoogleOutlined />} onClick={() => window.open(`${config.base_url}/#/welcome?desktop-login=true`, '_blank')} >
             Continue securely with Google
         </Button>
-
     )
 };
 
