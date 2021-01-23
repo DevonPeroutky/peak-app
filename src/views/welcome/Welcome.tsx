@@ -15,15 +15,17 @@ export const PeakWelcome = (props: {}) => {
     const query = useQuery();
     const desktopLoginParam: string | null = query.get("desktop-login")
     const loggedOutParam: string | null = query.get("logged-out-electron")
+    const addAccountParam: string | null = query.get("add-account")
     const desktopFlow: boolean = desktopLoginParam != null && desktopLoginParam == "true"
     const loggedOutFlow: boolean = loggedOutParam != null && loggedOutParam == "true"
+    const addAccountFlow: boolean = addAccountParam != null && addAccountParam == "true"
 
     return (
         <div className={"welcome-page-container"}>
             <div className={"welcome-container"}>
                 <PeakLogo className={"welcome-logo"}/>
                 <h2 className="peak-subtitle">Learn. Share. Grow.</h2>
-                { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow || loggedOutFlow}/> }
+                { (config.dist === ELECTRON) ? <DesktopGoogleLogin/> : <WebappGoogleLogin isDesktopLogin={desktopFlow || loggedOutFlow} addAccountFlow={addAccountFlow}/> }
             </div>
         </div>
     )

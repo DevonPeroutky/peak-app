@@ -3,7 +3,7 @@ import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
 import { HashRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import PeakLayout from "./views/layout/PeakLayout";
 import { NoMatch } from "./views/not-found/NoMatch";
-import {isAuthenticated, Peaker} from "./redux/slices/user/userSlice";
+import {isAuthenticated} from "./redux/slices/user/userSlice";
 import {useCurrentUser} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
 import {LoggedIn} from "./views/logged-in/LoggedIn";
@@ -12,6 +12,8 @@ import {PeakTimeline} from "./views/timeline/PeakTimeline";
 import {useUserAccounts} from "./utils/requests";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {KeybindingHandlerWrapper} from "./utils/loading-util";
+import {Peaker} from "./types";
+import {TempDesktopLogin} from "./views/temp-desktop-login/TempDesktopLogin";
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()
@@ -34,6 +36,9 @@ const ProvidedApp = (props: {}) => {
                     </Route>
                     <Route path="/logged-in">
                         <LoggedIn/>
+                    </Route>
+                    <Route path="/temp-desktop-login">
+                        <TempDesktopLogin/>
                     </Route>
                     <AuthedRoute>
                         <Switch>

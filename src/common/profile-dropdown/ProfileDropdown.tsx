@@ -10,14 +10,14 @@ import {useUserAccounts} from "../../utils/requests";
 import {DisplayPeaker} from "../../redux/slices/userAccountsSlice";
 import { capitalize } from "lodash";
 import {useAccountSwitcher} from "../../utils/loading-util";
+import {isElectron} from "../../utils/environment";
 
 export const ProfileDropdown = (props: {}) => {
-    const isElectron = useIsContextElectron()
     const user = useCurrentUser()
     const userAccounts: DisplayPeaker[] = useUserAccounts()
 
     const signinAdditionalAccount = () => {
-        window.open(`${config.base_url}/#/welcome?desktop-login=${isElectron}&${EXISTING_PEAK_USER_ID}=${user.peak_user_id}`, '_blank')
+        window.open(`${config.base_url}/#/welcome?desktop-login=${isElectron}&${EXISTING_PEAK_USER_ID}=${user.peak_user_id}&add-account=true`, '_blank')
     }
 
     const menu = (
