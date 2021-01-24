@@ -28,8 +28,6 @@ export function previous(editor: ReactEditor): Node | undefined {
         const [curr, currPath] = Editor.above(editor)
         const currParent = Node.parent(editor, currPath)
 
-        console.log(`PrevParent`)
-        console.log(prevParent)
         previousNode = (prevParent && (isPeakKnowledgeNoteType(prevParent) && !isPeakKnowledgeNoteType(currParent))) ? prevParent : prev
     }
     return previousNode
