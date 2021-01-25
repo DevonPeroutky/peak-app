@@ -78,7 +78,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
-            submitNote(
+            submitNoteViaWebsockets(
+                channel,
                 submitNodeMessage.userId,
                 submitNodeMessage.selectedTags,
                 submitNodeMessage.pageTitle,
@@ -86,11 +87,14 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 submitNodeMessage.body,
                 submitNodeMessage.pageUrl
             )
-            .then(res => {
-                sendSuccessfulSyncMessage(submitNodeMessage)
-            }).catch(err => {
-                console.log(`I HAVE TO FUCKING CATCH?!??!`)
-                sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon.")
-            })
+                .receive("ok", _ => {
+                    console.log(`Received the message`)
+                    sendSuccessfulSyncMessage(submitNodeMessage)
+                })
+                .receive("timeout", _ => {
+                    console.log(`WE ARE TIMING OUT?????`)
+                    sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
+                })
+                .receive("error", _ => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
     }
 });
