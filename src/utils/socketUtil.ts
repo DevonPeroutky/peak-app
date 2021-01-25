@@ -1,8 +1,8 @@
-import { Socket } from 'phoenix';
+import {Channel, Socket} from 'phoenix';
 import {useCurrentUser} from "./hooks";
 import {useEffect} from "react";
 
-export const establishSocketConnection = (userId: string) => {
+export function establishSocketConnectionToChannel(userId: string): Channel {
     console.log(`!!!!!!!!!!!! Establishing Socket Connection for ${userId}`)
 
     // TODO: We should be sending a token
@@ -18,7 +18,7 @@ export const establishSocketConnection = (userId: string) => {
     socket.onClose( e => console.log("CLOSE: ", e))
     socket.connect()
 
-    const channel = socket.channel(`journal:${userId}`, {});
+    const channel: Channel = socket.channel(`journal:${userId}`, {});
 
     channel.join()
         .receive("error", (err) => {
@@ -41,8 +41,9 @@ export const establishSocketConnection = (userId: string) => {
         console.log("terminating session")
         channel.leave()
     })
-}
 
+    return channel
+}
 
 export const useSockets = () => {
     const user = useCurrentUser()
@@ -53,9 +54,10 @@ export const useSockets = () => {
 
     useEffect(() => {
         if (!socket) {
-            establishSocketConnection(currentUserAccountId)
+            establishSocketConnectionToChannel(currentUserAccountId)
         } else {
             console.log(`Already have a socket for ${currentUserAccountId}`)
         }
     }, [currentUserAccountId]);
 }
+

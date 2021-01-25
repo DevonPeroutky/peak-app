@@ -1,16 +1,19 @@
 import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import {submitNote} from "../utils/noteUtil";
+import {submitNote, submitNoteViaWebsockets} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
 import {loadTags} from "../utils/tagUtil";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
+import {Channel, Socket} from 'phoenix';
+import {establishSocketConnectionToChannel} from "../../utils/socketUtil";
 
 // TODO CHANGE THIS <-------
 // var userId: string = "108703174669232421421";
-var userId: string = "";
+let userId: string
+let channel: Channel
 
 // --------------------------------
 // Fetch User Auth Token
@@ -30,10 +33,13 @@ chrome.identity.getAuthToken({
         loadUserRequest(chrome_user.id)
             .then(r => {
                 const user: Peaker = r.data.data as Peaker;
-                console.log(user)
-                console.log(`Syncing user: ${chrome_user} to chrome storage`)
+                console.log(`Syncing user to chrome storage`, user)
                 setItemInChromeState("user", user)
                 userId = user.id
+
+                if (!channel) {
+                    channel = establishSocketConnectionToChannel(userId)
+                }
 
                 loadTags(chrome_user.id)
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
@@ -79,7 +85,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 submitNodeMessage.favIconUrl,
                 submitNodeMessage.body,
                 submitNodeMessage.pageUrl
-            ).then(res => {
+            )
+            .then(res => {
                 sendSuccessfulSyncMessage(submitNodeMessage)
             }).catch(err => {
                 console.log(`I HAVE TO FUCKING CATCH?!??!`)

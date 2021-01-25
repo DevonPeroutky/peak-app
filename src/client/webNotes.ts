@@ -7,6 +7,7 @@ import {PeakTag} from "../types";
 // TODO: APPEND TAGS TO BODY
 export function createWebNoteRequest(userId: string, web_note: { title: string, url: string, favIconUrl: string, body: Node[] }, selected_tags: PeakTag[]) {
     const currentDate = getCurrentFormattedDate()
+
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
         "note": {
             title: web_note.title,
