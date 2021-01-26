@@ -17,7 +17,7 @@ import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {establishSocketConnection, useSockets} from "../../utils/socketUtil";
+import {useJournalSubscription} from "../../utils/socketUtil";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -29,7 +29,7 @@ const PeakLayout = (props: {}) => {
     const history = useHistory()
     const isOnline = useOnlineStatus()
     // establishSocketConnection(currentUser.id)
-    useSockets()
+    useJournalSubscription()
 
     useEffect(() => {
         if (!isOnline) {

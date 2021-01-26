@@ -8,7 +8,7 @@ import {loadTags} from "../utils/tagUtil";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel, Socket} from 'phoenix';
-import {establishSocketConnectionToChannel} from "../../utils/socketUtil";
+import {establishSocketConnectionToUsersChannel} from "../../utils/socketUtil";
 
 // TODO CHANGE THIS <-------
 // var userId: string = "108703174669232421421";
@@ -38,7 +38,7 @@ chrome.identity.getAuthToken({
                 userId = user.id
 
                 if (!channel) {
-                    channel = establishSocketConnectionToChannel(userId)
+                    channel = establishSocketConnectionToUsersChannel(userId)
                 }
 
                 loadTags(chrome_user.id)
