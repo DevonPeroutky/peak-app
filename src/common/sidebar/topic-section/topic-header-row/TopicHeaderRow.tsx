@@ -14,6 +14,7 @@ import cn from "classnames";
 import {PlusSquareOutlined} from "@ant-design/icons/lib";
 import "./topic-header-row.scss";
 import {capitalize_and_truncate} from "../../../../utils/strings";
+import {EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
     const [hovered, setHovering] = useState(false);
@@ -24,11 +25,10 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
     const createPageUnderTopic = () => {
         const empty_title = { type: TITLE, children: [{ text: ''}] }
-        const empty_paragraph = { type: ELEMENT_PARAGRAPH, children: [{ text: ''}] }
 
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
-                body: [{ children: [empty_title, empty_paragraph]}],
+                body: [{ children: [empty_title, EMPTY_PARAGRAPH_NODE]}],
                 topic_id: props.topic.id,
                 title: "",
                 privacy_level: "private",

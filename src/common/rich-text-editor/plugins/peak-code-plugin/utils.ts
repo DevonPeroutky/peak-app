@@ -5,6 +5,7 @@ import {setEditorFocusToNode} from "../../../../redux/slices/wikiPageSlice";
 import {insertCustomBlockElement, next, previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
+import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
@@ -16,10 +17,7 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
             id: nodeId,
             children: [{text: ''}]
         },
-        {
-            type: ELEMENT_PARAGRAPH,
-            children: [{text: ' '}]
-        }
+        EMPTY_PARAGRAPH_NODE
     ]);
     const pageId = window.location.href.split("/").pop()
     store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))

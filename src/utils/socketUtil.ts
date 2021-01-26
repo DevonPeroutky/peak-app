@@ -7,9 +7,9 @@ import {AppState} from "../redux";
 import {PeakWikiPage} from "../constants/wiki-types";
 import {JOURNAL} from "../common/rich-text-editor/types";
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
-import { updateJournalEntry } from 'src/redux/slices/wikiPageSlice';
 import {ELEMENT_WEB_NOTE} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {omit} from "ramda";
+import { updateJournalEntry } from '../redux/slices/wikiPageSlice';
 
 export function establishSocketConnectionToUsersChannel(userId: string): Channel {
     console.log(`!!!!!!!!!!!! Establishing Socket Connection for ${userId}`)

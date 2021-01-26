@@ -3,6 +3,7 @@ import {Editor, Node, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/utils";
+import {EMPTY_PARAGRAPH_NODE} from "../editors/constants";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -59,10 +60,7 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
             children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
             ...nodeProps,
         },
-        {
-            type: ELEMENT_PARAGRAPH,
-            children: [{text: ''}]
-        }
+        EMPTY_PARAGRAPH_NODE
     ]);
 }
 export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
