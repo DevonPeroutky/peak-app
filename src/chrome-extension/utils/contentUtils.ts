@@ -1,6 +1,12 @@
 import {MessageType} from "../constants/models";
+import {loadTags} from "./tagUtil";
+import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
+import {TAGS_KEY} from "./storageUtils";
+import {Peaker} from "../../types";
+import {logUserIn} from "./authUtil";
 
-export const idempotentlyInjectContentScript = (tabId: number, loadTagsAndOpenDrawer: () => void) => {
+type Tab = chrome.tabs.Tab;
+const idempotentlyInjectContentScript = (tabId: number, loadTagsAndOpenDrawer: () => void) => {
     chrome.tabs.sendMessage(tabId, { message_type: MessageType.Ping }, responseMessage => {
         // Content Script did respond so it must not be there
         if (!responseMessage) {
@@ -16,4 +22,36 @@ export const idempotentlyInjectContentScript = (tabId: number, loadTagsAndOpenDr
             loadTagsAndOpenDrawer()
         }
     });
+}
+export function injectContentScriptOpenDrawer() {
+    function injectContentScript(user: Peaker) {
+        function loadTagsAndOpenDrawer(userId: string, activeTab: Tab) {
+            loadTags(userId )
+                .then(tags => {
+                    sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+                }).catch(err => {
+                sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
+                chrome.storage.sync.get(TAGS_KEY, (data) => {
+                    const tags = data[TAGS_KEY]
+                    sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+                })
+            });
+        }
+        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+            const activeTab: Tab = tabs[0]
+            console.log(`CURRENT USER`, user)
+            idempotentlyInjectContentScript(activeTab.id, () => loadTagsAndOpenDrawer(user.id, activeTab))
+        })
+    }
+
+    chrome.storage.sync.get("user", data => {
+        const user: Peaker | null | undefined = data["user"]
+        if (user) {
+            console.log(`DA USER`, user)
+            injectContentScript(user)
+        } else {
+            console.log(`Need to login the user in`)
+            logUserIn(injectContentScript)
+        }
+    })
 }

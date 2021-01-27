@@ -1,12 +1,10 @@
 import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
-import {Peaker} from "../../../../redux/slices/user/userSlice";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";
 import {TITLE} from "../../../rich-text-editor/types";
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import peakAxiosClient from "../../../../client/axiosConfig"
-import {createPage, PeakWikiPage, setEditing} from "../../../../redux/slices/wikiPageSlice";
+import {createPage, setEditing} from "../../../../redux/slices/wikiPageSlice";
 import {message} from "antd";
 import {DeleteTopicModal} from "../../../modals/delete-topic-modal/DeleteTopicModal";
 import {UpdateTopicModal} from "../../../modals/update-topic/UpdateTopicModal";
@@ -15,6 +13,8 @@ import {PlusSquareOutlined} from "@ant-design/icons/lib";
 import "./topic-header-row.scss";
 import {capitalize_and_truncate} from "../../../../utils/strings";
 import {EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
+import {Peaker} from "../../../../types";
+import {PeakWikiPage} from "../../../../constants/wiki-types";
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
     const [hovered, setHovering] = useState(false);

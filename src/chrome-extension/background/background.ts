@@ -1,19 +1,18 @@
 import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import {submitNote, submitNoteViaWebsockets} from "../utils/noteUtil";
+import { submitNoteViaWebsockets} from "../utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
-import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
+import {injectContentScriptOpenDrawer} from "../utils/contentUtils";
 import {loadTags} from "../utils/tagUtil";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel, Socket} from 'phoenix';
 import {establishSocketConnectionToUsersChannel} from "../../utils/socketUtil";
 
-// TODO CHANGE THIS <-------
-// var userId: string = "108703174669232421421";
-let userId: string
 let channel: Channel
+
+chrome.storage.sync.clear()
 
 // --------------------------------
 // Fetch User Auth Token
@@ -22,7 +21,7 @@ chrome.identity.getAuthToken({
     interactive: true
 }, function(token) {
     if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
+        console.error("ERROR RETRIEVING THE AUTH TOKEN", chrome.runtime.lastError.message);
         return;
     }
     console.log(`Token: ${token}`)
@@ -35,13 +34,11 @@ chrome.identity.getAuthToken({
                 const user: Peaker = r.data.data as Peaker;
                 console.log(`Syncing user to chrome storage`, user)
                 setItemInChromeState("user", user)
-                userId = user.id
 
                 if (!channel) {
-                    channel = establishSocketConnectionToUsersChannel(userId)
+                    // TODO Remove the redux dependency from this
+                    channel = establishSocketConnectionToUsersChannel(user.id)
                 }
-
-                loadTags(chrome_user.id)
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
 
     }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
@@ -64,7 +61,7 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.commands.onCommand.addListener(function(command) {
     switch (command) {
         case "save-page":
-            injectContentScriptOpenDrawer(userId)
+            injectContentScriptOpenDrawer()
             break;
         default:
             console.log(`Command: ${command} ???`);

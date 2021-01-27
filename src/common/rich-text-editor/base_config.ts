@@ -1,3 +1,4 @@
+import {Node} from "slate";
 import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {
@@ -6,10 +7,11 @@ import {
     CodePlugin,
     ELEMENT_BLOCKQUOTE,
     ELEMENT_PARAGRAPH,
-    ExitBreakPlugin,
+    ExitBreakPlugin, getBlockAbove,
     getSelectableElement,
     ImagePlugin,
-    isBlockAboveEmpty,
+    isAncestorEmpty, isBlockAboveEmpty,
+    isSelectionAtBlockEnd,
     isSelectionAtBlockStart,
     ItalicPlugin,
     ListPlugin,
@@ -36,6 +38,8 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "./defaults";
+import {Editor} from "slate";
+import {last} from "ramda";
 
 const styleDraggableOptions = ({ type, level, component, ...options}: StyledNodeConfig) => (
     [
@@ -82,12 +86,14 @@ export const baseBehaviorPlugins = [
             {
                 types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Enter'],
-                predicate: isBlockAboveEmpty
+                defaultType: ELEMENT_PARAGRAPH,
+                predicate: isBlockAboveEmpty,
             },
             {
                 types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
-                predicate: isSelectionAtBlockStart
+                defaultType: ELEMENT_PARAGRAPH,
+                predicate: isSelectionAtBlockStart,
             }
         ]
     }),

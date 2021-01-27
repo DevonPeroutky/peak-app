@@ -66,3 +66,5 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
 export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
     return (editor: Editor) => insertCustomBlockElement(editor, nodeType, nodeProps)
 }
+
+// export const text = (editor: Editor, node: Ancestor) => !Node.string(node) && !node.children.some((n) => Editor.isInline(editor, n));

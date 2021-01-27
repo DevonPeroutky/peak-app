@@ -172,6 +172,7 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
     switch (request.message_type) {
         case MessageType.SaveToPeak:
+            console.log(`[Content] Opening the Drawer`)
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
             break;

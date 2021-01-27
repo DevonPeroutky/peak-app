@@ -86,8 +86,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
     }
 
-    console.log(`BODY`, body)
-
     return (
         <Drawer
             title={<PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>}
