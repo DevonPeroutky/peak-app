@@ -3,8 +3,6 @@ import {ChromeUser} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
 import {Peaker} from "../../types";
 import {setItemInChromeState} from "./storageUtils";
-import {loadTags} from "./tagUtil";
-
 
 export function logUserIn(callback: (user: Peaker) => void) {
 
@@ -25,13 +23,9 @@ export function logUserIn(callback: (user: Peaker) => void) {
                     console.log(`Syncing user to chrome storage`, user)
                     setItemInChromeState("user", user)
                     // TODO WATER WE DOING HERE BOYZZZ
-                    // userId = user.id
-                    //
                     // if (!channel) {
                     //     channel = establishSocketConnectionToUsersChannel(userId)
                     // }
-
-                    // loadTags(chrome_user.id)
                     callback(user)
                 }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
         }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));

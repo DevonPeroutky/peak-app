@@ -23,23 +23,23 @@ const idempotentlyInjectContentScript = (tabId: number, loadTagsAndOpenDrawer: (
         }
     });
 }
+function loadTagsAndOpenDrawer(userId: string, activeTab: Tab) {
+    loadTags(userId )
+        .then(tags => {
+            sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+        }).catch(err => {
+        sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
+        chrome.storage.sync.get(TAGS_KEY, (data) => {
+            const tags = data[TAGS_KEY]
+            sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+        })
+    });
+}
+
 export function injectContentScriptOpenDrawer() {
     function injectContentScript(user: Peaker) {
-        function loadTagsAndOpenDrawer(userId: string, activeTab: Tab) {
-            loadTags(userId )
-                .then(tags => {
-                    sendOpenSavePageDrawerMessage(activeTab, userId, tags)
-                }).catch(err => {
-                sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
-                chrome.storage.sync.get(TAGS_KEY, (data) => {
-                    const tags = data[TAGS_KEY]
-                    sendOpenSavePageDrawerMessage(activeTab, userId, tags)
-                })
-            });
-        }
         chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
             const activeTab: Tab = tabs[0]
-            console.log(`CURRENT USER`, user)
             idempotentlyInjectContentScript(activeTab.id, () => loadTagsAndOpenDrawer(user.id, activeTab))
         })
     }
@@ -47,10 +47,8 @@ export function injectContentScriptOpenDrawer() {
     chrome.storage.sync.get("user", data => {
         const user: Peaker | null | undefined = data["user"]
         if (user) {
-            console.log(`DA USER`, user)
             injectContentScript(user)
         } else {
-            console.log(`Need to login the user in`)
             logUserIn(injectContentScript)
         }
     })
