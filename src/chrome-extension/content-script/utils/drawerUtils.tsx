@@ -45,7 +45,6 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
 
 export function removeDrawer(activeTabId: string) {
     chrome.storage.sync.remove([activeTabId], () => {
-        console.log(`SUCCESS?`)
         unmountComponentAtNode(document.getElementById('my-extension-root'))
     })
 }
