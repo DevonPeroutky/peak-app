@@ -1,11 +1,11 @@
 import {message} from "antd";
-import {createWebNoteRequest} from "../../client/webNotes";
+import {createWebNoteRequest} from "../../../client/webNotes";
 import {Node} from "slate";
-import {PeakTag} from "../../types";
-import {futureCreatePeakTags} from "../../client/tags-base";
+import {PeakTag} from "../../../types";
+import {futureCreatePeakTags} from "../../../client/tags-base";
 import {Channel, Push, Socket} from "phoenix";
-import {ELEMENT_WEB_NOTE} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {getCurrentFormattedDate} from "../../utils/time";
+import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {getCurrentFormattedDate} from "../../../utils/time";
 
 export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string) => {
     futureCreatePeakTags(userId, selectedTags).catch(res => {

@@ -16,16 +16,16 @@ import 'antd/lib/spin/style/index.css';
 import "./save-note-modal.scss"
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import {createEditor, Node} from "slate";
-import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
-import {PeakLogo} from "../../../common/logo/PeakLogo";
-import {SUBMITTING_STATE} from "../../constants/constants";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
-import {chromeExtensionNormalizers} from "../../../common/rich-text-editor/editors/chrome-extension/config";
-import {INITIAL_PAGE_STATE} from "../../../constants/editor";
-import {PeakTag} from "../../../types";
-import {TagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
+import {PeakTag} from "../../../../types";
+import {SUBMITTING_STATE} from "../../../constants/constants";
+import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
+import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../utils/messageUtils";
+import {chromeExtensionNormalizers} from "../../../../common/rich-text-editor/editors/chrome-extension/config";
+import {PeakLogo} from "../../../../common/logo/PeakLogo";
+import {TagSelect} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 
 export interface SaveNoteDrawerProps {
     userId: string

@@ -1,3 +1,4 @@
+export const TAGS_KEY = "tags"
 export const ACTIVE_TAB_KEY = "activeTab"
 export const ACTIVE_DRAWER_STATE_KEY = "activeDrawerState"
 

@@ -1,10 +1,9 @@
 import axios from 'axios';
-import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
+import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import { submitNoteViaWebsockets} from "../utils/noteUtil";
-import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
-import {injectContentScriptOpenDrawer} from "../utils/contentUtils";
-import {loadTags} from "../utils/tagUtil";
+import { submitNoteViaWebsockets} from "./utils/noteUtil";
+import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
+import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel, Socket} from 'phoenix';

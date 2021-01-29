@@ -1,9 +1,9 @@
-import {MessageType} from "../constants/models";
+import {MessageType} from "../../constants/models";
 import {loadTags} from "./tagUtil";
 import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
-import {TAGS_KEY} from "./storageUtils";
-import {Peaker} from "../../types";
+import {Peaker} from "../../../types";
 import {logUserIn} from "./authUtil";
+import {TAGS_KEY} from "../../constants/constants";
 
 type Tab = chrome.tabs.Tab;
 const idempotentlyInjectContentScript = (tabId: number, loadTagsAndOpenDrawer: () => void) => {

@@ -1,8 +1,8 @@
 import axios from "axios";
-import {ChromeUser} from "../constants/models";
-import {loadUserRequest} from "../../client/user";
-import {Peaker} from "../../types";
-import {setItemInChromeState} from "./storageUtils";
+import {ChromeUser} from "../../constants/models";
+import {loadUserRequest} from "../../../client/user";
+import {Peaker} from "../../../types";
+import {setItemInChromeState} from "../../utils/storageUtils";
 
 export function logUserIn(callback: (user: Peaker) => void) {
 
