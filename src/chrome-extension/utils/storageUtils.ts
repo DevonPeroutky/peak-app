@@ -1,5 +1,11 @@
 
-export const setItemInChromeState = (key: string, value, callbackFunc: () => void = () => console.log(`Set the State.`)) => {
+
+const debugLogState = () => {
+    chrome.storage.sync.get(null, (data) => {
+        console.log(`Current State is now: `, data)
+    })
+}
+export const setItemInChromeState = (key: string, value, callbackFunc: () => void = debugLogState ) => {
     chrome.storage.sync.set({ [key]: value }, callbackFunc)
 }
 

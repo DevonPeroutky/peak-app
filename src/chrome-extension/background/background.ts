@@ -1,13 +1,14 @@
 import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import { submitNoteViaWebsockets} from "./utils/noteUtil";
+import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
-import {Channel, Socket} from 'phoenix';
+import {Channel} from 'phoenix';
 import {establishSocketConnectionToUsersChannel} from "../../utils/socketUtil";
+import {ACTIVE_TAB_KEY} from "../constants/constants";
 
 let channel: Channel
 
@@ -66,6 +67,13 @@ chrome.commands.onCommand.addListener(function(command) {
             console.log(`Command: ${command} ???`);
     }
 });
+
+// ------------------------------------------------
+// Maintain activeTab in Storage for content script
+// ------------------------------------------------
+chrome.tabs.onActivated.addListener(function (tab) {
+    setItemInChromeState(ACTIVE_TAB_KEY, tab.tabId)
+})
 
 // ---------------------------------------
 // Listen for Messages from Content Script

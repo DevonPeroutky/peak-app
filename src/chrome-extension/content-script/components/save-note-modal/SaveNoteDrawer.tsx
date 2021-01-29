@@ -73,10 +73,10 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
         const editorHasFocus: boolean = ReactEditor.isFocused(editor)
         if (nodesToAppend && !editorHasFocus) {
             if (isEmpty()) {
-                setBody([{children: nodesToAppend}])
+                updateThatBody([{children: nodesToAppend}])
             } else {
                 const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
-                setBody([{children: newBodyChildren}])
+                updateThatBody([{children: newBodyChildren}])
             }
         }
     }, [nodesToAppend])

@@ -68,8 +68,6 @@ const PeakJournal = (props: { }) => {
     // - Currently only the first journal entry can be modified via the existing functionality above. So only compare the fist
     //   journal entry for performance reasons.
     useEffect(() => {
-        console.log("Component State", journalContent)
-        console.log("Journal Redux Body", journal.body)
         const todayInComponent: Node[] = journalContent[0].children.slice(0, 2)
         const todayInRedux: Node[] = sort(journalOrdering, journal.body as JournalEntry[]).slice(0, 1).flatMap(convertJournalEntryToSlateNodes)
 

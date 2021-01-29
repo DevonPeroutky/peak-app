@@ -3,12 +3,15 @@ import React from 'react';
 import ReactDOM, {unmountComponentAtNode} from 'react-dom';
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../../types";
-import {ACTIVE_DRAWER_STATE_KEY, ACTIVE_TAB_KEY, TAGS_KEY} from "../../constants/constants";
+import {TAGS_KEY} from "../../constants/constants";
 import {setItemInChromeState} from "../../utils/storageUtils";
 import {SubmitNoteMessage} from "../../constants/models";
 import {sleep} from "../../utils/generalUtil";
 import {Node} from "slate";
 import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteDrawer";
+import {isEmpty} from "ramda";
+import {syncCurrentDrawerState} from "./messageUtils";
+import {INITIAL_PAGE_STATE} from "../../../constants/editor";
 
 export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
     function createDrawer(activeTabId: number, shouldSubmit: boolean) {
@@ -21,26 +24,27 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
             visible: true,
             tabId: currTab.id,
             shouldSubmit: shouldSubmit,
-            closeDrawer: () => removeDrawer(),
+            closeDrawer: () => removeDrawer(activeTabId.toString()),
         } as SaveNoteDrawerProps
 
         const app = document.getElementById('my-extension-root')
         ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     }
 
-    chrome.storage.sync.get([ACTIVE_TAB_KEY], (data) => {
-        setItemInChromeState(ACTIVE_TAB_KEY, currTab.id, () => {
-            const activeTabId: number = data[ACTIVE_TAB_KEY]
-            const alreadyOpen: boolean = currTab.id === activeTabId
-            createDrawer(activeTabId, alreadyOpen)
-        })
+    chrome.storage.sync.get([currTab.id.toString()], (data) => {
+        if (isEmpty(data)) {
+            createDrawer(currTab.id, false)
+            syncCurrentDrawerState(currTab.id, userId, [], currTab.title, currTab.url, currTab.favIconUrl, INITIAL_PAGE_STATE.body as Node[])
+        } else {
+            createDrawer(currTab.id, true)
+        }
     })
 
     setItemInChromeState(TAGS_KEY, tags)
 }
 
-export function removeDrawer() {
-    chrome.storage.sync.remove([ACTIVE_TAB_KEY], () => {
+export function removeDrawer(activeTabId: string) {
+    chrome.storage.sync.remove([activeTabId], () => {
         console.log(`SUCCESS?`)
         unmountComponentAtNode(document.getElementById('my-extension-root'))
     })
@@ -60,7 +64,7 @@ export function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
             tabId: message.tabId,
             shouldSubmit: false,
             submittingState: "submitted",
-            closeDrawer: () => removeDrawer(),
+            closeDrawer: () => removeDrawer(message.tabId.toString()),
         } as SaveNoteDrawerProps
 
         sleep(500).then(() => {
@@ -68,15 +72,19 @@ export function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
             ReactDOM.render(<SaveNoteDrawer {...props} />, app)
 
             sleep(500).then(() => {
-                removeDrawer()
+                removeDrawer(message.tabId.toString())
             })
         })
     })
 }
 
-export function rerenderDrawer(nodesToAppend: Node[]) {
-    chrome.storage.sync.get(null, data => {
-        const state: SubmitNoteMessage = data[ACTIVE_DRAWER_STATE_KEY]
+export function rerenderDrawer(activeTabId: string, nodesToAppend: Node[]) {
+    chrome.storage.sync.get([activeTabId], data => {
+        if (isEmpty(data)) {
+            return
+        }
+
+        const state: SubmitNoteMessage = data[activeTabId]
         const tags: PeakTag[] = data["tags"]
 
         const props: SaveNoteDrawerProps = {
@@ -90,7 +98,7 @@ export function rerenderDrawer(nodesToAppend: Node[]) {
             shouldSubmit: false,
             submittingState: "submitted",
             nodesToAppend: nodesToAppend,
-            closeDrawer: () => removeDrawer(),
+            closeDrawer: () => removeDrawer(activeTabId),
         } as SaveNoteDrawerProps
 
         const app = document.getElementById('my-extension-root')

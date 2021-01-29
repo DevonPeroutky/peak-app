@@ -29,6 +29,7 @@ export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME
     const message: MessageUserMessage = {
         message_type: MessageType.Message_User,
         message_theme: messageTheme,
+        tabId: tabId,
         message: messageBody
     }
     chrome.tabs.sendMessage(tabId, message);

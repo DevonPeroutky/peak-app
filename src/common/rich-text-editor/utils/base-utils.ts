@@ -60,7 +60,7 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
             children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
             ...nodeProps,
         },
-        EMPTY_PARAGRAPH_NODE
+        EMPTY_PARAGRAPH_NODE()
     ]);
 }
 export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {

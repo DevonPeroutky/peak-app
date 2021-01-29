@@ -24,7 +24,7 @@ export const INITIAL_PAGE_STATE: PeakWikiPage = {
     editorState: INITIAL_EDITING_STATE,
     body: [
         {
-            children: [EMPTY_PARAGRAPH_NODE],
+            children: [EMPTY_PARAGRAPH_NODE()],
         }
     ],
     title: '',

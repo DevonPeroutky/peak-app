@@ -2,7 +2,6 @@ import {PeakTag} from "../../../types";
 import {Node} from "slate";
 import {MessageType, SubmitNoteMessage} from "../../constants/models";
 import {setItemInChromeState} from "../../utils/storageUtils";
-import {ACTIVE_DRAWER_STATE_KEY} from "../../constants/constants";
 
 export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
     const message: SubmitNoteMessage = {
@@ -29,6 +28,9 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
         "favIconUrl": favIconUrl,
         "tabId": tabId
     };
-    setItemInChromeState(ACTIVE_DRAWER_STATE_KEY, message)
+    setItemInChromeState(tabId.toString(), message)
 };
 
+export const getCurrentTabFromBackground = () => {
+    chrome.runtime.sendMessage({ type: MessageType.Ping })
+}

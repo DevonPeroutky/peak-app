@@ -15,9 +15,10 @@ import {
 } from "../constants/models";
 import {Node} from "slate";
 import {message} from "antd";
-import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
 import {openDrawer, removeDrawer, removeDrawerWithSavedMessage, rerenderDrawer} from "./utils/drawerUtils";
+import {ACTIVE_TAB_KEY} from "../constants/constants";
+import moment from "moment";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
@@ -28,10 +29,6 @@ chrome.storage.sync.get(function (data) {
     app.id = "my-extension-root";
     document.body.appendChild(app);
     ReactDOM.render(<SaveNoteDrawer {...data as SaveNoteDrawerProps} />, app)
-
-    chrome.storage.sync.remove([ACTIVE_TAB_KEY], () => {
-        console.log(`Cleared the ACTIVE_TAB_KEY`)
-    })
 });
 
 // ---------------------------------------------------
@@ -40,7 +37,7 @@ chrome.storage.sync.get(function (data) {
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (const key in changes) {
         const storageChange = changes[key];
-        console.log('Storage key "%s" in namespace "%s" changed. ' + 'Old value was "%s", new value is "%s".',
+        console.log('Storage key "%s" in namespace "%s" changed. ' + 'Old value was "%s", new value is: ".',
             key,
             namespace,
             storageChange.oldValue,
@@ -71,7 +68,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             switch (messageUser.message_theme) {
                 case "error":
                     message.error(messageUser.message)
-                    removeDrawer()
+                    removeDrawer(messageUser.tabId.toString())
                     break;
                 case "info":
                     message.info(messageUser.message)
@@ -94,8 +91,15 @@ document.addEventListener('mouseup', (event) => {
     const selection = document.getSelection()
     if (!selection.isCollapsed) {
         const text = window.getSelection().toString();
-        const nodes: Node[] = addSelectionAsBlockQuote(text)
-        rerenderDrawer(nodes)
+        const node_id: number = moment().valueOf()
+        console.log(`CURRENT TIME `, node_id)
+        const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
+
+        chrome.storage.sync.get(ACTIVE_TAB_KEY, data => {
+            const activeTabId: string = data[ACTIVE_TAB_KEY].toString()
+            rerenderDrawer(activeTabId, nodes)
+        })
+
     } else {
         body = ""
     }

@@ -26,6 +26,7 @@ export interface ChromeExtMessage {
 
 export interface MessageUserMessage extends ChromeExtMessage {
     message: string
+    tabId: number
     message_theme: ANT_MESSAGE_THEME
 }
 
