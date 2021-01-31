@@ -38,7 +38,9 @@ chrome.identity.getAuthToken({
 
                 if (!channel) {
                     // TODO Remove the redux dependency from this
-                    channel = establishSocketConnectionToUsersChannel(user.id)
+                    establishSocketConnectionToUsersChannel(user.id).then(channelConn => {
+                        channel = channelConn
+                    })
                 }
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
 

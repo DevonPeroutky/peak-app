@@ -26,16 +26,19 @@ export const useJournalSubscription = () => {
     let socket: Socket
 
     useEffect(() => {
+        console.log(`SUBSCRIBING TO JOURNAL`)
 
         if (!socket) {
-            const channel: Channel = establishSocketConnectionToUsersChannel(currentUserAccountId)
-            channel.on("web_note_created", res => {
-                const appState: AppState = store.getState()
-                console.log(`RES`, res)
-                console.log(res.note)
-                const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.note, appState.peakWikiState[JOURNAL])
-                console.log(`NEW for today:`, newJournalEntryForToday)
-                dispatch(updateJournalEntry(newJournalEntryForToday))
+            console.log(`THERE IS NO SOCKETTTTTT`)
+            establishSocketConnectionToUsersChannel(currentUserAccountId).then(channel => {
+                channel.on("web_note_created", res => {
+                    const appState: AppState = store.getState()
+                    console.log(`RES`, res)
+                    console.log(res.note)
+                    const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.note, appState.peakWikiState[JOURNAL])
+                    console.log(`NEW for today:`, newJournalEntryForToday)
+                    dispatch(updateJournalEntry(newJournalEntryForToday))
+                })
             })
         } else {
             console.log(`Already have a socket for ${currentUserAccountId}`)
