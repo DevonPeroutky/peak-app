@@ -7,6 +7,7 @@ $drawer-title-height: 45px;
   font-family: $font-family!important;
   z-index: 2147483645;
   outline: none!important;
+  background: white;
 
   .ant-drawer-header {
     padding-top: $drawer-header-vert-padding;
@@ -35,6 +36,7 @@ $drawer-title-height: 45px;
         box-shadow: none!important;
         padding-top: 4px!important;
         padding-bottom: 4px!important;
+        background-color: white;
       }
 
       .peak-close-icon {
@@ -54,6 +56,13 @@ $drawer-title-height: 45px;
     flex-direction: column;
     //overflow: hidden; /* Hide scrollbars */
 
+    .submitting-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+
     .peak-note-drawer-body {
       display: flex;
       flex-direction: column;
@@ -65,6 +74,7 @@ $drawer-title-height: 45px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        padding-bottom: 64px;
         width: 100%;
 
         .peak-note-drawer-header {
@@ -86,8 +96,10 @@ $drawer-title-height: 45px;
       border-top: 1px solid #f0f0f0;
       width: 100% !important;
       color: $placeholder-text-color;
+      padding-top: 24px;
+      padding-bottom: 24px;
 
-      height: 64px;
+      height: 78px;
       display: flex;
       justify-content: center;
       align-items: center;

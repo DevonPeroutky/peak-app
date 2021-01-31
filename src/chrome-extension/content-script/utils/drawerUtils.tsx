@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM, {unmountComponentAtNode} from 'react-dom';
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../../types";
-import {TAGS_KEY} from "../../constants/constants";
+import {SUBMITTING_STATE, TAGS_KEY} from "../../constants/constants";
 import {setItemInChromeState} from "../../utils/storageUtils";
 import {SubmitNoteMessage} from "../../constants/models";
 import {sleep} from "../../utils/generalUtil";
@@ -15,6 +15,7 @@ import {INITIAL_PAGE_STATE} from "../../../constants/editor";
 
 export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
     function createDrawer(activeTabId: number, shouldSubmit: boolean) {
+        const submittingState: SUBMITTING_STATE = (shouldSubmit) ? "submitting" : "no"
         const props: SaveNoteDrawerProps = {
             userId: userId,
             pageUrl: currTab.url,
@@ -23,6 +24,7 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
             tags: tags,
             visible: true,
             tabId: currTab.id,
+            submittingState: submittingState,
             shouldSubmit: shouldSubmit,
             closeDrawer: () => removeDrawer(activeTabId.toString()),
         } as SaveNoteDrawerProps
@@ -95,7 +97,7 @@ export function rerenderDrawer(activeTabId: string, nodesToAppend: Node[]) {
             visible: true,
             tabId: state.tabId,
             shouldSubmit: false,
-            submittingState: "submitted",
+            submittingState: "no",
             nodesToAppend: nodesToAppend,
             closeDrawer: () => removeDrawer(activeTabId),
         } as SaveNoteDrawerProps

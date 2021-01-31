@@ -25,6 +25,7 @@ import moment from "moment";
 // ---------------------------------------------------
 chrome.storage.sync.get(function (data) {
     console.log(`----------> MOUNTING THE MODALLLL`)
+    console.log(`THE DATA`, data)
     const app = document.createElement('div');
     app.id = "my-extension-root";
     document.body.appendChild(app);
@@ -51,7 +52,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
     switch (request.message_type) {
         case MessageType.SaveToPeak:
-            console.log(`[Content] Opening the Drawer`)
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
             break;
@@ -92,7 +92,6 @@ document.addEventListener('mouseup', (event) => {
     if (!selection.isCollapsed) {
         const text = window.getSelection().toString();
         const node_id: number = moment().valueOf()
-        console.log(`CURRENT TIME `, node_id)
         const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
 
         chrome.storage.sync.get(ACTIVE_TAB_KEY, data => {
