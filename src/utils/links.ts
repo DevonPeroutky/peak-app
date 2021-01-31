@@ -4,7 +4,6 @@ import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extens
 
 // Get the current page id without a hook
 export function getCurrentPageId(): string | undefined {
-    console.log(`CHROME EXTENSION??? ${isChromeExtension}`)
     if (isChromeExtension) { return CHROME_EXTENSION }
 
     const hash: string[] = window.location.hash.split("/")

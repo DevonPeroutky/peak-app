@@ -67,6 +67,8 @@ const PeakJournal = (props: { }) => {
     // Handle updates from outside the editor. (Ex. From Chrome Extension saving, or copying of to-do list)
     // - Currently only the first journal entry can be modified via the existing functionality above. So only compare the fist
     //   journal entry for performance reasons.
+    //
+    // Code Editing also involves update redux.
     useEffect(() => {
         const todayInComponent: Node[] = journalContent[0].children.slice(0, 2)
         const todayInRedux: Node[] = sort(journalOrdering, journal.body as JournalEntry[]).slice(0, 1).flatMap(convertJournalEntryToSlateNodes)
@@ -79,7 +81,6 @@ const PeakJournal = (props: { }) => {
             setJournalContent([{children: newJournal}])
         }
     }, [journal.body])
-
 
     // Initial Loading
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -162,7 +163,6 @@ const PeakJournal = (props: { }) => {
 
     const syncJournalEntries = (newValue: Node[]) => {
         const journalEntries = journal.body as JournalEntry[]
-        console.log(`Current Selection`, editor.selection)
         if (newValue !== journalContent) {
             // Immediately update component state
             // @ts-ignore
@@ -256,8 +256,6 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
 
-    console.log(`CONTENT`)
-    console.log(journalContent)
     return (
         <Slate
             editor={editor}

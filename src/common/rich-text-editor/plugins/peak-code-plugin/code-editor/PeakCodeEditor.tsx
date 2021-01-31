@@ -79,7 +79,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
                 console.log(`WHAT THE FUCK`)
             } else {
                 // @ts-ignore
-                const updatedJournalBody = responsibleJournalEntry.body.map(n => (n.id && n.id === props.element.id) ? {...n, ...payload} : n)
+                const updatedJournalBody = responsibleJournalEntry.body.map(n => (n.id && n.id === props.element.id && n.type === ELEMENT_CODE_BLOCK) ? {...n, ...payload} : n)
                 const newJournalEntry: JournalEntry = {...responsibleJournalEntry, body: updatedJournalBody}
                 saveBulkJournalEntries([newJournalEntry], currentUser)
             }

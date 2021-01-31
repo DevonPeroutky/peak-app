@@ -60,6 +60,7 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
 
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
         if (isCodeBlockNode(previousNode) && (selectionCollapsedAndAtStart)) {
+            event.preventDefault()
             forceFocusToNode(previousNode)
         }
     }
