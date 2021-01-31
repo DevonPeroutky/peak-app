@@ -9,6 +9,7 @@ import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
 import {establishSocketConnectionToUsersChannel} from "../../utils/socketUtil";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {sleep} from "../utils/generalUtil";
 
 let channel: Channel
 

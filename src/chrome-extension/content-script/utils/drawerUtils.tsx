@@ -68,14 +68,8 @@ export function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
             closeDrawer: () => removeDrawer(message.tabId.toString()),
         } as SaveNoteDrawerProps
 
-        sleep(500).then(() => {
-            const app = document.getElementById('my-extension-root')
-            ReactDOM.render(<SaveNoteDrawer {...props} />, app)
-
-            sleep(500).then(() => {
-                removeDrawer(message.tabId.toString())
-            })
-        })
+        const app = document.getElementById('my-extension-root')
+        ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     })
 }
 

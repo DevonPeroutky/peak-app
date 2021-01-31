@@ -27,6 +27,7 @@ import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakLogo} from "../../../../common/logo/PeakLogo";
+import {SavingAnimation} from "./saving-animation/SavingAnimation";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -42,7 +43,7 @@ export interface SaveNoteDrawerProps {
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState, nodesToAppend } = props
+    const { tabId, userId, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState, nodesToAppend } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
@@ -109,7 +110,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
                         editor={editor}
                         selectedTags={selectedTags}
                         setSelectedTags={setSelectedTags}/> :
-                    <SavingAnimation submittingState={submittingState}/>
+                    <SavingAnimation submittingState={submittingState} closeDrawer={closeDrawer}/>
                 }
             </>
         </Drawer>
@@ -117,7 +118,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 }
 
 const DrawerContent = (props) => {
-    const { body, submittingState, updateThatBody, editor, selectedTags, tags, setSelectedTags } = props
+    const { body, updateThatBody, editor, selectedTags, tags, setSelectedTags } = props
 
     return (
         <div className={"peak-note-drawer-body"}>
@@ -129,15 +130,7 @@ const DrawerContent = (props) => {
                     <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
                 </div>
             </div>
-            <PeakDrawerFooter submittingState={submittingState}/>
-        </div>
-    )
-}
-
-const SavingAnimation = (props: {submittingState: SUBMITTING_STATE}) => {
-    return (
-        <div className={"submitting-container"}>
-            <span className={"submitting result-span"}><Spin className={"peak-spinner"}/> Saving</span>
+            <PeakDrawerFooter/>
         </div>
     )
 }
@@ -169,28 +162,11 @@ const SkippableCloseIcon = (props: { closeDrawer: () => void}) => {
     )
 }
 
-const PeakDrawerFooter = (props: {submittingState: SUBMITTING_STATE}) => {
-    const { submittingState } = props
-
-    switch (submittingState) {
-        case "submitting":
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <span className={"submitting result-span"}><Spin className={"peak-spinner"}/> Saving</span>
-                </div>
-            )
-        case "submitted":
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <span className={"success result-span"}><CheckOutlined className={"saved-check"}/> Saved</span>
-                </div>
-            )
-        default:
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <PeakLogo/>
-                    <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
-                </div>
-            )
-    }
+const PeakDrawerFooter = (props) => {
+    return (
+        <div className={"peak-note-drawer-footer"}>
+            <PeakLogo/>
+            <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+        </div>
+    )
 }

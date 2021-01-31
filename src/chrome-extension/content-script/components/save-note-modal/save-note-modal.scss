@@ -56,13 +56,6 @@ $drawer-title-height: 45px;
     flex-direction: column;
     //overflow: hidden; /* Hide scrollbars */
 
-    .submitting-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1 1 auto;
-    }
-
     .peak-note-drawer-body {
       display: flex;
       flex-direction: column;
@@ -112,25 +105,6 @@ $drawer-title-height: 45px;
         vertical-align: center;
         horiz-align: center;
         text-align: center;
-      }
-
-      .result-span {
-
-        &.success {
-          color: $primary-green;
-
-          .saved-check {
-            margin-right: 14px;
-          }
-        }
-
-        &.submitting {
-          color: $primary-blue;
-        }
-
-        .peak-spinner {
-          margin-right: 14px;
-        }
       }
     }
   }
