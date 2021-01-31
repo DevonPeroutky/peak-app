@@ -9,7 +9,6 @@ export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, close
     return (
         <div className={"submitting-container"}>
             <Spinner {...props}/>
-            {(props.submittingState === "submitted") ? <span className={"submitted animate__animated animate__fadeInUp"}>Saved</span> : null}
         </div>
     )
 }
