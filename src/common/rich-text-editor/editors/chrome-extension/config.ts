@@ -1,5 +1,5 @@
 import {
-    BlockquotePlugin, BoldPlugin,
+    BlockquotePlugin, BoldPlugin, CodeBlockPlugin,
     CodePlugin,
     ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin, LinkPlugin,
     ListPlugin,
@@ -18,7 +18,7 @@ import {defaultOptions} from "../../defaults";
 import {StyledNodeConfig} from "../../types";
 import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
-import {autoformatRules, withAutoReplace} from "../../plugins/withAutoReplace";
+import {chromeExtFormatRules, withAutoReplace} from "../../plugins/withAutoReplace";
 
 export const NODE_LEVEL: number = 1
 const basePlugins = [
@@ -66,7 +66,7 @@ const baseNormalizers = [
     withLink(),
     withImageUpload(),
     withAutoformat({
-        rules: autoformatRules,
+        rules: chromeExtFormatRules,
     }),
     withNodeID(),
     withAutoReplace,

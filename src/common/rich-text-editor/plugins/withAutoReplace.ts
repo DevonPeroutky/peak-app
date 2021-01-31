@@ -1,6 +1,6 @@
 import {Editor, Point, Range, Transforms} from 'slate';
 import {
-    AutoformatRule,
+    AutoformatRule, ELEMENT_CODE_BLOCK,
     MARK_BOLD,
     MARK_CODE,
     MARK_ITALIC,
@@ -36,14 +36,6 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 
             const beforeText = Editor.string(editor, range);
             const found = Object.keys(AUTO_REPLACE).find(matcher => beforeText.endsWith(matcher));
-            // const markdown_link = beforeText.match(MARKDOWN_LINK_REGEX)
-            // console.log(`HYYYY`)
-            // console.log(beforeText)
-            // console.log(markdown_link)
-            //
-            // if (markdown_link) {
-            //     console.log('WE GOT A LINK')
-            // }
 
             if (found) {
                 const afterText = AUTO_REPLACE[found];
@@ -110,3 +102,4 @@ const inlineAutoFormatRules: AutoformatRule[] = [
 ]
 
 export const autoformatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules]
+export const chromeExtFormatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules].filter(r => r.type !== ELEMENT_CODE_BLOCK)
