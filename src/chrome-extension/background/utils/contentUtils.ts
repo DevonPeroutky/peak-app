@@ -28,11 +28,11 @@ function loadTagsAndOpenDrawer(userId: string, activeTab: Tab) {
         .then(tags => {
             sendOpenSavePageDrawerMessage(activeTab, userId, tags)
         }).catch(err => {
-        sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
-        chrome.storage.sync.get(TAGS_KEY, (data) => {
-            const tags = data[TAGS_KEY]
-            sendOpenSavePageDrawerMessage(activeTab, userId, tags)
-        })
+            sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
+            chrome.storage.sync.get(TAGS_KEY, (data) => {
+                const tags = data[TAGS_KEY]
+                sendOpenSavePageDrawerMessage(activeTab, userId, tags)
+            })
     });
 }
 

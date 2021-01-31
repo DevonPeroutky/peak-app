@@ -35,9 +35,11 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
 
     chrome.storage.sync.get([currTab.id.toString()], (data) => {
         if (isEmpty(data)) {
+            console.log(`Creating New Drawer`)
             createDrawer(currTab.id, false)
             syncCurrentDrawerState(currTab.id, userId, [], currTab.title, currTab.url, currTab.favIconUrl, INITIAL_PAGE_STATE.body as Node[])
         } else {
+            console.log(`SUBMITTING`)
             createDrawer(currTab.id, true)
         }
     })

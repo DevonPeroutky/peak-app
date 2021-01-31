@@ -9,8 +9,10 @@ import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
+    console.log(`CREATING A CODE BLOCK`)
 
-    Transforms.removeNodes(editor)
+    // DOESN'T WORK in first line of JOURNAL due to normalization error
+    // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, [
         {
             type: ELEMENT_CODE_BLOCK,

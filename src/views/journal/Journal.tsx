@@ -71,8 +71,6 @@ const PeakJournal = (props: { }) => {
         const todayInComponent: Node[] = journalContent[0].children.slice(0, 2)
         const todayInRedux: Node[] = sort(journalOrdering, journal.body as JournalEntry[]).slice(0, 1).flatMap(convertJournalEntryToSlateNodes)
 
-        console.log(todayInComponent)
-        console.log(todayInRedux)
         if (equals(todayInRedux, todayInComponent)) {
             console.log(`No outside updates were made to Redux`)
         } else {
@@ -163,8 +161,8 @@ const PeakJournal = (props: { }) => {
     }, [index, search, target])
 
     const syncJournalEntries = (newValue: Node[]) => {
-        console.log(editor.selection)
         const journalEntries = journal.body as JournalEntry[]
+        console.log(`Current Selection`, editor.selection)
         if (newValue !== journalContent) {
             // Immediately update component state
             // @ts-ignore
@@ -258,6 +256,8 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
 
+    console.log(`CONTENT`)
+    console.log(journalContent)
     return (
         <Slate
             editor={editor}

@@ -4,6 +4,7 @@ import "./saving-animation.scss"
 import {Lottie} from "@crello/react-lottie";
 import saving from "../../../../../assets/animations/saved.json"
 import saved from "../../../../../assets/animations/saving.json"
+import {sleep} from "../../../../utils/generalUtil";
 
 export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => void}) => {
     return (
@@ -29,8 +30,7 @@ const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => v
             <Lottie
                 config={defaultConfig}
                 speed={1}
-                width={"100%"}
-                height={"auto"}
+                className={"peak-saving-animation"}
                 lottieEventListeners={[
                     {
                         name: 'complete',

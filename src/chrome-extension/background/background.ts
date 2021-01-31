@@ -94,7 +94,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             )
                 .receive("ok", _ => {
                     console.log(`Received the message`)
-                    sendSuccessfulSyncMessage(submitNodeMessage)
+                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
                 })
                 .receive("timeout", _ => {
                     console.log(`WE ARE TIMING OUT?????`)
