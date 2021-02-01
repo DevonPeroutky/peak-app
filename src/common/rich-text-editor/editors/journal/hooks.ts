@@ -1,7 +1,5 @@
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import {JournalEntry} from "./types";
-import {omit} from "ramda";
-import {ELEMENT_WEB_NOTE} from "../../plugins/peak-knowledge-plugin/constants";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
@@ -16,9 +14,9 @@ import {
 import {JOURNAL_CHANNEL_ID} from "./constants";
 
 export const useJournalSubscription = () => {
-    function appendWebNoteToJournal(webNote, journal: PeakWikiPage): JournalEntry {
+    function appendWebNoteToJournal(webNoteNodes: Node[], journal: PeakWikiPage): JournalEntry {
         const today: JournalEntry = journal.body[0] as JournalEntry
-        return {...today, body: [...today.body, webNote]}
+        return {...today, body: [...today.body, ...webNoteNodes]}
     }
 
     const user = useCurrentUser()
@@ -30,7 +28,7 @@ export const useJournalSubscription = () => {
         if (socket) {
             const channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
             channel.on("web_note_created", res => {
-                console.log(`Received web_note from backend broadcast`, res)
+                console.log(`Received nodes of web_note from backend broadcast`, res)
                 const appState: AppState = store.getState()
                 const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.note, appState.peakWikiState[JOURNAL])
                 dispatch(updateJournalEntry(newJournalEntryForToday))

@@ -306,7 +306,7 @@ export function useFetchJournal() {
                 console.log(`JOURNAL ENTRIES RES`, res.data.journal_entries)
                 const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
                 console.log(`Sorted Journal`, sortedJournal)
-                // dispatch(setJournalEntries(sortedJournal))
+                dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {
                 message.error({
