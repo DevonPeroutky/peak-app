@@ -18,6 +18,7 @@ import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 import {useJournalSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
+import {establishSocketConnection} from "../../utils/socketUtil";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -28,6 +29,7 @@ const PeakLayout = (props: {}) => {
     const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()
+
     useJournalSubscription()
 
     useEffect(() => {
@@ -35,6 +37,10 @@ const PeakLayout = (props: {}) => {
             history.push("/offline");
         }
     })
+
+    useEffect(() => {
+        establishSocketConnection(currentUser.id)
+    }, [])
 
     useEffect(() => {
         console.log(`FIRING THIS BAD BOY`)

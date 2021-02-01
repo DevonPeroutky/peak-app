@@ -31,6 +31,7 @@ import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/consta
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
 import {PeakTopicNode} from "../redux/slices/user/types";
+import {SocketState} from "../redux/slices/sockets/socketSlice";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -50,6 +51,10 @@ export function useChromeExtEditorState() {
 
 export function useCurrentUser() {
     return useSelector<AppState, Peaker>(state => state.currentUser);
+}
+
+export function useSocket() {
+    return useSelector<AppState, SocketState>(state => state.socket);
 }
 
 export function useFutureReads() {

@@ -6,6 +6,7 @@ import {DisplayPeaker} from "./slices/userAccountsSlice";
 import {PeakBook} from "./slices/booksSlice";
 import {PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
+import {SocketState} from "./slices/sockets/socketSlice";
 
 export const GLOBAL_APP_KEYS = ["electron", "quickSwitcher", "userAccounts"]
 
@@ -18,5 +19,6 @@ export interface AppState {
     quickSwitcher: QuickSwitcherState
     electron: ElectronState,
     tags: PeakTag[],
+    socket: SocketState,
     books: PeakBook[]
 }

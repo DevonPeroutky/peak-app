@@ -17,7 +17,6 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
     };
 
     useEffect(() => {
-        console.log(`USING THE LOADING PROMISES`)
         thePromised().then(res => {
             setLoaded(true);
         })
@@ -28,7 +27,6 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
         return loaded
     };
 
-    console.log(`RENDER LOADED ${loaded}`);
     return (
         <div className={"peak-loader"}>
             <Lottie config={defaultConfig} height="400px" width="400px" speed={2.5} lottieEventListeners={[

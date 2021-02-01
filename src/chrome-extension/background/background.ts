@@ -7,9 +7,13 @@ import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
-import {establishSocketConnectionToUsersChannel} from "../../utils/socketUtil";
+import {
+    establishSocketConnection,
+    subscribeToTopic
+} from "../../utils/socketUtil";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
+import {JOURNAL_CHANNEL_ID} from "../../common/rich-text-editor/editors/journal/constants";
 
 let channel: Channel
 
@@ -38,8 +42,8 @@ chrome.identity.getAuthToken({
 
                 if (!channel) {
                     // TODO Remove the redux dependency from this
-                    establishSocketConnectionToUsersChannel(user.id).then(channelConn => {
-                        channel = channelConn
+                    establishSocketConnection(user.id).then(socket => {
+                        channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
                     })
                 }
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
