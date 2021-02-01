@@ -1,12 +1,12 @@
 import React from "react";
 import {Dropdown, Menu, message, Select} from "antd";
 import cn from "classnames";
-import {formatDate, getCurrentFormattedDate} from "../../../../../utils/time";
-import {all, any, equals} from "ramda"
+import {getCurrentFormattedDate} from "../../../../../utils/time";
+import {all} from "ramda"
 import {Editor, Transforms, Node} from 'slate';
 import {useJournal} from "../../../../../utils/hooks";
 import {FileSyncOutlined} from "@ant-design/icons/lib";
-import {useSelected, useSlate} from "slate-react";
+import {useSlate} from "slate-react";
 import {JOURNAL_ENTRY} from "../../../types";
 import {convertJournalEntryToSlateNodes} from "../../../editors/journal/utils";
 import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";

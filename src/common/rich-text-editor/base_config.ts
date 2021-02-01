@@ -6,10 +6,11 @@ import {
     CodePlugin,
     ELEMENT_BLOCKQUOTE,
     ELEMENT_PARAGRAPH,
-    ExitBreakPlugin,
+    ExitBreakPlugin, getBlockAbove,
     getSelectableElement,
     ImagePlugin,
-    isBlockAboveEmpty,
+    isAncestorEmpty, isBlockAboveEmpty,
+    isSelectionAtBlockEnd,
     isSelectionAtBlockStart,
     ItalicPlugin,
     ListPlugin,
@@ -82,12 +83,14 @@ export const baseBehaviorPlugins = [
             {
                 types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Enter'],
-                predicate: isBlockAboveEmpty
+                defaultType: ELEMENT_PARAGRAPH,
+                predicate: isBlockAboveEmpty,
             },
             {
                 types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
-                predicate: isSelectionAtBlockStart
+                defaultType: ELEMENT_PARAGRAPH,
+                predicate: isSelectionAtBlockStart,
             }
         ]
     }),

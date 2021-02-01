@@ -14,18 +14,20 @@ import 'antd/lib/tag/style/index.css';
 import 'antd/lib/auto-complete/style/index.css';
 import 'antd/lib/spin/style/index.css';
 import "./save-note-modal.scss"
-import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import {createEditor, Node} from "slate";
-import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../content-script/content";
-import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
-import {PeakLogo} from "../../../common/logo/PeakLogo";
-import {SUBMITTING_STATE} from "../../constants/constants";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
-import {chromeExtensionNormalizers} from "../../../common/rich-text-editor/editors/chrome-extension/config";
-import {INITIAL_PAGE_STATE} from "../../../constants/editor";
-import {PeakTag} from "../../../types";
-import {TagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
+import {PeakTag} from "../../../../types";
+import {SUBMITTING_STATE} from "../../../constants/constants";
+import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
+import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../utils/messageUtils";
+import {chromeExtensionNormalizers} from "../../../../common/rich-text-editor/editors/chrome-extension/config";
+import cn from "classnames";
+import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
+import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
+import {TagSelect} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
+import {PeakLogo} from "../../../../common/logo/PeakLogo";
+import {SavingAnimation} from "./saving-animation/SavingAnimation";
 
 export interface SaveNoteDrawerProps {
     userId: string
@@ -41,11 +43,10 @@ export interface SaveNoteDrawerProps {
     closeDrawer: () => void
 }
 export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
-    const { tabId, userId, tags, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState, nodesToAppend } = props
+    const { tabId, userId, closeDrawer, visible, pageTitle, favIconUrl, pageUrl, shouldSubmit, submittingState, nodesToAppend } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
-    const [currentSubmitState, setCurrentSubmitState] = useState<SUBMITTING_STATE>("no")
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
@@ -56,7 +57,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 
     useEffect(() => {
         if (shouldSubmit) {
-            setCurrentSubmitState("submitting")
             sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
@@ -66,17 +66,16 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     }, [pageTitle])
 
     useEffect(() => {
-        setCurrentSubmitState(submittingState)
     }, [submittingState])
 
     useEffect(() => {
         const editorHasFocus: boolean = ReactEditor.isFocused(editor)
         if (nodesToAppend && !editorHasFocus) {
             if (isEmpty()) {
-                setBody([{children: nodesToAppend}])
+                updateThatBody([{children: nodesToAppend}])
             } else {
                 const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
-                setBody([{children: newBodyChildren}])
+                updateThatBody([{children: newBodyChildren}])
             }
         }
     }, [nodesToAppend])
@@ -89,7 +88,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     return (
         <Drawer
             title={<PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>}
-            className="peak-note-drawer"
+            className={cn("peak-note-drawer", (submittingState == "submitting") ? "submitting" : "")}
             placement="right"
             closable={false}
             onClose={closeDrawer}
@@ -101,19 +100,36 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             visible={visible || false}
         >
             <>
-                <div className="peak-note-drawer-body">
-                    <SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>
-                    <div className="peak-note-drawer-tag-section">
-                        <h2 className="peak-note-drawer-header">Tags</h2>
-                        <div className="peak-note-tag-section-container">
-                            <TagsOutlined/>
-                            <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
-                        </div>
-                    </div>
-                </div>
-                <PeakDrawerFooter submittingState={currentSubmitState}/>
+                {(submittingState == "no") ?
+                    <DrawerContent
+                        {...props}
+                        body={body}
+                        updateThatBody={updateThatBody}
+                        editor={editor}
+                        selectedTags={selectedTags}
+                        setSelectedTags={setSelectedTags}/> :
+                    <SavingAnimation submittingState={submittingState} closeDrawer={closeDrawer}/>
+                }
             </>
         </Drawer>
+    )
+}
+
+const DrawerContent = (props) => {
+    const { body, updateThatBody, editor, selectedTags, tags, setSelectedTags } = props
+
+    return (
+        <div className={"peak-note-drawer-body"}>
+            <SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>
+            <div className="peak-note-drawer-tag-section">
+                <h2 className="peak-note-drawer-header">Tags</h2>
+                <div className="peak-note-tag-section-container">
+                    <TagsOutlined/>
+                    <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
+                </div>
+            </div>
+            <PeakDrawerFooter/>
+        </div>
     )
 }
 
@@ -144,28 +160,11 @@ const SkippableCloseIcon = (props: { closeDrawer: () => void}) => {
     )
 }
 
-const PeakDrawerFooter = (props: {submittingState: SUBMITTING_STATE}) => {
-    const { submittingState } = props
-
-    switch (submittingState) {
-        case "submitting":
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <span className={"submitting result-span"}><Spin className={"peak-spinner"}/> Saving</span>
-                </div>
-            )
-        case "submitted":
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <span className={"success result-span"}><CheckOutlined className={"saved-check"}/> Saved</span>
-                </div>
-            )
-        default:
-            return (
-                <div className={"peak-note-drawer-footer"}>
-                    <PeakLogo/>
-                    <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
-                </div>
-            )
-    }
+const PeakDrawerFooter = (props) => {
+    return (
+        <div className={"peak-note-drawer-footer"}>
+            <PeakLogo/>
+            <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+        </div>
+    )
 }

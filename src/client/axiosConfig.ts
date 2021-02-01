@@ -1,10 +1,9 @@
 import axios from 'axios';
 import {backend_host_address} from "../constants/constants";
-import {isElectron} from "../utils/environment";
 
 const defaultConfig = {
     withCredentials: true,
-    baseURL: backend_host_address
+    baseURL: `http://${backend_host_address}`
 }
 const authedAxiosClient = axios.create(defaultConfig);
 

@@ -1,6 +1,6 @@
 import {Editor, Point, Range, Transforms} from 'slate';
 import {
-    AutoformatRule,
+    AutoformatRule, ELEMENT_CODE_BLOCK,
     MARK_BOLD,
     MARK_CODE,
     MARK_ITALIC,
@@ -8,6 +8,7 @@ import {
     unwrapList,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../peak-toolbar/toolbar-controls";
+import {createAndFocusCodeBlock} from "./peak-code-plugin/utils";
 
 const AUTO_REPLACE: { [key: string]: string } = {
     '-->': '→',
@@ -36,14 +37,6 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 
             const beforeText = Editor.string(editor, range);
             const found = Object.keys(AUTO_REPLACE).find(matcher => beforeText.endsWith(matcher));
-            // const markdown_link = beforeText.match(MARKDOWN_LINK_REGEX)
-            // console.log(`HYYYY`)
-            // console.log(beforeText)
-            // console.log(markdown_link)
-            //
-            // if (markdown_link) {
-            //     console.log('WE GOT A LINK')
-            // }
 
             if (found) {
                 const afterText = AUTO_REPLACE[found];
@@ -63,6 +56,7 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 const convertToAutoFormatRule = (editorControl: PeakEditorControl) => {
     return {
         type: editorControl.elementType,
+        trigger: editorControl.trigger,
         preFormat: (editor: Editor) => unwrapList(editor),
         markup: editorControl.markup,
         format: editorControl.customFormat
@@ -110,3 +104,4 @@ const inlineAutoFormatRules: AutoformatRule[] = [
 ]
 
 export const autoformatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules]
+export const chromeExtFormatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules].filter(r => r.type !== ELEMENT_CODE_BLOCK)

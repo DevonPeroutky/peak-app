@@ -86,7 +86,6 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
             leaveDown()
             return
         }
-
         if (direction === "up") {
             codeEditorRef.current!.editor.navigateUp(1)
         } else {
@@ -163,7 +162,7 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
                 setOptions={{
                     tabSize: 2,
                 }}/>
-            {isEditing && shouldFocus ? <span className="exit-instructions">Exit: ⇧/⇩</span> : null }
+            {isEditing && shouldFocus ? <span className="delete-instructions">Delete the Code Block with ⌘ + Backspace</span> : null }
         </div>
     )
 }

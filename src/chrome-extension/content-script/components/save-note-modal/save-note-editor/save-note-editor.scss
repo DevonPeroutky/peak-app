@@ -1,6 +1,8 @@
 .peak-note-editor-container {
   width: 100%;
   height: 69%;
+  overflow: auto;
+  flex: 1 1 auto;
 
   .peak-note-editor {
     height: 100%;

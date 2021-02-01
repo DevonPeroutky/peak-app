@@ -10,7 +10,8 @@ import {DeleteOutlined, EditOutlined, QuestionCircleOutlined} from "@ant-design/
 import {useHistory} from "react-router-dom";
 import { batch } from 'react-redux'
 import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
-import {PeakTopicNode, setUserHierarchy} from "../../redux/slices/user/userSlice";
+import {setUserHierarchy} from "../../redux/slices/user/userSlice";
+import {PeakTopicNode} from "../../redux/slices/user/types";
 
 const PageContextBar = (props: {topicId: string}) => {
     const { topicId } = props

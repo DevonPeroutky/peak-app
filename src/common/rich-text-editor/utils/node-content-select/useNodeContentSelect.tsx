@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import {Editor, Path, Point, Range, Transforms} from 'slate';
+import {Editor, Path, Point, Range, Transforms, Location} from 'slate';
 import {
-    autoformatBlock,
+    ELEMENT_PARAGRAPH,
     getNextIndex,
     getPreviousIndex,
     getRangeFromBlockStart,
@@ -15,13 +15,19 @@ import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
 import {createCreateNewBookListItem} from "./constants";
 import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
-import {createNewPeakBook, useBooks} from "../../../../client/books";
+import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
+import {isAtTopLevelOfEditor} from "../base-utils";
+
+interface PeakNodeSelectMenuOptions extends UseMentionOptions {
+    editorLevel: number
+}
 
 export const useNodeContentSelect = (
-    { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}
+    { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
 ) => {
+
     const currentUser = useCurrentUser()
     const booksSelectItems: PeakNodeSelectListItem[] = useBooks().map(convertPeakBookToNodeSelectListItem)
 
@@ -42,7 +48,7 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const resetNodeMenuItem = () => {
-        console.log(`RESETTING`)
+        console.log(`Resetting Node Menu Item`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
     }
@@ -155,8 +161,13 @@ export const useNodeContentSelect = (
                         at: cursor,
                         trigger,
                     });
+                    const [currNode, currPath] = Editor.above(editor)
 
-                    if (atEnd && beforeMatch) {
+                    // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
+                    const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
+                    const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH
+
+                    if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
                         setTargetRange(range as Range);
                         const [, word] = beforeMatch;
                         setSearch(word);
@@ -188,12 +199,40 @@ export const insertNodeContent = async (
     selectedOption: PeakNodeSelectListItem,
     targetRange: Range
 ) => {
-    const rangeFromBlockStart = getRangeFromBlockStart(editor) as Range;
-    autoformatBlock(editor, selectedOption.elementType, rangeFromBlockStart, {
+    const rangeAtBlockStart = getRangeFromBlockStart(editor) as Range;
+    peakAutoformatBlock(editor, selectedOption.elementType, rangeAtBlockStart, {
         preFormat: () => {
             unwrapList(editor);
         },
         format: selectedOption.customFormat
     });
     Transforms.insertText(editor, '', { at: editor.selection! } )
+};
+
+// We need our own implementation of this because we don't want Transforms.delete running for the node select I guess.
+// Errors would ensue when using the NodeSelect at the top of a Journal w/at least 2 lines
+const peakAutoformatBlock = (
+    editor: Editor,
+    type: string,
+    at: Location,
+    {
+        preFormat,
+        format,
+    }: {
+        preFormat?: (editor: Editor) => void;
+        format?: (editor: Editor) => void;
+    }
+) => {
+    // Transforms.delete(editor, { at });
+    preFormat?.(editor);
+
+    if (!format) {
+        Transforms.setNodes(
+            editor,
+            { type },
+            { match: (n) => Editor.isBlock(editor, n) }
+        );
+    } else {
+        format(editor);
+    }
 };

@@ -1,16 +1,23 @@
 import axios from 'axios';
-import {ChromeExtMessage, ChromeUser, MessageType, SavePageMessage, SubmitNoteMessage} from "../constants/models";
+import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
 import {loadUserRequest} from "../../client/user";
-import {submitNote} from "../utils/noteUtil";
-import {sendMessageToUser, sendSuccessfulSyncMessage} from "../utils/messageUtil";
-import {injectContentScriptOpenDrawer} from "../utils/generalUtil";
-import {loadTags} from "../utils/tagUtil";
+import {submitNoteViaWebsockets} from "./utils/noteUtil";
+import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
+import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
+import {Channel} from 'phoenix';
+import {
+    establishSocketConnection,
+    subscribeToTopic
+} from "../../utils/socketUtil";
+import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {sleep} from "../utils/generalUtil";
+import {JOURNAL_CHANNEL_ID} from "../../common/rich-text-editor/editors/journal/constants";
 
-// TODO CHANGE THIS <-------
-// var userId: string = "108703174669232421421";
-var userId: string = "";
+let channel: Channel
+
+chrome.storage.sync.clear()
 
 // --------------------------------
 // Fetch User Auth Token
@@ -19,7 +26,7 @@ chrome.identity.getAuthToken({
     interactive: true
 }, function(token) {
     if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
+        console.error("ERROR RETRIEVING THE AUTH TOKEN", chrome.runtime.lastError.message);
         return;
     }
     console.log(`Token: ${token}`)
@@ -30,12 +37,15 @@ chrome.identity.getAuthToken({
         loadUserRequest(chrome_user.id)
             .then(r => {
                 const user: Peaker = r.data.data as Peaker;
-                console.log(user)
-                console.log(`Syncing user: ${chrome_user} to chrome storage`)
+                console.log(`Syncing user to chrome storage`, user)
                 setItemInChromeState("user", user)
-                userId = user.id
 
-                loadTags(chrome_user.id)
+                if (!channel) {
+                    // TODO Remove the redux dependency from this
+                    establishSocketConnection(user.id).then(socket => {
+                        channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
+                    })
+                }
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
 
     }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
@@ -58,12 +68,19 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.commands.onCommand.addListener(function(command) {
     switch (command) {
         case "save-page":
-            injectContentScriptOpenDrawer(userId)
+            injectContentScriptOpenDrawer()
             break;
         default:
             console.log(`Command: ${command} ???`);
     }
 });
+
+// ------------------------------------------------
+// Maintain activeTab in Storage for content script
+// ------------------------------------------------
+chrome.tabs.onActivated.addListener(function (tab) {
+    setItemInChromeState(ACTIVE_TAB_KEY, tab.tabId)
+})
 
 // ---------------------------------------
 // Listen for Messages from Content Script
@@ -72,18 +89,25 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
-            submitNote(
+            submitNoteViaWebsockets(
+                channel,
                 submitNodeMessage.userId,
                 submitNodeMessage.selectedTags,
                 submitNodeMessage.pageTitle,
                 submitNodeMessage.favIconUrl,
                 submitNodeMessage.body,
                 submitNodeMessage.pageUrl
-            ).then(res => {
-                sendSuccessfulSyncMessage(submitNodeMessage)
-            }).catch(err => {
-                console.log(`I HAVE TO FUCKING CATCH?!??!`)
-                sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon.")
-            })
+            )
+                .receive("ok", _ => {
+                    console.log(`Received the message`)
+                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
+                })
+                .receive("timeout", _ => {
+                    console.log(`WE ARE TIMING OUT?????`)
+                    sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
+                })
+                .receive("error", _ => {
+                    sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                })
     }
 });

@@ -5,21 +5,21 @@ import {setEditorFocusToNode} from "../../../../redux/slices/wikiPageSlice";
 import {insertCustomBlockElement, next, previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
+import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
 
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
+    console.log(`CREATING A CODE BLOCK`)
 
-    Transforms.removeNodes(editor)
+    // DOESN'T WORK in first line of JOURNAL due to normalization error
+    // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, [
         {
             type: ELEMENT_CODE_BLOCK,
             id: nodeId,
             children: [{text: ''}]
         },
-        {
-            type: ELEMENT_PARAGRAPH,
-            children: [{text: ' '}]
-        }
+        EMPTY_PARAGRAPH_NODE()
     ]);
     const pageId = window.location.href.split("/").pop()
     store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
@@ -60,6 +60,7 @@ export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
 
         const selectionCollapsedAndAtStart: boolean = isSelectionAtBlockStart(editor) && Range.isCollapsed(editor.selection!)
         if (isCodeBlockNode(previousNode) && (selectionCollapsedAndAtStart)) {
+            event.preventDefault()
             forceFocusToNode(previousNode)
         }
     }

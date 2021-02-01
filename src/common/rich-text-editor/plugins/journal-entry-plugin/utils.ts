@@ -2,14 +2,13 @@ import {Editor, Node, Transforms} from "slate";
 import {JOURNAL_ENTRY} from "../../types";
 import {isCurrentDay} from "../../../../utils/time";
 import {useJournal} from "../../../../utils/hooks";
-import {JournalEntry} from "../../../../redux/slices/wikiPageSlice";
 import {convertJournalEntryToSlateNodes} from "../../editors/journal/utils";
+import {JournalEntry} from "../../editors/journal/types";
 
 export const useSelectFirstJournalEntry = () => {
     const journal = useJournal()
 
     return (editor: Editor) => {
-        console.log(`Setting selection!!!!`)
         const journalContent  = (journal.body as JournalEntry[]).flatMap(convertJournalEntryToSlateNodes)
         const slateJournalNodes: Node[] = journalContent[0].children as Node[]
 

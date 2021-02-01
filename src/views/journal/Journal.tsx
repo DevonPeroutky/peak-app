@@ -20,6 +20,7 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {
+    JOURNAL_NODE_LEVEL,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/config";
@@ -32,12 +33,14 @@ import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
 import {Empty, message, Skeleton} from "antd";
 import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
-import  { equals } from "ramda";
+import {drop, equals} from "ramda";
 import cn from "classnames";
 import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";
 import {EMPTY_JOURNAL_STATE} from "../../common/rich-text-editor/editors/journal/constants";
 import {PeakWikiPage} from "../../constants/wiki-types";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
+import {journalOrdering} from "../../redux/slices/wikiPageSlice";
+import {sort} from "ramda"
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -61,6 +64,24 @@ const PeakJournal = (props: { }) => {
     const todayPlaceholder: SlateDocumentFragment = EMPTY_JOURNAL_STATE.flatMap(convertJournalEntryToSlateNodes) as SlateDocumentFragment
     const initialContent2: SlateDocument = [{children: todayPlaceholder }]
     const [journalContent, setJournalContent] = useState<SlateDocument>(initialContent2)
+
+    // Handle updates from outside the editor. (Ex. From Chrome Extension saving, or copying of to-do list)
+    // - Currently only the first journal entry can be modified via the existing functionality above. So only compare the fist
+    //   journal entry for performance reasons.
+    //
+    // Code Editing also involves update redux.
+    useEffect(() => {
+        const todayInComponent: Node[] = journalContent[0].children.slice(0, 2)
+        const todayInRedux: Node[] = sort(journalOrdering, journal.body as JournalEntry[]).slice(0, 1).flatMap(convertJournalEntryToSlateNodes)
+
+        if (equals(todayInRedux, todayInComponent)) {
+            console.log(`No outside updates were made to Redux`)
+        } else {
+            const newJournal: SlateDocumentFragment = [...todayInRedux, ...drop(2, journalContent)] as SlateDocumentFragment
+            console.log(`OUTSIDE UPDATES TO REDUX`, newJournal)
+            setJournalContent([{children: newJournal}])
+        }
+    }, [journal.body])
 
     // Initial Loading
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -132,6 +153,7 @@ const PeakJournal = (props: { }) => {
         target,
         nodeContentSelectMode
     } = useNodeContentSelect({
+        editorLevel: JOURNAL_NODE_LEVEL,
         maxSuggestions: 10,
         trigger: '/',
     });
@@ -142,7 +164,6 @@ const PeakJournal = (props: { }) => {
     }, [index, search, target])
 
     const syncJournalEntries = (newValue: Node[]) => {
-        console.log(editor.selection)
         const journalEntries = journal.body as JournalEntry[]
         if (newValue !== journalContent) {
             // Immediately update component state

@@ -53,11 +53,12 @@ import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defa
 import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
-import {PEAK_LEARNING, ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {PEAK_LEARNING, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
     markup?: string[]
+    trigger?: string[]
     markupLabel?: string[]
     elementType: string
     label: string
@@ -151,7 +152,8 @@ const PEAK_CODE_BLOCK: PeakEditorControlDisplay = {
     label: "Code Block",
     description: "Display code with syntax highlighting",
     elementType: ELEMENT_CODE_BLOCK,
-    markup: ['```'],
+    markup: ['``'],
+    trigger: ['`'],
     markupLabel: ["```", "Space"],
     customFormat: (editor => createAndFocusCodeBlock(editor)),
 };

@@ -30,9 +30,6 @@ function fetchAllUserAccounts(userId: string, peakUserId: string) {
 }
 export function loadAllUserAccounts(userId: string, peakUserId: string) {
     return fetchAllUserAccounts(userId, peakUserId).then(res => {
-        console.log(`FETCHED ALL THE USER ACCOUNTS`)
-        console.log(res)
-        console.log(res.data)
         const userAccounts: DisplayPeaker[] = res.data.users as DisplayPeaker[]
         store.dispatch(setUserAccounts(userAccounts))
         return userAccounts

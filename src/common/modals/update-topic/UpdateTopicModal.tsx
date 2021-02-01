@@ -3,13 +3,14 @@ import {Button, Modal, Input, Tooltip, message} from "antd";
 import {connect, useDispatch, useSelector} from "react-redux";
 import {updateTopic, PeakTopic, addTopic} from "../../../redux/slices/topicSlice"
 import {AppState} from "../../../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/user/userSlice";
+import {setUserHierarchy} from "../../../redux/slices/user/userSlice";
 import "./update-topic-modal.scss";
-import { backend_host_address } from "../../../constants/constants";
 import {CompassOutlined, EditOutlined, InfoCircleOutlined} from "@ant-design/icons/lib";
 import cn from "classnames";
 import peakAxiosConfig from "../../../client/axiosConfig"
 import {useCurrentUser} from "../../../utils/hooks";
+import {Peaker} from "../../../types";
+import {PeakTopicNode} from "../../../redux/slices/user/types";
 
 export const UpdateTopicModal = (props: {topicId: string, hovered: boolean}) => {
     const { topicId, hovered } = props

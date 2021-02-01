@@ -13,7 +13,7 @@ import { equals } from "ramda";
 import { EditablePlugins, pipe } from "@udecode/slate-plugins";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
-import {wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/config";
+import {WIKI_NODE_LEVEL, wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/config";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 
 const TopicWiki = (props: {topic_id: string}) => {
@@ -39,6 +39,7 @@ const TopicWiki = (props: {topic_id: string}) => {
         target,
         nodeContentSelectMode
     } = useNodeContentSelect({
+        editorLevel: WIKI_NODE_LEVEL,
         maxSuggestions: 10,
         trigger: '/',
     });

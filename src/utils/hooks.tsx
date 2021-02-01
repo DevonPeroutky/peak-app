@@ -273,7 +273,6 @@ function useBulkJournalEntrySaver() {
     const dispatch = useDispatch();
     const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
     return (entries: JournalEntry[], user: Peaker) => {
-        console.log(`REQUESTING with ${user.email}`)
         return bulkSaveJournalEntry(entries, user)
             .then((res) => {
                 const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
@@ -304,7 +303,9 @@ export function useFetchJournal() {
         return peakAxiosClient
             .get(`/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
             .then(res => {
+                console.log(`JOURNAL ENTRIES RES`, res.data.journal_entries)
                 const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
+                console.log(`Sorted Journal`, sortedJournal)
                 dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {
