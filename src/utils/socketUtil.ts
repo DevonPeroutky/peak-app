@@ -1,6 +1,7 @@
 import {Channel, Socket} from 'phoenix';
 import peakAxiosClient from "../client/axiosConfig";
 import {AxiosResponse} from "axios";
+import {backend_host_address} from "../constants/constants";
 
 interface SocketTokenPayload {
     id: string
@@ -19,7 +20,7 @@ export function establishSocketConnection(userId: string): Promise<Socket> {
         const socketAccessToken: SocketTokenPayload = res.data
 
         // TODO: Needs to be configured as another BACKEND URL
-        const socketConn = new Socket(`ws://localhost:4000/socket`, {
+        const socketConn = new Socket(`ws://${backend_host_address}/socket`, {
             // logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) }),
             params: socketAccessToken,
         })
