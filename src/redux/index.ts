@@ -3,7 +3,7 @@ import {FutureRead} from "./slices/readingListSlice";
 import {QuickSwitcherState} from "./slices/quickSwitcherSlice";
 import {ElectronState} from "./slices/electronSlice";
 import {DisplayPeaker} from "./slices/userAccountsSlice";
-import {PeakBook} from "./slices/booksSlice";
+import {PeakNote} from "./slices/noteSlice";
 import {PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
 
@@ -18,5 +18,5 @@ export interface AppState {
     quickSwitcher: QuickSwitcherState
     electron: ElectronState,
     tags: PeakTag[],
-    books: PeakBook[]
+    notes: PeakNote[]
 }

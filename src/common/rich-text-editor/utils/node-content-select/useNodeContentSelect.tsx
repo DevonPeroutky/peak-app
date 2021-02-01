@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import {Editor, Path, Point, Range, Transforms, Location} from 'slate';
 import {
-    autoformatBlock,
     getNextIndex,
     getPreviousIndex,
     getRangeFromBlockStart,
@@ -15,7 +14,7 @@ import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
 import {createCreateNewBookListItem} from "./constants";
 import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
-import {createNewPeakBook, useBooks} from "../../../../client/books";
+import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 

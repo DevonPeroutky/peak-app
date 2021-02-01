@@ -3,10 +3,10 @@ import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {PeakNodeSelectListItem} from "./types";
 import {Editor, Point, Range} from "slate";
 import {escapeRegExp, getText} from "@udecode/slate-plugins";
-import {PeakBook} from "../../../../redux/slices/booksSlice";
 import {insertCustomBlockElement} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
+import {PeakNote} from "../../../../redux/slices/noteSlice";
 
 export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditorControlDisplay): PeakNodeSelectListItem {
     return {
@@ -20,7 +20,7 @@ export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditor
     }
 }
 
-export function convertPeakBookToNodeSelectListItem(book: PeakBook): PeakNodeSelectListItem {
+export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSelectListItem {
     return {
         title: book.title,
         label: book.title,
@@ -30,7 +30,7 @@ export function convertPeakBookToNodeSelectListItem(book: PeakBook): PeakNodeSel
     }
 }
 
-export function insertBookElementCallback(book: PeakBook): (editor: Editor) => void {
+export function insertBookElementCallback(book: PeakNote): (editor: Editor) => void {
     return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {bookId: book.id, title: book.title}))
 }
 
