@@ -106,6 +106,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                     console.log(`WE ARE TIMING OUT?????`)
                     sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
                 })
-                .receive("error", _ => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                .receive("error", _ => {
+                    sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                })
     }
 });
