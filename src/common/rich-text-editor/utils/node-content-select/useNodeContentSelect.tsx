@@ -18,7 +18,7 @@ import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
 import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
-import {isAtTopLevelOfEditor} from "../../plugins/peak-knowledge-plugin/utils";
+import {isAtTopLevelOfEditor} from "../base-utils";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number

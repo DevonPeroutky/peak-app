@@ -55,10 +55,3 @@ export function isPeakKnowledgeNoteType(n: Node): boolean {
     return PEAK_KNOWLEDGE_TYPES.includes(n.type as string)
 }
 
-export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
-    const isPointAtTopLevel= (p: Point) => {
-        return p && p.path && p.path.length === editorLevel + 2
-    }
-
-    return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
-}

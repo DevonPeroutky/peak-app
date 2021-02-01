@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import { Node} from 'slate';
-import { useEditor } from 'slate-react'
+import {Editor, Node, Transforms} from 'slate';
+import {useEditor} from 'slate-react'
 import {
     useCurrentWikiPage,
     useSavePageRequest,
@@ -16,6 +16,7 @@ import {ELEMENT_CODE_BLOCK, toggleNodeType} from "@udecode/slate-plugins";
 import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
 import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
 import {JournalEntry} from "../../../editors/journal/types";
+import {findNode} from "../../../utils/base-utils";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
@@ -42,13 +43,11 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     const updateWikiPageContents = (newValue: string) => {
         if (daString !== newValue) {
             updateWikiBody({ children: [{text: newValue}]})
-        } else {
         }
     };
     const updateLanguage = (newLanguage: string) => {
         if (newLanguage !== language) {
             updateWikiBody({ language: newLanguage })
-        } else {
         }
     }
 
@@ -91,8 +90,15 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         if (e) {
             e.preventDefault();
         }
-        await toggleNodeType(editor, { activeType: ELEMENT_CODE_BLOCK })
+
+        // await toggleNodeType(editor, { activeType: ELEMENT_CODE_BLOCK })
+        const [node, nodePath] = findNode(editor, (n) => n.id && n.id === props.element.id && n.type === ELEMENT_CODE_BLOCK)
         await exitUp()
+        await Transforms.delete(editor, {
+            at: nodePath,
+            distance: 1,
+            unit: "block"
+        })
     }
 
     const exitUp = () => {

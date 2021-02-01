@@ -1,9 +1,11 @@
 import {ReactEditor} from "slate-react";
-import {Editor, Node, Transforms} from "slate";
+import {Editor, Node, Point, Range, Transforms} from "slate";
 import {isEqual} from "lodash";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/utils";
 import {EMPTY_PARAGRAPH_NODE} from "../editors/constants";
+import {JOURNAL_ENTRY} from "../types";
+import {isCurrentDay} from "../../../utils/time";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -67,4 +69,22 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
 }
 export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {}): (editor: Editor) => void {
     return (editor: Editor) => insertCustomBlockElement(editor, nodeType, nodeProps)
+}
+
+export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
+    const isPointAtTopLevel= (p: Point) => {
+        return p && p.path && p.path.length === editorLevel + 2
+    }
+
+    return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
+}
+
+
+// TODO: Replace w/findNode in slate-plugins
+export function findNode(editor: Editor, match: (n: Node) => boolean) {
+    const [res] = Editor.nodes(editor, {
+        at: [],
+        match
+    })
+    return res
 }
