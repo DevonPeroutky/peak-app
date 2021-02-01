@@ -1,8 +1,6 @@
 import {Channel, Socket} from 'phoenix';
 import peakAxiosClient from "../client/axiosConfig";
 import {AxiosResponse} from "axios";
-import {store} from "../redux/store";
-import { connected, disconnected } from 'src/redux/slices/sockets/socketSlice';
 
 interface SocketTokenPayload {
     id: string
@@ -20,16 +18,17 @@ export function establishSocketConnection(userId: string): Promise<Socket> {
     return fetchAccessTokenForSocket(userId).then(res => {
         const socketAccessToken: SocketTokenPayload = res.data
 
+        // TODO: Needs to be configured as another BACKEND URL
         const socketConn = new Socket(`ws://localhost:4000/socket`, {
             // logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) }),
             params: socketAccessToken,
         })
         socketConn.onOpen( ev => {
-            store.dispatch(connected())
+            console.log(`Connected to socket`)
             socket = socketConn
         })
         socketConn.onError( ev => console.log("ERROR: ", ev) )
-        socketConn.onClose( e => store.dispatch(disconnected()))
+        socketConn.onClose( e => console.log(`Socket has been closed`))
         socketConn.connect()
         return socketConn
     })

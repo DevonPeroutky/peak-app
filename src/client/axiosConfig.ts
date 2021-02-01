@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {backend_host_address} from "../constants/constants";
-import {isElectron} from "../utils/environment";
 
 const defaultConfig = {
     withCredentials: true,

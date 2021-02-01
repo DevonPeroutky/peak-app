@@ -2,7 +2,7 @@ import {PeakWikiPage} from "../../../../constants/wiki-types";
 import {JournalEntry} from "./types";
 import {omit} from "ramda";
 import {ELEMENT_WEB_NOTE} from "../../plugins/peak-knowledge-plugin/constants";
-import {useCurrentUser, useJournal, useSocket} from "../../../../utils/hooks";
+import {useCurrentUser} from "../../../../utils/hooks";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {AppState} from "../../../../redux";
@@ -14,7 +14,6 @@ import {
     subscribeToTopic
 } from "../../../../utils/socketUtil";
 import {JOURNAL_CHANNEL_ID} from "./constants";
-import {SocketState} from "../../../../redux/slices/sockets/socketSlice";
 
 export const useJournalSubscription = () => {
     function appendWebNoteToJournal(webNote, journal: PeakWikiPage): JournalEntry {
@@ -24,13 +23,12 @@ export const useJournalSubscription = () => {
     }
 
     const user = useCurrentUser()
-    const socketState: SocketState = useSocket()
     const dispatch = useDispatch()
     const currentUserAccountId = user.id
 
     useEffect(() => {
-        console.log(`SOCKET`, socket)
-        if (socketState.connected && socket) {
+        console.log(`Subscribing to journal for ${currentUserAccountId}`, socket)
+        if (socket) {
             const channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
             channel.on("web_note_created", res => {
                 const appState: AppState = store.getState()

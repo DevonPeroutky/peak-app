@@ -4,7 +4,6 @@ import {combineReducers, createAction} from "@reduxjs/toolkit";
 import topics, {PeakTopic} from "./slices/topicSlice";
 import futureReads, {FutureRead} from "./slices/readingListSlice";
 import peakWikiState from "./slices/wikiPageSlice";
-import socket from "./slices/sockets/socketSlice";
 import quickSwitcher from "./slices/quickSwitcherSlice";
 import electron from "./slices/electronSlice";
 import tags from "./slices/tags/tagSlice";
@@ -25,7 +24,7 @@ export interface UserSpecificAppState {
 export const switch_user_accounts = createAction<DisplayPeaker>("switch_user_accounts")
 export const load_active_user = createAction<UserSpecificAppState>("load_active_user")
 
-const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, electron, tags, userAccounts, books, socket});
+const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, electron, tags, userAccounts, books});
 export const rootReducer = (state, action) => {
     if (action.type === "switch_user_accounts") {
         const desired_user_account_id: string = action.payload.id
