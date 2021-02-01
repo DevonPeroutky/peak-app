@@ -15,7 +15,6 @@ export async function fetchAccessTokenForSocket(userId: string): Promise<AxiosRe
 }
 
 export function establishSocketConnection(userId: string): Promise<Socket> {
-    console.log(`!!!!!!!!!!!! Establishing Socket Connection for ${userId}`)
     return fetchAccessTokenForSocket(userId).then(res => {
         const socketAccessToken: SocketTokenPayload = res.data
 

@@ -18,8 +18,7 @@ import {JOURNAL_CHANNEL_ID} from "./constants";
 export const useJournalSubscription = () => {
     function appendWebNoteToJournal(webNote, journal: PeakWikiPage): JournalEntry {
         const today: JournalEntry = journal.body[0] as JournalEntry
-        const newSlateNode = omit(['body', 'note_type'], {...webNote, type: ELEMENT_WEB_NOTE, children: webNote.body[0].children})
-        return {...today, body: [...today.body, newSlateNode]}
+        return {...today, body: [...today.body, webNote]}
     }
 
     const user = useCurrentUser()
@@ -31,11 +30,9 @@ export const useJournalSubscription = () => {
         if (socket) {
             const channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
             channel.on("web_note_created", res => {
+                console.log(`Received web_note from backend broadcast`, res)
                 const appState: AppState = store.getState()
-                console.log(`RES`, res)
-                console.log(res.note)
                 const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.note, appState.peakWikiState[JOURNAL])
-                console.log(`NEW for today:`, newJournalEntryForToday)
                 dispatch(updateJournalEntry(newJournalEntryForToday))
             })
         } else {
