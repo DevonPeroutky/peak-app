@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import {Editor, Path, Point, Range, Transforms, Location} from 'slate';
 import {
+    ELEMENT_PARAGRAPH,
     getNextIndex,
     getPreviousIndex,
     getRangeFromBlockStart,
@@ -17,10 +18,16 @@ import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
 import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
+import {isAtTopLevelOfEditor} from "../../plugins/peak-knowledge-plugin/utils";
+
+interface PeakNodeSelectMenuOptions extends UseMentionOptions {
+    editorLevel: number
+}
 
 export const useNodeContentSelect = (
-    { maxSuggestions = 10, trigger = '/', ...options }: UseMentionOptions = {}
+    { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
 ) => {
+
     const currentUser = useCurrentUser()
     const booksSelectItems: PeakNodeSelectListItem[] = useBooks().map(convertPeakBookToNodeSelectListItem)
 
@@ -154,8 +161,13 @@ export const useNodeContentSelect = (
                         at: cursor,
                         trigger,
                     });
+                    const [currNode, currPath] = Editor.above(editor)
 
-                    if (atEnd && beforeMatch) {
+                    // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
+                    const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
+                    const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH
+
+                    if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
                         setTargetRange(range as Range);
                         const [, word] = beforeMatch;
                         setSearch(word);

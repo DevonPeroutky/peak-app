@@ -20,6 +20,7 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {
+    JOURNAL_NODE_LEVEL,
     journalNormalizers,
     journalPlugins
 } from "../../common/rich-text-editor/editors/journal/config";
@@ -152,6 +153,7 @@ const PeakJournal = (props: { }) => {
         target,
         nodeContentSelectMode
     } = useNodeContentSelect({
+        editorLevel: JOURNAL_NODE_LEVEL,
         maxSuggestions: 10,
         trigger: '/',
     });

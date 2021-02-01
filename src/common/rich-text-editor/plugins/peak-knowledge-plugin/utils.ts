@@ -1,4 +1,4 @@
-import { Editor, Node, Range, Transforms  } from "slate";
+import {Editor, Node, Point, Range, Transforms} from "slate";
 import { previous } from "../../utils/base-utils";
 import { ReactEditor } from "slate-react";
 import { forceFocusToNode } from "../../utils/external-editor-utils";
@@ -53,4 +53,12 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
 
 export function isPeakKnowledgeNoteType(n: Node): boolean {
     return PEAK_KNOWLEDGE_TYPES.includes(n.type as string)
+}
+
+export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
+    const isPointAtTopLevel= (p: Point) => {
+        return p && p.path && p.path.length === editorLevel + 2
+    }
+
+    return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
 }

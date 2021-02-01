@@ -14,9 +14,9 @@ const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),
 ]
 // Default
-const nodeLevel: number = 1
-export const wikiPlugins: SlatePlugin[] = setEditorPlugins(nodeLevel, wikiSpecificPlugins)
-export const wikiNormalizers = setEditorNormalizers(nodeLevel, [
+export const WIKI_NODE_LEVEL: number = 1
+export const wikiPlugins: SlatePlugin[] = setEditorPlugins(WIKI_NODE_LEVEL, wikiSpecificPlugins)
+export const wikiNormalizers = setEditorNormalizers(WIKI_NODE_LEVEL, [
     withNormalizeTypes({
         rules: [{ path: [0, 0], strictType: TITLE }],
     }),
