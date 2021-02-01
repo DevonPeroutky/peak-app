@@ -8,6 +8,7 @@ import {
     unwrapList,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../peak-toolbar/toolbar-controls";
+import {createAndFocusCodeBlock} from "./peak-code-plugin/utils";
 
 const AUTO_REPLACE: { [key: string]: string } = {
     '-->': '→',
@@ -55,6 +56,7 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 const convertToAutoFormatRule = (editorControl: PeakEditorControl) => {
     return {
         type: editorControl.elementType,
+        trigger: editorControl.trigger,
         preFormat: (editor: Editor) => unwrapList(editor),
         markup: editorControl.markup,
         format: editorControl.customFormat

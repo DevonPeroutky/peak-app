@@ -1,4 +1,3 @@
-import {Node} from "slate";
 import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {
@@ -38,8 +37,6 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "./defaults";
-import {Editor} from "slate";
-import {last} from "ramda";
 
 const styleDraggableOptions = ({ type, level, component, ...options}: StyledNodeConfig) => (
     [

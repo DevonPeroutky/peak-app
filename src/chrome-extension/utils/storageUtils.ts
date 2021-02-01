@@ -12,5 +12,3 @@ export const setItemInChromeState = (key: string, value, callbackFunc: () => voi
 export const getItemFromChromeState = (key: string, callack) => {
     return chrome.storage.sync.get(key, callack)
 }
-
-

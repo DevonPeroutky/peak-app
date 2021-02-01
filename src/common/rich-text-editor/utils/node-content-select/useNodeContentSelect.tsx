@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import {Editor, Path, Point, Range, Transforms} from 'slate';
+import {Editor, Path, Point, Range, Transforms, Location} from 'slate';
 import {
     autoformatBlock,
     getNextIndex,
@@ -42,7 +42,7 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const resetNodeMenuItem = () => {
-        console.log(`RESETTING`)
+        console.log(`Resetting Node Menu Item`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
     }
@@ -188,12 +188,40 @@ export const insertNodeContent = async (
     selectedOption: PeakNodeSelectListItem,
     targetRange: Range
 ) => {
-    const rangeFromBlockStart = getRangeFromBlockStart(editor) as Range;
-    autoformatBlock(editor, selectedOption.elementType, rangeFromBlockStart, {
+    const rangeAtBlockStart = getRangeFromBlockStart(editor) as Range;
+    peakAutoformatBlock(editor, selectedOption.elementType, rangeAtBlockStart, {
         preFormat: () => {
             unwrapList(editor);
         },
         format: selectedOption.customFormat
     });
     Transforms.insertText(editor, '', { at: editor.selection! } )
+};
+
+// We need our own implementation of this because we don't want Transforms.delete running for the node select I guess.
+// Errors would ensue when using the NodeSelect at the top of a Journal w/at least 2 lines
+const peakAutoformatBlock = (
+    editor: Editor,
+    type: string,
+    at: Location,
+    {
+        preFormat,
+        format,
+    }: {
+        preFormat?: (editor: Editor) => void;
+        format?: (editor: Editor) => void;
+    }
+) => {
+    // Transforms.delete(editor, { at });
+    preFormat?.(editor);
+
+    if (!format) {
+        Transforms.setNodes(
+            editor,
+            { type },
+            { match: (n) => Editor.isBlock(editor, n) }
+        );
+    } else {
+        format(editor);
+    }
 };

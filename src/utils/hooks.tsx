@@ -273,7 +273,6 @@ function useBulkJournalEntrySaver() {
     const dispatch = useDispatch();
     const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
     return (entries: JournalEntry[], user: Peaker) => {
-        console.log(`REQUESTING with ${user.email}`)
         return bulkSaveJournalEntry(entries, user)
             .then((res) => {
                 const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
