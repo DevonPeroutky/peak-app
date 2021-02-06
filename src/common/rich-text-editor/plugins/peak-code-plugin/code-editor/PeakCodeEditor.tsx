@@ -12,7 +12,7 @@ import {updatePageContents} from '../../../../../redux/slices/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
-import {ELEMENT_CODE_BLOCK, toggleNodeType} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
 import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
 import {JournalEntry} from "../../../editors/journal/types";

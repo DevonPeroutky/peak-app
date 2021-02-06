@@ -24,7 +24,7 @@ function fetchNotesRequest(userId: string) {
 }
 
 // Requests + Reduxs
-export function loadPeakNote(userId: string) {
+export function loadPeakNotes(userId: string) {
     return fetchNotesRequest(userId).then(res => {
         const books = res.data.book as PeakNote[]
         store.dispatch(setNotes(books))
@@ -51,9 +51,9 @@ function createPeakNote(userId: string, title: string): Promise<PeakNote> {
     })
 }
 
-
-
-
+export function useNotes() {
+    return useSelector<AppState, PeakNote[]>(state => state.notes);
+}
 export function useBooks() {
     return useSelector<AppState, PeakNote[]>(state => state.notes.filter(n => n.note_type === ELEMENT_PEAK_BOOK));
 }
