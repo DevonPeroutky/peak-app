@@ -5,6 +5,7 @@ export interface PeakNote {
     title: string
     note_type: string
     icon_url: string
+    url: string
     author?: string
     inserted_at?: string
 }

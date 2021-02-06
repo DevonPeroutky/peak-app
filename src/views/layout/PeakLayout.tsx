@@ -68,18 +68,19 @@ const PeakLayout = (props: {}) => {
                     <Content className="peak-content-container">
                        <Switch>
                            <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
-                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView />} />
                            <Route path={`${match.path}/notes/:id`} render={(props) => {
-                               if (currentWikiPage) {
+                               if (props.match.params && props.match.params.id) {
                                    return <PeakNoteView key={props.match.params.id} {...props} />
                                } else {
                                    return <Redirect to={"/"} />
                                }
                            }} />
+                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView />} />
                            <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                            <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                            <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
                            <Route path={`${match.path}/wiki/:id`} render={(props) => {
+                               console.log(`THIS PATH`, match.path)
                                if (currentWikiPage) {
                                    return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
                                } else {

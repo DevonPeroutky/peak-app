@@ -6,6 +6,8 @@ import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/
 import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {addNote, deleteNote, PeakNote, setNotes} from "../redux/slices/noteSlice";
+import {PeakWikiState} from "../constants/wiki-types";
+import {useLocation} from "react-router-dom";
 
 // Requests
 function createNoteRequest(userId: string, book: {title: string}) {
@@ -59,4 +61,18 @@ export function useBooks() {
 }
 export function createNewPeakBook(userId: string, title: string): Promise<PeakNodeSelectListItem> {
     return createPeakNote(userId, title).then((created_book) => convertPeakBookToNodeSelectListItem(created_book))
+}
+
+export function useCurrentNoteId() {
+    const location = useLocation();
+
+    // TODO: HANDLE JOURNAL
+    const url = location.pathname.split("/");
+    const currentNoteId = url.pop()!;
+    console.log(`Current Note Id`, currentNoteId)
+    return currentNoteId
+}
+export function useCurrentNote(): PeakNote | undefined {
+    const currentNoteId = useCurrentNoteId();
+    return useNotes().find(n => n.id === currentNoteId)
 }
