@@ -17,6 +17,7 @@ export const PeakNoteView = (props) => {
     return (
         <div className={"peak-note-view-container"}>
             {(currentNote.note_type === ELEMENT_WEB_NOTE) ? <WebNoteHeaderSection note={currentNote}/> : <BookHeaderSection note={currentNote}/>}
+
         </div>
     )
 }
@@ -26,9 +27,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
     console.log(`Note`, note)
     const url = new URL(note.url);
     const authorUrl = new URL(note.author);
-    const authorDomain: string = authorUrl.hostname.split('.').slice(0, -1).join(" ");
-    console.log(`URL`, url.hostname)
-
+    const urlDomain: string = url.hostname.split('.').slice(0, -1).join(" ");
 
     return (
         <div className={"note-header-section"}>
@@ -36,7 +35,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
                 <Link to={`/home/notes`}><CaretLeftFilled/> Back to notes</Link>
                 <a href={note.url} target={"_blank"} className={"note-link-container"}>
                     <img className={"note-web-icon"} src={note.icon_url}/>
-                    <span className={"note-url"}>{`${capitalize_and_truncate(authorDomain)}`} <CaretRightFilled/></span>
+                    <span className={"note-url"}>{`${capitalize_and_truncate(urlDomain)}`} <CaretRightFilled/></span>
                 </a>
             </div>
             <div className={"note-header-row"}>
