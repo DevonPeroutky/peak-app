@@ -23,17 +23,6 @@ export interface OpenLibraryBook {
     first_publish_year: string
 }
 
-export const bullshit = {
-    cover_i: 69,
-    title: "WHAT THE FAWK",
-    title_suggest: "WHAT THE FAWK",
-    author_name: "WHAT THE FAWK",
-    author_key: "WHAT THE FAWK",
-    first_publish_year: "WHAT THE FAWK",
-}
-
-
-
 // EXAMPLE: http://openlibrary.org/search.json?title=the+lord+of+the+rings
 const searchForBookByTitle = (title: string, callBackFunc: (books: OpenLibraryBook[]) => void) => {
     const url = `http://openlibrary.org/search.json?title=${title}`
@@ -53,7 +42,6 @@ export function useDebounceOpenLibrarySearcher() {
 }
 
 // EXAMPLE: http://covers.openlibrary.org/b/id/8814444-L.jpg
-export function getCoverImageUrl(openLibraryBookId: string, size: "S" | "M" | "L"): string {
+export function getCoverImageUrl(openLibraryBookId: number, size: "S" | "M" | "L"): string {
     return `http://covers.openlibrary.org/b/id/${openLibraryBookId}-${size}.jpg`
 }
-

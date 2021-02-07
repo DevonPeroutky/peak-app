@@ -89,13 +89,20 @@ const NodeContentSelectBase = ({
     return (
         <PortalBody>
             <div ref={ref} className={classNames.root} {...props}>
-                <OptionList options={options} valueIndex={valueIndex} classNames={classNames} onClickMention={onClickMention} editor={editor} openLibraryBooks={openLibraryBooks}/>
+                <OptionList
+                    options={options}
+                    valueIndex={valueIndex}
+                    classNames={classNames}
+                    onClickMention={onClickMention}
+                    nodeContentSelectMode={nodeContentSelectMode}
+                    editor={editor}
+                    openLibraryBooks={openLibraryBooks}/>
             </div>
         </PortalBody>
     );
 };
 
-const OptionList = ({options, valueIndex, classNames, onClickMention, editor, openLibraryBooks}) => {
+const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onClickMention, editor, openLibraryBooks}) => {
     if (options.length === 0) {
         return (
             <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
@@ -118,6 +125,7 @@ const OptionList = ({options, valueIndex, classNames, onClickMention, editor, op
                 {
                     ((openLibraryBooks.length > 0) ?
                             <div className="peak-external-results">
+                                <div className={"ant-select-item ant-select-item-group"}>Select new book</div>
                                 { openLibraryBooks.map(convertOpenLibraryBookToNodeSelectListItem).map((option, i) =>
                                 <NodeContentSelectItem
                                     key={`${i}${option.label}`}
@@ -132,7 +140,6 @@ const OptionList = ({options, valueIndex, classNames, onClickMention, editor, op
            </>
         )
     }
-
 }
 
 export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);
@@ -153,10 +160,12 @@ const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMentio
            )}
        >
            <div className={"node-content-select-item-container"}>
-               {option.icon}
+               <div className={"icon-container"}>
+                   {option.icon}
+               </div>
                <div className={"node-content-item"}>
                    <div className={"node-content-item-body"}>
-                       <div className={"node-title"}>{capitalize_and_truncate(option.label)}</div>
+                       <div className={"node-title"}>{capitalize_and_truncate(option.label, 40)}</div>
                        <div className={"node-description"}>{option.description}</div>
                    </div>
                    {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
