@@ -23,6 +23,10 @@ export const noteSlice = createSlice({
         addNote(state, action: PayloadAction<PeakNote>) {
             return [...state, action.payload]
         },
+        updateNote(state, action: PayloadAction<PeakNote>) {
+            const updatedNote: PeakNote = action.payload
+            return state.map(n => n.id === updatedNote.id ? updatedNote : n);
+        },
         deleteNote(state, action: PayloadAction<string>) {
             const filteredBooks: PeakNote[] = state.filter(t => t.id !== action.payload)
             return filteredBooks
@@ -30,5 +34,5 @@ export const noteSlice = createSlice({
     }
 });
 
-export const { setNotes, addNote, deleteNote } = noteSlice.actions;
+export const { setNotes, addNote, deleteNote, updateNote } = noteSlice.actions;
 export default noteSlice.reducer;

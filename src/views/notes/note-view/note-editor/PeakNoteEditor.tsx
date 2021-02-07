@@ -6,7 +6,7 @@ import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-l
 import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
-import {useCurrentNote} from "../../../../client/notes";
+import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../../client/notes";
 import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -16,20 +16,24 @@ import {
     notePlugins
 } from "../../../../common/rich-text-editor/editors/note-editor/config";
 import "./peak-note-editor.scss"
+import {useCurrentUser} from "../../../../utils/hooks";
 
 export const PeakNoteEditor = (props) => {
     const currentNote: PeakNote = useCurrentNote()
     const editorState = useActiveEditorState()
+    const currentUser = useCurrentUser()
     const currentPageId = `note-${currentNote.id}`
     const bodyContent: Node[] = [{ children: currentNote.body }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
+    const noteSaver = useDebouncePeakNoteSaver()
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
 
     const updateNoteContent = (newBody: Node[]) => {
-        console.log(`Updating note`, newBody)
         setNoteContent(newBody)
+
+        noteSaver(currentUser.id, currentNote.id, newBody[0]["children"] as Node[])
     }
     const defaultKeyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor)

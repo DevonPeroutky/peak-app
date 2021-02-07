@@ -5,6 +5,8 @@ import {Avatar, List, Menu} from "antd";
 import {ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
+import {deriveBaseDomain, deriveHostname} from "../../../utils/urls";
+import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 
 export const PeakNoteListView = (props: {}) => {
     const notes: PeakNote[] = useNotes()
@@ -33,7 +35,7 @@ export const PeakNoteListView = (props: {}) => {
                                     {item.title}
                                 </Link>
                             }
-                            description={item.author}
+                            description={(item.note_type === ELEMENT_WEB_NOTE) ? deriveHostname(item.url) : item.author}
                         />
                     </List.Item>
                 )}
