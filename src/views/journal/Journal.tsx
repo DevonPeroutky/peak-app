@@ -161,10 +161,10 @@ const PeakJournal = (props: { }) => {
         maxSuggestions: 10,
         trigger: '/',
     });
-    // function keyBindingHandler(event): void | false {
-    //     baseKeyBindingHandler(event, editor)
-    //     return onKeyDownMention(event, editor)
-    // }
+    function keyBindingHandler(event): void | false {
+        baseKeyBindingHandler(event, editor)
+        return onKeyDownMention(event, editor, openLibraryResults)
+    }
 
     const syncJournalEntries = (newValue: Node[]) => {
         const journalEntries = journal.body as JournalEntry[]
@@ -195,7 +195,7 @@ const PeakJournal = (props: { }) => {
                 journalContent={journalContent}
                 syncJournalEntries={syncJournalEntries}
                 currentPageId={currentPageId}
-                keyBindingHandler={onKeyDownMention}
+                keyBindingHandler={keyBindingHandler}
                 isLoadingMore={isLoadingMore}
                 index={index}
                 target={target}
