@@ -147,7 +147,7 @@ const PeakJournal = (props: { }) => {
     // TODO: Refactor these two into a single export for Peak Editors
     const {
         values,
-        openLibraryBooks,
+        openLibraryResults,
         onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
@@ -160,11 +160,10 @@ const PeakJournal = (props: { }) => {
         maxSuggestions: 10,
         trigger: '/',
     });
-    const keyBindingHandler: (event: any) => false | void = useCallback((event: any) => {
+    function keyBindingHandler(event): void | false {
         baseKeyBindingHandler(event, editor)
-
         return onKeyDownMention(event, editor)
-    }, [index, search, target])
+    }
 
     const syncJournalEntries = (newValue: Node[]) => {
         const journalEntries = journal.body as JournalEntry[]
@@ -199,7 +198,7 @@ const PeakJournal = (props: { }) => {
                 isLoadingMore={isLoadingMore}
                 index={index}
                 target={target}
-                openLibraryBooks={openLibraryBooks}
+                openLibraryBooks={openLibraryResults}
                 search={search}
                 values={values}
                 nodeContentSelectMode={nodeContentSelectMode}

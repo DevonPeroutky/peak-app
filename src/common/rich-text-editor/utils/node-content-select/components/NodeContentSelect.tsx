@@ -101,10 +101,6 @@ const OptionList = ({options, valueIndex, classNames, onClickMention, editor, op
             <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
         )
     } else {
-        console.log(`THE LIBRARY`, openLibraryBooks)
-        console.log(`Options`, options)
-        console.log(`Value Index`, valueIndex)
-
         const numInternalOptions: number = options.length
         return (
             <>
@@ -127,7 +123,7 @@ const OptionList = ({options, valueIndex, classNames, onClickMention, editor, op
                                     key={`${i}${option.label}`}
                                     option={option}
                                     i={numInternalOptions + i}
-                                    valueIndex={numInternalOptions + valueIndex}
+                                    valueIndex={valueIndex}
                                     classNames={classNames}
                                     onClickMention={onClickMention}
                                     editor={editor}/>)}
@@ -142,8 +138,7 @@ const OptionList = ({options, valueIndex, classNames, onClickMention, editor, op
 export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);
 
 const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMention, editor }) => {
-    console.log(`${i}-${option.label}: ${valueIndex}`)
-   return (
+    return (
        <div
            key={`${i}${option.label}`}
            className={
@@ -168,5 +163,5 @@ const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMentio
                </div>
            </div>
        </div>
-   )
+    )
 }

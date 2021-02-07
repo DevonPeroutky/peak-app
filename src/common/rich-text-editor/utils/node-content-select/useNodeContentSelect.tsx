@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Editor, Path, Point, Range, Transforms, Location} from 'slate';
 import {
     ELEMENT_PARAGRAPH,
@@ -28,7 +28,6 @@ interface PeakNodeSelectMenuOptions extends UseMentionOptions {
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
 ) => {
-
     const currentUser = useCurrentUser()
     const booksSelectItems: PeakNodeSelectListItem[] = useBooks().map(convertPeakBookToNodeSelectListItem)
     const openLibrarySearcher = useDebounceOpenLibrarySearcher()
@@ -50,10 +49,15 @@ export const useNodeContentSelect = (
     }
     const values = filterValues();
 
+    const searchLibary = () => {
+        return openLibraryBooks
+    }
+    const library: OpenLibraryBook[] = searchLibary()
+
     const resetNodeMenuItem = () => {
-        console.log(`Resetting Node Menu Item`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
+        setOpenLibraryBooks([])
     }
 
     const onAddNodeContent = useCallback(
@@ -63,7 +67,6 @@ export const useNodeContentSelect = (
                     setSearch('')
                     setMenuItems(booksSelectItems)
                     setNodeSelectMode(false)
-                    setOpenLibraryBooks([])
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
@@ -90,17 +93,31 @@ export const useNodeContentSelect = (
         [options, targetRange]
     );
 
+    // OpenLibrary response may come after we reset NodeList
+    useEffect(() => {
+        if (nodeContentSelectMode && library.length > 0) {
+            setOpenLibraryBooks([])
+        }
+    }, [library]);
+
+    console.log(`THE LIBRARY `, library)
     const onKeyDownMention = useCallback(
         (e, editor: Editor) => {
+            const totalMax: number = Math.max(values.length, 1) + library.length - 1
+            console.log(`SHOULD THIS NOT WORK `, library)
+            console.log(`WTF `, openLibraryBooks)
             if (targetRange) {
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    const totalMax: number = values.length + openLibraryBooks.length - 2
-                    return setValueIndex(getNextIndex(valueIndex, values.length - 1));
+                    const nextIndex = getNextIndex(valueIndex, totalMax)
+                    console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
+                    return setValueIndex(getNextIndex(valueIndex, totalMax));
                 }
                 if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    return setValueIndex(getPreviousIndex(valueIndex, values.length - 1));
+                    const nextIndex = getPreviousIndex(valueIndex, totalMax)
+                    console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
+                    return setValueIndex(getPreviousIndex(valueIndex, totalMax));
                 }
                 if (e.key === 'Escape') {
                     e.preventDefault();
@@ -126,6 +143,8 @@ export const useNodeContentSelect = (
         },
         [
             values,
+            openLibraryBooks,
+            library,
             valueIndex,
             setValueIndex,
             targetRange,
@@ -134,7 +153,7 @@ export const useNodeContentSelect = (
     );
 
     const onChangeMention = useCallback(
-        (editor: Editor) => {
+        (editor: Editor, ) => {
             const { selection } = editor;
 
             if (selection && isCollapsed(selection)) {
@@ -147,16 +166,15 @@ export const useNodeContentSelect = (
                         resetNodeMenuItem()
                     }
 
-                    console.log(`SEARCHING FOR BOOKS WITH THE TITLE: `, search)
-                    console.log(`openLibraryBooks: `, openLibraryBooks)
-                    if (search) {
-                        openLibrarySearcher(search, setOpenLibraryBooks)
-                    }
-
                     const { range, match: beforeMatch } = isTextAfterTrigger(editor, {at: cursor, trigger})
 
                     if (atEnd && beforeMatch) {
                         const [, word] = beforeMatch;
+
+                        if (word) {
+                            openLibrarySearcher(word, setOpenLibraryBooks)
+                        }
+
                         const pointAtStartOfLine: Point = {path: range.focus.path, offset: 0}
                         const rangePinnedToStartOfLine: Range = {anchor: pointAtStartOfLine, focus: range.focus}
                         setTargetRange(rangePinnedToStartOfLine as Range);
@@ -164,6 +182,7 @@ export const useNodeContentSelect = (
                         setValueIndex(0);
                         return
                     }
+
                 }
 
                 // If we are searching through NodeTypes (The default menu)
@@ -190,7 +209,7 @@ export const useNodeContentSelect = (
 
             setTargetRange(null);
         },
-        [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, openLibraryBooks]
+        [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, library]
     );
 
     return {
@@ -198,7 +217,7 @@ export const useNodeContentSelect = (
         index: valueIndex,
         target: targetRange,
         values,
-        openLibraryBooks,
+        openLibraryResults: library,
         onChangeMention,
         onKeyDownMention,
         onAddNodeContent,
