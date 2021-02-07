@@ -1,5 +1,5 @@
 import {useDispatch} from "react-redux";
-import { setEditing, deletePage } from "../../redux/slices/wikiPageSlice";
+import { deletePage } from "../../redux/slices/wikiPageSlice";
 import {removePageFromTopic, PeakPage} from "../../redux/slices/topicSlice"
 import React, {useState} from "react";
 import cn from "classnames";
@@ -12,11 +12,13 @@ import { batch } from 'react-redux'
 import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
 import {setUserHierarchy} from "../../redux/slices/user/userSlice";
 import {PeakTopicNode} from "../../redux/slices/user/types";
+import {setEditing, useActiveEditorState} from "src/redux/slices/activeEditor/activeEditorSlice";
 
 const PageContextBar = (props: {topicId: string}) => {
     const { topicId } = props
     let history = useHistory();
     const dispatch = useDispatch()
+    const editorState = useActiveEditorState()
     const peakWikiPage = useCurrentWikiPage()
     const determineNextLink = useDetermineNextLink();
     const user = useCurrentUser()
@@ -25,11 +27,11 @@ const PageContextBar = (props: {topicId: string}) => {
         <div className="context-button-row animated fadeIn">
             <Switch className={cn("public-switch")} checkedChildren="Public" unCheckedChildren="Private" defaultChecked/>
             <EditOutlined
-                className={cn("is-editing-icon", peakWikiPage.editorState.isEditing ? "active" : "")}
+                className={cn("is-editing-icon", editorState.isEditing ? "active" : "")}
                 onClick={() => {
-                    dispatch(setEditing({ pageId: peakWikiPage.id, isEditing: !peakWikiPage.editorState.isEditing}))
+                    dispatch(setEditing({ pageId: peakWikiPage.id, isEditing: !editorState.isEditing}))
                 }}/>
-            <Popconfirm title="Are you sure？" className={cn("is-editing-icon", peakWikiPage.editorState.isEditing ? "active" : "")} icon={<QuestionCircleOutlined style={{ color: 'red' }} />} onConfirm={() => deletePageEverywhere()}>
+            <Popconfirm title="Are you sure？" className={cn("is-editing-icon", editorState.isEditing ? "active" : "")} icon={<QuestionCircleOutlined style={{ color: 'red' }} />} onConfirm={() => deletePageEverywhere()}>
                 <DeleteOutlined />
             </Popconfirm>
         </div>
@@ -49,7 +51,7 @@ const PageContextBar = (props: {topicId: string}) => {
 
     return (
         <div className={"context-container"}>
-            { (peakWikiPage.editorState.isEditing) ? null : contextButton }
+            { (editorState.isEditing) ? null : contextButton }
         </div>
     )
 }

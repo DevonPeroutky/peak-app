@@ -80,7 +80,6 @@ const PeakLayout = (props: {}) => {
                            <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                            <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
                            <Route path={`${match.path}/wiki/:id`} render={(props) => {
-                               console.log(`THIS PATH`, match.path)
                                if (currentWikiPage) {
                                    return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
                                } else {

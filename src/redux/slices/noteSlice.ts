@@ -1,10 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {Node} from "slate";
 
 export interface PeakNote {
     id: string
     title: string
     note_type: string
     icon_url: string
+    body: Node[]
     url: string
     author?: string
     inserted_at?: string

@@ -1,8 +1,6 @@
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {EMPTY_JOURNAL_STATE, JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
 import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
 import {PeakEditorState, PeakHyperlinkState, PeakWikiPage} from "./wiki-types";
-import moment from "moment";
 import {EMPTY_PARAGRAPH_NODE} from "../common/rich-text-editor/editors/constants";
 
 export const INITIAL_LINK_STATE: PeakHyperlinkState = {
@@ -14,6 +12,7 @@ export const INITIAL_LINK_STATE: PeakHyperlinkState = {
 
 export const INITIAL_EDITING_STATE: PeakEditorState = {
     isEditing: true,
+    isSaving: false,
     focusMap: {},
     showLinkMenu: false,
     currentLinkState: INITIAL_LINK_STATE,
@@ -21,14 +20,12 @@ export const INITIAL_EDITING_STATE: PeakEditorState = {
 
 export const INITIAL_PAGE_STATE: PeakWikiPage = {
     id: "-1",
-    editorState: INITIAL_EDITING_STATE,
     body: [
         {
             children: [EMPTY_PARAGRAPH_NODE()],
         }
     ],
-    title: '',
-    isSaving: false
+    title: ''
 };
 
 export const INITIAL_JOURNAL_STATE: PeakWikiPage = {...INITIAL_PAGE_STATE, body: EMPTY_JOURNAL_STATE, id: JOURNAL_PAGE_ID }

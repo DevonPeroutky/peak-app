@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react'
 import "./topic-wiki.scss"
 import {useDispatch} from "react-redux";
-import { setEditing, beginSavingPage } from "../../redux/slices/wikiPageSlice";
 import 'antd/dist/antd.css';
 import {Slate, ReactEditor} from "slate-react";
 import {createEditor, Node} from "slate";
@@ -15,10 +14,12 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {WIKI_NODE_LEVEL, wikiNormalizers, wikiPlugins} from "../../common/rich-text-editor/editors/wiki/config";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
+import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
     const dispatch = useDispatch();
+    const editorState = useActiveEditorState()
     const publishPage = usePagePublisher();
     const savePageToDB = useDebounceWikiSaver();
     const updatePageEverywhere = useDebouncePageTitleUpdater();
@@ -74,7 +75,7 @@ const TopicWiki = (props: {topic_id: string}) => {
 
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, wikiPageContent)) {
-            if (!currentWikiPage.isSaving) {
+            if (!editorState.isSaving) {
                 dispatch(beginSavingPage({pageId: currentPageId}));
             }
             // updateComponentPageContent
@@ -101,20 +102,20 @@ const TopicWiki = (props: {topic_id: string}) => {
             <div className="peak-topic-wiki-container">
                 <MemoizedLinkMenu
                     key={`${currentPageId}-LinkMenu`}
-                    linkState={currentWikiPage.editorState.currentLinkState}
-                    showLinkMenu={currentWikiPage.editorState.showLinkMenu}
+                    linkState={editorState.currentLinkState}
+                    showLinkMenu={editorState.showLinkMenu}
                     pageId={currentPageId}/>
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins
                         onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
                         onKeyDownDeps={[index, search, target]}
-                        key={`${currentPageId}-${currentWikiPage.editorState.isEditing}`}
+                        key={`${currentPageId}-${editorState.isEditing}`}
                         plugins={wikiPlugins}
                         placeholder="Drop some knowledge..."
                         spellCheck={true}
                         autoFocus={true}
-                        readOnly={!currentWikiPage.editorState.isEditing}
+                        readOnly={!editorState.isEditing}
                         style={{
                             textAlign: "left",
                             flex: "1 1 auto",

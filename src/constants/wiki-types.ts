@@ -6,26 +6,24 @@ interface CodeEditorFocusState {
     [key: string]: boolean
 };
 
-export interface PeakEditorState {
-    isEditing: boolean,
-    focusMap: CodeEditorFocusState,
-    showLinkMenu: boolean,
-    currentLinkState: PeakHyperlinkState,
-};
-export interface PeakWikiPage {
-    id: string,
-    body: Node[] | JournalEntry[],
-    title: string,
-    editorState: PeakEditorState,
-    isSaving: boolean
-}
-
 export interface PeakHyperlinkState {
     currentLinkUrl: string,
     currentSelection: Range | null,
     currentText: string
     currentHyperLinkId: string,
 };
+export interface PeakEditorState {
+    isEditing: boolean,
+    focusMap: CodeEditorFocusState,
+    showLinkMenu: boolean,
+    currentLinkState: PeakHyperlinkState,
+    isSaving: boolean
+};
+export interface PeakWikiPage {
+    id: string,
+    body: Node[] | JournalEntry[],
+    title: string,
+}
 
 export interface PeakWikiState {
     [key: string]: PeakWikiPage;
