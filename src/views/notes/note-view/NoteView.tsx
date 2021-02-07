@@ -78,8 +78,8 @@ const BookHeaderSection = (props: {note: PeakNote}) => {
             <div className={"book-note-header-row"}>
                 <ImageLoader url={note.icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
                 <div className={"note-header"}>
-                    <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
-                    <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author}/>
+                    <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
+                    <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
                 </div>
             </div>
         </div>
