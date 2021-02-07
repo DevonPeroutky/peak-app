@@ -62,8 +62,15 @@ const NoteAvatar = (props: { item: PeakNote }) => {
     if (!item.icon_url) {
         return (<ReadFilled className="default-note-icon"/>)
     } else {
-        return (<ImageLoader className="note-icon" url={item.icon_url}
-                             fallbackElement={<ReadFilled className="default-note-icon"/>}/>)
+        return (
+            <ImageLoader
+                className="note-icon"
+                url={item.icon_url}
+                fallbackElement={
+                    <ReadFilled className="default-note-icon"/>
+                }
+            />
+        )
     }
 }
 

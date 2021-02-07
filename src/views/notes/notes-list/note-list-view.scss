@@ -44,7 +44,7 @@
 
               .subtitle-container {
                 color: $text-accent-color;
-                font-size: 10px;
+                font-size: 12px;
                 text-transform: uppercase;
                 line-height: 14px;
                 display: flex;
@@ -68,7 +68,7 @@
 
         .ant-list-item-meta-avatar {
           min-width: 48px;
-          margin-right: 16px;
+          margin-right: 24px;
 
           .web-note-icon {
             width: 24px;
@@ -82,7 +82,7 @@
 
           .default-note-icon {
             svg {
-              height: 32px;
+              height: auto;
               width: 32px;
             }
           }
