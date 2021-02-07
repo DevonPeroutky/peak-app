@@ -83,7 +83,7 @@ const NoteSubTitle = (props: { item: PeakNote }) => {
                    <ImageLoader className={"fav-icon"} url={item.icon_url} fallbackElement={<BookOutlined className="default-note-icon"/>}/>
                    <span>{deriveHostname(item.url)}</span>
                </>
-               : item.author.split(" ").map(capitalize).join(" ")}
+               : item.author}
        </div>
     )
 }

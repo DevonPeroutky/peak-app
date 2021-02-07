@@ -32,8 +32,7 @@ export const PeakNoteEditor = (props) => {
 
     const updateNoteContent = (newBody: Node[]) => {
         setNoteContent(newBody)
-
-        noteSaver(currentUser.id, currentNote.id, newBody[0]["children"] as Node[])
+        noteSaver(currentUser.id, currentNote.id, { body: newBody[0]["children"] as Node[] })
     }
     const defaultKeyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor)

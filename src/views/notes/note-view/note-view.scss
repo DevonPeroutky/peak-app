@@ -53,6 +53,15 @@
       h1 {
         margin-bottom: 0;
       }
+
+      .web-title-input {
+        margin-bottom: 0;
+        font-size: 2.2rem!important;
+        font-weight: 600;
+        text-align: left;
+        padding-left: 0;
+        text-transform: capitalize;
+      }
     }
 
     .book-note-header-row {
@@ -78,12 +87,20 @@
         flex-direction: column;
         align-items: flex-start;
         margin-left: 15px;
+        width: 100%;
 
-        h1 {
+        .book-title-input {
           margin-bottom: 0;
+          font-size: 2.2rem!important;
+          font-weight: 600;
+          width: 100%;
+          text-align: left;
+          padding-left: 0;
+          text-transform: capitalize;
         }
 
         .author-subtitle {
+          padding-left: 0;
           text-transform: uppercase;
           font-weight: 700;
           color: $text-accent-color;
