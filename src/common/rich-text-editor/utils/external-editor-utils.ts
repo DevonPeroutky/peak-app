@@ -80,8 +80,5 @@ export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolea
 }
 
 export function forceFocusToNode(slateNode: Node, focus: boolean = true) {
-    const currentPageId = getCurrentPageId()
-    if (currentPageId) {
-        store.dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: slateNode.id as number, focused: focus}))
-    }
+    store.dispatch(setEditorFocusToNode({ nodeId: slateNode.id as number, focused: focus}))
 }

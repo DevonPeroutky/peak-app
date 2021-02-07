@@ -25,7 +25,6 @@ export const peakLinkOnKeyDownHandler = (event: any, editor: Editor) => {
     if (event.metaKey && event.key == 'l') {
         event.preventDefault();
         const [...match] = Editor.nodes(editor, { match: n => n.type === "a" });
-        const currentPageId = getCurrentPageId()
 
         /**
          * - This is an existing Link
@@ -44,14 +43,13 @@ export const peakLinkOnKeyDownHandler = (event: any, editor: Editor) => {
                 currentText: text,
                 currentSelection: linkSelection
             };
-            store.dispatch(openEditLinkMenu({ pageId: currentPageId, hyperlinkState: currentHyperlink} ));
+            store.dispatch(openEditLinkMenu({ hyperlinkState: currentHyperlink} ));
         } else {
-            store.dispatch(openEmptyLinkMenu(currentPageId));
+            store.dispatch(openEmptyLinkMenu());
         }
     }
 
     if (event.key === 'Escape') {
-        const currentPageId = getCurrentPageId()
-        store.dispatch(closeLinkMenu(currentPageId));
+        store.dispatch(closeLinkMenu());
     }
 }

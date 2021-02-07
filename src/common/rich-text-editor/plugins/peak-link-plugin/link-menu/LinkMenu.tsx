@@ -142,7 +142,7 @@ const LinkMenu = (props: LinkMenuProps) => {
         setText('')
         setDropdownOpen(false)
         setEditing(true)
-        dispatch(closeLinkMenu(pageId));
+        dispatch(closeLinkMenu());
 
         // Reset the selection
         if (resetDefaultSelection && savedSelection) {

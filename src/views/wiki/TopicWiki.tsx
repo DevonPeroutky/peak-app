@@ -52,11 +52,11 @@ const TopicWiki = (props: {topic_id: string}) => {
         switch (handler.key) {
             case 'command+s':
                 event.preventDefault();
-                dispatch(setEditing({ pageId: currentPageId, isEditing: false }));
+                dispatch(setEditing({ isEditing: false }));
                 break;
             case 'e':
                 event.preventDefault();
-                dispatch(setEditing({ pageId: currentPageId, isEditing: true }));
+                dispatch(setEditing({ isEditing: true }));
                 break;
         }
     }, {}, [currentPageId]);
@@ -76,7 +76,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, wikiPageContent)) {
             if (!editorState.isSaving) {
-                dispatch(beginSavingPage({pageId: currentPageId}));
+                dispatch(beginSavingPage());
             }
             // updateComponentPageContent
             setWikiPageContent(newValue)

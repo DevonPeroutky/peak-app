@@ -13,7 +13,6 @@ const PeakHyperLink = (props: RenderElementProps) => {
         children,
         attributes,
     } = props;
-    const peakWikiPage = useCurrentWikiPage();
     const dispatch = useDispatch();
     const editorState = useActiveEditorState()
     const editor = useSlate();
@@ -31,7 +30,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
                 currentText: linkText,
                 currentSelection: editor.selection
             };
-            dispatch(openEditLinkMenu({ pageId: peakWikiPage.id, hyperlinkState: currentHyperlink} ));
+            dispatch(openEditLinkMenu({ hyperlinkState: currentHyperlink} ));
         } else {
             const url: string = element.url as string
             if (url.startsWith("/")) {

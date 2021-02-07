@@ -40,7 +40,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
             batch(() => {
                 dispatch(createPage({pageId: newPage.id, newPage: newPage}));
                 dispatch(addPageToTopic({topicId: props.topic.id, page: newPage as PeakPage}));
-                dispatch(setEditing({pageId: newPage.id, isEditing: true}));
+                dispatch(setEditing({isEditing: true}));
             })
             history.push(`/topic/${topic.id}/wiki/${newPage.id}`);
         }).catch(() => {

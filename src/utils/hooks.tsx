@@ -168,7 +168,7 @@ export function usePagePublisher() {
     const dispatch = useDispatch();
     const currentWikiPage = useCurrentWikiPage();
     return () => {
-        dispatch(setEditing({ pageId: currentWikiPage.id, isEditing: false }));
+        dispatch(setEditing({ isEditing: false }));
         notification.success({ message: "Published", duration: 1});
     }
 }
@@ -202,7 +202,7 @@ function usePageSaver() {
                 const newHierarchy: PeakTopicNode[] = res.data.hierarchy
                 const newPage: PeakWikiPage = res.data.page
                 batch(() => {
-                    dispatch(endSavingPage({pageId: pageId}))
+                    dispatch(endSavingPage())
                     dispatch(setUserHierarchy(newHierarchy))
                     dispatch(updatePageContents({
                         pageId: pageId,

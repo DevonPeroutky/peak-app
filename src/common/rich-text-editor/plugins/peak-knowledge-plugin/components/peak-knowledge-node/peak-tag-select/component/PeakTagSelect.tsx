@@ -29,7 +29,6 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const currentUser = useCurrentUser()
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
-    const currentWikiPage = useCurrentWikiPage();
     const editorState = useActiveEditorState()
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
@@ -95,7 +94,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         }
     }
     const lockFocus = (shouldFocus: boolean) => {
-        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
+        dispatch(setEditorFocusToNode({nodeId: nodeId, focused: shouldFocus}))
     }
 
     const saveAndLeave = () => {

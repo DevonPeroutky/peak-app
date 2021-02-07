@@ -29,7 +29,7 @@ const PageContextBar = (props: {topicId: string}) => {
             <EditOutlined
                 className={cn("is-editing-icon", editorState.isEditing ? "active" : "")}
                 onClick={() => {
-                    dispatch(setEditing({ pageId: peakWikiPage.id, isEditing: !editorState.isEditing}))
+                    dispatch(setEditing({ isEditing: !editorState.isEditing}))
                 }}/>
             <Popconfirm title="Are you sure？" className={cn("is-editing-icon", editorState.isEditing ? "active" : "")} icon={<QuestionCircleOutlined style={{ color: 'red' }} />} onConfirm={() => deletePageEverywhere()}>
                 <DeleteOutlined />

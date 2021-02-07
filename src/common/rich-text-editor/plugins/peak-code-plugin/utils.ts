@@ -21,8 +21,7 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
         },
         EMPTY_PARAGRAPH_NODE()
     ]);
-    const pageId = window.location.href.split("/").pop()
-    store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
+    store.dispatch(setEditorFocusToNode({nodeId: nodeId, focused: true}))
 }
 
 export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {
