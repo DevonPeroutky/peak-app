@@ -59,7 +59,7 @@ export const PeakNoteEditor = (props) => {
         return onKeyDownMention(event, editor, openLibraryResults)
     }
 
-    console.log("Note Content", noteContent)
+    console.log("Re-Rendering Note Content", noteContent)
 
     return (
         <Slate

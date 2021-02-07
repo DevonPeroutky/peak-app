@@ -33,7 +33,7 @@
         width: 40px!important;
         height: 40px!important;
         font-size: 32px;
-        margin-right: 12px;
+        //margin-right: 12px;
       }
     }
     .peak-editor-control-icon {
@@ -63,6 +63,7 @@
         .node-description {
           color: rgb(107, 119, 140);
           font-size: 12px;
+          text-transform: capitalize;
         }
       }
 
