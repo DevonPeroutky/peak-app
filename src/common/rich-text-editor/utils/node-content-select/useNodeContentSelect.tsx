@@ -19,6 +19,7 @@ import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
+import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number
@@ -30,12 +31,14 @@ export const useNodeContentSelect = (
 
     const currentUser = useCurrentUser()
     const booksSelectItems: PeakNodeSelectListItem[] = useBooks().map(convertPeakBookToNodeSelectListItem)
+    const openLibrarySearcher = useDebounceOpenLibrarySearcher()
 
     // "Component" State
     const [nodeContentSelectMode, setNodeSelectMode] = useState(true)
     const [targetRange, setTargetRange] = useState<Range | null>(null);
     const [valueIndex, setValueIndex] = useState(0);
     const [menuItems, setMenuItems] = useState(NODE_CONTENT_LIST_ITEMS);
+    const [openLibraryBooks, setOpenLibraryBooks] = useState<OpenLibraryBook[]>([]);
     const [search, setSearch] = useState('');
     const filterValues = () => {
         const filteredValues: PeakNodeSelectListItem[] = menuItems
@@ -60,6 +63,7 @@ export const useNodeContentSelect = (
                     setSearch('')
                     setMenuItems(booksSelectItems)
                     setNodeSelectMode(false)
+                    setOpenLibraryBooks([])
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
@@ -91,6 +95,7 @@ export const useNodeContentSelect = (
             if (targetRange) {
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
+                    const totalMax: number = values.length + openLibraryBooks.length - 2
                     return setValueIndex(getNextIndex(valueIndex, values.length - 1));
                 }
                 if (e.key === 'ArrowUp') {
@@ -142,6 +147,12 @@ export const useNodeContentSelect = (
                         resetNodeMenuItem()
                     }
 
+                    console.log(`SEARCHING FOR BOOKS WITH THE TITLE: `, search)
+                    console.log(`openLibraryBooks: `, openLibraryBooks)
+                    if (search) {
+                        openLibrarySearcher(search, setOpenLibraryBooks)
+                    }
+
                     const { range, match: beforeMatch } = isTextAfterTrigger(editor, {at: cursor, trigger})
 
                     if (atEnd && beforeMatch) {
@@ -179,7 +190,7 @@ export const useNodeContentSelect = (
 
             setTargetRange(null);
         },
-        [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search]
+        [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, openLibraryBooks]
     );
 
     return {
@@ -187,6 +198,7 @@ export const useNodeContentSelect = (
         index: valueIndex,
         target: targetRange,
         values,
+        openLibraryBooks,
         onChangeMention,
         onKeyDownMention,
         onAddNodeContent,

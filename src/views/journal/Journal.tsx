@@ -42,6 +42,7 @@ import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types"
 import {journalOrdering} from "../../redux/slices/wikiPageSlice";
 import {sort} from "ramda"
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
+import {OpenLibraryBook} from "../../client/openLibrary";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -146,6 +147,7 @@ const PeakJournal = (props: { }) => {
     // TODO: Refactor these two into a single export for Peak Editors
     const {
         values,
+        openLibraryBooks,
         onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
@@ -197,6 +199,7 @@ const PeakJournal = (props: { }) => {
                 isLoadingMore={isLoadingMore}
                 index={index}
                 target={target}
+                openLibraryBooks={openLibraryBooks}
                 search={search}
                 values={values}
                 nodeContentSelectMode={nodeContentSelectMode}
@@ -237,6 +240,7 @@ interface InternalJournalProps {
     // TODO: This doesn't feel like something we should have to pass
     index: number,
     target: Range,
+    openLibraryBooks: OpenLibraryBook[],
     search: string,
     values: PeakNodeSelectListItem[]
     onAddNodeContent: (editor: Editor, data: PeakNodeSelectListItem) => void
@@ -253,6 +257,7 @@ const Journal = (props: InternalJournalProps) => {
         index,
         target,
         values,
+        openLibraryBooks,
         nodeContentSelectMode,
         search,
         onAddNodeContent
@@ -284,6 +289,7 @@ const Journal = (props: InternalJournalProps) => {
             {(isLoadingMore) ? <Skeleton active paragraph title/> : null}
             <NodeContentSelect
                 at={target}
+                openLibraryBooks={openLibraryBooks}
                 valueIndex={index}
                 options={values}
                 onClickMention={onAddNodeContent}

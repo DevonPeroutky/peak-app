@@ -3,10 +3,11 @@ import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {PeakNodeSelectListItem} from "./types";
 import {Editor, Point, Range} from "slate";
 import {escapeRegExp, getText} from "@udecode/slate-plugins";
-import {insertCustomBlockElement} from "../base-utils";
+import {insertCustomBlockElement, insertCustomBlockElementCallback} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
+import {getCoverImageUrl, OpenLibraryBook} from "../../../../client/openLibrary";
 
 export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditorControlDisplay): PeakNodeSelectListItem {
     return {
@@ -29,6 +30,20 @@ export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSel
         icon: <ReadOutlined className={"inline-select-item-icon"}/>
     }
 }
+
+export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook): PeakNodeSelectListItem {
+    return {
+        title: book.title,
+        label: `${book.title} by ${book.author_name}`,
+        knowledgeNodeId: "-69",
+        elementType: ELEMENT_PEAK_BOOK,
+        customFormat: (editor => insertCustomBlockElementCallback(ELEMENT_PEAK_BOOK,{knowledgeNodeId: "-1", title: book.title})(editor)),
+        icon: <ReadOutlined className={"inline-select-item-icon"}/>
+    }
+}
+
+
+
 
 export function insertBookElementCallback(book: PeakNote): (editor: Editor) => void {
     return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {bookId: book.id, title: book.title}))
