@@ -9,7 +9,7 @@ import {rootReducer} from "./rootReducer"; // defaults to localStorage for web
 
 const persistConfig = {
     key: 'root',
-    blacklist: ['quickSwitcher', 'electron'],
+    blacklist: ['quickSwitcher', 'electron', 'activeEditorState'],
     storage,
 };
 

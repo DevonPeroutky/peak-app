@@ -41,6 +41,7 @@ import {PeakWikiPage} from "../../constants/wiki-types";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 import {journalOrdering} from "../../redux/slices/wikiPageSlice";
 import {sort} from "ramda"
+import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
@@ -248,7 +249,6 @@ const Journal = (props: InternalJournalProps) => {
         syncJournalEntries,
         currentPageId,
         keyBindingHandler,
-        journalPageState,
         isLoadingMore,
         index,
         target,
@@ -257,6 +257,7 @@ const Journal = (props: InternalJournalProps) => {
         search,
         onAddNodeContent
     } = props
+    const editorState = useActiveEditorState()
 
     return (
         <Slate
@@ -265,8 +266,8 @@ const Journal = (props: InternalJournalProps) => {
             onChange={syncJournalEntries}>
             <MemoizedLinkMenu
                 key={`${currentPageId}-LinkMenu`}
-                linkState={journalPageState.editorState.currentLinkState}
-                showLinkMenu={journalPageState.editorState.showLinkMenu}
+                linkState={editorState.currentLinkState}
+                showLinkMenu={editorState.showLinkMenu}
                 pageId={currentPageId}/>
             <EditablePlugins
                 onKeyDown={[keyBindingHandler]}

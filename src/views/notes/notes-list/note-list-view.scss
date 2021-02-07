@@ -1,0 +1,43 @@
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+
+  .peak-notes-list {
+    width: 100%;
+
+    .peak-note-meta-container {
+      display: flex;
+      margin-bottom: 0!important;
+      width: 100%;
+
+      .note-icon {
+        height: 32px;
+        width: 32px;
+      }
+
+      .default-note-icon {
+        svg {
+          height: 32px;
+          width: 32px;
+        }
+      }
+
+      .ant-list-item-meta-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        .ant-list-item-meta-title {
+          display: flex;
+          margin-bottom: 3px;
+        }
+      }
+    }
+
+  }
+
+
+}

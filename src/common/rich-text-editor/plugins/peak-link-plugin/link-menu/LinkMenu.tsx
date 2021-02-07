@@ -9,7 +9,7 @@ import {unWrapLink, upsertLink} from "../link-util";
 import {AlignLeftOutlined} from "@ant-design/icons/lib";
 import {DisplayLinkMenu} from "./link-menu-body/display-link-menu/DisplayLinkMenu";
 import HierarchySearcherInput from "./hierarchy-searcher/HierarchySearcherInput";
-import {closeLinkMenu} from "../../../../../redux/slices/wikiPageSlice";
+import {closeLinkMenu} from "../../../../../redux/slices/activeEditor/activeEditorSlice";
 import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 
 interface LinkMenuProps {
@@ -142,7 +142,7 @@ const LinkMenu = (props: LinkMenuProps) => {
         setText('')
         setDropdownOpen(false)
         setEditing(true)
-        dispatch(closeLinkMenu(pageId));
+        dispatch(closeLinkMenu());
 
         // Reset the selection
         if (resetDefaultSelection && savedSelection) {

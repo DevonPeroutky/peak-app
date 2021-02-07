@@ -1,7 +1,7 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {store} from "../../../redux/store";
-import {setEditorFocusToNode} from "../../../redux/slices/wikiPageSlice";
+import {setEditorFocusToNode} from "../../../redux/slices/activeEditor/activeEditorSlice";
 import {getCurrentPageId} from "../../../utils/links";
 import {
     isAtLastLineOfPeakKnowledgeNode,
@@ -80,8 +80,5 @@ export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolea
 }
 
 export function forceFocusToNode(slateNode: Node, focus: boolean = true) {
-    const currentPageId = getCurrentPageId()
-    if (currentPageId) {
-        store.dispatch(setEditorFocusToNode({ pageId: currentPageId, nodeId: slateNode.id as number, focused: focus}))
-    }
+    store.dispatch(setEditorFocusToNode({ nodeId: slateNode.id as number, focused: focus}))
 }

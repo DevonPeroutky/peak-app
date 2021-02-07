@@ -8,7 +8,10 @@ import {calculateNextColor} from "../utils";
 import {Editor, Node, Transforms} from "slate";
 import {forceFocusToNode, reEnterDown} from "../../../../../../utils/external-editor-utils";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
-import {setEditorFocusToNode} from "../../../../../../../../redux/slices/wikiPageSlice";
+import {
+    setEditorFocusToNode,
+    useActiveEditorState
+} from "../../../../../../../../redux/slices/activeEditor/activeEditorSlice";
 import {Empty, Select, Tag} from "antd";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {DeleteOutlined, TagOutlined} from "@ant-design/icons/lib";
@@ -26,12 +29,12 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const currentUser = useCurrentUser()
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
-    const currentWikiPage = useCurrentWikiPage();
+    const editorState = useActiveEditorState()
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
-    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[nodeId] || false
+    const shouldFocus: boolean = editorState.focusMap[nodeId] || false
     if (shouldFocus) {
         mainRef.current.focus()
     }
@@ -91,7 +94,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         }
     }
     const lockFocus = (shouldFocus: boolean) => {
-        dispatch(setEditorFocusToNode({pageId: currentWikiPage.id, nodeId: nodeId, focused: shouldFocus}))
+        dispatch(setEditorFocusToNode({nodeId: nodeId, focused: shouldFocus}))
     }
 
     const saveAndLeave = () => {

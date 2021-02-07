@@ -3,12 +3,12 @@ import {AutoComplete, Modal } from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { AppState} from "../../redux";
 import { closeSwitcher } from "../../redux/slices/quickSwitcherSlice";
-import {PeakDisplayNode, PeakNode, PeakTopicNode} from "../../redux/slices/user/userSlice";
 import "./quick-switcher.scss"
 import {convertHierarchyToSearchableList} from "../../utils/hierarchy";
 import { cloneDeep} from "lodash";
 import { useHistory } from 'react-router-dom';
 import {renderPeakDisplayNodesInList} from "./quick-switch-item/QuickSwitchItem";
+import {PeakDisplayNode, PeakTopicNode} from "../../redux/slices/user/types";
 
 const QuickSwitcher = (props: { }) => {
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
@@ -30,7 +30,7 @@ const QuickSwitcher = (props: { }) => {
     }, [ hierarchy ]);
 
     useEffect(() => {
-        let timer: number | null = null;
+        let timer = null;
         if (isOpen) {
             timer = setTimeout(() => {
                 setMounted(true)

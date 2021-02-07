@@ -12,11 +12,12 @@ import {updatePageContents} from '../../../../../redux/slices/wikiPageSlice';
 import "./peak-code-editor.scss"
 import {LanguageContextBar} from "./LanguageContextBar";
 import PeakAceEditor from "./PeakAceEditor";
-import {ELEMENT_CODE_BLOCK, toggleNodeType} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {forceFocusToNode, reEnterDown, reEnterUp} from "../../../utils/external-editor-utils";
 import {JOURNAL_PAGE_ID} from "../../../editors/journal/constants";
 import {JournalEntry} from "../../../editors/journal/types";
 import {findNode} from "../../../utils/base-utils";
+import {useActiveEditorState} from "../../../../../redux/slices/activeEditor/activeEditorSlice";
 
 const PeakCodeEditor = (props: { attributes: any, children: any, element: any }) => {
     const { element  } = props;
@@ -26,6 +27,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     // Hooks
     const currentUser = useCurrentUser()
     const currentWikiPage = useCurrentWikiPage();
+    const editorState = useActiveEditorState();
     const dispatch = useDispatch();
     const savePageToDB = useSavePageRequest();
     const wikiSave = useDebounceWikiSaver();
@@ -116,7 +118,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
         wikiSave.cancel()
         forceFocusToNode(element, shouldFocusThis)
     }
-    const shouldFocus: boolean = currentWikiPage.editorState.focusMap[element.id] || false
+    const shouldFocus: boolean = editorState.focusMap[element.id] || false
     return (
         <div
             {...props.attributes}
@@ -131,7 +133,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
                     codeId={props.element.id}
                     pageId={currentWikiPage.id}
                     updateLanguage={updateLanguage}
-                    isEditing={currentWikiPage.editorState.isEditing}
+                    isEditing={editorState.isEditing}
                     deleteCodeBlock={deleteCodeBlock}
                     language={language}/>
                 <PeakAceEditor
@@ -142,7 +144,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
                     updateLanguage={updateLanguage}
                     updateFocus={lockFocus}
                     codeBlockValue={codeBlock}
-                    isEditing={currentWikiPage.editorState.isEditing}
+                    isEditing={editorState.isEditing}
                     leaveDown={exitDown}
                     leaveUp={exitUp}
                     onCodeChange={setCodeBlock}

@@ -1,25 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {Node} from "slate";
 import {differenceWith, omit, uniqBy} from "ramda";
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {CHROME_EXTENSION} from "../../common/rich-text-editor/editors/chrome-extension/constants";
 import {
     INITIAL_CHROME_EXT_STATE, INITIAL_EDITING_STATE,
     INITIAL_JOURNAL_STATE,
-    INITIAL_LINK_STATE,
     INITIAL_PAGE_STATE,
 } from "../../constants/editor";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 import {JOURNAL_PAGE_ID} from "../../common/rich-text-editor/editors/journal/constants";
-import {PeakEditorState, PeakHyperlinkState, PeakWikiPage, PeakWikiState} from "../../constants/wiki-types";
+import { PeakWikiPage, PeakWikiState} from "../../constants/wiki-types";
 const R = require('ramda');
-
-const INITIAL_EDITOR_STATE: PeakEditorState = {
-    isEditing: false,
-    focusMap: {},
-    showLinkMenu: false,
-    currentLinkState: INITIAL_LINK_STATE
-};
 
 export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: INITIAL_JOURNAL_STATE, [CHROME_EXTENSION]: INITIAL_CHROME_EXT_STATE } ;
 export const journalOrdering = (a: JournalEntry, b: JournalEntry) => {
@@ -48,56 +39,9 @@ export const wikiPageSlice = createSlice({
             const newPageState = {...state[action.payload.pageId], title: action.payload.title};
             return { ...state, [action.payload.pageId]: newPageState }
         },
-        beginSavingPage(state, action: PayloadAction<{ pageId: string}>) {
-            const newPageState = {...state[action.payload.pageId], isSaving: true};
-            return { ...state, [action.payload.pageId]: newPageState }
-        },
-        endSavingPage(state, action: PayloadAction<{ pageId: string}>) {
-            const newPageState = {...state[action.payload.pageId], isSaving: false};
-            return { ...state, [action.payload.pageId]: newPageState }
-        },
         updatePageContents(state, action: PayloadAction<{ pageId: string, title: string, body: Node[]}>) {
             const newPageState = {...state[action.payload.pageId], title: action.payload.title, body: action.payload.body};
             return { ...state, [action.payload.pageId]: newPageState }
-        },
-        openEmptyLinkMenu(state, action: PayloadAction<string>) {
-            const newPageEditingState = {...state[action.payload].editorState, showLinkMenu: true};
-            const newPageState = {...state[action.payload], editorState: newPageEditingState};
-            return { ...state, [action.payload]: newPageState }
-        },
-        setEditing(state, action: PayloadAction<{ pageId: string, isEditing: boolean }>) {
-            if (action.payload.isEditing) {
-                const newPageState = {...state[action.payload.pageId], editorState: INITIAL_EDITING_STATE};
-                return {...state, [action.payload.pageId]: newPageState }
-            } else {
-                const newPageState = {...state[action.payload.pageId], editorState: INITIAL_EDITOR_STATE};
-                return {...state, [action.payload.pageId]: newPageState }
-            }
-        },
-        closeLinkMenu(state, action: PayloadAction<string>) {
-            const newPageEditingState = { ...state[action.payload].editorState, showLinkMenu: false, currentLinkState: INITIAL_LINK_STATE };
-            const newPageState = {...state[action.payload], editorState: newPageEditingState};
-            return {...state, [action.payload]: newPageState }
-        },
-        openEditLinkMenu(state, action: PayloadAction<{pageId: string, hyperlinkState: PeakHyperlinkState}>) {
-            const newPageEditingState = { ...state[action.payload.pageId].editorState, showLinkMenu: true, currentLinkState: action.payload.hyperlinkState };
-            const newPageState = {...state[action.payload.pageId], editorState: newPageEditingState};
-            return {...state, [action.payload.pageId]: newPageState }
-        },
-        setEditorFocusToNode(state, action: PayloadAction<{pageId: string, nodeId: number, focused: boolean }>) {
-            const { pageId, nodeId, focused } = action.payload
-            const newCodeEditorFocusState = { [nodeId]: focused }
-            const newPageEditingState = { ...state[pageId].editorState, focusMap: newCodeEditorFocusState };
-            const newPageState = {...state[pageId], editorState: newPageEditingState};
-            return {...state, [pageId]: newPageState }
-        },
-        deleteCodeBlock(state, action: PayloadAction<{pageId: string, nodeId: string}>) {
-            const { pageId, nodeId } = action.payload
-            const emptyParagraphBlock = { text: "", type: ELEMENT_PARAGRAPH }
-            const currentPageBody: Node[] = state[pageId].body as Node[]
-            const newPageBody = currentPageBody.map(node => node.id === nodeId ? emptyParagraphBlock : node )
-            const newPageState = {...state[pageId], body: newPageBody};
-            return {...state, [pageId]: newPageState }
         },
         setJournalEntries(state, action: PayloadAction<JournalEntry[]>) {
             const newJournals: JournalEntry[] = R.sort(journalOrdering, action.payload)
@@ -137,17 +81,9 @@ export const wikiPageSlice = createSlice({
 
 export const {
     deletePage,
-    openEmptyLinkMenu,
-    setEditing,
-    closeLinkMenu,
-    openEditLinkMenu,
-    addPages,
     updatePageContents,
     createPage,
     updatePageTitle,
-    beginSavingPage,
-    endSavingPage,
-    setEditorFocusToNode,
     setJournalEntries,
     updateJournalEntry,
     updateJournalEntries

@@ -4,8 +4,6 @@ import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
 import { setUserHierarchy} from "../redux/slices/user/userSlice";
 import {
-    setEditing,
-    endSavingPage,
     updatePageContents,
     updateJournalEntry,
     setJournalEntries,
@@ -31,6 +29,7 @@ import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/consta
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
 import {PeakTopicNode} from "../redux/slices/user/types";
+import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/activeEditor/activeEditorSlice";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -169,7 +168,7 @@ export function usePagePublisher() {
     const dispatch = useDispatch();
     const currentWikiPage = useCurrentWikiPage();
     return () => {
-        dispatch(setEditing({ pageId: currentWikiPage.id, isEditing: false }));
+        dispatch(setEditing({ isEditing: false }));
         notification.success({ message: "Published", duration: 1});
     }
 }
@@ -189,10 +188,10 @@ export function useSavePageRequest() {
 function usePageSaver() {
     const dispatch = useDispatch();
     const savePage = useSavePageRequest()
-    const currentWikiPage = useCurrentWikiPage()
+    const editorState = useActiveEditorState()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
-        if (!isEmpty(currentWikiPage.editorState.focusMap)) {
+        if (!isEmpty(editorState.focusMap)) {
             console.log("NOT SUBMITTING")
             // @ts-ignore
             return
@@ -203,7 +202,7 @@ function usePageSaver() {
                 const newHierarchy: PeakTopicNode[] = res.data.hierarchy
                 const newPage: PeakWikiPage = res.data.page
                 batch(() => {
-                    dispatch(endSavingPage({pageId: pageId}))
+                    dispatch(endSavingPage())
                     dispatch(setUserHierarchy(newHierarchy))
                     dispatch(updatePageContents({
                         pageId: pageId,

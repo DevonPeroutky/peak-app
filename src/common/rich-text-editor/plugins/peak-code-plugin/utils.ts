@@ -1,7 +1,7 @@
 import {Editor, Node, Range, Transforms} from "slate";
 import {ELEMENT_CODE_BLOCK, ELEMENT_LI, ELEMENT_PARAGRAPH, isSelectionAtBlockStart} from "@udecode/slate-plugins";
 import {store} from "../../../../redux/store";
-import {setEditorFocusToNode} from "../../../../redux/slices/wikiPageSlice";
+import {setEditorFocusToNode} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {insertCustomBlockElement, next, previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
@@ -21,8 +21,7 @@ export const createAndFocusCodeBlock = (editor: Editor) => {
         },
         EMPTY_PARAGRAPH_NODE()
     ]);
-    const pageId = window.location.href.split("/").pop()
-    store.dispatch(setEditorFocusToNode({pageId: pageId!, nodeId: nodeId, focused: true}))
+    store.dispatch(setEditorFocusToNode({nodeId: nodeId, focused: true}))
 }
 
 export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {

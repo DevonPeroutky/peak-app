@@ -19,6 +19,8 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 import {useJournalSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
 import {establishSocketConnection} from "../../utils/socketUtil";
+import {PeakNoteListView} from "../notes/notes-list/NoteListView";
+import {PeakNoteView} from "../notes/note-view/NoteView";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -54,10 +56,6 @@ const PeakLayout = (props: {}) => {
         }
     }, [history.location.hash]) // Fires every time hash changes
 
-    useEffect(() => {
-
-    })
-
     const loadEverything: () => Promise<void> = () => loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
 
     if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={loadEverything}/>
@@ -70,6 +68,14 @@ const PeakLayout = (props: {}) => {
                     <Content className="peak-content-container">
                        <Switch>
                            <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                           <Route path={`${match.path}/notes/:id`} render={(props) => {
+                               if (props.match.params && props.match.params.id) {
+                                   return <PeakNoteView key={props.match.params.id} {...props} />
+                               } else {
+                                   return <Redirect to={"/"} />
+                               }
+                           }} />
+                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView />} />
                            <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                            <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                            <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />

@@ -1,0 +1,63 @@
+.peak-note-view-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+
+  .note-header-section {
+    display: flex;
+    flex-direction: column;
+
+    .note-subheader-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      height: 22px;
+      line-height: 22px;
+
+      .note-link-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .note-web-icon {
+          height: 18px;
+          width: auto;
+          padding-right: 5px;
+        }
+
+        .note-url {
+          line-height: 18px;
+          font-size: 14px;
+          color: #7e8488;
+          text-decoration: none!important;
+          text-shadow: none!important;
+          background: none!important;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+      }
+    }
+
+    .note-header-row {
+      display: flex;
+      padding-top: 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      h1 {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .note-divider {
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+
+}
