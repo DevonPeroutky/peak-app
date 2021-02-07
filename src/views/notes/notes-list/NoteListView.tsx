@@ -9,6 +9,7 @@ import {deriveBaseDomain, deriveHostname} from "../../../utils/urls";
 import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
+const bookmark = require('../../../assets/icons/bookmark.svg');
 
 export const PeakNoteListView = (props: {}) => {
     const notes: PeakNote[] = useNotes()
@@ -31,22 +32,51 @@ export const PeakNoteListView = (props: {}) => {
                     <List.Item key={item.title}>
                         <List.Item.Meta
                             className={"peak-note-meta-container"}
-                            avatar={(item.icon_url) ? <ImageLoader className="note-icon" url={item.icon_url} fallbackElement={<ReadFilled className="default-note-icon"/>}/> : <ReadFilled className="default-note-icon"/>}
+                            avatar={<NoteAvatar item={item}/>}
                             title={
                                 <Link to={`/home/notes/${item.id}`}>
                                     <div className={"peak-note-list-item-header"}>
-                                        <span className={"subtitle"}>{(item.note_type === ELEMENT_WEB_NOTE) ? deriveHostname(item.url) : item.author.split(" ").map(capitalize).join(" ")}</span>
+                                        <NoteSubTitle item={item}/>
                                         <span className={"item-title"}>
                                             {capitalize(item.title)}
                                         </span>
                                     </div>
                                 </Link>
                             }
-                           description={(item.note_type === ELEMENT_WEB_NOTE) ? <Tag color="magenta" icon={<BookOutlined/>} children={"Bookmark"}/> : <Tag color="blue" icon={<ReadFilled/>} children={"Book"}/>}
                         />
                     </List.Item>
                 )}
             />
         </div>
+    )
+}
+
+
+const NoteAvatar = (props: { item: PeakNote }) => {
+    const { item } = props
+
+    if (item.note_type === ELEMENT_WEB_NOTE) {
+        return (<img src={bookmark} className={"web-note-icon"}/>)
+    }
+
+    if (!item.icon_url) {
+        return (<ReadFilled className="default-note-icon"/>)
+    } else {
+        return (<ImageLoader className="note-icon" url={item.icon_url}
+                             fallbackElement={<ReadFilled className="default-note-icon"/>}/>)
+    }
+}
+
+const NoteSubTitle = (props: { item: PeakNote }) => {
+    const { item } = props
+    return (
+       <div className={"subtitle-container"}>
+           {(item.note_type === ELEMENT_WEB_NOTE) ?
+               <>
+                   <ImageLoader className={"fav-icon"} url={item.icon_url} fallbackElement={<BookOutlined className="default-note-icon"/>}/>
+                   <span>{deriveHostname(item.url)}</span>
+               </>
+               : item.author.split(" ").map(capitalize).join(" ")}
+       </div>
     )
 }

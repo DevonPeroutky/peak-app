@@ -20,6 +20,7 @@
         display: flex;
         margin-bottom: 0!important;
         width: 100%;
+        align-items: center;
 
         .ant-list-item-meta-content {
           display: flex;
@@ -41,11 +42,19 @@
               text-align: left;
               height: fit-content!important;
 
-              .subtitle {
+              .subtitle-container {
                 color: $text-accent-color;
                 font-size: 10px;
                 text-transform: uppercase;
                 line-height: 14px;
+                display: flex;
+                align-items: center;
+
+                .fav-icon {
+                  height: 16px;
+                  width: auto;
+                  margin-right: 5px;
+                }
               }
 
               .item-title {
@@ -60,6 +69,11 @@
         .ant-list-item-meta-avatar {
           min-width: 48px;
           margin-right: 16px;
+
+          .web-note-icon {
+            width: 24px;
+            height: auto;
+          }
 
           .note-icon {
             height: auto;
