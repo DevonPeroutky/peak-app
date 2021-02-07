@@ -1,6 +1,6 @@
 .peak-note-view-container {
   width: 100%;
-  max-width: 650px;
+  max-width: 850px;
   margin: 0 auto;
 
   .note-header-section {
@@ -44,10 +44,20 @@
 
     .note-header-row {
       display: flex;
-      padding-top: 20px;
+      padding-top: 24px;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
+
+      h1 {
+        margin-bottom: 0;
+      }
     }
   }
+
+  .note-divider {
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+
 }

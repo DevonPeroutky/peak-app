@@ -22,7 +22,7 @@ export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: 
             editor={editor}
             value={content}
             onChange={updatePageContent}>
-            <div className="peak-note-editor-container">
+            <div className="peak-save-note-editor-container">
                 <EditablePlugins
                     autoFocus
                     className={"peak-note-editor"}

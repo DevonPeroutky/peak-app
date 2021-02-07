@@ -69,7 +69,6 @@ export function useCurrentNoteId() {
     // TODO: HANDLE JOURNAL
     const url = location.pathname.split("/");
     const currentNoteId = url.pop()!;
-    console.log(`Current Note Id`, currentNoteId)
     return currentNoteId
 }
 export function useCurrentNote(): PeakNote | undefined {

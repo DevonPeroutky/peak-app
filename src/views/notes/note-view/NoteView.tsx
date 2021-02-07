@@ -6,6 +6,8 @@ import {CaretLeftFilled, CaretRightFilled} from "@ant-design/icons/lib";
 import "./note-view.scss"
 import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {capitalize_and_truncate} from "../../../utils/strings";
+import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
+import {Divider} from "antd";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -17,7 +19,8 @@ export const PeakNoteView = (props) => {
     return (
         <div className={"peak-note-view-container"}>
             {(currentNote.note_type === ELEMENT_WEB_NOTE) ? <WebNoteHeaderSection note={currentNote}/> : <BookHeaderSection note={currentNote}/>}
-
+            <Divider className={"note-divider"}/>
+            <PeakNoteEditor/>
         </div>
     )
 }
@@ -39,7 +42,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
                 </a>
             </div>
             <div className={"note-header-row"}>
-                <h1>{capitalize_and_truncate(note.title, 40)}</h1>
+                <h1>{capitalize_and_truncate(note.title, 45)}</h1>
             </div>
         </div>
     )
@@ -54,7 +57,7 @@ const BookHeaderSection = (props: {note: PeakNote}) => {
             <div className={"note-header-row"}>
                 <>
                     <img src={note.icon_url}/>
-                    <h1>{capitalize_and_truncate(note.title, 40)}</h1>
+                    <h1>{capitalize_and_truncate(note.title, 35)}</h1>
                 </>
                 <span>{note.author}</span>
             </div>

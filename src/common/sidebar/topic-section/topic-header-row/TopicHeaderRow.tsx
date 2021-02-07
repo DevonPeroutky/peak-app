@@ -16,6 +16,7 @@ import {EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants"
 import {Peaker} from "../../../../types";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import { setEditing } from "src/redux/slices/activeEditor/activeEditorSlice";
+import {Node} from "slate";
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
     const [hovered, setHovering] = useState(false);
@@ -26,10 +27,11 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
     const createPageUnderTopic = () => {
         const empty_title = { type: TITLE, children: [{ text: ''}] }
+        const dat_bodyyy: Node[] = [{ children: [empty_title, EMPTY_PARAGRAPH_NODE()]}]
 
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
-                body: [{ children: [empty_title, EMPTY_PARAGRAPH_NODE]}],
+                body: dat_bodyyy,
                 topic_id: props.topic.id,
                 title: "",
                 privacy_level: "private",
