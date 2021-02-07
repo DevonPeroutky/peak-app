@@ -1,3 +1,5 @@
+@import "../../../constants/variables";
+
 .notes-container {
   display: flex;
   flex-direction: column;
@@ -7,39 +9,70 @@
   .peak-notes-list {
     width: 100%;
 
-    .peak-note-meta-container {
-      display: flex;
-      margin-bottom: 0!important;
-      width: 100%;
-
-      .note-icon {
-        height: auto;
-        width: 32px;
-      }
-
-      .default-note-icon {
-        svg {
-          height: 32px;
-          width: 32px;
-        }
-      }
-
-    }
     .ant-list-item {
       padding-left: 0px;
+      padding-top: 30px;
+      padding-bottom: 30px;
       display: flex;
       justify-content: flex-start;
 
-    }
-    .ant-list-item-meta-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-
-      .ant-list-item-meta-title {
+      .peak-note-meta-container {
         display: flex;
-        margin-bottom: 3px;
+        margin-bottom: 0!important;
+        width: 100%;
+
+        .ant-list-item-meta-content {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          height: 100%;
+
+          .ant-list-item-meta-title {
+            display: flex;
+            line-height: 48px!important;
+            height: fit-content!important;
+            //margin-bottom: 10px;
+
+            .peak-note-list-item-header {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              text-align: left;
+              height: fit-content!important;
+
+              .subtitle {
+                color: $text-accent-color;
+                font-size: 10px;
+                text-transform: uppercase;
+                line-height: 14px;
+              }
+
+              .item-title {
+                line-height: 32px;
+                font-size: 24px;
+
+              }
+            }
+          }
+        }
+
+        .ant-list-item-meta-avatar {
+          min-width: 48px;
+          margin-right: 16px;
+
+          .note-icon {
+            height: auto;
+            width: 32px;
+          }
+
+          .default-note-icon {
+            svg {
+              height: 32px;
+              width: 32px;
+            }
+          }
+        }
       }
     }
   }

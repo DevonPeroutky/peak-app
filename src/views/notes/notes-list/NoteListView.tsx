@@ -1,8 +1,8 @@
 import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
-import {Avatar, List, Menu} from "antd";
-import {ReadFilled} from "@ant-design/icons/lib";
+import {Avatar, List, Menu, Tag} from "antd";
+import {BookOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveBaseDomain, deriveHostname} from "../../../utils/urls";
@@ -34,10 +34,15 @@ export const PeakNoteListView = (props: {}) => {
                             avatar={(item.icon_url) ? <ImageLoader className="note-icon" url={item.icon_url} fallbackElement={<ReadFilled className="default-note-icon"/>}/> : <ReadFilled className="default-note-icon"/>}
                             title={
                                 <Link to={`/home/notes/${item.id}`}>
-                                    {capitalize(item.title)}
+                                    <div className={"peak-note-list-item-header"}>
+                                        <span className={"subtitle"}>{(item.note_type === ELEMENT_WEB_NOTE) ? deriveHostname(item.url) : item.author.split(" ").map(capitalize).join(" ")}</span>
+                                        <span className={"item-title"}>
+                                            {capitalize(item.title)}
+                                        </span>
+                                    </div>
                                 </Link>
                             }
-                            description={(item.note_type === ELEMENT_WEB_NOTE) ? deriveHostname(item.url) : item.author.split(" ").map(capitalize).join(" ")}
+                           description={(item.note_type === ELEMENT_WEB_NOTE) ? <Tag color="magenta" icon={<BookOutlined/>} children={"Bookmark"}/> : <Tag color="blue" icon={<ReadFilled/>} children={"Book"}/>}
                         />
                     </List.Item>
                 )}
