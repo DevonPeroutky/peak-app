@@ -43,7 +43,7 @@ export const PeakNoteEditor = (props) => {
     const {
         values,
         onAddNodeContent,
-        onChangeMention,
+        openLibraryResults,
         onKeyDownMention,
         search,
         index,
@@ -54,9 +54,13 @@ export const PeakNoteEditor = (props) => {
         maxSuggestions: 10,
         trigger: '/',
     });
-    const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
-        return onKeyDownMention(event, editor)
-    }, [index, search, target])
+
+    function keyBindingHandler(event): void | false {
+        baseKeyBindingHandler(event, editor)
+        return onKeyDownMention(event, editor, openLibraryResults)
+    }
+
+    console.log("Note Content", noteContent)
 
     return (
         <Slate
@@ -76,8 +80,8 @@ export const PeakNoteEditor = (props) => {
                     <PageContextBar topicId={topic_id}/>
                     */}
                     <EditablePlugins
-                        onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
-                        onKeyDownDeps={[index, search, target]}
+                        onKeyDown={[defaultKeyBindingHandler, keyBindingHandler]}
+                        onKeyDownDeps={[index, search, target, openLibraryResults]}
                         key={`${currentPageId}-${editorState.isEditing}`}
                         plugins={notePlugins}
                         placeholder="Drop some knowledge..."
@@ -92,6 +96,7 @@ export const PeakNoteEditor = (props) => {
                     />
                     <NodeContentSelect
                         at={target}
+                        openLibraryBooks={openLibraryResults}
                         valueIndex={index}
                         options={values}
                         onClickMention={onAddNodeContent}

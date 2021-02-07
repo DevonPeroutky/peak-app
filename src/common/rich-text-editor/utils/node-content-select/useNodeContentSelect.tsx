@@ -14,7 +14,11 @@ import {
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
 import {createCreateNewBookListItem} from "./constants";
-import {convertPeakBookToNodeSelectListItem, isTextAfterTrigger} from "./utils";
+import {
+    convertOpenLibraryBookToNodeSelectListItem,
+    convertPeakBookToNodeSelectListItem,
+    isTextAfterTrigger
+} from "./utils";
 import {createNewPeakBook, useBooks} from "../../../../client/notes";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
@@ -63,6 +67,7 @@ export const useNodeContentSelect = (
 
     const onAddNodeContent = useCallback(
         (editor: Editor, data: PeakNodeSelectListItem) => {
+            console.log(`THE DATA: `, data)
             if (targetRange !== null) {
                 if (data.elementType === PEAK_BOOK_SELECT_ITEM) {
                     setSearch('')
@@ -72,13 +77,14 @@ export const useNodeContentSelect = (
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
                 } else {
+                    console.log(`INSERTING YA BOYYY`)
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
 
                     // IF CREATING A NEW BOOK
                     // We need to insert w/The ID
-                    if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1") {
-                        createNewPeakBook(currentUser.id, data.title).then((newPeakBookItem) => {
+                    if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
+                        createNewPeakBook(currentUser.id, data).then((newPeakBookItem) => {
                             insertNodeContent(editor, newPeakBookItem, targetRange)
                             resetNodeMenuItem()
                             return setTargetRange(null);
@@ -126,7 +132,11 @@ export const useNodeContentSelect = (
             if (['Tab', 'Enter'].includes(e.key)) {
                 e.preventDefault();
                 if (values.length) {
-                    onAddNodeContent(editor, values[valueIndex])
+                    console.log(`Values `, values)
+                    console.log(`Books `, books)
+                    console.log(`ValueIndex `, valueIndex)
+                    const fullOptions: PeakNodeSelectListItem[] = [...values, ...books.map(convertOpenLibraryBookToNodeSelectListItem)]
+                    onAddNodeContent(editor, fullOptions[valueIndex])
                     return false
                 } else {
                     Editor.insertBreak(editor)

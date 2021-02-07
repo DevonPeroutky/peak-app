@@ -18,7 +18,7 @@ export interface OpenLibraryBook {
     cover_i: number
     title: string
     title_suggest: string
-    author_name: string
+    author_name: string[]
     author_key: string
     first_publish_year: string
 }

@@ -8,7 +8,6 @@ import {ReadOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
 import {getCoverImageUrl, OpenLibraryBook} from "../../../../client/openLibrary";
-import {Img} from "react-image";
 import {ImageLoader} from "../../../image-loader/ImageLoader";
 
 export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditorControlDisplay): PeakNodeSelectListItem {
@@ -34,16 +33,17 @@ export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSel
 }
 
 export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook): PeakNodeSelectListItem {
-    console.log(`GOING FOR IT `, getCoverImageUrl(book.cover_i, "S"))
     return {
         title: book.title,
         label: `${book.title}`,
-        description: book.author_name,
+        description: book.author_name.join(", "),
+        author: book.author_name.join(", "),
+        iconUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
         knowledgeNodeId: "-69",
         elementType: ELEMENT_PEAK_BOOK,
         customFormat: (editor => insertCustomBlockElementCallback(ELEMENT_PEAK_BOOK,{knowledgeNodeId: "-1", title: book.title})(editor)),
         icon: <ImageLoader
-            url={(book.cover_i) ? getCoverImageUrl(book.cover_i, "S") : "bogus"}
+            url={(book.cover_i !== undefined) ? getCoverImageUrl(book.cover_i, "S") : "bogus"}
             className={"peak-node-select-book-cover"}
             fallbackElement={<ReadOutlined className={"peak-node-select-book-cover"}/>}
         />
