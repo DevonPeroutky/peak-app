@@ -50,11 +50,13 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const searchLibary = () => {
-        return openLibraryBooks
+        const newThings = openLibraryBooks
+        return newThings
     }
     const library: OpenLibraryBook[] = searchLibary()
 
     const resetNodeMenuItem = () => {
+        console.log(`RESETTING FOR SOME REASON?`)
         setNodeSelectMode(true)
         setMenuItems(NODE_CONTENT_LIST_ITEMS)
         setOpenLibraryBooks([])
@@ -95,62 +97,56 @@ export const useNodeContentSelect = (
 
     // OpenLibrary response may come after we reset NodeList
     useEffect(() => {
-        if (nodeContentSelectMode && library.length > 0) {
+        if (nodeContentSelectMode && library.length > 1) {
+            console.log(`CLEANING OUT THE LIBRARY`)
             setOpenLibraryBooks([])
         }
     }, [library]);
 
     console.log(`THE LIBRARY `, library)
-    const onKeyDownMention = useCallback(
-        (e, editor: Editor) => {
-            const totalMax: number = Math.max(values.length, 1) + library.length - 1
-            console.log(`SHOULD THIS NOT WORK `, library)
-            console.log(`WTF `, openLibraryBooks)
-            if (targetRange) {
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    const nextIndex = getNextIndex(valueIndex, totalMax)
-                    console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
-                    return setValueIndex(getNextIndex(valueIndex, totalMax));
-                }
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    const nextIndex = getPreviousIndex(valueIndex, totalMax)
-                    console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
-                    return setValueIndex(getPreviousIndex(valueIndex, totalMax));
-                }
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    resetNodeMenuItem();
-                    return setTargetRange(null);
-                }
+    console.log(`VALUES `, values)
+    const onKeyDownMention = (e, editor: Editor, books: OpenLibraryBook[]) => {
+        const totalMax: number = Math.max(values.length, 1) + library.length - 1
+        console.log(`--> RIGHT FUCKING HERE!!!!!!!`)
+        if (targetRange) {
+            if (e.key === 'ArrowDown') {
+                console.log(`BOOKS `, books)
+                console.log(`SHOULD THIS NOT WORK `, searchLibary())
+                console.log(`WHY DOES THIS WORK `, values)
+                e.preventDefault();
+                const nextIndex = getNextIndex(valueIndex, totalMax)
+                console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
+                return setValueIndex(getNextIndex(valueIndex, totalMax));
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const nextIndex = getPreviousIndex(valueIndex, totalMax)
+                console.log(`MOVING INDEX (${totalMax}): ${valueIndex} --> ${nextIndex}`)
+                return setValueIndex(getPreviousIndex(valueIndex, totalMax));
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                resetNodeMenuItem();
+                return setTargetRange(null);
+            }
 
-                if (e.key === 'Backspace' && search.length === 0) {
-                    resetNodeMenuItem();
-                    return setTargetRange(null);
-                }
+            if (e.key === 'Backspace' && search.length === 0) {
+                resetNodeMenuItem();
+                return setTargetRange(null);
+            }
 
-                if (['Tab', 'Enter'].includes(e.key)) {
-                    e.preventDefault();
-                    if (values.length) {
-                        onAddNodeContent(editor, values[valueIndex])
-                        return false
-                    } else {
-                        Editor.insertBreak(editor)
-                    }
+            if (['Tab', 'Enter'].includes(e.key)) {
+                e.preventDefault();
+                console.log(`GETTTING CALLED`, values)
+                if (values.length) {
+                    onAddNodeContent(editor, values[valueIndex])
+                    return false
+                } else {
+                    Editor.insertBreak(editor)
                 }
             }
-        },
-        [
-            values,
-            openLibraryBooks,
-            library,
-            valueIndex,
-            setValueIndex,
-            targetRange,
-            onAddNodeContent,
-        ]
-    );
+        }
+    }
 
     const onChangeMention = useCallback(
         (editor: Editor, ) => {

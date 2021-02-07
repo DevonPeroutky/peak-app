@@ -144,6 +144,7 @@ const PeakJournal = (props: { }) => {
     // @ts-ignore
     const editor = useMemo<ReactEditor>(() => pipe(createEditor(), ...journalNormalizers),  []);
 
+
     // TODO: Refactor these two into a single export for Peak Editors
     const {
         values,
@@ -160,10 +161,10 @@ const PeakJournal = (props: { }) => {
         maxSuggestions: 10,
         trigger: '/',
     });
-    function keyBindingHandler(event): void | false {
-        baseKeyBindingHandler(event, editor)
-        return onKeyDownMention(event, editor)
-    }
+    // function keyBindingHandler(event): void | false {
+    //     baseKeyBindingHandler(event, editor)
+    //     return onKeyDownMention(event, editor)
+    // }
 
     const syncJournalEntries = (newValue: Node[]) => {
         const journalEntries = journal.body as JournalEntry[]
@@ -182,7 +183,7 @@ const PeakJournal = (props: { }) => {
         }
     }
 
-    const isEmpty =  equals(journalContent, emptyState)
+    const isEmpty = equals(journalContent, emptyState)
 
     const daComponent = () => {
         if (isEmpty) {
@@ -194,7 +195,7 @@ const PeakJournal = (props: { }) => {
                 journalContent={journalContent}
                 syncJournalEntries={syncJournalEntries}
                 currentPageId={currentPageId}
-                keyBindingHandler={keyBindingHandler}
+                keyBindingHandler={onKeyDownMention}
                 isLoadingMore={isLoadingMore}
                 index={index}
                 target={target}
@@ -233,7 +234,7 @@ interface InternalJournalProps {
     // Random
     // TODO: This doesn't feel like something we should have to pass
     currentPageId: string,
-    keyBindingHandler: (event: any) => false | void,
+    keyBindingHandler: (e, editor: Editor, books: OpenLibraryBook[]) => void,
 
     // Node Content Select Props
     // TODO: This doesn't feel like something we should have to pass
@@ -274,8 +275,8 @@ const Journal = (props: InternalJournalProps) => {
                 showLinkMenu={editorState.showLinkMenu}
                 pageId={currentPageId}/>
             <EditablePlugins
-                onKeyDown={[keyBindingHandler]}
-                onKeyDownDeps={[index, search, target]}
+                onKeyDown={[(e, editor) => keyBindingHandler(e, editor, openLibraryBooks)]}
+                onKeyDownDeps={[index, search, target, openLibraryBooks]}
                 style={{
                     textAlign: "left",
                     flex: "1 1 auto",

@@ -23,6 +23,15 @@ export interface OpenLibraryBook {
     first_publish_year: string
 }
 
+export const bullshit = {
+    cover_i: 69,
+    title: "WHAT THE FAWK",
+    title_suggest: "WHAT THE FAWK",
+    author_name: "WHAT THE FAWK",
+    author_key: "WHAT THE FAWK",
+    first_publish_year: "WHAT THE FAWK",
+}
+
 
 
 // EXAMPLE: http://openlibrary.org/search.json?title=the+lord+of+the+rings
