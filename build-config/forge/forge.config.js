@@ -43,4 +43,27 @@ module.exports = {
             }
         ],
     ],
+    "publishers": [
+        {
+            "name": "@electron-forge/publisher-github",
+            "config": {
+                "repository": {
+                    "owner": "DevonPeroutky",
+                    "name": "peak-app"
+                }
+            }
+        }
+    ],
+    "dependencies": {
+        "electron-squirrel-startup": "^1.0.0"
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^6.0.0-beta.54",
+        "@electron-forge/maker-deb": "^6.0.0-beta.54",
+        "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+        "@electron-forge/maker-zip": "^6.0.0-beta.54",
+        "@electron-forge/publisher-github": "^6.0.0-beta.54",
+        "electron": "11.1.1"
+    }
 };
