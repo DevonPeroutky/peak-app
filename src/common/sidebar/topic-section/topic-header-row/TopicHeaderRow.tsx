@@ -15,7 +15,7 @@ import {capitalize_and_truncate} from "../../../../utils/strings";
 import {EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
 import {Peaker} from "../../../../types";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
-import { setEditing } from "src/redux/slices/activeEditor/activeEditorSlice";
+import { setEditing } from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {Node} from "slate";
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {

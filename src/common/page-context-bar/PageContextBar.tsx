@@ -12,7 +12,7 @@ import { batch } from 'react-redux'
 import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
 import {setUserHierarchy} from "../../redux/slices/user/userSlice";
 import {PeakTopicNode} from "../../redux/slices/user/types";
-import {setEditing, useActiveEditorState} from "src/redux/slices/activeEditor/activeEditorSlice";
+import {setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 
 const PageContextBar = (props: {topicId: string}) => {
     const { topicId } = props
