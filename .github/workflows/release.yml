@@ -18,5 +18,7 @@ jobs:
         run: yarn install
       - name: publish
         env:
+          REACT_APP_DIST: electron
+          REACT_APP_ENV: prod
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn publish
