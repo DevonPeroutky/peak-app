@@ -1,7 +1,7 @@
 {
   "name": "peak-app",
   "productName": "Peak",
-  "version": "0.0.1-beta-4",
+  "version": "0.0.1-beta-10",
   "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
   "scripts": {
