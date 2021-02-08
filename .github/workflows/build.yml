@@ -11,6 +11,6 @@ jobs:
       with:
         node-version: 14
     - name: install dependencies
-      run: yarn  install
+      run: yarn install
     - name: build
-      run: yarn make
+      run: yarn run make
