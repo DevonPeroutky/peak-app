@@ -20,6 +20,7 @@ export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: s
 
 export function submitNoteViaWebsockets(socketChannel: Channel, userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string): Push {
     const currentDate = getCurrentFormattedDate()
+    console.log(`Submitting the note `, pageTitle)
 
     return socketChannel
         .push("submit_web_note", {

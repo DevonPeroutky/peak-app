@@ -1,12 +1,15 @@
 import React from "react";
 import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {PeakNodeSelectListItem} from "./types";
-import {Editor, Point, Range} from "slate";
-import {escapeRegExp, getText} from "@udecode/slate-plugins";
-import {insertCustomBlockElement} from "../base-utils";
+import {Editor, Location, Point, Range, Transforms} from "slate";
+import {escapeRegExp, getRangeFromBlockStart, getText, unwrapList} from "@udecode/slate-plugins";
+import {insertCustomBlockElement, insertCustomBlockElementCallback} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
+import {getCoverImageUrl, OpenLibraryBook} from "../../../../client/openLibrary";
+import {ImageLoader} from "../../../image-loader/ImageLoader";
+import {uniq} from "ramda";
 
 export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditorControlDisplay): PeakNodeSelectListItem {
     return {
@@ -21,12 +24,38 @@ export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditor
 }
 
 export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSelectListItem {
+    console.log(`CONVERTING THE BOOK `, book)
     return {
         title: book.title,
         label: book.title,
+        description: book.author,
+        author: book.author,
         elementType: ELEMENT_PEAK_BOOK,
         customFormat: insertBookElementCallback(book),
-        icon: <ReadOutlined className={"inline-select-item-icon"}/>
+        icon: <ImageLoader
+            url={book.icon_url}
+            className={"peak-node-select-book-cover"}
+            fallbackElement={<ReadOutlined className={"inline-select-item-icon"}/>}
+        />
+    }
+}
+
+export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook): PeakNodeSelectListItem {
+    const author: string = (book.author_name) ? uniq(book.author_name).join(", ") : ""
+    return {
+        title: book.title,
+        label: `${book.title}`,
+        description: author,
+        author: author,
+        iconUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
+        knowledgeNodeId: "-69",
+        elementType: ELEMENT_PEAK_BOOK,
+        customFormat: (editor => insertCustomBlockElementCallback(ELEMENT_PEAK_BOOK,{knowledgeNodeId: "-1", title: book.title})(editor)),
+        icon: <ImageLoader
+            url={(book.cover_i !== undefined) ? getCoverImageUrl(book.cover_i, "S") : "bogus"}
+            className={"peak-node-select-book-cover"}
+            fallbackElement={<ReadOutlined className={"peak-node-select-book-cover"}/>}
+        />
     }
 }
 
@@ -68,4 +97,47 @@ export const isTextAfterTrigger = (
         range: currentLineRange,
         match,
     };
+};
+
+export const insertNodeContent = async (
+    editor: Editor,
+    selectedOption: PeakNodeSelectListItem,
+    targetRange: Range
+) => {
+    const rangeAtBlockStart = getRangeFromBlockStart(editor) as Range;
+    peakAutoformatBlock(editor, selectedOption.elementType, rangeAtBlockStart, {
+        preFormat: () => {
+            unwrapList(editor);
+        },
+        format: selectedOption.customFormat
+    });
+    Transforms.insertText(editor, '', { at: editor.selection! } )
+};
+
+// We need our own implementation of this because we don't want Transforms.delete running for the node select I guess.
+// Errors would ensue when using the NodeSelect at the top of a Journal w/at least 2 lines
+const peakAutoformatBlock = (
+    editor: Editor,
+    type: string,
+    at: Location,
+    {
+        preFormat,
+        format,
+    }: {
+        preFormat?: (editor: Editor) => void;
+        format?: (editor: Editor) => void;
+    }
+) => {
+    // Transforms.delete(editor, { at });
+    preFormat?.(editor);
+
+    if (!format) {
+        Transforms.setNodes(
+            editor,
+            { type },
+            { match: (n) => Editor.isBlock(editor, n) }
+        );
+    } else {
+        format(editor);
+    }
 };

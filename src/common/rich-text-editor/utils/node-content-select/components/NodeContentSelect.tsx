@@ -15,6 +15,8 @@ import {trim} from "lodash";
 import {PeakNodeSelectListItem} from "../types";
 import "./node-content-select.scss"
 import {capitalize_and_truncate} from "../../../../../utils/strings";
+import {OpenLibraryBook} from "../../../../../client/openLibrary";
+import {convertOpenLibraryBookToNodeSelectListItem} from "../utils";
 
 export interface NodeContentSelectProps {
     /**
@@ -43,6 +45,8 @@ export interface NodeContentSelectProps {
     onClickMention?: (editor: ReactEditor, option: PeakNodeSelectListItem) => void;
     /** True if the menu is currently on the default menu of node types*/
     nodeContentSelectMode: boolean;
+
+    openLibraryBooks: OpenLibraryBook[]
 }
 
 const getClassNames = classNamesFunction<
@@ -57,7 +61,7 @@ const NodeContentSelectBase = ({
                                       options,
                                       valueIndex,
                                       onClickMention,
-                                      nodeContentSelectMode,
+                                      nodeContentSelectMode, openLibraryBooks,
                                       ...props
                                   }: NodeContentSelectProps) => {
     const classNames = getClassNames(styles, {
@@ -85,50 +89,89 @@ const NodeContentSelectBase = ({
     return (
         <PortalBody>
             <div ref={ref} className={classNames.root} {...props}>
-                <OptionList options={options} valueIndex={valueIndex} classNames={classNames} onClickMention={onClickMention} editor={editor}/>
+                <OptionList
+                    options={options}
+                    valueIndex={valueIndex}
+                    classNames={classNames}
+                    onClickMention={onClickMention}
+                    nodeContentSelectMode={nodeContentSelectMode}
+                    editor={editor}
+                    openLibraryBooks={openLibraryBooks}/>
             </div>
         </PortalBody>
     );
 };
 
-export const OptionList = ({options, valueIndex, classNames, onClickMention, editor}) => {
+const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onClickMention, editor, openLibraryBooks}) => {
     if (options.length === 0) {
         return (
             <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
         )
     } else {
+        const numInternalOptions: number = options.length
+        console.log(`OPTIONS `, options)
         return (
-           <>
-               {options.map((option, i) => (
-                   <div
-                       key={`${i}${option.label}`}
-                       className={
-                           i === valueIndex
-                               ? `${classNames.mentionItemSelected} peak-node-content-item-selected`
-                               : classNames.mentionItem
-                       }
-                       onMouseDown={getPreventDefaultHandler(
-                           onClickMention,
-                           editor,
-                           option
-                       )}
-                   >
-                       <div className={"node-content-select-item-container"}>
-                           {option.icon}
-                           <div className={"node-content-item"}>
-                               <div className={"node-content-item-body"}>
-                                   <div className={"node-title"}>{capitalize_and_truncate(option.label)}</div>
-                                   <div className={"node-description"}>{option.description}</div>
-                               </div>
-                               {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
-                           </div>
-                       </div>
-                   </div>
-               ))}
+            <>
+                <div className="peak-internal-results">
+                    {options.map((option, i) =>
+                        <NodeContentSelectItem
+                            key={`${i}${option.label}`}
+                            option={option}
+                            i={i}
+                            valueIndex={valueIndex}
+                            classNames={classNames}
+                            onClickMention={onClickMention}
+                            editor={editor}/>)}
+                </div>
+                {
+                    ((openLibraryBooks.length > 0) ?
+                            <div className="peak-external-results">
+                                <div className={"ant-select-item ant-select-item-group"}>Select new book</div>
+                                { openLibraryBooks.map(convertOpenLibraryBookToNodeSelectListItem).map((option, i) =>
+                                <NodeContentSelectItem
+                                    key={`${i}${option.label}`}
+                                    option={option}
+                                    i={numInternalOptions + i}
+                                    valueIndex={valueIndex}
+                                    classNames={classNames}
+                                    onClickMention={onClickMention}
+                                    editor={editor}/>)}
+                            </div>: null)
+                }
            </>
         )
     }
-
 }
 
 export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);
+
+const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMention, editor }) => {
+    return (
+       <div
+           key={`${i}${option.label}`}
+           className={
+               i === valueIndex
+                   ? `${classNames.mentionItemSelected} peak-node-content-item-selected`
+                   : classNames.mentionItem
+           }
+           onMouseDown={getPreventDefaultHandler(
+               onClickMention,
+               editor,
+               option
+           )}
+       >
+           <div className={"node-content-select-item-container"}>
+               <div className={"icon-container"}>
+                   {option.icon}
+               </div>
+               <div className={"node-content-item"}>
+                   <div className={"node-content-item-body"}>
+                       <div className={"node-title"}>{capitalize_and_truncate(option.label, 40)}</div>
+                       <div className={"node-description"}>{option.description}</div>
+                   </div>
+                   {(option.hotkeyInstructionArray) ? <Tag className={"node-hotkey"}>{trim(option.hotkeyInstructionArray.join(""), '()')}</Tag> : null}
+               </div>
+           </div>
+       </div>
+    )
+}

@@ -7,13 +7,9 @@ import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {setItemInChromeState} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
-import {
-    establishSocketConnection,
-    subscribeToTopic
-} from "../../utils/socketUtil";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
-import {JOURNAL_CHANNEL_ID} from "../../common/rich-text-editor/editors/journal/constants";
+import {establishSocketChannelConnection} from "./utils/socketHelper";
 
 let channel: Channel
 
@@ -40,12 +36,9 @@ chrome.identity.getAuthToken({
                 console.log(`Syncing user to chrome storage`, user)
                 setItemInChromeState("user", user)
 
-                if (!channel) {
-                    // TODO Remove the redux dependency from this
-                    establishSocketConnection(user.id).then(socket => {
-                        channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
-                    })
-                }
+                establishSocketChannelConnection(channel, user.id).then(c => {
+                    channel = c
+                })
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
 
     }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
@@ -89,25 +82,29 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     switch (request.message_type) {
         case MessageType.PostFromBackgroundScript:
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
-            submitNoteViaWebsockets(
-                channel,
-                submitNodeMessage.userId,
-                submitNodeMessage.selectedTags,
-                submitNodeMessage.pageTitle,
-                submitNodeMessage.favIconUrl,
-                submitNodeMessage.body,
-                submitNodeMessage.pageUrl
-            )
-                .receive("ok", _ => {
-                    console.log(`Received the message`)
-                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
-                })
-                .receive("timeout", _ => {
-                    console.log(`WE ARE TIMING OUT?????`)
-                    sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
-                })
-                .receive("error", _ => {
-                    sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
-                })
+            establishSocketChannelConnection(channel, submitNodeMessage.userId).then(c => {
+                channel = c
+                console.log(`NOW WE ARE HERE??? `, c)
+                submitNoteViaWebsockets(
+                    c,
+                    submitNodeMessage.userId,
+                    submitNodeMessage.selectedTags,
+                    submitNodeMessage.pageTitle,
+                    submitNodeMessage.favIconUrl,
+                    submitNodeMessage.body,
+                    submitNodeMessage.pageUrl
+                )
+                    .receive("ok", _ => {
+                        console.log(`Received the message`)
+                        sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
+                    })
+                    .receive("timeout", _ => {
+                        console.log(`WE ARE TIMING OUT?????`)
+                        sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
+                    })
+                    .receive("error", _ => {
+                        sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                    })
+            })
     }
 });

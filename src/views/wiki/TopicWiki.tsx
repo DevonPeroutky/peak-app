@@ -32,6 +32,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     // PeakInlineSelect nonsense
     const {
         values,
+        openLibraryResults,
         onAddNodeContent,
         onChangeMention,
         onKeyDownMention,
@@ -45,7 +46,7 @@ const TopicWiki = (props: {topic_id: string}) => {
         trigger: '/',
     });
     const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
-        return onKeyDownMention(event, editor)
+        return onKeyDownMention(event, editor, openLibraryResults)
     }, [index, search, target])
 
     useHotkeys('e, command+s', (event, handler) => {
@@ -94,6 +95,8 @@ const TopicWiki = (props: {topic_id: string}) => {
         }
     }
 
+    console.log(`Re-RENDERING Topic Wiki`)
+
     return (
         <Slate
             editor={editor}
@@ -124,6 +127,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                     />
                     <NodeContentSelect
                         at={target}
+                        openLibraryBooks={openLibraryResults}
                         valueIndex={index}
                         options={values}
                         onClickMention={onAddNodeContent}

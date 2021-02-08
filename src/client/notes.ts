@@ -13,19 +13,19 @@ import {useCallback} from "react";
 import {debounce} from "lodash";
 
 // Requests
-function createNoteRequest(userId: string, book: {title: string}) {
+function createNoteRequest(userId: string, book: {title: string, iconUrl: string, author: string}) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
         "book": {
             title: book.title,
+            iconUrl: book.iconUrl,
+            author: book.author,
             note_type: ELEMENT_PEAK_BOOK
         }
     })
 }
-function updateNoteRequest(userId: string, bookId: string, book: {body: Node[]}) {
+function updateNoteRequest(userId: string, bookId: string, book: { body?: Node[], title?: string, author?: string }) {
     return peakAxiosClient.put(`/api/v1/users/${userId}/books/${bookId}`, {
-        "book": {
-            body: book.body,
-        }
+        "book": book
     })
 }
 function deleteNoteRequest(userId: string, bookId: string) {
@@ -55,18 +55,22 @@ export function deletePeakNote(userId: string, bookId: string): Promise<string> 
         return bookId
     })
 }
-export function createNewPeakBook(userId: string, title: string): Promise<PeakNodeSelectListItem> {
-    function createPeakNote(userId: string, title: string): Promise<PeakNote> {
-        return createNoteRequest(userId, { title: title }).then(res => {
+export function createNewPeakBook(userId: string, data: PeakNodeSelectListItem): Promise<PeakNodeSelectListItem> {
+    function createPeakNote(userId: string, title: string, iconUrl: string, author: string): Promise<PeakNote> {
+        return createNoteRequest(userId, {
+            title: title,
+            iconUrl: iconUrl,
+            author: author
+        }).then(res => {
             const created_book = res.data.book as PeakNote
             store.dispatch(addNote(created_book))
             return created_book
         })
     }
-    return createPeakNote(userId, title).then((created_book) => convertPeakBookToNodeSelectListItem(created_book))
+    return createPeakNote(userId, data.title, data.iconUrl, data.description).then((created_book) => convertPeakBookToNodeSelectListItem(created_book))
 }
-export function updatePeakNoteBody(userId: string, bookId: string, newBody: Node[]) {
-    updateNoteRequest(userId, bookId, {body: newBody} ).then(res => {
+function updatePeakNote(userId: string, bookId: string, note: { body?: Node[], title?: string, author?: string}) {
+    updateNoteRequest(userId, bookId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
     })
@@ -94,6 +98,6 @@ export function useCurrentNote(): PeakNote | undefined {
 export function useDebouncePeakNoteSaver() {
 
     // You need useCallback otherwise it's a different function signature each render?
-    return useCallback(debounce(updatePeakNoteBody, 1500), [])
+    return useCallback(debounce(updatePeakNote, 1500), [])
 }
 

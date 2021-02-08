@@ -1,62 +1,88 @@
-.node-content-select-item-container {
-  width: 100%;
-  display: flex;
-  min-height: 40px;
-  padding: 12px;
-  align-items: center;
-  min-width: 350px;
 
-  .inline-select-item-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px!important;
-    height: 40px!important;
-    font-size: 32px;
-    margin-right: 12px;
-  }
-  .peak-editor-control-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px!important;
-    height: 40px!important;
-    font-size: 32px;
-    margin-right: 12px;
-  }
+.slate-MentionSelect {
+  padding: 0;
 
-  .node-content-item {
+  .node-content-select-item-container {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    min-height: 40px;
+    padding: 12px;
+    align-items: center;
+    min-width: 350px;
 
-    .node-content-item-body {
-
-      .node-title {
-        color: rgb(9, 30, 66);
-        font-size: 14px;
-        font-weight: 400;
-      }
-
-      .node-description {
-        color: rgb(107, 119, 140);
-        font-size: 12px;
-      }
-    }
-
-    .node-hotkey {
+    .icon-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 0;
-      margin-right: 0px!important;
-      background-color: rgba(223, 225, 229, 0.5);
+      width: 50px;
+      margin-right: 12px;
+
+      .peak-node-select-book-cover {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px!important;
+        max-width: 100%;
+        font-size: 32px;
+      }
+
+      .inline-select-item-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px!important;
+        height: 40px!important;
+        font-size: 32px;
+        //margin-right: 12px;
+      }
+    }
+    .peak-editor-control-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px!important;
+      height: 40px!important;
+      font-size: 32px;
+      margin-right: 12px;
+    }
+
+    .node-content-item {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .node-content-item-body {
+        width: 100%;
+
+        .node-title {
+          color: rgb(9, 30, 66);
+          font-size: 14px;
+          font-weight: 400;
+        }
+
+        .node-description {
+          color: rgb(107, 119, 140);
+          font-size: 12px;
+          text-transform: capitalize;
+        }
+      }
+
+      .node-hotkey {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 0;
+        margin-right: 0px!important;
+        background-color: rgba(223, 225, 229, 0.5);
+      }
     }
   }
 }
 
-.slate-MentionSelect {
-  padding: 0;
+.peak-internal-results {
+}
+
+.peak-external-results {
 }
 
 .peak-node-content-item-selected {

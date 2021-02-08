@@ -1,3 +1,5 @@
+@import "../../../constants/variables";
+
 .notes-container {
   display: flex;
   flex-direction: column;
@@ -7,37 +9,85 @@
   .peak-notes-list {
     width: 100%;
 
-    .peak-note-meta-container {
+    .ant-list-item {
+      padding-left: 0px;
+      padding-top: 30px;
+      padding-bottom: 30px;
       display: flex;
-      margin-bottom: 0!important;
-      width: 100%;
+      justify-content: flex-start;
 
-      .note-icon {
-        height: 32px;
-        width: 32px;
-      }
-
-      .default-note-icon {
-        svg {
-          height: 32px;
-          width: 32px;
-        }
-      }
-
-      .ant-list-item-meta-content {
+      .peak-note-meta-container {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
+        margin-bottom: 0!important;
+        width: 100%;
+        align-items: center;
 
-        .ant-list-item-meta-title {
+        .ant-list-item-meta-content {
           display: flex;
-          margin-bottom: 3px;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          height: 100%;
+
+          .ant-list-item-meta-title {
+            display: flex;
+            line-height: 48px!important;
+            height: fit-content!important;
+            margin-bottom: 0;
+
+            .peak-note-list-item-header {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              text-align: left;
+              height: fit-content!important;
+
+              .subtitle-container {
+                color: $text-accent-color;
+                font-size: 12px;
+                text-transform: uppercase;
+                line-height: 14px;
+                display: flex;
+                align-items: center;
+
+                .fav-icon {
+                  height: 16px;
+                  width: auto;
+                  margin-right: 5px;
+                }
+              }
+
+              .item-title {
+                line-height: 32px;
+                font-size: 24px;
+
+              }
+            }
+          }
+        }
+
+        .ant-list-item-meta-avatar {
+          min-width: 48px;
+          margin-right: 24px;
+
+          .web-note-icon {
+            width: 24px;
+            height: auto;
+          }
+
+          .note-icon {
+            height: auto;
+            width: 32px;
+          }
+
+          .default-note-icon {
+            svg {
+              height: auto;
+              width: 32px;
+            }
+          }
         }
       }
     }
-
   }
-
-
 }

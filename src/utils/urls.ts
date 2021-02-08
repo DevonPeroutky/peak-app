@@ -16,5 +16,5 @@ export const deriveBaseDomain = (urlStr: string) => {
 
 export const deriveHostname = (urlStr: string) => {
     const url = new URL(urlStr);
-    return capitalize(url.hostname)
+    return url.hostname
 }
