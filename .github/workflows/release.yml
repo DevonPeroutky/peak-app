@@ -15,7 +15,7 @@ jobs:
           node-version: 14
           always-auth: true
       - name: install dependencies
-        run: yarn run install
+        run: yarn install
       - name: publish
         env:
           REACT_APP_DIST: electron
