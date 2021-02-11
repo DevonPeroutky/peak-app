@@ -1,6 +1,8 @@
 import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
 import config from "../constants/environment-vars"
+require('update-electron-app')()
+
 const { Deeplink } = require('electron-deeplink');
 const log = require('electron-log');
 
