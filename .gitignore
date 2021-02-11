@@ -93,3 +93,4 @@ out/
 
 build/
 dist/
+build-dependencies/scripts/set-build-secrets.sh

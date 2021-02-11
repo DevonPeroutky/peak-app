@@ -1,7 +1,7 @@
 {
   "name": "peak-app",
   "productName": "Peak",
-  "version": "0.0.1-beta-1",
+  "version": "0.0.1-beta-2",
   "repository": "DevonPeroutky/peak-app",
   "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
@@ -41,6 +41,7 @@
     "cpy": "^8.1.1",
     "css-loader": "^4.3.0",
     "electron": "10.1.3",
+    "electron-notarize": "^1.0.0",
     "electron-webpack-ts": "^4.0.1",
     "eslint-plugin-import": "^2.20.0",
     "file-loader": "^6.1.0",
