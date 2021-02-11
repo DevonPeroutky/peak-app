@@ -1,7 +1,7 @@
 {
   "name": "peak-app",
   "productName": "Peak",
-  "version": "0.0.1-beta-2",
+  "version": "0.0.1-beta-3",
   "repository": "DevonPeroutky/peak-app",
   "description": "Your Peakiest Peak",
   "main": "./.webpack/main",
