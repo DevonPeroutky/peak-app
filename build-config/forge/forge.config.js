@@ -23,7 +23,6 @@ module.exports = {
         },
     ],
     packagerConfig: {
-        asar: true,
         "protocols": [{"name": "Peak", "schemes": ["peak-dev-app", "peak-app"]}],
         "name": "Peak",
         "executableName": "Peak",
@@ -31,11 +30,12 @@ module.exports = {
             "sign": false,
         },
         "osxSign": {
-            "identity": process.env.APPLE_DEVELOPER_IDENTITY,
-            "hardenedRuntime": true,
-            "gatekeeper-assess": false,
-            "entitlements": "./build-dependencies/resources/entitlements.mac.plist",
-            "entitlementsInherits": "./build-dependencies/resources/entitlements.mac.plist"
+            identity: process.env.APPLE_DEVELOPER_IDENTITY,
+            hardenedRuntime: true,
+            'gatekeeper-assess': false,
+            entitlements: 'entitlements.mac.plist',
+            'entitlementsInherits': 'entitlements.mac.plist',
+            'signature-flags': 'library'
         },
         "osxNotarize": {
             "appleId": process.env.APPLE_ID,
@@ -47,9 +47,20 @@ module.exports = {
     "hooks": {
         "postPackage": async function (params) {
             console.log('postPackage hook triggered');
+            if (process.env.DEV_ONLY) {
+                console.log(`DEV_ONLY, skipping notarization`);
+                return;
+            }
 
             if (process.platform !== 'darwin') {
                 console.log('Skipping notarization - not building for Mac');
+                return;
+            }
+
+            if (!process.env.APPLE_ID || !process.env.APPLE_ID_PASSWORD) {
+                console.warn(
+                    'Should be notarizing, but environment variables APPLE_ID or APPLE_ID_PASSWORD are missing!',
+                );
                 return;
             }
 
