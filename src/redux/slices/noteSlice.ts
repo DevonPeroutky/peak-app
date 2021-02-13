@@ -6,6 +6,7 @@ export interface PeakNote {
     title: string
     note_type: string
     icon_url: string
+    tag_ids: string[]
     body: Node[]
     url: string
     author?: string

@@ -1,14 +1,15 @@
 import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
-import {Avatar, List, Menu, Tag} from "antd";
+import {List} from "antd";
 import {BookOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
-import {deriveBaseDomain, deriveHostname} from "../../../utils/urls";
+import {deriveHostname} from "../../../utils/urls";
 import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
+import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 const bookmark = require('../../../assets/icons/bookmark.svg');
 
 export const PeakNoteListView = (props: {}) => {
@@ -34,14 +35,21 @@ export const PeakNoteListView = (props: {}) => {
                             className={"peak-note-meta-container"}
                             avatar={<NoteAvatar item={item}/>}
                             title={
-                                <Link to={`/home/notes/${item.id}`}>
-                                    <div className={"peak-note-list-item-header"}>
-                                        <NoteSubTitle item={item}/>
-                                        <span className={"item-title"}>
-                                            {capitalize(item.title)}
-                                        </span>
-                                    </div>
-                                </Link>
+                                <>
+                                    <Link to={`/home/notes/${item.id}`}>
+                                        <div className={"peak-note-list-item-header"}>
+                                            <NoteSubTitle item={item}/>
+                                            <span className={"item-title"}>
+                                                {capitalize(item.title)}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </>
+                            }
+                            description={
+                                <div className="peak-note-tag-section">
+                                    {item.tag_ids.map(id => <PeakTagDisplay tagId={id}/>)}
+                                </div>
                             }
                         />
                     </List.Item>
