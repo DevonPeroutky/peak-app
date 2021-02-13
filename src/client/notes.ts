@@ -5,8 +5,7 @@ import {store} from "../redux/store";
 import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/utils/node-content-select/utils";
 import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {addNote, deleteNote, PeakNote, setNotes, updateNote} from "../redux/slices/noteSlice";
-import {PeakWikiState} from "../constants/wiki-types";
+import {upsertNote, deleteNote, PeakNote, setNotes, updateNote} from "../redux/slices/noteSlice";
 import {useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
@@ -63,7 +62,7 @@ export function createNewPeakBook(userId: string, data: PeakNodeSelectListItem):
             author: author
         }).then(res => {
             const created_book = res.data.book as PeakNote
-            store.dispatch(addNote(created_book))
+            store.dispatch(upsertNote(created_book))
             return created_book
         })
     }

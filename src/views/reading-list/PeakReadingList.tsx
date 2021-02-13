@@ -2,10 +2,9 @@ import React from 'react'
 import "./peak-reading-list.scss"
 import {message, Table} from "antd";
 import {deleteFutureRead, FutureRead} from "../../redux/slices/readingListSlice";
-import PeakTagDisplay from "../../common/peak-tag-display/PeakTagDisplay";
 import {useCurrentUser, useFutureReads} from "../../utils/hooks";
-import {Peaker} from "../../redux/slices/user/userSlice";
 import peakAxiosClient from "../../client/axiosConfig"
+import {Peaker} from "../../types";
 
 const PeakReadingList = (props: { }) => {
     const user: Peaker = useCurrentUser()
@@ -32,7 +31,7 @@ const PeakReadingList = (props: { }) => {
             dataIndex: 'topic_id',
             width: '250px',
             render: (topicId?: string) => {
-                return (topicId == null) ? null : <PeakTagDisplay key={topicId} topicId={topicId}/>
+                return (topicId == null) ? null : <span>This use to be PeakTagDisplay</span>
             },
         },
         {

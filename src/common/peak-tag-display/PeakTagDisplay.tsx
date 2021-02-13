@@ -1,19 +1,19 @@
 import React from 'react'
 import {Tag} from "antd";
-import {AppState} from "../../redux";
-import {connect} from "react-redux";
-import {PeakTopic} from "../../redux/slices/topicSlice";
 import { capitalize } from "lodash";
+import {useTags} from "../../client/tags";
+import {PeakTag} from "../../types";
 
-const PeakTagDisplay = (props: { topicId: string, topics: PeakTopic[] }) => {
-    const { topicId, topics } = props;
-    const topic = topics.find(topic => topic.id ==topicId);
+export const PeakTagDisplay = (props: { tagId: string }) => {
+    const { tagId } = props
+    const tags = useTags()
+    const tag: PeakTag | undefined = tags.find(tag => tag.id === tagId);
 
-    if (topic == null) return null;
+    if (tag == null) {
+        console.error(`We are trying to render tag ${tagId} which we don't have!`)
+        return null;
+    }
     return (
-        <Tag color={topic.color} key={topicId}>{capitalize(topic.name)}</Tag>
+        <Tag color={tag.color} key={tagId}>{capitalize(tag.title)}</Tag>
     )
 };
-
-const mapStateToProps = (state: AppState) => ({ topics: state.topics});
-export default connect(mapStateToProps, {})(PeakTagDisplay);
