@@ -47,7 +47,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     });
     const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
         return onKeyDownMention(event, editor, openLibraryResults)
-    }, [index, search, target])
+    }, [index, search, target, openLibraryResults])
 
     useHotkeys('e, command+s', (event, handler) => {
         switch (handler.key) {
@@ -112,7 +112,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins
                         onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
-                        onKeyDownDeps={[index, search, target]}
+                        onKeyDownDeps={[index, search, target, openLibraryResults]}
                         key={`${currentPageId}-${editorState.isEditing}`}
                         plugins={wikiPlugins}
                         placeholder="Drop some knowledge..."

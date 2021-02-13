@@ -204,7 +204,6 @@ const PeakJournal = (props: { }) => {
                 values={values}
                 nodeContentSelectMode={nodeContentSelectMode}
                 onAddNodeContent={onAddNodeContent}/>
-
         }
     }
 

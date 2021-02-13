@@ -64,7 +64,7 @@ export const PeakNoteEditor = (props) => {
 
     const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
         return onKeyDownMention(event, editor, openLibraryResults)
-    }, [index, search, target])
+    }, [index, search, target, openLibraryResults])
 
     console.log("Re-Rendering Note Content", noteContent)
 
