@@ -43,7 +43,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         if (existingTag) {
             setSelectedTags([...displaySelectedTags, existingTag])
         } else {
-            const newColor: string = calculateNextColor(tags)
+            const newColor: string = calculateNextColor(tags, selected_tags)
             const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setSelectedTags([...displaySelectedTags, newTag])
         }
