@@ -151,7 +151,7 @@ const PeakJournal = (props: { }) => {
         openLibraryResults,
         onAddNodeContent,
         onChangeMention,
-        onKeyDownMention,
+        onKeyDownSelect,
         search,
         index,
         target,
@@ -163,7 +163,7 @@ const PeakJournal = (props: { }) => {
     });
     function keyBindingHandler(event): void | false {
         baseKeyBindingHandler(event, editor)
-        return onKeyDownMention(event, editor, openLibraryResults)
+        return onKeyDownSelect(event, editor)
     }
 
     const syncJournalEntries = (newValue: Node[]) => {
@@ -204,7 +204,6 @@ const PeakJournal = (props: { }) => {
                 values={values}
                 nodeContentSelectMode={nodeContentSelectMode}
                 onAddNodeContent={onAddNodeContent}/>
-
         }
     }
 
@@ -234,7 +233,7 @@ interface InternalJournalProps {
     // Random
     // TODO: This doesn't feel like something we should have to pass
     currentPageId: string,
-    keyBindingHandler: (e, editor: Editor, books: OpenLibraryBook[]) => void,
+    keyBindingHandler: (e, editor: Editor) => void,
 
     // Node Content Select Props
     // TODO: This doesn't feel like something we should have to pass
@@ -277,7 +276,7 @@ const Journal = (props: InternalJournalProps) => {
                 showLinkMenu={editorState.showLinkMenu}
                 pageId={currentPageId}/>
             <EditablePlugins
-                onKeyDown={[(e, editor) => keyBindingHandler(e, editor, openLibraryBooks)]}
+                onKeyDown={[(e, editor) => keyBindingHandler(e, editor)]}
                 onKeyDownDeps={[index, search, target, openLibraryBooks]}
                 style={{
                     textAlign: "left",

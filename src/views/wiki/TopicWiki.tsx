@@ -35,7 +35,7 @@ const TopicWiki = (props: {topic_id: string}) => {
         openLibraryResults,
         onAddNodeContent,
         onChangeMention,
-        onKeyDownMention,
+        onKeyDownSelect,
         search,
         index,
         target,
@@ -45,9 +45,6 @@ const TopicWiki = (props: {topic_id: string}) => {
         maxSuggestions: 10,
         trigger: '/',
     });
-    const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
-        return onKeyDownMention(event, editor, openLibraryResults)
-    }, [index, search, target])
 
     useHotkeys('e, command+s', (event, handler) => {
         switch (handler.key) {
@@ -111,8 +108,8 @@ const TopicWiki = (props: {topic_id: string}) => {
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins
-                        onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
-                        onKeyDownDeps={[index, search, target]}
+                        onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
+                        onKeyDownDeps={[index, search, target, openLibraryResults]}
                         key={`${currentPageId}-${editorState.isEditing}`}
                         plugins={wikiPlugins}
                         placeholder="Drop some knowledge..."
