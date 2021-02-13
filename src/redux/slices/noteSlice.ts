@@ -21,8 +21,9 @@ export const noteSlice = createSlice({
         setNotes(state, action: PayloadAction<PeakNote[]>) {
             return action.payload;
         },
-        addNote(state, action: PayloadAction<PeakNote>) {
-            return [...state, action.payload]
+        upsertNote(state, action: PayloadAction<PeakNote>) {
+            const noteToUpsert: PeakNote = action.payload
+            return [...state.filter(n => n.id !== noteToUpsert.id), action.payload]
         },
         updateNote(state, action: PayloadAction<PeakNote>) {
             const updatedNote: PeakNote = action.payload
@@ -35,5 +36,5 @@ export const noteSlice = createSlice({
     }
 });
 
-export const { setNotes, addNote, deleteNote, updateNote } = noteSlice.actions;
+export const { setNotes, upsertNote, deleteNote, updateNote } = noteSlice.actions;
 export default noteSlice.reducer;

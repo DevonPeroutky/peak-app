@@ -1,6 +1,7 @@
 import peakAxiosClient from "./axiosConfig";
 import {PeakTag} from "../types";
 import {STUB_TAG_ID} from "../redux/slices/tags/types";
+import {AxiosResponse} from "axios";
 
 export function loadTagsRequests(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/tags`)
@@ -14,12 +15,12 @@ export function createTagsRequest(userId: string, tags: PeakTag[]) {
     })
 }
 
-export function futureCreatePeakTags(userId: string, selectedTags: PeakTag[]) {
+export function futureCreatePeakTags(userId: string, selectedTags: PeakTag[]): Promise<{"tags": PeakTag[]}> {
     const tagsToBeCreated: PeakTag[] = selectedTags.filter(t => t.id === STUB_TAG_ID)
     if (tagsToBeCreated.length > 0) {
-        return createTagsRequest(userId, tagsToBeCreated)
+        return createTagsRequest(userId, tagsToBeCreated).then(res => res.data)
     }
     return new Promise(function(resolve, reject) {
-        resolve([]);
+        resolve({ "tags": []});
     });
 }
