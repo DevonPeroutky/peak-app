@@ -42,7 +42,7 @@ export const PeakNoteEditor = (props) => {
         onAddNodeContent,
         openLibraryResults,
         onChangeMention,
-        onKeyDownMention,
+        onKeyDownSelect,
         search,
         index,
         target,
@@ -56,15 +56,6 @@ export const PeakNoteEditor = (props) => {
     const defaultKeyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor)
     }, [])
-
-    // function keyBindingHandler(event): void | false {
-    //     baseKeyBindingHandler(event, editor)
-    //     return onKeyDownMention(event, editor, openLibraryResults)
-    // }
-
-    const nodeSelectMenuKeyBindingHandler = useCallback((event: any) => {
-        return onKeyDownMention(event, editor, openLibraryResults)
-    }, [index, search, target, openLibraryResults])
 
     console.log("Re-Rendering Note Content", noteContent)
 
@@ -86,7 +77,7 @@ export const PeakNoteEditor = (props) => {
                     <PageContextBar topicId={topic_id}/>
                     */}
                     <EditablePlugins
-                        onKeyDown={[defaultKeyBindingHandler, nodeSelectMenuKeyBindingHandler]}
+                        onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
                         onKeyDownDeps={[index, search, target, openLibraryResults]}
                         key={`${currentPageId}-${editorState.isEditing}`}
                         plugins={notePlugins}

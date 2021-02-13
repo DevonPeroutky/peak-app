@@ -22,6 +22,7 @@ import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
+import {useSlate} from "slate-react";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number
@@ -112,43 +113,43 @@ export const useNodeContentSelect = (
         [options, targetRange]
     );
 
-    const onKeyDownMention = useCallback((e, editor: Editor, books: OpenLibraryBook[]) => {
-        const totalMax: number = Math.max(values.length, 1) + library.length - 1
-        if (targetRange) {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                return setValueIndex(getNextIndex(valueIndex, totalMax));
-            }
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                return setValueIndex(getPreviousIndex(valueIndex, totalMax));
-            }
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                resetNodeMenuItem();
-                return setTargetRange(null);
-            }
+    const onKeyDownSelect = useCallback((e, editor: Editor) => {
+            const totalMax: number = Math.max(values.length, 1) + library.length - 1
+            if (targetRange) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    return setValueIndex(getNextIndex(valueIndex, totalMax));
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    return setValueIndex(getPreviousIndex(valueIndex, totalMax));
+                }
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    resetNodeMenuItem();
+                    return setTargetRange(null);
+                }
 
-            if (e.key === 'Backspace' && search.length === 0) {
-                resetNodeMenuItem();
-                return setTargetRange(null);
-            }
+                if (e.key === 'Backspace' && search.length === 0) {
+                    resetNodeMenuItem();
+                    return setTargetRange(null);
+                }
 
-            if (['Tab', 'Enter'].includes(e.key)) {
-                e.preventDefault();
-                if (values.length) {
-                    console.log(`Values `, values)
-                    console.log(`Books `, books)
-                    console.log(`ValueIndex `, valueIndex)
-                    const fullOptions: PeakNodeSelectListItem[] = [...values, ...books.map(convertOpenLibraryBookToNodeSelectListItem)]
-                    onAddNodeContent(editor, fullOptions[valueIndex])
-                    return false
-                } else {
-                    Editor.insertBreak(editor)
+                if (['Tab', 'Enter'].includes(e.key)) {
+                    e.preventDefault();
+                    if (values.length) {
+                        console.log(`Values `, values)
+                        console.log(`Books `, books)
+                        console.log(`ValueIndex `, valueIndex)
+                        const fullOptions: PeakNodeSelectListItem[] = [...values, ...library.map(convertOpenLibraryBookToNodeSelectListItem)]
+                        onAddNodeContent(editor, fullOptions[valueIndex])
+                        return false
+                    } else {
+                        Editor.insertBreak(editor)
+                    }
                 }
             }
-        }
-    },[
+        },[
             values,
             valueIndex,
             library,
@@ -225,7 +226,7 @@ export const useNodeContentSelect = (
         values,
         openLibraryResults: library,
         onChangeMention,
-        onKeyDownMention,
+        onKeyDownSelect,
         onAddNodeContent,
         nodeContentSelectMode
     };
