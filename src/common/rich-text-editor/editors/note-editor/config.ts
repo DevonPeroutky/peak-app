@@ -4,7 +4,8 @@ import {
     withInlineVoid,
 } from "@udecode/slate-plugins";
 import {
-    setEditorNormalizers, setEditorPlugins,
+    setEditorNormalizers,
+    setEditorPlugins,
 } from "../../base_config";
 
 // Default
