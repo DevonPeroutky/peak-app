@@ -48,7 +48,7 @@ export const PeakNoteListView = (props: {}) => {
                             }
                             description={
                                 <div className="peak-note-tag-section">
-                                    {item.tag_ids.map(id => <PeakTagDisplay tagId={id}/>)}
+                                    {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
                                 </div>
                             }
                         />

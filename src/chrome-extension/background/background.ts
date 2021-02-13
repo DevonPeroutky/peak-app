@@ -10,6 +10,7 @@ import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
 import {establishSocketChannelConnection} from "./utils/socketHelper";
+import {message} from "antd";
 
 let channel: Channel
 
@@ -85,7 +86,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             establishSocketChannelConnection(channel, submitNodeMessage.userId).then(c => {
                 channel = c
                 console.log(`NOW WE ARE HERE??? `, c)
-                submitNoteViaWebsockets(
+                const notesubmitFuture = submitNoteViaWebsockets(
                     c,
                     submitNodeMessage.userId,
                     submitNodeMessage.selectedTags,
@@ -94,17 +95,23 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                     submitNodeMessage.body,
                     submitNodeMessage.pageUrl
                 )
-                    .receive("ok", _ => {
-                        console.log(`Received the message`)
-                        sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
-                    })
-                    .receive("timeout", _ => {
-                        console.log(`WE ARE TIMING OUT?????`)
-                        sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
-                    })
-                    .receive("error", _ => {
-                        sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
-                    })
+
+                notesubmitFuture.then(res => {
+                    res
+                        .receive("ok", _ => {
+                            console.log(`Received the message`)
+                            sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
+                        })
+                        .receive("timeout", _ => {
+                            console.log(`WE ARE TIMING OUT?????`)
+                            sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
+                        })
+                        .receive("error", _ => {
+                            sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                        })
+                }).catch(res => {
+                    message.warn("Failed to create the new tags. Let Devon know")
+                })
             })
     }
 });
