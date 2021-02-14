@@ -11,6 +11,13 @@ import {Node} from "slate";
 import {useCallback} from "react";
 import {debounce} from "lodash";
 
+interface NotePayload {
+    body?: Node[],
+    title?: string,
+    author?: string,
+    tag_ids?: string[]
+}
+
 // Requests
 function createNoteRequest(userId: string, book: {title: string, iconUrl: string, author: string}) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
@@ -22,7 +29,7 @@ function createNoteRequest(userId: string, book: {title: string, iconUrl: string
         }
     })
 }
-function updateNoteRequest(userId: string, bookId: string, book: { body?: Node[], title?: string, author?: string }) {
+function updateNoteRequest(userId: string, bookId: string, book: NotePayload) {
     return peakAxiosClient.put(`/api/v1/users/${userId}/books/${bookId}`, {
         "book": book
     })
@@ -68,7 +75,7 @@ export function createNewPeakBook(userId: string, data: PeakNodeSelectListItem):
     }
     return createPeakNote(userId, data.title, data.iconUrl, data.description).then((created_book) => convertPeakBookToNodeSelectListItem(created_book))
 }
-function updatePeakNote(userId: string, bookId: string, note: { body?: Node[], title?: string, author?: string}) {
+export function updatePeakNote(userId: string, bookId: string, note: NotePayload) {
     updateNoteRequest(userId, bookId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))

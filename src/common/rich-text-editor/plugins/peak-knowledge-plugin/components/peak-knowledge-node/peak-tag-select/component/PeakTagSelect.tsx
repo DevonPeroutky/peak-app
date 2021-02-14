@@ -26,11 +26,11 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const dispatch = useDispatch()
     const editor = useEditor()
     const existingTags = useTags()
+    const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const currentUser = useCurrentUser()
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const editorState = useActiveEditorState()
-    const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
@@ -43,7 +43,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         if (existingTag) {
             setSelectedTags([...displaySelectedTags, existingTag])
         } else {
-            const newColor: string = calculateNextColor(tags, selected_tags)
+            const newColor: string = calculateNextColor(tags, displaySelectedTags)
             const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setSelectedTags([...displaySelectedTags, newTag])
         }

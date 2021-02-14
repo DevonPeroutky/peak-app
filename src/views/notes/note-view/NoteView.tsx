@@ -10,6 +10,9 @@ import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
 import {Divider, Input} from "antd";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import {useCurrentUser} from "../../../utils/hooks";
+import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
+import {useLoadTags} from "../../../utils/notes";
+import {PeakTag} from "../../../types";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -34,6 +37,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
     const [title, setTitle] = useState(note.title)
     const noteSaver = useDebouncePeakNoteSaver()
     const currentUser = useCurrentUser()
+    const selected_tags: PeakTag[] = useLoadTags(note.tag_ids)
 
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -51,6 +55,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
             </div>
             <div className={"note-header-row"}>
                 <Input className={"web-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
+                <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
             </div>
         </div>
     )
@@ -61,6 +66,7 @@ const BookHeaderSection = (props: {note: PeakNote}) => {
     const [author, setAuthor] = useState(note.author)
     const noteSaver = useDebouncePeakNoteSaver()
     const currentUser = useCurrentUser()
+    const selected_tags: PeakTag[] = useLoadTags(note.tag_ids)
 
     const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthor(e.target.value)
@@ -80,6 +86,7 @@ const BookHeaderSection = (props: {note: PeakNote}) => {
                 <div className={"note-header"}>
                     <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
                     <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
+                    <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
                 </div>
             </div>
         </div>
