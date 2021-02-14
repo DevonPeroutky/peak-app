@@ -268,7 +268,7 @@ export function useJournalSaver() {
     }
 }
 
-function useBulkJournalEntrySaver() {
+export function useBulkJournalEntrySaver() {
     const dispatch = useDispatch();
     const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
     return (entries: JournalEntry[], user: Peaker) => {
@@ -315,7 +315,6 @@ export function useFetchJournal() {
             })
     }
 }
-
 
 const useUpdatePageTitleEverywhere = () => {
     const dispatch = useDispatch()

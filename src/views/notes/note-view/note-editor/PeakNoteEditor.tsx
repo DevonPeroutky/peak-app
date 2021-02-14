@@ -15,16 +15,18 @@ import {
     notePlugins
 } from "../../../../common/rich-text-editor/editors/note-editor/config";
 import "./peak-note-editor.scss"
-import {useCurrentUser} from "../../../../utils/hooks";
+import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
-import {ELEMENT_PEAK_BOOK} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {equals} from "ramda";
+import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/types";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
     const currentNote: PeakNote | undefined = useSpecificNote(note_id)
     const editorState = useActiveEditorState()
+    const journal = useJournal()
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
@@ -36,16 +38,11 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
 
     const updateNoteContent = (newBody: Node[]) => {
-        setNoteContent(newBody)
 
-        if (currentNote) {
-            noteSaver(currentUser.id, currentNote.id, { body: newBody[0]["children"] as Node[] })
-
-            /**
-             *  1. Find today's Journal Entry
-             *  2. If a node corresponding to the current Note does NOT exist
-             *  3. Append a stub pointing to the current note
-             */
+        if (currentNote && !equals(newBody, noteContent)) {
+            setNoteContent(newBody)
+            console.log(`SAvinG NOTE CONTENT`, currentNote, newBody)
+            noteSaver(currentUser, currentNote, { body: newBody[0]["children"] as Node[] }, journal.body as JournalEntry[])
         }
         onChangeMention(editor);
         ReactEditor.focus(editor)

@@ -28,6 +28,7 @@ export const useSelectFirstJournalEntry = () => {
                 // Transforms.collapse(editor, {edge: "end"})
             } else if (node) {
                 Transforms.select(editor, node[1])
+                Transforms.collapse(editor, {edge: "end"})
             }
         } else {
             console.log(`Failed to fetch current day's entry?`)

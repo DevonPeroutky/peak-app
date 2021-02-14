@@ -17,7 +17,7 @@ import {
     convertPeakBookToNodeSelectListItem, insertNodeContent,
     isTextAfterTrigger
 } from "./utils";
-import {createNewPeakBook, useBooks} from "../../../../client/notes";
+import {useBooks} from "../../../../client/notes";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
@@ -93,20 +93,15 @@ export const useNodeContentSelect = (
                     // IF CREATING A NEW BOOK
                     // We need to insert w/The ID
                     if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
-                        // createNewPeakBook(currentUser.id, data).then((newPeakBookItem) => {
-                        //     insertNodeContent(editor, newPeakBookItem, targetRange)
-                        //     resetNodeMenuItem()
-                        //     return setTargetRange(null);
-                        // })
-                        console.log(`MOVING TO THE DRAFTTTT /home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
-                        resetNodeMenuItem()
-                        history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`);
-                        return setTargetRange(null);
+                        return new Promise(function(resolve, reject) {
+                            resetNodeMenuItem()
+                            resolve(setTargetRange(null))
+                        }).then(() => history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`))
                     } else {
-                        console.log(`MOVING TO THE EXISTING BOOK /notes/${data.bookId}`)
-                        resetNodeMenuItem()
-                        history.push(`/home/notes/${data.bookId}`);
-                        return setTargetRange(null);
+                        return new Promise(function(resolve, reject) {
+                            resetNodeMenuItem()
+                            resolve(setTargetRange(null))
+                        }).then(() => history.push(`/home/notes/${data.bookId}`))
                     }
                 }
             }

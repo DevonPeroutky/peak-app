@@ -2,14 +2,22 @@ import peakAxiosClient from "./axiosConfig";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {store} from "../redux/store";
-import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/utils/node-content-select/utils";
-import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID} from "../redux/slices/noteSlice";
 import {useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
 import {debounce} from "lodash";
+import {useBulkJournalEntrySaver, useJournal} from "../utils/hooks";
+import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
+import {Peaker} from "../types";
+import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {EMPTY_PARAGRAPH_NODE} from "../common/rich-text-editor/editors/constants";
+import {getTodayEntry} from "../utils/journal";
+import {
+    PEAK_NOTE_STUB,
+    PeakStubAction,
+} from "../common/rich-text-editor/plugins/peak-note-stub-plugin/types";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -78,9 +86,10 @@ export function createNewPeakBook(userId: string, book: CreateNotePayload): Prom
     return createPeakNote(userId, book)
 }
 export function updatePeakNote(userId: string, bookId: string, note: UpdateNotePayload) {
-    updateNoteRequest(userId, bookId, note ).then(res => {
+    return updateNoteRequest(userId, bookId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
+        return updatedNote
     })
 }
 
@@ -101,15 +110,84 @@ export function useCurrentNoteId() {
 }
 export function useCurrentNote(): PeakNote | undefined {
     const currentNoteId = useCurrentNoteId();
-    return useNotes().find(n => n.id === currentNoteId)
+    const notes = useNotes()
+    console.log(`NOTES ${currentNoteId}`, notes)
+    return notes.find(n => n.id === currentNoteId)
 }
 export function useSpecificNote(nodeId: string): PeakNote | undefined {
     const notes = useNotes()
     return (nodeId === STUB_BOOK_ID) ? undefined : notes.find(n => n.id === nodeId)
 }
 export function useDebouncePeakNoteSaver() {
+    const createStub = useCreateNoteStubInJournal()
 
     // You need useCallback otherwise it's a different function signature each render?
-    return useCallback(debounce(updatePeakNote, 1500), [])
+    const updateNoteAndStub = (user: Peaker, note: PeakNote, newNote: UpdateNotePayload, journal: JournalEntry[]) => {
+        return updatePeakNote(user.id, note.id, newNote).then(res => {
+            createStub(user, note, journal)
+        })
+    }
+    return useCallback(debounce(updateNoteAndStub, 1500), [])
 }
 
+export function usePeakNoteCreator() {
+    const createStub = useCreateNoteStubInJournal()
+
+    return (user: Peaker, book: CreateNotePayload, journal: JournalEntry[]) => {
+        return createNewPeakBook(user.id, book)
+            .then(note => {
+                createStub(user, note, journal, 'created')
+                return note
+            })
+    }
+}
+
+function useAppendToJournal() {
+    const saver = useBulkJournalEntrySaver()
+    return (note: PeakNote, journalEntry: JournalEntry, user: Peaker, action: PeakStubAction) => {
+        const nodeId = Date.now()
+        const nodesToAppend = [
+            {
+                id: nodeId,
+                type: PEAK_NOTE_STUB,
+                action: action,
+                note_type: note.note_type,
+                note_id:  note.id,
+                children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
+                title: note.title,
+                author: note.author,
+            },
+            EMPTY_PARAGRAPH_NODE()
+        ];
+
+        const cleanedJournal = journalEntry.body.filter(n => !(n.type === ELEMENT_PARAGRAPH && Node.string(n).toLowerCase() === `/${note.title.toLowerCase()}`))
+        const newBody: Node [] = cleanedJournal.concat(nodesToAppend)
+        const journalEntryToWrite: JournalEntry = {...journalEntry, body: newBody}
+
+        saver([journalEntryToWrite], user)
+    }
+}
+function useCreateNoteStubInJournal() {
+    const appendToJournal = useAppendToJournal()
+
+    return (user: Peaker, note: PeakNote, journal: JournalEntry[], action: PeakStubAction = "added_notes") => {
+        const todayJournalEntry = getTodayEntry(journal)
+        console.log(`STUBBING`)
+        /**
+         *  1. Find today's Journal Entry
+         *  2. If a node corresponding to the current Note does NOT exist
+         *  3. Append a stub pointing to the current note
+         */
+        const stub = todayJournalEntry.body.find(n => {
+            return (n.note_id && n.note_id === note.id && n.type === PEAK_NOTE_STUB && n.note_type === note.note_type)
+        })
+        if (!stub) {
+            console.log(`Adding a stub`)
+            appendToJournal(note, todayJournalEntry, user, action)
+        } else {
+            console.log(`Already there Boss`)
+        }
+    }
+
+
+}

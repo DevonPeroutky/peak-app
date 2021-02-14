@@ -9,15 +9,18 @@ import {capitalize_and_truncate} from "../../../utils/strings";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
 import {Divider, Input} from "antd";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
-import {useCurrentUser} from "../../../utils/hooks";
+import {useCurrentUser, useJournal} from "../../../utils/hooks";
 import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {useLoadTags} from "../../../utils/notes";
 import {PeakTag} from "../../../types";
+import {JournalEntry} from "../../../common/rich-text-editor/editors/journal/types";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
     const currentNote: PeakNote | undefined = useCurrentNote()
+    console.log(`CURRENT NOTE `, currentNote)
 
+    const journal = useJournal()
     const noteSaver = useDebouncePeakNoteSaver()
     const currentUser = useCurrentUser()
     const selected_tags: PeakTag[] = useLoadTags(currentNote.tag_ids)
@@ -26,12 +29,12 @@ export const PeakNoteView = (props) => {
 
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
-        noteSaver(currentUser.id, currentNote.id, { title: e.target.value })
+        noteSaver(currentUser, currentNote, { title: e.target.value }, journal.body as JournalEntry[])
     }
 
     const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthor(e.target.value)
-        noteSaver(currentUser.id, currentNote.id, { author: e.target.value })
+        noteSaver(currentUser, currentNote, { author: e.target.value }, journal.body as JournalEntry[])
     }
 
     if (!currentNote) {
