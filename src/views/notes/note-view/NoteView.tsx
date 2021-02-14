@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../client/notes";
-import {PeakNote, STUB_BOOK_ID} from "../../../redux/slices/noteSlice";
+import {PeakNote} from "../../../redux/slices/noteSlice";
 import {Link, useHistory} from "react-router-dom";
 import {CaretLeftFilled, CaretRightFilled, ReadOutlined} from "@ant-design/icons/lib";
 import "./note-view.scss"
@@ -13,7 +13,6 @@ import {useCurrentUser} from "../../../utils/hooks";
 import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {useLoadTags} from "../../../utils/notes";
 import {PeakTag} from "../../../types";
-import {sleep} from "../../../chrome-extension/utils/generalUtil";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()

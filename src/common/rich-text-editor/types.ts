@@ -1,4 +1,5 @@
 import {
+    ELEMENT_CODE_BLOCK,
     ELEMENT_H1,
     ELEMENT_H2,
     ELEMENT_H3,
@@ -7,6 +8,7 @@ import {
     ELEMENT_H6,
 } from "@udecode/slate-plugins";
 import {Editor} from "slate";
+import {PEAK_NOTE_STUB} from "./plugins/peak-note-stub-plugin/types";
 
 export const DIVIDER = "divider";
 export const JOURNAL_ENTRY = "journal_entry";
@@ -24,3 +26,5 @@ export interface StyledNodeConfig {
     component: any
     rootProps: any
 }
+
+export const PEAK_VOID_TYPES = [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER, PEAK_NOTE_STUB]

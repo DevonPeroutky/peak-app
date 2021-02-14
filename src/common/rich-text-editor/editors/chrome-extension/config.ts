@@ -15,7 +15,7 @@ import {
 import {PeakHeadingPlugin} from "../../plugins/peak-heading-plugin/PeakHeadingPlugin";
 import {PeakCalloutPlugin} from "../../plugins/peak-callout-plugin/PeakCalloutPlugin";
 import {defaultOptions} from "../../defaults";
-import {StyledNodeConfig} from "../../types";
+import {PEAK_VOID_TYPES, StyledNodeConfig} from "../../types";
 import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {chromeExtFormatRules, withAutoReplace} from "../../plugins/withAutoReplace";
@@ -74,7 +74,7 @@ const baseNormalizers = [
 const normalizers = [
     ...baseNormalizers,
     withList(options),
-    withInlineVoid({ plugins: plugins, voidTypes: [ELEMENT_CODE_BLOCK] }),
+    withInlineVoid({ plugins: plugins, voidTypes: PEAK_VOID_TYPES }),
     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: 1 })
 ]
 

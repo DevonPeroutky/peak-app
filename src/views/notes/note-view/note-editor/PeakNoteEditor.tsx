@@ -3,10 +3,9 @@ import {ReactEditor, Slate} from "slate-react";
 import {EditablePlugins, pipe} from "@udecode/slate-plugins";
 import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
-import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
-import {createNewPeakBook, useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
+import {useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
 import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -20,6 +19,7 @@ import {useCurrentUser} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
+import {ELEMENT_PEAK_BOOK} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -40,6 +40,12 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
 
         if (currentNote) {
             noteSaver(currentUser.id, currentNote.id, { body: newBody[0]["children"] as Node[] })
+
+            /**
+             *  1. Find today's Journal Entry
+             *  2. If a node corresponding to the current Note does NOT exist
+             *  3. Append a stub pointing to the current note
+             */
         }
         onChangeMention(editor);
         ReactEditor.focus(editor)
