@@ -82,14 +82,10 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
         if (open && event.key === "Escape") {
             event.stopPropagation()
             event.preventDefault()
-            console.log(`CLOSING THE SHOP`)
             setCurrentSearch('')
             setDropdownState(false)
         }
     }
-
-    console.log(`SELECTED TAGS `, displaySelectedTags)
-    console.log(`TAGS `, tags)
 
     // @ts-ignore
     return (

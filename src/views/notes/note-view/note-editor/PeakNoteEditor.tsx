@@ -1,12 +1,12 @@
-import React, {useCallback, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {ReactEditor, Slate} from "slate-react";
 import {EditablePlugins, pipe} from "@udecode/slate-plugins";
-import {createEditor, Node} from "slate";
+import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
-import {useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
+import {createNewPeakBook, useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
 import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -18,6 +18,8 @@ import {
 import "./peak-note-editor.scss"
 import {useCurrentUser} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
+import {sleep} from "../../../../chrome-extension/utils/generalUtil";
+import { Editor } from 'slate';
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -34,7 +36,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
 
     const updateNoteContent = (newBody: Node[]) => {
-        console.log(`updating Note Content `, newBody)
         setNoteContent(newBody)
 
         if (currentNote) {
@@ -43,6 +44,14 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         onChangeMention(editor);
         ReactEditor.focus(editor)
     }
+
+    // Why the fuck is this needed
+    useEffect(() => {
+        sleep(100).then(() => {
+            Transforms.select(editor, Editor.end(editor, []));
+            ReactEditor.focus(editor)
+        })
+    }, [])
 
     // PeakInlineSelect nonsense
     const {
@@ -65,8 +74,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         baseKeyBindingHandler(event, editor)
     }, [])
 
-    console.log("Re-Rendering Note Content", noteContent)
-
     return (
         <Slate
             editor={editor}
@@ -87,12 +94,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
                         placeholder="Drop some knowledge..."
                         spellCheck={true}
                         autoFocus={true}
-                        onFocus={() => {
-                            console.log(`------> we are FOCUSING`)
-                        }}
-                        onBlur={() => {
-                            console.log(`------> why are we BLURING`)
-                        }}
                         readOnly={!editorState.isEditing}
                         style={{
                             textAlign: "left",

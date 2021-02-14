@@ -54,13 +54,11 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const searchLibary = () => {
-        const newThings = openLibraryBooks
-        return newThings
+        return openLibraryBooks
     }
     const library: OpenLibraryBook[] = searchLibary()
 
     useEffect(() => {
-        console.log(`SET BOOK SELECT ITEMS `, books)
         setBookSelectItems(books.map(convertPeakBookToNodeSelectListItem))
     }, [books.length]);
 
@@ -101,13 +99,13 @@ export const useNodeContentSelect = (
                         //     return setTargetRange(null);
                         // })
                         console.log(`MOVING TO THE DRAFTTTT /home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
-                        history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`);
                         resetNodeMenuItem()
+                        history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`);
                         return setTargetRange(null);
                     } else {
                         console.log(`MOVING TO THE EXISTING BOOK /notes/${data.bookId}`)
-                        history.push(`/home/notes/${data.bookId}`);
                         resetNodeMenuItem()
+                        history.push(`/home/notes/${data.bookId}`);
                         return setTargetRange(null);
                     }
                 }

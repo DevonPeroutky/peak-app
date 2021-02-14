@@ -1,29 +1,29 @@
 import {useHistory} from "react-router-dom";
-import {createNewPeakBook, useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../../client/notes";
+import {
+    createNewPeakBook,
+    useBooks,
+    useDebouncePeakNoteSaver,
+} from "../../../client/notes";
 import React, {useEffect, useState} from "react";
 import {useCurrentUser} from "../../../utils/hooks";
 import {Divider, message} from "antd";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
-import {BookHeaderSection} from "./NoteView";
 import {useQuery} from "../../../utils/urls";
 import {getCoverImageUrl} from "../../../client/openLibrary";
 import {PeakNote, STUB_BOOK_ID} from "../../../redux/slices/noteSlice";
+import {BookHeaderSection} from "./NoteView";
 
 export const PeakDraftNoteView = (props) => {
     const history = useHistory()
     const query = useQuery();
     const currentUser = useCurrentUser();
+    const books = useBooks();
     const noteSaver = useDebouncePeakNoteSaver()
     const [currentNote, setCurrentNote] = useState<PeakNote | null>(null)
     const titleParam: string | null = query.get("title")
     const coverIdParam: string | null = query.get("cover-id")
     const authorParam: string | null = query.get("author")
     const bookIconUrl: string = getCoverImageUrl(parseInt(coverIdParam), "L")
-
-    console.log(`DRAFTing`)
-    console.log(titleParam)
-    console.log(coverIdParam)
-    console.log(authorParam)
 
     if (!titleParam && !authorParam) {
         message.error("Something went wrong! Tell Devon")
@@ -32,7 +32,13 @@ export const PeakDraftNoteView = (props) => {
 
     useEffect(() => {
         if (!currentNote) {
-            createNewPeakBook(currentUser.id, {title: titleParam, iconUrl: bookIconUrl, author: authorParam}).then(setCurrentNote)
+            const existingBook: PeakNote | undefined = (books.find(b => b.title.toLowerCase() === titleParam.toLowerCase() && b.author.toLowerCase() === authorParam.toLowerCase()))
+
+            if (existingBook) {
+                setCurrentNote(existingBook)
+            } else {
+                createNewPeakBook(currentUser.id, {title: titleParam, iconUrl: bookIconUrl, author: authorParam}).then(setCurrentNote)
+            }
         }
     }, [])
 

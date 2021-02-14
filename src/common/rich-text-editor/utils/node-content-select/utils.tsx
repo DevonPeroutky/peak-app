@@ -24,7 +24,6 @@ export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditor
 }
 
 export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSelectListItem {
-    console.log(`CONVERTING THE BOOK `, book)
     return {
         title: book.title,
         label: book.title,
