@@ -43,7 +43,7 @@ export const PeakDraftNoteView = (props) => {
     }, [])
 
     const [title, setTitle] = useState(titleParam)
-    const [author, setAuthor] = useState(authorParam)
+    const [author, setAuthor] = useState((authorParam === "undefined") ? "" : authorParam)
     const note_id = (currentNote) ? currentNote.id : STUB_BOOK_ID
 
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +54,8 @@ export const PeakDraftNoteView = (props) => {
         setAuthor(e.target.value)
         noteSaver(currentUser.id, currentNote.id, { author: e.target.value })
     }
+
+    console.log(`THE AUTHOR `, author)
 
     return (
         <div className={"peak-note-view-container"}>
