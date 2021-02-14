@@ -17,32 +17,53 @@ import {PeakTag} from "../../../types";
 export const PeakNoteView = (props) => {
     const history = useHistory()
     const currentNote: PeakNote | undefined = useCurrentNote()
+
+    const [title, setTitle] = useState(currentNote.title)
+    const noteSaver = useDebouncePeakNoteSaver()
+    const currentUser = useCurrentUser()
+    const selected_tags: PeakTag[] = useLoadTags(currentNote.tag_ids)
+    const [author, setAuthor] = useState(currentNote.author)
+
+    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
+        noteSaver(currentUser.id, currentNote.id, { title: e.target.value })
+    }
+
+    const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAuthor(e.target.value)
+        noteSaver(currentUser.id, currentNote.id, { author: e.target.value })
+    }
+
     if (!currentNote) {
         history.push(`/home/journal`)
     }
 
     return (
         <div className={"peak-note-view-container"}>
-            {(currentNote.note_type === ELEMENT_WEB_NOTE) ? <WebNoteHeaderSection note={currentNote}/> : <BookHeaderSection note={currentNote}/>}
+            {(currentNote.note_type === ELEMENT_WEB_NOTE) ?
+                <WebNoteHeaderSection
+                    note={currentNote}
+                    title={title}
+                    onTitleChange={onTitleChange}
+                    selected_tags={selected_tags}/>
+                : <BookHeaderSection
+                    title={title}
+                    onTitleChange={onTitleChange}
+                    author={author}
+                    onAuthorChange={onAuthorChange}
+                    note={currentNote}
+                    selected_tags={selected_tags}/>
+            }
             <Divider className={"note-divider"}/>
             <PeakNoteEditor/>
         </div>
     )
 }
 
-const WebNoteHeaderSection = (props: {note: PeakNote}) => {
-    const { note } = props
+const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTitleChange: (e) => void, selected_tags: PeakTag[]}) => {
+    const { note, selected_tags, onTitleChange, title } = props
     const url = new URL(note.url);
     const urlDomain: string = url.hostname.split('.').slice(0, -1).join(" ");
-    const [title, setTitle] = useState(note.title)
-    const noteSaver = useDebouncePeakNoteSaver()
-    const currentUser = useCurrentUser()
-    const selected_tags: PeakTag[] = useLoadTags(note.tag_ids)
-
-    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
-        noteSaver(currentUser.id, note.id, { title: e.target.value })
-    }
 
     return (
         <div className={"note-header-section web_note"}>
@@ -60,22 +81,8 @@ const WebNoteHeaderSection = (props: {note: PeakNote}) => {
         </div>
     )
 }
-const BookHeaderSection = (props: {note: PeakNote}) => {
-    const { note } = props
-    const [title, setTitle] = useState(note.title)
-    const [author, setAuthor] = useState(note.author)
-    const noteSaver = useDebouncePeakNoteSaver()
-    const currentUser = useCurrentUser()
-    const selected_tags: PeakTag[] = useLoadTags(note.tag_ids)
-
-    const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAuthor(e.target.value)
-        noteSaver(currentUser.id, note.id, { author: e.target.value })
-    }
-    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
-        noteSaver(currentUser.id, note.id, { title: e.target.value })
-    }
+const BookHeaderSection = (props: {note: PeakNote, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
+    const { note, title, author, onAuthorChange, onTitleChange, selected_tags } = props
     return (
         <div className={"note-header-section peak_book"}>
             <div className={"note-subheader-section"}>
