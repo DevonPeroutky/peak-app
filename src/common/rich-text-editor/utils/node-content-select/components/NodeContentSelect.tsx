@@ -109,7 +109,6 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
         )
     } else {
         const numInternalOptions: number = options.length
-        console.log(`OPTIONS `, options)
         return (
             <>
                 <div className="peak-internal-results">

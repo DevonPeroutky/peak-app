@@ -5,8 +5,8 @@ import {createEditor, Node} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
-import {PeakNote} from "../../../../redux/slices/noteSlice";
-import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../../client/notes";
+import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
+import {useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
 import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -17,23 +17,31 @@ import {
 } from "../../../../common/rich-text-editor/editors/note-editor/config";
 import "./peak-note-editor.scss"
 import {useCurrentUser} from "../../../../utils/hooks";
+import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 
-export const PeakNoteEditor = (props) => {
-    const currentNote: PeakNote = useCurrentNote()
+export const PeakNoteEditor = (props: { note_id: string }) => {
+    const { note_id } = props
+    const currentNote: PeakNote | undefined = useSpecificNote(note_id)
     const editorState = useActiveEditorState()
     const currentUser = useCurrentUser()
-    const currentPageId = `note-${currentNote.id}`
-    const bodyContent: Node[] = [{ children: currentNote.body }]
-    const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
     const noteSaver = useDebouncePeakNoteSaver()
+    const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
+    const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
+
+    const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
 
     const updateNoteContent = (newBody: Node[]) => {
+        console.log(`updating Note Content `, newBody)
         setNoteContent(newBody)
-        noteSaver(currentUser.id, currentNote.id, { body: newBody[0]["children"] as Node[] })
+
+        if (currentNote) {
+            noteSaver(currentUser.id, currentNote.id, { body: newBody[0]["children"] as Node[] })
+        }
         onChangeMention(editor);
+        ReactEditor.focus(editor)
     }
 
     // PeakInlineSelect nonsense
@@ -71,11 +79,6 @@ export const PeakNoteEditor = (props) => {
                     showLinkMenu={editorState.showLinkMenu}
                     pageId={currentPageId}/>
                 <div className={"rich-text-editor-container"}>
-
-                    {/*
-                    TODO: ADD ABILITY TO DELETE A NOTE
-                    <PageContextBar topicId={topic_id}/>
-                    */}
                     <EditablePlugins
                         onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
                         onKeyDownDeps={[index, search, target, openLibraryResults]}
@@ -84,6 +87,12 @@ export const PeakNoteEditor = (props) => {
                         placeholder="Drop some knowledge..."
                         spellCheck={true}
                         autoFocus={true}
+                        onFocus={() => {
+                            console.log(`------> we are FOCUSING`)
+                        }}
+                        onBlur={() => {
+                            console.log(`------> why are we BLURING`)
+                        }}
                         readOnly={!editorState.isEditing}
                         style={{
                             textAlign: "left",

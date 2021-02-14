@@ -28,6 +28,7 @@ export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSel
     return {
         title: book.title,
         label: book.title,
+        bookId: book.id,
         description: book.author,
         author: book.author,
         elementType: ELEMENT_PEAK_BOOK,
@@ -46,6 +47,7 @@ export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook
         title: book.title,
         label: `${book.title}`,
         description: author,
+        coverId: book.cover_i,
         author: author,
         iconUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
         knowledgeNodeId: "-69",

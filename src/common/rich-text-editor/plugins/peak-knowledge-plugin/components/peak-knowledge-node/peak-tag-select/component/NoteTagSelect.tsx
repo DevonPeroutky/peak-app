@@ -10,6 +10,7 @@ import {createPeakTags, useTags} from "../../../../../../../../client/tags";
 import {useCurrentUser} from "../../../../../../../../utils/hooks";
 import {updatePeakNote} from "../../../../../../../../client/notes";
 import "./peak-tag-select.scss"
+import {STUB_BOOK_ID} from "../../../../../../../../redux/slices/noteSlice";
 const { Option } = Select;
 
 /**
@@ -99,6 +100,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
                     // TODO: lockFocus(true)
                 }}
                 ref={mainRef}
+                disabled={note_id === STUB_BOOK_ID}
                 open={open}
                 onBlur={saveAndLeave}
                 onFocus={() => {

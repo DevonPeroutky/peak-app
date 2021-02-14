@@ -51,11 +51,12 @@ export const PeakNoteView = (props) => {
                     onTitleChange={onTitleChange}
                     author={author}
                     onAuthorChange={onAuthorChange}
-                    note={currentNote}
+                    note_id={currentNote.id}
+                    icon_url={currentNote.icon_url}
                     selected_tags={selected_tags}/>
             }
             <Divider className={"note-divider"}/>
-            <PeakNoteEditor/>
+            <PeakNoteEditor note_id={currentNote.id}/>
         </div>
     )
 }
@@ -81,19 +82,19 @@ const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTitleChan
         </div>
     )
 }
-const BookHeaderSection = (props: {note: PeakNote, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
-    const { note, title, author, onAuthorChange, onTitleChange, selected_tags } = props
+export const BookHeaderSection = (props: {note_id: string, icon_url: string, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
+    const { note_id, icon_url, title, author, onAuthorChange, onTitleChange, selected_tags } = props
     return (
         <div className={"note-header-section peak_book"}>
             <div className={"note-subheader-section"}>
                 <Link to={`/home/notes`}><CaretLeftFilled/> Back to Notes</Link>
             </div>
             <div className={"book-note-header-row"}>
-                <ImageLoader url={note.icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
+                <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
                 <div className={"note-header"}>
                     <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
                     <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
-                    <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
+                    <NoteTagSelect selected_tags={selected_tags} note_id={note_id}/>
                 </div>
             </div>
         </div>

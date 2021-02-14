@@ -21,6 +21,7 @@ import {useJournalSubscription} from "../../common/rich-text-editor/editors/jour
 import {establishSocketConnection} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
+import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -68,6 +69,7 @@ const PeakLayout = (props: {}) => {
                     <Content className="peak-content-container">
                        <Switch>
                            <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                           <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                            <Route path={`${match.path}/notes/:id`} render={(props) => {
                                if (props.match.params && props.match.params.id) {
                                    return <PeakNoteView key={props.match.params.id} {...props} />

@@ -18,11 +18,10 @@ import {
     isTextAfterTrigger
 } from "./utils";
 import {createNewPeakBook, useBooks} from "../../../../client/notes";
-import {useCurrentUser} from "../../../../utils/hooks";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
-import {useSlate} from "slate-react";
+import {useHistory} from "react-router-dom";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number
@@ -31,7 +30,8 @@ interface PeakNodeSelectMenuOptions extends UseMentionOptions {
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
 ) => {
-    const currentUser = useCurrentUser()
+
+    let history = useHistory();
     const books = useBooks()
     const openLibrarySearcher = useDebounceOpenLibrarySearcher()
 
@@ -42,7 +42,6 @@ export const useNodeContentSelect = (
     const [menuItems, setMenuItems] = useState(NODE_CONTENT_LIST_ITEMS);
     const [openLibraryBooks, setOpenLibraryBooks] = useState<OpenLibraryBook[]>([]);
     const [search, setSearch] = useState('');
-    console.log(`Re RENDERING THE NodeContentSelect!`, bookSelectItems)
 
     const filterValues = () => {
         const filteredValues: PeakNodeSelectListItem[] = menuItems
@@ -90,20 +89,24 @@ export const useNodeContentSelect = (
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
                 } else {
-                    console.log(`INSERTING YA BOYYY`)
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
 
                     // IF CREATING A NEW BOOK
                     // We need to insert w/The ID
                     if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
-                        createNewPeakBook(currentUser.id, data).then((newPeakBookItem) => {
-                            insertNodeContent(editor, newPeakBookItem, targetRange)
-                            resetNodeMenuItem()
-                            return setTargetRange(null);
-                        })
+                        // createNewPeakBook(currentUser.id, data).then((newPeakBookItem) => {
+                        //     insertNodeContent(editor, newPeakBookItem, targetRange)
+                        //     resetNodeMenuItem()
+                        //     return setTargetRange(null);
+                        // })
+                        console.log(`MOVING TO THE DRAFTTTT /home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
+                        history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`);
+                        resetNodeMenuItem()
+                        return setTargetRange(null);
                     } else {
-                        insertNodeContent(editor, data, targetRange)
+                        console.log(`MOVING TO THE EXISTING BOOK /notes/${data.bookId}`)
+                        history.push(`/home/notes/${data.bookId}`);
                         resetNodeMenuItem()
                         return setTargetRange(null);
                     }

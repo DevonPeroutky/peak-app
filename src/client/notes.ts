@@ -5,17 +5,23 @@ import {store} from "../redux/store";
 import { convertPeakBookToNodeSelectListItem } from "../common/rich-text-editor/utils/node-content-select/utils";
 import {PeakNodeSelectListItem} from "../common/rich-text-editor/utils/node-content-select/types";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {upsertNote, deleteNote, PeakNote, setNotes, updateNote} from "../redux/slices/noteSlice";
+import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID} from "../redux/slices/noteSlice";
 import {useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
 import {debounce} from "lodash";
 
-interface NotePayload {
+interface UpdateNotePayload {
     body?: Node[],
     title?: string,
     author?: string,
     tag_ids?: string[]
+}
+
+interface CreateNotePayload {
+    title: string,
+    author: string,
+    iconUrl: string
 }
 
 // Requests
@@ -29,7 +35,7 @@ function createNoteRequest(userId: string, book: {title: string, iconUrl: string
         }
     })
 }
-function updateNoteRequest(userId: string, bookId: string, book: NotePayload) {
+function updateNoteRequest(userId: string, bookId: string, book: UpdateNotePayload) {
     return peakAxiosClient.put(`/api/v1/users/${userId}/books/${bookId}`, {
         "book": book
     })
@@ -61,21 +67,17 @@ export function deletePeakNote(userId: string, bookId: string): Promise<string> 
         return bookId
     })
 }
-export function createNewPeakBook(userId: string, data: PeakNodeSelectListItem): Promise<PeakNodeSelectListItem> {
-    function createPeakNote(userId: string, title: string, iconUrl: string, author: string): Promise<PeakNote> {
-        return createNoteRequest(userId, {
-            title: title,
-            iconUrl: iconUrl,
-            author: author
-        }).then(res => {
+export function createNewPeakBook(userId: string, book: CreateNotePayload): Promise<PeakNote> {
+    function createPeakNote(userId: string, book: CreateNotePayload): Promise<PeakNote> {
+        return createNoteRequest(userId, book).then(res => {
             const created_book = res.data.book as PeakNote
             store.dispatch(upsertNote(created_book))
             return created_book
         })
     }
-    return createPeakNote(userId, data.title, data.iconUrl, data.description).then((created_book) => convertPeakBookToNodeSelectListItem(created_book))
+    return createPeakNote(userId, book)
 }
-export function updatePeakNote(userId: string, bookId: string, note: NotePayload) {
+export function updatePeakNote(userId: string, bookId: string, note: UpdateNotePayload) {
     updateNoteRequest(userId, bookId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
@@ -100,6 +102,10 @@ export function useCurrentNoteId() {
 export function useCurrentNote(): PeakNote | undefined {
     const currentNoteId = useCurrentNoteId();
     return useNotes().find(n => n.id === currentNoteId)
+}
+export function useSpecificNote(nodeId: string): PeakNote | undefined {
+    const notes = useNotes()
+    return (nodeId === STUB_BOOK_ID) ? undefined : notes.find(n => n.id === nodeId)
 }
 export function useDebouncePeakNoteSaver() {
 

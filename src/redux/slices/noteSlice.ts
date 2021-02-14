@@ -1,6 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Node} from "slate";
 
+export const STUB_BOOK_ID = "new-book"
+
 export interface PeakNote {
     id: string
     title: string
