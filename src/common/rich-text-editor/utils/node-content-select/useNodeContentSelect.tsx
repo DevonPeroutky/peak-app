@@ -90,19 +90,28 @@ export const useNodeContentSelect = (
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
 
-                    // IF CREATING A NEW BOOK
-                    // We need to insert w/The ID
-                    if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
-                        return new Promise(function(resolve, reject) {
-                            resetNodeMenuItem()
-                            resolve(setTargetRange(null))
-                        }).then(() => history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`))
-                    } else {
-                        return new Promise(function(resolve, reject) {
-                            resetNodeMenuItem()
-                            resolve(setTargetRange(null))
-                        }).then(() => history.push(`/home/notes/${data.bookId}`))
+                    if (data.elementType === ELEMENT_PEAK_BOOK) {
+                        // IF CREATING A NEW BOOK
+                        if (data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
+                            return new Promise(function(resolve, reject) {
+                                resetNodeMenuItem()
+                                resolve(setTargetRange(null))
+                            }).then(() => history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`))
+
+                        // IF Referencing a book
+                        } else {
+                            return new Promise(function(resolve, reject) {
+                                resetNodeMenuItem()
+                                resolve(setTargetRange(null))
+                            }).then(() => history.push(`/home/notes/${data.bookId}`))
+
+                        }
                     }
+
+                    // Insert Normally
+                    insertNodeContent(editor, data, targetRange)
+                    resetNodeMenuItem()
+                    return setTargetRange(null);
                 }
             }
         },
