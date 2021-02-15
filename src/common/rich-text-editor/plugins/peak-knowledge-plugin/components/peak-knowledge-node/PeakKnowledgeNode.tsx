@@ -8,6 +8,7 @@ import {capitalize_and_truncate} from "../../../../../../utils/strings";
 import {ELEMENT_WEB_NOTE, PEAK_LEARNING} from "../../constants";
 import "./peak-knowledge-node.scss"
 import {PeakTag} from "../../../../../../types";
+import {Link} from "react-router-dom";
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
@@ -16,12 +17,23 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
     const isEmpty: boolean = isNodeEmpty(element)
+    console.log(element)
 
     return (
         <div className={cn("peak-knowledge-node-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
-            <KnowledgeTitleRow elementType={element.type as string} label={element.title as string | undefined}/>
-            {props.children}
-            <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
+            <div className={"peak-knowledge-title-row web"} contentEditable={false}>
+                <span>Saved the page </span>
+                <img src={bookmark} className={"title-row-icon web"}/>
+                <span className={"knowledge-label"}>
+                    <Link to={`/home/notes/${element.note_id}`} className={"link-to-note"}>{capitalize_and_truncate(element.title as string, 100)}</Link>
+                </span>
+            </div>
+            <div className={"web-body"}>
+                {props.children}
+            </div>
+            <div className={"web-footer"}>
+                <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
+            </div>
         </div>
     )
 }
