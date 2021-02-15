@@ -22,6 +22,10 @@ import {establishSocketConnection} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
 import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
+import {
+    ELEMENT_PEAK_BOOK,
+    ELEMENT_WEB_NOTE
+} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -77,7 +81,8 @@ const PeakLayout = (props: {}) => {
                                    return <Redirect to={"/"} />
                                }
                            }} />
-                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView />} />
+                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
+                           <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
                            <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                            <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                            <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />

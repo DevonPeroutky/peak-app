@@ -10,14 +10,16 @@ import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-kn
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
+import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 const bookmark = require('../../../assets/icons/bookmark.svg');
 
-export const PeakNoteListView = (props: {}) => {
-    const notes: PeakNote[] = useNotes()
+export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
+    const { page_header, note_type } = props
+    const notes: PeakNote[] = useNotes().filter(n => n.note_type === note_type)
 
     return (
         <div className={"notes-container"}>
-            <h1>Notes</h1>
+            <h1>{capitalize(page_header)}</h1>
             <List
                 className={"peak-notes-list"}
                 itemLayout={"vertical"}
