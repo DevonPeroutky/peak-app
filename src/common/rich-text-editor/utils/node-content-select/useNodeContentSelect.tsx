@@ -103,7 +103,7 @@ export const useNodeContentSelect = (
                             return new Promise(function(resolve, reject) {
                                 resetNodeMenuItem()
                                 resolve(setTargetRange(null))
-                            }).then(() => history.push(`/home/notes/${data.bookId}`))
+                            }).then(() => history.push(`/home/notes/${data.noteId}`))
 
                         }
                     }

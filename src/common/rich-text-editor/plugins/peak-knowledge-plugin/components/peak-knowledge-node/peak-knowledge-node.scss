@@ -2,6 +2,7 @@
 
 $title-row-height: 30px;
 $margin-top: 20px;
+$web-body-padding: 20px;
 .peak-knowledge-node-container {
   margin-top: $margin-top;
   border-radius: $peak-kn-border-radius;
@@ -17,33 +18,65 @@ $margin-top: 20px;
     //padding-left: 10px;
     //padding-right: 10px;
     height: $title-row-height;
-    color: $placeholder-text-color;
+    //color: $placeholder-text-color;
     user-select: none;
+    justify-content: space-between;
 
-    .title-row-icon {
-      margin-right: 5px;
+    .title-section {
+      display: flex;
 
-      &.book {
-        color: $primary-blue;
+      .title-row-icon {
+        margin-right: 5px;
+        margin-left: 5px;
+
+        &.book {
+          color: $primary-blue;
+        }
+        &.learning {
+          color: $primary-green;
+        }
+        &.web {
+          color: $primary-red;
+        }
       }
-      &.learning {
-        color: $primary-green;
-      }
-      &.web {
-        color: $primary-red;
+
+      .knowledge-label {
+        color: $text-color;
       }
     }
 
-    .knowledge-label {
-      color: $text-color;
+    .icon-section {
+      display: flex;
+      align-items: center;
+
+      .external-link-icon {
+        margin-left: 10px;
+      }
     }
+
   }
 
   .web-body {
+    display: flex;
     padding-top: 24px;
     padding-left: 24px;
     padding-right: 24px;
+    //line-height: 18px;
     //padding-bottom: 24px;
+
+    &.empty::after {
+      position: absolute;
+      padding-top: 3px;
+      top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
+      color: $placeholder-text-color;
+      cursor: text;
+      content: "Write down something that caught your attention....";
+      display: flex;
+      align-items: center;
+      line-height: inherit;
+      //padding-top: calc(#{$peak-kn-padding-top} + 5px);
+      pointer-events:none;
+    }
   }
 
   .web-footer {
@@ -51,16 +84,4 @@ $margin-top: 20px;
     padding-bottom: 24px;
   }
 
-  &.empty::after {
-    position: absolute;
-    color: $placeholder-text-color;
-    top: $margin-top;
-    cursor: text;
-    content: "Write down something that caught your attention....";
-    display: flex;
-    align-items: center;
-    line-height: inherit;
-    padding-top: calc(#{$peak-kn-padding-top} + 5px);
-    pointer-events:none;
-  }
 }

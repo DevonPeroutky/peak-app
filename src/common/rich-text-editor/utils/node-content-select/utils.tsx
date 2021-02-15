@@ -27,7 +27,7 @@ export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSel
     return {
         title: book.title,
         label: book.title,
-        bookId: book.id,
+        noteId: book.id,
         description: book.author,
         author: book.author,
         elementType: ELEMENT_PEAK_BOOK,
@@ -61,7 +61,7 @@ export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook
 }
 
 export function insertBookElementCallback(book: PeakNote): (editor: Editor) => void {
-    return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {bookId: book.id, title: book.title}))
+    return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {noteId: book.id, title: book.title}))
 }
 
 /**

@@ -43,13 +43,13 @@ function createNoteRequest(userId: string, book: {title: string, iconUrl: string
         }
     })
 }
-function updateNoteRequest(userId: string, bookId: string, book: UpdateNotePayload) {
-    return peakAxiosClient.put(`/api/v1/users/${userId}/books/${bookId}`, {
+function updateNoteRequest(userId: string, noteId: string, book: UpdateNotePayload) {
+    return peakAxiosClient.put(`/api/v1/users/${userId}/books/${noteId}`, {
         "book": book
     })
 }
-function deleteNoteRequest(userId: string, bookId: string) {
-    return peakAxiosClient.delete(`/api/v1/users/${userId}/books/${bookId}`)
+function deleteNoteRequest(userId: string, noteId: string) {
+    return peakAxiosClient.delete(`/api/v1/users/${userId}/books/${noteId}`)
 }
 function fetchNotesRequest(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/books`)
@@ -65,14 +65,14 @@ export function loadPeakNotes(userId: string) {
         console.log(err)
     })
 }
-export function deletePeakNote(userId: string, bookId: string): Promise<string> {
-    return deleteNoteRequest(userId, bookId).then(res => {
-        store.dispatch(deleteNote(bookId))
-        return bookId
+export function deletePeakNote(userId: string, noteId: string): Promise<string> {
+    return deleteNoteRequest(userId, noteId).then(res => {
+        store.dispatch(deleteNote(noteId))
+        return noteId
     }).catch(err => {
-        console.log(`DID NOT successfully delete the tag: ${bookId}`)
+        console.log(`DID NOT successfully delete the tag: ${noteId}`)
         console.log(err)
-        return bookId
+        return noteId
     })
 }
 export function createNewPeakBook(userId: string, book: CreateNotePayload): Promise<PeakNote> {
@@ -85,8 +85,8 @@ export function createNewPeakBook(userId: string, book: CreateNotePayload): Prom
     }
     return createPeakNote(userId, book)
 }
-export function updatePeakNote(userId: string, bookId: string, note: UpdateNotePayload) {
-    return updateNoteRequest(userId, bookId, note ).then(res => {
+export function updatePeakNote(userId: string, noteId: string, note: UpdateNotePayload) {
+    return updateNoteRequest(userId, noteId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
         return updatedNote
