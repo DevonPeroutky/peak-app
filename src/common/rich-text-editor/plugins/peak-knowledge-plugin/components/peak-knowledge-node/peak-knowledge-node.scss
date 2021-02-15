@@ -24,6 +24,11 @@ $web-body-padding: 20px;
 
     .title-section {
       display: flex;
+      align-items: center;
+
+      .main-icon {
+        margin-right: 10px;
+      }
 
       .title-row-icon {
         margin-right: 5px;
