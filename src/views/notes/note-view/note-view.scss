@@ -8,6 +8,7 @@
   .note-header-section {
     display: flex;
     flex-direction: column;
+    min-height: 175px;
 
     .note-subheader-section {
       display: flex;
@@ -114,9 +115,9 @@
     }
   }
 
-  .note-divider {
-    margin-top: 32px;
-    margin-bottom: 32px;
-  }
+  //.note-divider {
+  //  margin-top: 32px;
+  //  margin-bottom: 32px;
+  //}
 
 }

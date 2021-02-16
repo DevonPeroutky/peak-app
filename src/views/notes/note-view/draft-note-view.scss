@@ -1,0 +1,13 @@
+.peak-note-draft-view-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+
+  .peak-draft-height {
+    min-height: 175px;
+  }
+
+  .ant-skeleton-title {
+    margin-top: 0!important;
+  }
+}

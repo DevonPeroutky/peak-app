@@ -56,7 +56,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
             const newSelected: PeakTag[] = hotSwap(displaySelectedTags, createdTags)
             setTags([...tags, ...createdTags])
             setSelectedTags(newSelected)
-            updatePeakNote(currentUser.id, note_id, { tag_ids: newSelected.map(t => t.id) })
+            updatePeakNote(currentUser, note_id, { tag_ids: newSelected.map(t => t.id) })
         }).finally(() => {
             setCurrentSearch("")
         })

@@ -5,7 +5,7 @@ import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
-import {useDebouncePeakNoteSaver, useSpecificNote} from "../../../../client/notes";
+import {useDebouncePeakNoteSaver, useDebouncePeakStubCreator, useSpecificNote} from "../../../../client/notes";
 import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -29,19 +29,33 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const journal = useJournal()
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
+    const createStub = useDebouncePeakStubCreator()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
+    const [readyToStub, setReadyToStub] = useState(false)
+    const [stubCreated, setStubCreated] = useState(false)
 
     const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
+
+    useEffect(() => {
+        // We have a race condition between the default Journal updater with is debounced at 1000 and we want to be after
+        sleep(1500).then(() => {
+            setReadyToStub(true)
+        })
+    }, [])
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
 
     const updateNoteContent = (newBody: Node[]) => {
-
-        if (currentNote && !equals(newBody, noteContent)) {
+        if (!equals(newBody, noteContent)) {
             setNoteContent(newBody)
-            noteSaver(currentUser, currentNote, { body: newBody[0]["children"] as Node[] }, journal.body as JournalEntry[])
+            noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
+        }
+
+        if (readyToStub && !stubCreated) {
+            createStub(currentUser, currentNote, journal.body as JournalEntry[], "added_notes")
+            setStubCreated(true)
         }
         onChangeMention(editor);
     }

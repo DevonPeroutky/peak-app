@@ -1,28 +1,22 @@
 import {useHistory} from "react-router-dom";
 import {
     useBooks,
-    useDebouncePeakNoteSaver, usePeakNoteCreator,
+    usePeakNoteCreator,
 } from "../../../client/notes";
-import React, {useEffect, useState} from "react";
-import {useCurrentUser, useJournal} from "../../../utils/hooks";
-import {Divider, message} from "antd";
-import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
+import React, {useEffect} from "react";
+import {useCurrentUser } from "../../../utils/hooks";
+import { Divider, message, Skeleton} from "antd";
 import {useQuery} from "../../../utils/urls";
 import {getCoverImageUrl} from "../../../client/openLibrary";
-import {PeakNote, STUB_BOOK_ID} from "../../../redux/slices/noteSlice";
-import {BookHeaderSection} from "./NoteView";
-import {JournalEntry} from "../../../common/rich-text-editor/editors/journal/types";
-import {sleep} from "../../../chrome-extension/utils/generalUtil";
+import {PeakNote} from "../../../redux/slices/noteSlice";
+import "./draft-note-view.scss"
 
 export const PeakDraftNoteView = (props) => {
     const history = useHistory()
     const query = useQuery();
     const currentUser = useCurrentUser();
-    const journal = useJournal();
     const books = useBooks();
-    const noteSaver = useDebouncePeakNoteSaver()
     const noteCreator = usePeakNoteCreator()
-    const [currentNote, setCurrentNote] = useState<PeakNote | null>(null)
     const titleParam: string | null = query.get("title")
     const coverIdParam: string | null = query.get("cover-id")
     const authorParam: string | null = query.get("author")
@@ -33,62 +27,27 @@ export const PeakDraftNoteView = (props) => {
         history.push(`/home/journal`)
     }
 
-    const [title, setTitle] = useState(titleParam)
-    const [author, setAuthor] = useState((authorParam === "undefined") ? "" : authorParam)
-    const [created, setCreated] = useState(false)
-    const [canCreate, setCanCreate] = useState(false)
-    const note_id = (currentNote) ? currentNote.id : STUB_BOOK_ID
-
-    const setNodeAndMove = (note: PeakNote) => {
-        setCurrentNote(note)
-        history.push(`/home/notes/${note.id}`)
-    }
+    const author = (authorParam === "undefined") ? "" : authorParam
 
     useEffect(() => {
-        // We have a race condition between the default Journal updater with is debounced at 1000 and we want to be after
-        sleep(1500).then(() => {
-            setCanCreate(true)
-        })
+        const existingBook: PeakNote | undefined = (books.find(b => b.title.toLowerCase() === titleParam.toLowerCase() && b.author.toLowerCase() === authorParam.toLowerCase()))
+
+        if (existingBook) {
+            // setCurrentNote(existingBook)
+            history.push(`/home/notes/${existingBook.id}`)
+        } else {
+            noteCreator(currentUser, {title: titleParam, iconUrl: bookIconUrl, author: author}).then((note) => {
+                history.push(`/home/notes/${note.id}`)
+            })
+        }
     }, [])
 
-    useEffect(() => {
-        if (!currentNote && !created && canCreate) {
-            const existingBook: PeakNote | undefined = (books.find(b => b.title.toLowerCase() === titleParam.toLowerCase() && b.author.toLowerCase() === authorParam.toLowerCase()))
-
-            if (existingBook) {
-                // setCurrentNote(existingBook)
-                setNodeAndMove(existingBook)
-                setCreated(true)
-            } else {
-                noteCreator(currentUser, {title: title, iconUrl: bookIconUrl, author: author}, journal.body as JournalEntry[]).then(setNodeAndMove)
-                setCreated(true)
-            }
-        }
-    }, [journal.body, canCreate])
-
-    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
-        console.log(`SUBMITTING NEW TITLE`, currentNote)
-        noteSaver(currentUser, currentNote, { title: e.target.value }, journal.body as JournalEntry[])
-    }
-    const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAuthor(e.target.value)
-        console.log(`SUBMITTING NEW AUTHOR`, currentNote)
-        noteSaver(currentUser, currentNote, { author: e.target.value }, journal.body as JournalEntry[])
-    }
-
     return (
-        <div className={"peak-note-view-container"}>
-            <BookHeaderSection
-                title={title}
-                onTitleChange={onTitleChange}
-                author={author}
-                onAuthorChange={onAuthorChange}
-                note_id={note_id}
-                icon_url={(currentNote) ? currentNote.icon_url : bookIconUrl}
-                selected_tags={[]}/>
+        <div className={"peak-note-draft-view-container"}>
+            <Skeleton paragraph={{ rows: 0}}/>
+            <Skeleton active avatar={{ shape: 'square', size: 96}} className={"peak-draft-height"} paragraph={{ rows: 4 }}/>
             <Divider className={"note-divider"}/>
-            <PeakNoteEditor note_id={note_id}/>
+            <Skeleton active/>
         </div>
     )
 }

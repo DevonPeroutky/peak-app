@@ -199,13 +199,14 @@ export function usePagePublisher() {
 
 export function useSavePageRequest() {
     const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
-    const topics: PeakTopic[] = useTopics()
-    const deriveNewHierarchy = useUpdatePageInHierarchy()
+    // const topics: PeakTopic[] = useTopics()
+    // const deriveNewHierarchy = useUpdatePageInHierarchy()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
-        const currentTopic: PeakTopic = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
-        const newHierarchy = deriveNewHierarchy(newValue, currentTopic.id, pageId)
-        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, newHierarchy)
+        // TODO: This breaks with CodeEditing in Notes because the pageId is different.
+        // const currentTopic: PeakTopic = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
+        // const newHierarchy = deriveNewHierarchy(newValue, currentTopic.id, pageId)
+        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, user.hierarchy)
     }
 }
 

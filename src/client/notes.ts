@@ -85,8 +85,8 @@ export function createNewPeakBook(userId: string, book: CreateNotePayload): Prom
     }
     return createPeakNote(userId, book)
 }
-export function updatePeakNote(userId: string, noteId: string, note: UpdateNotePayload) {
-    return updateNoteRequest(userId, noteId, note ).then(res => {
+export function updatePeakNote(user: Peaker, noteId: string, note: UpdateNotePayload) {
+    return updateNoteRequest(user.id, noteId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
         return updatedNote
@@ -119,26 +119,22 @@ export function useSpecificNote(nodeId: string): PeakNote | undefined {
     return (nodeId === STUB_BOOK_ID) ? undefined : notes.find(n => n.id === nodeId)
 }
 export function useDebouncePeakNoteSaver() {
-    const createStub = useCreateNoteStubInJournal()
 
     // You need useCallback otherwise it's a different function signature each render?
-    const updateNoteAndStub = (user: Peaker, note: PeakNote, newNote: UpdateNotePayload, journal: JournalEntry[]) => {
-        return updatePeakNote(user.id, note.id, newNote).then(res => {
-            createStub(user, note, journal)
-        })
-    }
-    return useCallback(debounce(updateNoteAndStub, 1500), [])
+    // const updateNoteAndStub = (user: Peaker, note: PeakNote, newNote: UpdateNotePayload) => {
+    //     return updatePeakNote(user.id, note.id, newNote)
+    // }
+    return useCallback(debounce(updatePeakNote, 1500), [])
+}
+
+export function useDebouncePeakStubCreator() {
+    const createStub = useCreateNoteStubInJournal()
+    return useCallback(debounce(createStub, 1500), [])
 }
 
 export function usePeakNoteCreator() {
-    const createStub = useCreateNoteStubInJournal()
-
-    return (user: Peaker, book: CreateNotePayload, journal: JournalEntry[]) => {
+    return (user: Peaker, book: CreateNotePayload) => {
         return createNewPeakBook(user.id, book)
-            .then(note => {
-                createStub(user, note, journal, 'created')
-                return note
-            })
     }
 }
 
@@ -164,7 +160,7 @@ function useAppendToJournal() {
         const newBody: Node [] = cleanedJournal.concat(nodesToAppend)
         const journalEntryToWrite: JournalEntry = {...journalEntry, body: newBody}
 
-        saver([journalEntryToWrite], user)
+        return saver([journalEntryToWrite], user)
     }
 }
 function useCreateNoteStubInJournal() {
@@ -172,7 +168,6 @@ function useCreateNoteStubInJournal() {
 
     return (user: Peaker, note: PeakNote, journal: JournalEntry[], action: PeakStubAction = "added_notes") => {
         const todayJournalEntry = getTodayEntry(journal)
-        console.log(`STUBBING`)
         /**
          *  1. Find today's Journal Entry
          *  2. If a node corresponding to the current Note does NOT exist
@@ -183,11 +178,10 @@ function useCreateNoteStubInJournal() {
         })
         if (!stub) {
             console.log(`Adding a stub`)
-            appendToJournal(note, todayJournalEntry, user, action)
+            return appendToJournal(note, todayJournalEntry, user, action)
         } else {
             console.log(`Already there Boss`)
+            return new Promise(resolve => { return "hey" });
         }
     }
-
-
 }
