@@ -18,7 +18,6 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
     const isEmpty: boolean = isNodeEmpty(element)
-    console.log(element)
 
     return (
         <div className={cn("peak-knowledge-node-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>

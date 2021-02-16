@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
-import {useCurrentUser, useCurrentPage} from "../../../../../../../../utils/hooks";
+import {useCurrentUser} from "../../../../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
