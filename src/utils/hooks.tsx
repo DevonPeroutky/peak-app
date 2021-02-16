@@ -92,7 +92,6 @@ export function useCurrentPageId() {
     const location = useLocation();
     const url = location.pathname.split("/");
     const currentPageId = url.pop()!;
-    console.log(`Current Page Id `, currentPageId)
     return currentPageId
 }
 
@@ -327,9 +326,7 @@ export function useFetchJournal() {
         return peakAxiosClient
             .get(`/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
             .then(res => {
-                console.log(`JOURNAL ENTRIES RES`, res.data.journal_entries)
                 const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
-                console.log(`Sorted Journal`, sortedJournal)
                 dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {

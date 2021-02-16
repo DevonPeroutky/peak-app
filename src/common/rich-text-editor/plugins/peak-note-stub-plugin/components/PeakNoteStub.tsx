@@ -1,14 +1,13 @@
 import React from "react";
 import {RenderElementProps} from "slate-react";
 import cn from 'classnames';
-import {EditOutlined, EditTwoTone, FireFilled, FireTwoTone, ReadOutlined} from "@ant-design/icons/lib";
+import { EditTwoTone, FireTwoTone, ReadOutlined } from "@ant-design/icons/lib";
 import "./peak-note-stub.scss"
 import {Link} from "react-router-dom";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
 
 export const PeakNoteStub = (props: RenderElementProps) => {
     const { element } = props
-    console.log(props)
     return (
         <div className={cn("peak-note-stub-container")} {...props.attributes} key={0} tabIndex={0} contentEditable={false}>
             <div className={"peak-note-stub-title-row"} >
