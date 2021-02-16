@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
-import {useCurrentUser, useCurrentWikiPage} from "../../../../../../../../utils/hooks";
+import {useCurrentUser, useCurrentPage} from "../../../../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
@@ -94,6 +94,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         }
     }
     const lockFocus = (shouldFocus: boolean) => {
+        console.log(`LOCKING FOCUS to Tagselect`)
         dispatch(setEditorFocusToNode({nodeId: nodeId, focused: shouldFocus}))
     }
 

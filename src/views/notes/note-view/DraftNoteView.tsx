@@ -39,6 +39,11 @@ export const PeakDraftNoteView = (props) => {
     const [canCreate, setCanCreate] = useState(false)
     const note_id = (currentNote) ? currentNote.id : STUB_BOOK_ID
 
+    const setNodeAndMove = (note: PeakNote) => {
+        setCurrentNote(note)
+        history.push(`/home/notes/${note.id}`)
+    }
+
     useEffect(() => {
         // We have a race condition between the default Journal updater with is debounced at 1000 and we want to be after
         sleep(1500).then(() => {
@@ -51,10 +56,11 @@ export const PeakDraftNoteView = (props) => {
             const existingBook: PeakNote | undefined = (books.find(b => b.title.toLowerCase() === titleParam.toLowerCase() && b.author.toLowerCase() === authorParam.toLowerCase()))
 
             if (existingBook) {
-                setCurrentNote(existingBook)
+                // setCurrentNote(existingBook)
+                setNodeAndMove(existingBook)
                 setCreated(true)
             } else {
-                noteCreator(currentUser, {title: title, iconUrl: bookIconUrl, author: author}, journal.body as JournalEntry[]).then(setCurrentNote)
+                noteCreator(currentUser, {title: title, iconUrl: bookIconUrl, author: author}, journal.body as JournalEntry[]).then(setNodeAndMove)
                 setCreated(true)
             }
         }

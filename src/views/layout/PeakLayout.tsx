@@ -10,7 +10,7 @@ import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
+import {useCurrentUser, useCurrentPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
@@ -32,7 +32,7 @@ const PeakLayout = (props: {}) => {
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
     const [isLoading, setLoading] = useState(true);
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()

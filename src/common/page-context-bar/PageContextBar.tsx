@@ -9,7 +9,7 @@ import peakAxiosClient from "../../client/axiosConfig"
 import {DeleteOutlined, EditOutlined, QuestionCircleOutlined} from "@ant-design/icons/lib";
 import {useHistory} from "react-router-dom";
 import { batch } from 'react-redux'
-import {useCurrentUser, useCurrentWikiPage, useDetermineNextLink} from "../../utils/hooks";
+import {useCurrentUser, useCurrentPage, useDetermineNextLink} from "../../utils/hooks";
 import {setUserHierarchy} from "../../redux/slices/user/userSlice";
 import {PeakTopicNode} from "../../redux/slices/user/types";
 import {setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
@@ -19,7 +19,7 @@ const PageContextBar = (props: {topicId: string}) => {
     let history = useHistory();
     const dispatch = useDispatch()
     const editorState = useActiveEditorState()
-    const peakWikiPage = useCurrentWikiPage()
+    const peakWikiPage = useCurrentPage()
     const determineNextLink = useDetermineNextLink();
     const user = useCurrentUser()
 

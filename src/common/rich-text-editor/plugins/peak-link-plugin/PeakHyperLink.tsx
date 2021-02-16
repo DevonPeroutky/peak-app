@@ -1,5 +1,5 @@
 import {RenderElementProps, useSlate} from "slate-react";
-import {useCurrentWikiPage} from "../../../../utils/hooks";
+import {useCurrentPage} from "../../../../utils/hooks";
 import {useDispatch} from "react-redux";
 import {openEditLinkMenu, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import React from "react";

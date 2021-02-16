@@ -93,7 +93,9 @@ export const BookHeaderSection = (props: {note_id: string, icon_url: string, sel
                 <Link to={`/home/notes`}><CaretLeftFilled/> Back to Notes</Link>
             </div>
             <div className={"book-note-header-row"}>
-                <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
+                <div className={"image-section"}>
+                    <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
+                </div>
                 <div className={"note-header"}>
                     <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
                     <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>

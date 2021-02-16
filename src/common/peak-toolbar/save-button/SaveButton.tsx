@@ -1,13 +1,13 @@
 import { Button } from "antd";
 import React, { useState } from "react";
-import { useCurrentWikiPage, usePagePublisher } from '../../../utils/hooks';
+import { useCurrentPage, usePagePublisher } from '../../../utils/hooks';
 import "./save-button.scss";
 import {CheckOutlined} from "@ant-design/icons/lib";
 
 interface SaveButtonProps {}
 export const PublishButton = (props: SaveButtonProps) => {
     // CurrentPage saving state
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     const publishPage = usePagePublisher();
     const content = (currentWikiPage.isSaving) ? "Saving" : "Publish";
 

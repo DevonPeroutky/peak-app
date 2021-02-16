@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Editor, Node, Transforms} from 'slate';
 import {useEditor} from 'slate-react'
 import {
-    useCurrentWikiPage,
+    useCurrentPage,
     useSavePageRequest,
     useDebounceWikiSaver,
     useDebounceBulkJournalEntrySaver, useCurrentUser
@@ -26,7 +26,7 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
 
     // Hooks
     const currentUser = useCurrentUser()
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     const editorState = useActiveEditorState();
     const dispatch = useDispatch();
     const savePageToDB = useSavePageRequest();
@@ -116,9 +116,11 @@ const PeakCodeEditor = (props: { attributes: any, children: any, element: any })
     // Focus handler
     const lockFocus = (shouldFocusThis: boolean) => {
         wikiSave.cancel()
+        console.log(`WE LOCKING IN FOCUS BRAH `, shouldFocusThis)
         forceFocusToNode(element, shouldFocusThis)
     }
     const shouldFocus: boolean = editorState.focusMap[element.id] || false
+    console.log(`SHOULD BE FOCUSING: (${element.id}) `, shouldFocus)
     return (
         <div
             {...props.attributes}

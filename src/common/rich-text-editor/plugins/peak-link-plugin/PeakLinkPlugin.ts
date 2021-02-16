@@ -8,7 +8,6 @@ import renderElementLink from "./PeakHyperLink";
 import {Editor, Node, Range} from "slate";
 import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {store} from "../../../../redux/store";
-import {getCurrentPageId} from "../../../../utils/links";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 
 export const PeakLinkPlugin = (options?: any): SlatePlugin => {

@@ -41,11 +41,9 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
 
         if (currentNote && !equals(newBody, noteContent)) {
             setNoteContent(newBody)
-            console.log(`SAvinG NOTE CONTENT`, currentNote, newBody)
             noteSaver(currentUser, currentNote, { body: newBody[0]["children"] as Node[] }, journal.body as JournalEntry[])
         }
         onChangeMention(editor);
-        ReactEditor.focus(editor)
     }
 
     // Why the fuck is this needed
