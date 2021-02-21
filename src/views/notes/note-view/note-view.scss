@@ -8,6 +8,7 @@
   .note-header-section {
     display: flex;
     flex-direction: column;
+    min-height: 175px;
 
     .note-subheader-section {
       display: flex;
@@ -71,14 +72,19 @@
       justify-content: flex-start;
       min-height: 88px;
 
+      .image-section {
+        display: flex;
+        min-width: 72px;
 
-      .book-note-cover-image {
-        width: 64px;
-        height: auto;
-
-        svg {
-          width: 48px;
+        .book-note-cover-image {
+          max-width: 100%;
+          width: 64px;
           height: auto;
+
+          svg {
+            width: 48px;
+            height: auto;
+          }
         }
       }
 
@@ -109,9 +115,9 @@
     }
   }
 
-  .note-divider {
-    margin-top: 32px;
-    margin-bottom: 32px;
-  }
+  //.note-divider {
+  //  margin-top: 32px;
+  //  margin-bottom: 32px;
+  //}
 
 }

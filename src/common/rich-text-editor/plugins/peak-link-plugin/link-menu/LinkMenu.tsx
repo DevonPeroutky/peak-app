@@ -80,7 +80,6 @@ const LinkMenu = (props: LinkMenuProps) => {
     }
 
     useEffect(() => {
-        console.log(`USING THE useEffect in LinkMenu`)
         const el = ref.current;
 
         if (!el) {

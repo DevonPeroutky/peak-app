@@ -1,10 +1,10 @@
 import React from 'react'
 import {FileOutlined, MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
-import {PeakDisplayNode} from "../../../redux/slices/user/userSlice";
 import "./quick-switch-item.scss"
 import {AutoComplete} from "antd";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5 } from "@udecode/slate-plugins";
 import {JOURNAL, TIMELINE, TITLE} from "../../rich-text-editor/types";
+import {PeakDisplayNode} from "../../../redux/slices/user/types";
 const { Option } = AutoComplete;
 
 const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {

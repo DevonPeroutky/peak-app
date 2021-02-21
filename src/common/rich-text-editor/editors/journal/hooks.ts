@@ -16,9 +16,9 @@ import {JOURNAL_CHANNEL_ID} from "./constants";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
 
 export const useJournalSubscription = () => {
-    function appendWebNoteToJournal(webNoteNodes: Node[], journal: PeakWikiPage): JournalEntry {
+    function appendWebNoteToJournal(webNoteNodes: Node[], journal: PeakWikiPage, note_id: string): JournalEntry {
         const today: JournalEntry = journal.body[0] as JournalEntry
-        return {...today, body: [...today.body, ...webNoteNodes]}
+        return {...today, body: [...today.body, ...webNoteNodes] }
     }
 
     const user = useCurrentUser()
@@ -33,7 +33,7 @@ export const useJournalSubscription = () => {
                 console.log(`Received nodes of web_note from backend broadcast`, res)
                 const newlyCreatedNote: PeakNote = res.note
                 const appState: AppState = store.getState()
-                const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.journal_nodes, appState.peakWikiState[JOURNAL])
+                const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.journal_nodes, appState.peakWikiState[JOURNAL], newlyCreatedNote.id)
                 batch(() => {
                     dispatch(updateJournalEntry(newJournalEntryForToday))
                     dispatch(upsertNote(newlyCreatedNote))

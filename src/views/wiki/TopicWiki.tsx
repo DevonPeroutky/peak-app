@@ -7,7 +7,7 @@ import {createEditor, Node} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import {useHotkeys} from "react-hotkeys-hook";
-import { usePagePublisher, useDebounceWikiSaver, useCurrentWikiPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
+import { usePagePublisher, useDebounceWikiSaver, useCurrentPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
 import { equals } from "ramda";
 import { EditablePlugins, pipe } from "@udecode/slate-plugins";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -23,7 +23,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     const publishPage = usePagePublisher();
     const savePageToDB = useDebounceWikiSaver();
     const updatePageEverywhere = useDebouncePageTitleUpdater();
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     const currentPageId: string = currentWikiPage.id;
 
     const [wikiPageContent, setWikiPageContent] = useState<Node[]>(currentWikiPage.body as Node[])
@@ -91,9 +91,6 @@ const TopicWiki = (props: {topic_id: string}) => {
             onChangeMention(editor);
         }
     }
-
-    console.log(`Re-RENDERING Topic Wiki`)
-
     return (
         <Slate
             editor={editor}

@@ -2,6 +2,7 @@ import {PeakKnowledgeNode} from "./components/peak-knowledge-node/PeakKnowledgeN
 import {BlockquotePluginOptionsValues} from "@udecode/slate-plugins";
 import {PeakKnowledgeKeyOption} from "./types";
 import {ELEMENT_PEAK_BOOK, ELEMENT_WEB_NOTE, PEAK_LEARNING} from "./constants";
+import {PeakLearningNode} from "./components/peak-learning-node/PeakLearningNode";
 
 export const DEFAULTS_PEAK_KNOWLEDGE: Record<
     PeakKnowledgeKeyOption,
@@ -24,7 +25,7 @@ export const DEFAULTS_PEAK_KNOWLEDGE: Record<
         },
     },
     learning: {
-        component: PeakKnowledgeNode,
+        component: PeakLearningNode,
         type: PEAK_LEARNING,
         rootProps: {
             className: `slate-PLUGIN-peak-learning`,

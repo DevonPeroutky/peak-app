@@ -1,7 +1,7 @@
 import React from "react"
 import {HelpModal} from "../modals/help-modal/HelpModal";
 import "./editor-context-bar.scss"
-import {useCurrentWikiPage} from "../../utils/hooks";
+import {useCurrentPage} from "../../utils/hooks";
 import {CheckOutlined} from "@ant-design/icons/lib";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 

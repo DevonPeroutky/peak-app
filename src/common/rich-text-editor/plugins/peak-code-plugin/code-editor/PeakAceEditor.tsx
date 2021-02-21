@@ -113,6 +113,7 @@ function PeakAceEditor(props: PeakCodeEditorProps) {
                     }
                 }}
                 onBlur={() => {
+                    console.log(`BLURRRING?!??!?!?!`)
                     updateFocus(false)
                     saveCode(codeBlockValue)
                 }}

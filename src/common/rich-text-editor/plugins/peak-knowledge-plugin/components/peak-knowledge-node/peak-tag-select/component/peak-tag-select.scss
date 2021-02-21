@@ -44,6 +44,24 @@
 
 }
 
+.note {
+  .ant-select {
+    padding-left: 0!important;
+
+    .ant-select-selector {
+      padding-left: 0 !important;
+
+      .ant-select-selection-search {
+        //left: -4px;
+      }
+
+      .ant-select-selection-placeholder {
+        left: 0px;
+      }
+    }
+  }
+}
+
 .peak-tag-select-dropdown {
   z-index: 2147483646!important;
   pointer-events: auto!important;

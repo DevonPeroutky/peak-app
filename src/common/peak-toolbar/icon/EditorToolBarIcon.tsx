@@ -15,7 +15,7 @@ import {
 import { PeakEditorControlDisplay} from "../toolbar-controls";
 import { capitalize } from "lodash";
 import {PeakWikiPage} from "../../../redux/slices/wikiPageSlice";
-import {useCurrentWikiPage} from "../../../utils/hooks";
+import {useCurrentPage} from "../../../utils/hooks";
 
 export const EditorToolBarIcon = (props: {
     isDisabled: boolean,
@@ -25,7 +25,7 @@ export const EditorToolBarIcon = (props: {
 }) => {
     const { editorControl, isScrolled, className } = props;
     const editor = useSlate();
-    const currentPage: PeakWikiPage = useCurrentWikiPage()
+    const currentPage: PeakWikiPage = useCurrentPage()
     const tooltipContent = <div>{capitalize(editorControl.label)} <span className={"hotkey-command-tag"}>{editorControl.hotkeyInstructionArray.join(" ")}</span></div>;
 
     const handleClick = () => {

@@ -10,8 +10,6 @@ export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any)
     const [currNode, currPath] = (nodeEntry) ? nodeEntry : Editor.above(editor)
     const [currParent, currParentPath] = Editor.parent(editor, currPath)
     const [lastChildNode] = currParent.children.slice(-1)
-    console.log(`CURR PARENT`)
-    console.log(currParent)
     return isPeakKnowledgeNoteType(currParent) && lastChildNode.id === currNode.id
 }
 
@@ -25,7 +23,6 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
     if (worthEvaluating && event.key == "ArrowDown") {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
-        console.log(`GOING DOWN`)
 
         if (isAtLastLineOfPeakKnowledgeNode(editor)) {
             console.log(`WE ARE AT END OF THE KNOWLEDGE NODE`)
@@ -37,10 +34,7 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: Editor) => {
         const [currNode, currPath] = Editor.above(editor)
         const [currParent, currParentPath] = Editor.parent(editor, currPath)
 
-        console.log(`GOING UP`)
-
         const previousNode: Node | undefined = previous(reactEditor)
-        console.log(previousNode)
         if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakKnowledgeNoteType(previousNode)) {
             console.log(`WE ARE DIRECTLY BELOW A KNOWLEDGE NODE`)
             event.preventDefault();

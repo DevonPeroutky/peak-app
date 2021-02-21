@@ -10,7 +10,7 @@ import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentWikiPage, useOnlineStatus} from "../../utils/hooks";
+import {useCurrentUser, useCurrentPage, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
@@ -21,13 +21,18 @@ import {useJournalSubscription} from "../../common/rich-text-editor/editors/jour
 import {establishSocketConnection} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
+import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
+import {
+    ELEMENT_PEAK_BOOK,
+    ELEMENT_WEB_NOTE
+} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
     const [isLoading, setLoading] = useState(true);
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()
@@ -68,6 +73,7 @@ const PeakLayout = (props: {}) => {
                     <Content className="peak-content-container">
                        <Switch>
                            <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                           <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                            <Route path={`${match.path}/notes/:id`} render={(props) => {
                                if (props.match.params && props.match.params.id) {
                                    return <PeakNoteView key={props.match.params.id} {...props} />
@@ -75,7 +81,8 @@ const PeakLayout = (props: {}) => {
                                    return <Redirect to={"/"} />
                                }
                            }} />
-                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView />} />
+                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
+                           <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
                            <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                            <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
                            <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />

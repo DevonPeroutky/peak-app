@@ -1,0 +1,53 @@
+@import "../../../../../constants/variables";
+
+.peak-note-stub-container {
+  user-select: none;
+  user-focus: none;
+  tab-index: -1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: $peak-kn-border-radius;
+  box-shadow: $peak-kn-box-shadow;
+  padding: $peak-kn-padding;
+  min-height: 50px;
+  border: none;
+
+  .peak-note-stub-title-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding-right: 10px;
+    color: $placeholder-text-color;
+    user-select: none;
+
+    .knowledge-label {
+      display: flex;
+      align-items: center;
+      color: $text-color;
+
+      .edit-icon {
+        margin-right: 10px;
+      }
+
+      .title-row-icon {
+        margin-left: 10px;
+        margin-right: 5px;
+
+        &.book {
+          color: $primary-blue;
+        }
+        &.learning {
+          color: $primary-green;
+        }
+        &.web {
+          color: $primary-red;
+        }
+      }
+
+      .link-to-note {
+        margin-right: 5px;
+      }
+    }
+  }
+}

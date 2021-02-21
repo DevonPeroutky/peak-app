@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
-import {useCurrentUser, useCurrentWikiPage} from "../../../../../../../../utils/hooks";
+import {useCurrentUser} from "../../../../../../../../utils/hooks";
 import React, {useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
@@ -26,11 +26,11 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const dispatch = useDispatch()
     const editor = useEditor()
     const existingTags = useTags()
+    const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const currentUser = useCurrentUser()
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const editorState = useActiveEditorState()
-    const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
@@ -43,7 +43,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         if (existingTag) {
             setSelectedTags([...displaySelectedTags, existingTag])
         } else {
-            const newColor: string = calculateNextColor(tags, selected_tags)
+            const newColor: string = calculateNextColor(tags, displaySelectedTags)
             const newTag: PeakTag = {id: STUB_TAG_ID, title: displayLabel.value as string, color: newColor as string}
             setSelectedTags([...displaySelectedTags, newTag])
         }
@@ -94,6 +94,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         }
     }
     const lockFocus = (shouldFocus: boolean) => {
+        console.log(`LOCKING FOCUS to Tagselect`)
         dispatch(setEditorFocusToNode({nodeId: nodeId, focused: shouldFocus}))
     }
 

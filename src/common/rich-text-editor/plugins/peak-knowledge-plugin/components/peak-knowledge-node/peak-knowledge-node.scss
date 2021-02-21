@@ -2,53 +2,91 @@
 
 $title-row-height: 30px;
 $margin-top: 20px;
+$web-body-padding: 20px;
 .peak-knowledge-node-container {
   margin-top: $margin-top;
+  border-radius: $peak-kn-border-radius;
   box-shadow: $peak-kn-box-shadow;
-  padding: $peak-kn-padding;
+  //padding: $peak-kn-padding;
   border: none;
 
   .peak-knowledge-title-row {
-    position: absolute;
-    top: calc(-#{$title-row-height / 2} + #{$margin-top} + 1px);
     display: flex;
+    padding: $peak-kn-padding;
+    border-bottom: 1px solid $gray-accent-color;
     align-items: center;
-    background-color: $background-color;
-    padding-left: 10px;
-    padding-right: 10px;
+    //padding-left: 10px;
+    //padding-right: 10px;
     height: $title-row-height;
-    color: $placeholder-text-color;
+    //color: $placeholder-text-color;
     user-select: none;
+    justify-content: space-between;
 
-    .title-row-icon {
-      margin-right: 5px;
+    .title-section {
+      display: flex;
+      align-items: center;
 
-      &.book {
-        color: $primary-blue;
+      .main-icon {
+        margin-right: 10px;
       }
-      &.learning {
-        color: $primary-green;
+
+      .title-row-icon {
+        margin-right: 5px;
+        margin-left: 5px;
+
+        &.book {
+          color: $primary-blue;
+        }
+        &.learning {
+          color: $primary-green;
+        }
+        &.web {
+          color: $primary-red;
+        }
       }
-      &.web {
-        color: $primary-red;
+
+      .knowledge-label {
+        color: $text-color;
       }
     }
 
-    .knowledge-label {
-      color: $text-color;
+    .icon-section {
+      display: flex;
+      align-items: center;
+
+      .external-link-icon {
+        margin-left: 10px;
+      }
     }
+
   }
 
-  &.empty::after {
-    position: absolute;
-    color: $placeholder-text-color;
-    top: $margin-top;
-    cursor: text;
-    content: "Write down something that caught your attention....";
+  .web-body {
     display: flex;
-    align-items: center;
-    line-height: inherit;
-    padding-top: calc(#{$peak-kn-padding-top} + 5px);
-    pointer-events:none;
+    padding-top: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    //line-height: 18px;
+    //padding-bottom: 24px;
+
+    &.empty::after {
+      position: absolute;
+      padding-top: 3px;
+      top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
+      color: $placeholder-text-color;
+      cursor: text;
+      content: "Write down something that caught your attention....";
+      display: flex;
+      align-items: center;
+      line-height: inherit;
+      //padding-top: calc(#{$peak-kn-padding-top} + 5px);
+      pointer-events:none;
+    }
   }
+
+  .web-footer {
+    padding-left: 24px;
+    padding-bottom: 24px;
+  }
+
 }

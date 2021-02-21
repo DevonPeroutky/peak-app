@@ -17,12 +17,11 @@ import {
     convertPeakBookToNodeSelectListItem, insertNodeContent,
     isTextAfterTrigger
 } from "./utils";
-import {createNewPeakBook, useBooks} from "../../../../client/notes";
-import {useCurrentUser} from "../../../../utils/hooks";
+import {useBooks} from "../../../../client/notes";
 import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
-import {useSlate} from "slate-react";
+import {useHistory} from "react-router-dom";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number
@@ -31,7 +30,8 @@ interface PeakNodeSelectMenuOptions extends UseMentionOptions {
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
 ) => {
-    const currentUser = useCurrentUser()
+
+    let history = useHistory();
     const books = useBooks()
     const openLibrarySearcher = useDebounceOpenLibrarySearcher()
 
@@ -42,7 +42,6 @@ export const useNodeContentSelect = (
     const [menuItems, setMenuItems] = useState(NODE_CONTENT_LIST_ITEMS);
     const [openLibraryBooks, setOpenLibraryBooks] = useState<OpenLibraryBook[]>([]);
     const [search, setSearch] = useState('');
-    console.log(`Re RENDERING THE NodeContentSelect!`, bookSelectItems)
 
     const filterValues = () => {
         const filteredValues: PeakNodeSelectListItem[] = menuItems
@@ -55,13 +54,11 @@ export const useNodeContentSelect = (
     const values = filterValues();
 
     const searchLibary = () => {
-        const newThings = openLibraryBooks
-        return newThings
+        return openLibraryBooks
     }
     const library: OpenLibraryBook[] = searchLibary()
 
     useEffect(() => {
-        console.log(`SET BOOK SELECT ITEMS `, books)
         setBookSelectItems(books.map(convertPeakBookToNodeSelectListItem))
     }, [books.length]);
 
@@ -90,23 +87,31 @@ export const useNodeContentSelect = (
                     Transforms.insertText(editor, '/', { at: editor.selection! } )
                     return setTargetRange(null);
                 } else {
-                    console.log(`INSERTING YA BOYYY`)
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
 
-                    // IF CREATING A NEW BOOK
-                    // We need to insert w/The ID
-                    if (data.elementType === ELEMENT_PEAK_BOOK && data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
-                        createNewPeakBook(currentUser.id, data).then((newPeakBookItem) => {
-                            insertNodeContent(editor, newPeakBookItem, targetRange)
-                            resetNodeMenuItem()
-                            return setTargetRange(null);
-                        })
-                    } else {
-                        insertNodeContent(editor, data, targetRange)
-                        resetNodeMenuItem()
-                        return setTargetRange(null);
+                    if (data.elementType === ELEMENT_PEAK_BOOK) {
+                        // IF CREATING A NEW BOOK
+                        if (data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
+                            return new Promise(function(resolve, reject) {
+                                resetNodeMenuItem()
+                                resolve(setTargetRange(null))
+                            }).then(() => history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`))
+
+                        // IF Referencing a book
+                        } else {
+                            return new Promise(function(resolve, reject) {
+                                resetNodeMenuItem()
+                                resolve(setTargetRange(null))
+                            }).then(() => history.push(`/home/notes/${data.noteId}`))
+
+                        }
                     }
+
+                    // Insert Normally
+                    insertNodeContent(editor, data, targetRange)
+                    resetNodeMenuItem()
+                    return setTargetRange(null);
                 }
             }
         },

@@ -88,3 +88,4 @@ export function findNode(editor: Editor, match: (n: Node) => boolean) {
     })
     return res
 }
+

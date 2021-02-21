@@ -2,7 +2,7 @@ import {Editor, Node, Range, Transforms} from "slate";
 import {ELEMENT_CODE_BLOCK, ELEMENT_LI, ELEMENT_PARAGRAPH, isSelectionAtBlockStart} from "@udecode/slate-plugins";
 import {store} from "../../../../redux/store";
 import {setEditorFocusToNode} from "../../../../redux/slices/activeEditor/activeEditorSlice";
-import {insertCustomBlockElement, next, previous} from "../../utils/base-utils";
+import {next, previous} from "../../utils/base-utils";
 import {ReactEditor} from "slate-react";
 import {forceFocusToNode} from "../../utils/external-editor-utils";
 import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
@@ -10,18 +10,19 @@ import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
 export const createAndFocusCodeBlock = (editor: Editor) => {
     const nodeId = Date.now()
     console.log(`CREATING A CODE BLOCK`)
+    const codeNode = {
+        type: ELEMENT_CODE_BLOCK,
+        id: nodeId,
+        children: [{text: ''}]
+    }
 
     // DOESN'T WORK in first line of JOURNAL due to normalization error
     // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, [
-        {
-            type: ELEMENT_CODE_BLOCK,
-            id: nodeId,
-            children: [{text: ''}]
-        },
+        codeNode,
         EMPTY_PARAGRAPH_NODE()
     ]);
-    store.dispatch(setEditorFocusToNode({nodeId: nodeId, focused: true}))
+    forceFocusToNode(codeNode, true)
 }
 
 export const peakCodeEditorOnKeyDownHandler = (event: any, editor: Editor) => {

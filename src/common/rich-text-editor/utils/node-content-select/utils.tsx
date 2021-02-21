@@ -24,10 +24,10 @@ export function convertEditorControlDisplayToNodeSelectListItem(node: PeakEditor
 }
 
 export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSelectListItem {
-    console.log(`CONVERTING THE BOOK `, book)
     return {
         title: book.title,
         label: book.title,
+        noteId: book.id,
         description: book.author,
         author: book.author,
         elementType: ELEMENT_PEAK_BOOK,
@@ -46,6 +46,7 @@ export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook
         title: book.title,
         label: `${book.title}`,
         description: author,
+        coverId: book.cover_i,
         author: author,
         iconUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
         knowledgeNodeId: "-69",
@@ -60,7 +61,7 @@ export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook
 }
 
 export function insertBookElementCallback(book: PeakNote): (editor: Editor) => void {
-    return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {bookId: book.id, title: book.title}))
+    return (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK, {noteId: book.id, title: book.title}))
 }
 
 /**

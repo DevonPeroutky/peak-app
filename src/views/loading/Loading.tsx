@@ -23,7 +23,6 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
     }, []);
 
     const isLoading = () => {
-        console.log(`I AM GETTING CALLED --> ${loaded}`);
         return loaded
     };
 

@@ -16,7 +16,7 @@ import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
-import {isEmpty} from "ramda";
+import {isEmpty, not} from "ramda";
 import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
@@ -30,6 +30,8 @@ import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
 import {PeakTopicNode} from "../redux/slices/user/types";
 import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/activeEditor/activeEditorSlice";
+import {useNotes} from "../client/notes";
+import {PeakNote} from "../redux/slices/noteSlice";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -88,8 +90,6 @@ export function useIsFullscreen() {
  */
 export function useCurrentPageId() {
     const location = useLocation();
-
-    // TODO: HANDLE JOURNAL
     const url = location.pathname.split("/");
     const currentPageId = url.pop()!;
     return currentPageId
@@ -99,10 +99,33 @@ export function useCurrentPageId() {
  * Use this for getting the current wiki page. Do not use this externally for just getting the page id, as this will come
  * back null for pages that are not wiki Pages.
  */
-export function useCurrentWikiPage() {
-    const currentPageId = useCurrentPageId();
+export function useCurrentPage() {
+    const location = useLocation();
+    const notes = useNotes()
     const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
-    return peakWikiState[currentPageId];
+    const url = location.pathname.split("/");
+    const currentPageId = url.pop()!;
+    const pageType = url.pop()!;
+
+    // if (pageId === "") {
+    //
+    // }
+
+    if (pageType === "notes") {
+        const note: PeakNote = notes.find(n => n.id === currentPageId)
+        return { id: note.id, body: note.body, title: note.title }
+    } else {
+        return peakWikiState[currentPageId];
+    }
+}
+
+export function useCurrentPageContent() {
+    const notes = useNotes()
+    const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
+
+    return (pageId: string) => {
+
+    }
 }
 
 // --------------------------------------------------
@@ -166,7 +189,7 @@ export const useDetermineNextLink = () => {
 // --------------------------------------------------
 export function usePagePublisher() {
     const dispatch = useDispatch();
-    const currentWikiPage = useCurrentWikiPage();
+    const currentWikiPage = useCurrentPage();
     return () => {
         dispatch(setEditing({ isEditing: false }));
         notification.success({ message: "Published", duration: 1});
@@ -175,13 +198,14 @@ export function usePagePublisher() {
 
 export function useSavePageRequest() {
     const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
-    const topics: PeakTopic[] = useTopics()
-    const deriveNewHierarchy = useUpdatePageInHierarchy()
+    // const topics: PeakTopic[] = useTopics()
+    // const deriveNewHierarchy = useUpdatePageInHierarchy()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
-        const currentTopic: PeakTopic = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
-        const newHierarchy = deriveNewHierarchy(newValue, currentTopic.id, pageId)
-        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, newHierarchy)
+        // TODO: This breaks with CodeEditing in Notes because the pageId is different.
+        // const currentTopic: PeakTopic = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
+        // const newHierarchy = deriveNewHierarchy(newValue, currentTopic.id, pageId)
+        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, user.hierarchy)
     }
 }
 
@@ -268,7 +292,7 @@ export function useJournalSaver() {
     }
 }
 
-function useBulkJournalEntrySaver() {
+export function useBulkJournalEntrySaver() {
     const dispatch = useDispatch();
     const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
     return (entries: JournalEntry[], user: Peaker) => {
@@ -302,9 +326,7 @@ export function useFetchJournal() {
         return peakAxiosClient
             .get(`/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
             .then(res => {
-                console.log(`JOURNAL ENTRIES RES`, res.data.journal_entries)
                 const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
-                console.log(`Sorted Journal`, sortedJournal)
                 dispatch(setJournalEntries(sortedJournal))
                 return sortedJournal
             }).catch(err => {
@@ -315,7 +337,6 @@ export function useFetchJournal() {
             })
     }
 }
-
 
 const useUpdatePageTitleEverywhere = () => {
     const dispatch = useDispatch()

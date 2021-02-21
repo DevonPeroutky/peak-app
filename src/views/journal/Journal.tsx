@@ -262,8 +262,6 @@ const Journal = (props: InternalJournalProps) => {
         onAddNodeContent
     } = props
     const editorState = useActiveEditorState()
-    console.log(`RE-RENDERING JOURNAL`)
-    console.log(`-------------------`)
 
     return (
         <Slate
