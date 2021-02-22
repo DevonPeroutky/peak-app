@@ -93,4 +93,5 @@ out/
 
 build/
 dist/
+extension-dist/
 set-build-secrets.sh

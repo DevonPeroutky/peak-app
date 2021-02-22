@@ -19,6 +19,8 @@ export const PeakWelcome = (props: {}) => {
     const desktopFlow: boolean = desktopLoginParam != null && desktopLoginParam == "true"
     const loggedOutFlow: boolean = loggedOutParam != null && loggedOutParam == "true"
     const addAccountFlow: boolean = addAccountParam != null && addAccountParam == "true"
+    console.log(config)
+    console.log(`Desktop `, desktopFlow)
 
     return (
         <div className={"welcome-page-container"}>
