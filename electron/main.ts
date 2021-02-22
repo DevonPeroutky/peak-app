@@ -2,7 +2,7 @@ import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import config from "../src/constants/environment-vars"
-require('update-electron-app')()
+import { autoUpdater } from "electron-updater"
 
 const { Deeplink } = require('electron-deeplink');
 const protocol = config.protocol;
@@ -75,6 +75,16 @@ const createWindow = (): void => {
     mainWindow && mainWindow.webContents.send('fullscreen', false)
   })
 
+  mainWindow.webContents.on("did-finish-load", () => {
+    log.info("Checking for updates")
+      autoUpdater.checkForUpdatesAndNotify().then((res) => {
+        log.info(`Update response `)
+        log.info(res)
+      }).catch((err) => {
+        log.error(`Checking for updates failed`)
+        log.error(err.toString())
+      });
+  })
 };
 
 

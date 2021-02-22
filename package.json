@@ -39,12 +39,9 @@
     "mac": {
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
-      "target": "dmg",
+      "target": ["dmg", "zip"],
       "category": "public.app-category.productivity",
-      "icon": "build/icon.png"
-    },
-    "directories": {
-      "buildResources": "assets"
+      "icon": "build/assets/icon.icns"
     },
     "afterSign": "scripts/notarize.js"
   },
@@ -130,6 +127,7 @@
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.2.4",
     "electron-reload": "^1.5.0",
+    "electron-updater": "^4.3.5",
     "electron-webpack": "^2.8.2",
     "eslint": "^6.6.0",
     "immutability-helper": "^3.1.1",
@@ -159,7 +157,6 @@
     "slate-hyperscript": "^0.59.0",
     "slate-react": "^0.59.0",
     "styled-components": "^5.1.1",
-    "update-electron-app": "^2.0.1",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"
   }

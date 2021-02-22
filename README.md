@@ -2,12 +2,48 @@ The Navy SEALs live by a motto that captures this repository well: “no one is 
 
 Good Luck.
 
-
+# Components
 ## Chrome Extension
 At one point based off of this [template](https://github.com/sivertschou/react-typescript-chrome-extension-boilerplate)
+
+
+### Publishing a new version of the Webapp
+1. Merge your PR into main with the version bumped in the `manifest.json`
+2. Remove the `key` field from `public/manifest.json`
+3. Run `yarn extension:build`
+4. Zip the output `/extension-dist` from the previous step  
+5. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
+6. *Re-add the `key` field back into `public/manifest.json`* (Needed for development, but can't be in production build)
 
 ## Webapp
 Bootstrapped using `yarn create react-app antd-demo-ts --template typescript`
 
+### Publishing a new version of the Webapp
+- Once a PR is merged to main, render will automatically re-deploy the webapp. 
+
+## Backend Server
+An elixir project built using Elixir, Phoenix, and Ecto. Also hosted on Render. Source code lives in a private [Gitlab repo](https://gitlab.com/peak1/peak-backend), but will be open-sourced as well as some point.  
+
+#### Publishing a new version of the Backend
+- Once a PR is merged to main, render will automatically re-deploy the backend service 
+
+
 ## Electron
 Using [Electron-Builder](https://www.electron.build/) to package up the webapp.
+
+### Publishing a new version of the Electron App
+- Once a PR is merged to main, render will automatically re-deploy the webapp. 
+
+
+## Random Things
+### Verify Signing Cheatsheet
+- `codesign -vvv --deep --strict out/my-new-app-darwin-x64/my-new-app.app`
+- `codesign --display --entitlements :- out/my-new-app-darwin-x64/my-new-app.app` 
+- `codesign -dvv out/my-new-app-darwin-x64/my-new-app.app`
+- `security cms -D -i /path/to/your.app/Contents/embedded.provisionprofile`
+- `codesign --test-requirement="=notarized" --verify --verbose <appname.app>`
+
+Maybe [this](https://snippets.cacher.io/snippet/354a3eb7b0dcbe711383) works
+
+## Weird Gotchas
+- Shouldn't need to target a `zip` output for electron, however we need to for [auto-updater to work](https://github.com/electron-userland/electron-builder/issues/2199) 
