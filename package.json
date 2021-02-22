@@ -41,10 +41,7 @@
       "gatekeeperAssess": false,
       "target": ["dmg", "zip"],
       "category": "public.app-category.productivity",
-      "icon": "build/icon.png"
-    },
-    "directories": {
-      "buildResources": "assets"
+      "icon": "build/assets/icon.icns"
     },
     "afterSign": "scripts/notarize.js"
   },
