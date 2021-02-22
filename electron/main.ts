@@ -16,11 +16,6 @@ const protocol = config.protocol;
 // Instantiate Deep Link listener
 const deeplink = new Deeplink({ app, mainWindow, protocol, isDev });
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  app.quit();
-}
-
 // on macOS: ~/Library/Logs/{app name}/{process type}.log
 log.info(`Main Window Webpack`)
 log.info(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -70,6 +65,11 @@ const createWindow = (): void => {
 
 };
 
+
+
+// --------------------------------------------------------
+// Electron Listeners
+// --------------------------------------------------------
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
