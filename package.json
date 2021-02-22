@@ -1,46 +1,83 @@
 {
   "name": "peak-app",
   "productName": "Peak",
-  "version": "0.0.1-beta-3",
-  "repository": "DevonPeroutky/peak-app",
+  "author": {
+    "name": "Devon",
+    "email": "devonperoutky@gmail.com"
+  },
   "description": "Your Peakiest Peak",
-  "main": "./.webpack/main",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevonPeroutky/peak-app.git"
+  },
+  "homepage": ".",
+  "main": "build/electron/main.js",
+  "version": "0.0.1-beta-1",
   "scripts": {
     "extension:dev": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
     "extension:build": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
-    "webapp:dev": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
-    "webapp:prod": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
-    "electron:dev": "REACT_APP_DIST=electron REACT_APP_ENV=dev electron-forge start",
-    "dev": "concurrently \"yarn webapp:dev\" \"yarn electron:dev\"",
-    "package": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge package",
-    "make": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge make",
-    "publish": "REACT_APP_DIST=electron REACT_APP_ENV=prod electron-forge publish"
+    "start": "REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
+    "build": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
+    "electron:dev": "concurrently \"BROWSER=none REACT_APP_DIST=electron REACT_APP_ENV=dev react-scripts start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "dev": "concurrently \"yarn start\" \"yarn electron:dev\"",
+    "electron:build": "REACT_APP_DIST=electron REACT_APP_ENV=prod react-scripts build && tsc -p electron && electron-builder",
+    "electron:publish": "REACT_APP_DIST=electron REACT_APP_ENV=prod react-scripts build && tsc -p electron && electron-builder --publish=always",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "extends": null,
+    "files": [
+      "build/**/*"
+    ],
+    "appId": "com.Massive.Peak",
+    "dmg": {
+      "sign": false
+    },
+    "publish": [
+      "github"
+    ],
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png"
+    },
+    "directories": {
+      "buildResources": "assets"
+    },
+    "afterSign": "scripts/notarize.js"
   },
   "keywords": [],
-  "author": {
-    "name": "DevonPeroutky",
-    "email": "devonperoutky@gmail.com"
-  },
   "license": "MIT",
-  "config": {
-    "forge": "./build-config/forge/forge.config.js"
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "no-unused-vars": "off",
+      "noImplicitReturns": false
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.10.4",
-    "@electron-forge/cli": "6.0.0-beta.53",
-    "@electron-forge/maker-deb": "6.0.0-beta.53",
-    "@electron-forge/maker-rpm": "6.0.0-beta.53",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.53",
-    "@electron-forge/maker-zip": "6.0.0-beta.53",
-    "@electron-forge/plugin-webpack": "^6.0.0-beta.53",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
-    "babel-loader": "8.1.0",
     "concurrently": "^5.3.0",
     "cpy": "^8.1.1",
     "css-loader": "^4.3.0",
     "electron": "10.1.3",
+    "electron-builder": "^22.9.1",
     "electron-notarize": "^1.0.0",
     "electron-webpack-ts": "^4.0.1",
     "eslint-plugin-import": "^2.20.0",
@@ -52,26 +89,21 @@
     "style-loader": "^1.3.0",
     "ts-loader": "^8.0.4",
     "ttf-loader": "^1.0.2",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "wait-on": "^5.2.1"
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@crello/react-lottie": "^0.0.7",
-    "@electron-forge/publisher-github": "^6.0.0-beta.54",
     "@iconify/icons-gridicons": "^1.0.6",
     "@iconify/react": "^1.1.3",
     "@n8tb1t/use-scroll-position": "^1.0.43",
     "@reduxjs/toolkit": "^1.2.5",
-    "@storybook/addon-knobs": "^5.3.19",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "@types/chrome": "^0.0.127",
     "@types/classnames": "^2.2.10",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/immutability-helper": "^2.6.3",
     "@types/is-url": "^1.2.28",
-    "@types/jest": "^24.0.0",
     "@types/lodash": "^4.14.150",
     "@types/node": "^12.0.0",
     "@types/phoenix": "^1.5.1",
@@ -97,7 +129,6 @@
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.2.4",
     "electron-reload": "^1.5.0",
-    "electron-squirrel-startup": "^1.0.0",
     "electron-webpack": "^2.8.2",
     "eslint": "^6.6.0",
     "immutability-helper": "^3.1.1",
@@ -115,7 +146,6 @@
     "react-hot-keys": "^2.5.2",
     "react-hotkeys-hook": "^2.1.1",
     "react-image": "^4.0.3",
-    "react-infinite-scroll-component": "^5.0.5",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.3",
@@ -131,24 +161,5 @@
     "update-electron-app": "^2.0.1",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-unused-vars": "off",
-      "noImplicitReturns": false
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

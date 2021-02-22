@@ -29,7 +29,10 @@ const config = {
         extensions: [".js", ".jsx", ".tsx", ".ts"],
     },
     devServer: {
-        contentBase: "../../dist",
+        contentBase: "../../extension-dist",
+    },
+    output: {
+        path: path.resolve(__dirname, "../../extension-dist")
     },
     devtool: 'cheap-module-source-map',
     plugins: [

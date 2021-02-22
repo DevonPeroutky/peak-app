@@ -3,7 +3,7 @@ import { message, Popconfirm} from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { PeakTopic, deleteTopic} from "../../../redux/slices/topicSlice"
 import {AppState} from "../../../redux";
-import {Peaker, PeakTopicNode, setUserHierarchy} from "../../../redux/slices/user/userSlice";
+import {setUserHierarchy} from "../../../redux/slices/user/userSlice";
 import "./delete-topic-modal.scss";
 import {
     DeleteOutlined,
@@ -13,6 +13,8 @@ import cn from "classnames";
 import peakAxiosClient from "../../../client/axiosConfig"
 import {useHistory} from "react-router-dom";
 import {useCurrentUser} from "../../../utils/hooks";
+import {Peaker} from "../../../types";
+import {PeakTopicNode} from "../../../redux/slices/user/types";
 
 export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => {
     const { topicId, hovered } = props

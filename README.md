@@ -1,4 +1,3 @@
-1. Import renderer.tsx
-2. Handle images in webpack
-3. import over from main repo
-4. import public/
+The Navy SEALs live by a motto that captures this repository well: “no one is coming; it’s up to us.”
+
+Good Luck.

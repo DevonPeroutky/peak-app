@@ -14,8 +14,7 @@ import {
 } from "@udecode/slate-plugins";
 import { PeakEditorControlDisplay} from "../toolbar-controls";
 import { capitalize } from "lodash";
-import {PeakWikiPage} from "../../../redux/slices/wikiPageSlice";
-import {useCurrentPage} from "../../../utils/hooks";
+import {useActiveEditorState} from "../../../redux/slices/activeEditor/activeEditorSlice";
 
 export const EditorToolBarIcon = (props: {
     isDisabled: boolean,
@@ -25,7 +24,7 @@ export const EditorToolBarIcon = (props: {
 }) => {
     const { editorControl, isScrolled, className } = props;
     const editor = useSlate();
-    const currentPage: PeakWikiPage = useCurrentPage()
+    const editorState = useActiveEditorState()
     const tooltipContent = <div>{capitalize(editorControl.label)} <span className={"hotkey-command-tag"}>{editorControl.hotkeyInstructionArray.join(" ")}</span></div>;
 
     const handleClick = () => {
@@ -63,8 +62,8 @@ export const EditorToolBarIcon = (props: {
             case "list":
                 return isNodeTypeIn(editor, editorControl.elementType);
             case ELEMENT_CODE_BLOCK:
-                const focusMap = currentPage.editorState.focusMap
-                return (focusMap) ? any((a: boolean) => { return a })(Object.values(currentPage.editorState.focusMap)) : false;
+                const focusMap = editorState.focusMap
+                return (focusMap) ? any((a: boolean) => { return a })(Object.values(editorState.focusMap)) : false;
             default:
                 return false;
         }

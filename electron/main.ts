@@ -1,56 +1,63 @@
 import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
-import config from "../constants/environment-vars"
+import * as path from 'path';
+import config from "../src/constants/environment-vars"
 require('update-electron-app')()
 
 const { Deeplink } = require('electron-deeplink');
+const protocol = config.protocol;
+
+// on macOS: ~/Library/Logs/{app name}/{process type}.log
 const log = require('electron-log');
 
 console.log(`Is Dev? ${isDev}`)
-declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
 let mainWindow: BrowserWindow | null = null;
-const protocol = config.protocol;
 
 // Instantiate Deep Link listener
 const deeplink = new Deeplink({ app, mainWindow, protocol, isDev });
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  app.quit();
-}
-
-// on macOS: ~/Library/Logs/{app name}/{process type}.log
-log.info(`Main Window Webpack`)
-log.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 860,
-    width: 1320,
+    // width: 1320,
+    width: 600,
     title: "Peak",
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-      devTools: isDev,
+      devTools: true,  // TODO: isDev,
       nodeIntegration: true
     }
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  if (isDev){
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:3000/index.html');
     mainWindow.webContents.openDevTools({'mode': 'detach'});
+  } else {
+    const url = `file://${__dirname}/../index.html`
+    console.log(`THE URL `, url)
+    // 'build/index.html'
+    mainWindow.loadURL(url);
+  }
+
+  mainWindow.on('closed', () => mainWindow = null);
+
+  // Hot Reloading
+  if (isDev) {
+    // 'node_modules/.bin/electronPath'
+    require('electron-reload')(__dirname, {
+      electron: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
+      forceHardReset: true,
+      hardResetMethod: 'exit'
+    });
   }
 
   // All new-window events should load in the user's default browser
   // new-window events are when a user clicks on <a> link with target="_blank"
   mainWindow.webContents.on("new-window", function(event, url) {
-      event.preventDefault();
-      shell.openExternal(url);
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   mainWindow.webContents.send('fullscreen', false)
@@ -70,6 +77,11 @@ const createWindow = (): void => {
 
 };
 
+
+
+// --------------------------------------------------------
+// Electron Listeners
+// --------------------------------------------------------
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
