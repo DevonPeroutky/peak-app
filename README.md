@@ -11,3 +11,13 @@ Bootstrapped using `yarn create react-app antd-demo-ts --template typescript`
 
 ## Electron
 Using [Electron-Builder](https://www.electron.build/) to package up the webapp.
+
+
+### Verify Signing Cheatsheet
+- `codesign -vvv --deep --strict out/my-new-app-darwin-x64/my-new-app.app`
+- `codesign --display --entitlements :- out/my-new-app-darwin-x64/my-new-app.app` 
+- `codesign -dvv out/my-new-app-darwin-x64/my-new-app.app`
+- `security cms -D -i /path/to/your.app/Contents/embedded.provisionprofile`
+- `codesign --test-requirement="=notarized" --verify --verbose <appname.app>`
+
+Maybe [this](https://snippets.cacher.io/snippet/354a3eb7b0dcbe711383) works

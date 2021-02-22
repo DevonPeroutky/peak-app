@@ -2,7 +2,7 @@ import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import config from "../src/constants/environment-vars"
-require('update-electron-app')()
+import { autoUpdater } from "electron-updater"
 
 const { Deeplink } = require('electron-deeplink');
 const protocol = config.protocol;
@@ -104,6 +104,9 @@ app.whenReady().then(() => {
 
   // Check whether a shortcut is registered.
   console.log(globalShortcut.isRegistered('CommandOrControl+Shift+J'))
+
+  // Check for updates and notify...
+  autoUpdater.checkForUpdatesAndNotify()
 }).then(createWindow)
 
 app.on('will-quit', () => {
