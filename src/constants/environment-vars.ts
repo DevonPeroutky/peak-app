@@ -8,7 +8,7 @@ const dev = {
 }
 
 const prod = {
-    base_url: "https://peak-webapp.onrender.com/",
+    base_url: "https://peak-app-server.onrender.com",
     env: "prod",
     protocol: "peak-app",
     dist: process.env.REACT_APP_DIST || ELECTRON

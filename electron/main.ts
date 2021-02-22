@@ -75,6 +75,16 @@ const createWindow = (): void => {
     mainWindow && mainWindow.webContents.send('fullscreen', false)
   })
 
+  mainWindow.webContents.on("did-finish-load", () => {
+    log.info("Checking for updates")
+      autoUpdater.checkForUpdatesAndNotify().then((res) => {
+        log.info(`Update response `)
+        log.info(res)
+      }).catch((err) => {
+        log.error(`Checking for updates failed`)
+        log.error(err.toString())
+      });
+  })
 };
 
 
@@ -104,9 +114,6 @@ app.whenReady().then(() => {
 
   // Check whether a shortcut is registered.
   console.log(globalShortcut.isRegistered('CommandOrControl+Shift+J'))
-
-  // Check for updates and notify...
-  autoUpdater.checkForUpdatesAndNotify()
 }).then(createWindow)
 
 app.on('will-quit', () => {

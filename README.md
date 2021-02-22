@@ -21,3 +21,6 @@ Using [Electron-Builder](https://www.electron.build/) to package up the webapp.
 - `codesign --test-requirement="=notarized" --verify --verbose <appname.app>`
 
 Maybe [this](https://snippets.cacher.io/snippet/354a3eb7b0dcbe711383) works
+
+## Weird Gotchas
+- Shouldn't need to target a `zip` output for electron, however we need to for [auto-updater to work](https://github.com/electron-userland/electron-builder/issues/2199) 
