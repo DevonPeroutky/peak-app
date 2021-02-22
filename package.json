@@ -12,7 +12,7 @@
   },
   "homepage": ".",
   "main": "build/electron/main.js",
-  "version": "0.0.1-beta-1",
+  "version": "0.0.1-beta-2",
   "scripts": {
     "extension:dev": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
     "extension:build": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
