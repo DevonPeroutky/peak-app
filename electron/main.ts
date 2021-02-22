@@ -1,6 +1,6 @@
 import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
 import * as isDev from 'electron-is-dev';
-import config from "../constants/environment-vars"
+import config from "../src/constants/environment-vars"
 require('update-electron-app')()
 
 const { Deeplink } = require('electron-deeplink');
@@ -49,8 +49,8 @@ const createWindow = (): void => {
   // All new-window events should load in the user's default browser
   // new-window events are when a user clicks on <a> link with target="_blank"
   mainWindow.webContents.on("new-window", function(event, url) {
-      event.preventDefault();
-      shell.openExternal(url);
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   mainWindow.webContents.send('fullscreen', false)

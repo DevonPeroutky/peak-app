@@ -36,6 +36,7 @@ const EditorTextTypeSelect = (props: { }) => {
             value={activeTextType ? activeTextType.elementType : ELEMENT_PARAGRAPH}>
             {
                 TEXT_MARKS.map(textType => {
+                    // @ts-ignore
                     return (
                         <Option
                             key={textType.elementType}
@@ -43,7 +44,7 @@ const EditorTextTypeSelect = (props: { }) => {
                             label={textType.label}
                             className={`text-option ${textType.className}`}>
                             <div className={"text-option-container"} onClick={event => event.preventDefault()}>
-                                {textType.label} <span className={"header-text-hotkey-command"}>{textType.hotkeyInstruction}</span>
+                                {/*{textType.label} <span className={"header-text-hotkey-command"}>{textType.hotkeyInstruction}</span>*/}
                             </div>
                         </Option>
                     )

@@ -12,7 +12,6 @@
     "noUnusedLocals": false,
     "baseUrl": ".",
     "target": "es5",
-    "outDir": "./.webpack/main",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": [
@@ -23,11 +22,10 @@
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src/electron/**/*",
-    "src/chrome-extension/**/*"
-  ],
-  "extends": "./node_modules/electron-webpack/tsconfig-base.json"
+    "src"
+  ]
 }
