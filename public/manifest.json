@@ -1,7 +1,7 @@
 {
     "name": "Peak",
     "manifest_version": 2,
-    "description": "Based off of https://github.com/sivertschou/react-typescript-chrome-extension-boilerplate",
+    "description": "Save and take notes of what your read to the Peak desktop app.",
     "key": "eiilkgojneaombphoehpmiclaknkfpdb",
     "author": "Devon Peroutky",
     "version": "0.0.1",
