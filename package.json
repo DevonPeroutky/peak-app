@@ -1,10 +1,18 @@
 {
   "name": "peak-app",
   "productName": "Peak",
-  "version": "0.0.1-beta-3",
-  "repository": "DevonPeroutky/peak-app",
+  "author": {
+    "name": "Devon",
+    "email": "devonperoutky@gmail.com"
+  },
   "description": "Your Peakiest Peak",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevonPeroutky/peak-app.git"
+  },
+  "homepage": ".",
   "main": "build/electron/main.js",
+  "version": "0.0.1-beta-1",
   "scripts": {
     "extension:dev": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
     "extension:build": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
@@ -25,22 +33,44 @@
     "files": [
       "build/**/*"
     ],
-    "appId": "com.Example.ExampleApp",
+    "appId": "com.Massive.Peak",
     "dmg": {
       "sign": false
     },
     "publish": ["github"],
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png"
+    },
     "directories": {
       "buildResources": "assets"
     },
     "afterSign": "scripts/notarize.js"
   },
   "keywords": [],
-  "author": {
-    "name": "DevonPeroutky",
-    "email": "devonperoutky@gmail.com"
-  },
   "license": "MIT",
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "no-unused-vars": "off",
+      "noImplicitReturns": false
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
@@ -141,24 +171,5 @@
     "update-electron-app": "^2.0.1",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-unused-vars": "off",
-      "noImplicitReturns": false
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
