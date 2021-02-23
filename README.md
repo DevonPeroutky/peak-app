@@ -8,12 +8,13 @@ At one point based off of this [template](https://github.com/sivertschou/react-t
 
 
 ### Publishing a new version of the Webapp
-1. Merge your PR into main with the version bumped in the `manifest.json`
+1. Merge your PR into main with the version bumped `public/manifest.json`
 2. Remove the `key` field from `public/manifest.json`
 3. Run `yarn extension:build`
 4. Zip the output `/extension-dist` from the previous step  
 5. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
 6. *Re-add the `key` field back into `public/manifest.json`* (Needed for development, but can't be in production build)
+7. TODO make a script that does this.
 
 ## Webapp
 Bootstrapped using `yarn create react-app antd-demo-ts --template typescript`
@@ -32,7 +33,10 @@ An elixir project built using Elixir, Phoenix, and Ecto. Also hosted on Render. 
 Using [Electron-Builder](https://www.electron.build/) to package up the webapp.
 
 ### Publishing a new version of the Electron App
-- Once a PR is merged to main, render will automatically re-deploy the webapp. 
+- Merge the PR to main, with the version bumped in `package.json`. 
+- Once merged, rebase off of main
+- Run `. ./set-build-secrets.sh` to set the local environment variables necessary to sign, notarize, and publish the app
+- `yarn electron:publish`
 
 
 ## Random Things
