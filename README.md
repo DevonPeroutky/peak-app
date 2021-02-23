@@ -14,6 +14,7 @@ At one point based off of this [template](https://github.com/sivertschou/react-t
 4. Zip the output `/extension-dist` from the previous step  
 5. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
 6. *Re-add the `key` field back into `public/manifest.json`* (Needed for development, but can't be in production build)
+7. TODO make a script that does this.
 
 ## Webapp
 Bootstrapped using `yarn create react-app antd-demo-ts --template typescript`
