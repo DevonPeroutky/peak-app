@@ -24,21 +24,27 @@ if (isElectron) {
     console.log(`Electron context. Attaching listeners onto the renderer.tsx!`)
     const { ipcRenderer } = window.require('electron');
 
+    const journalHash = `#/home/journal`
+    const welcomeHash = `#/welcome`
+    const offlineHash = `#/offline`
+    const tempDesktopLoginHash = `#/temp-desktop-login`
+
     ipcRenderer.on('login-user', (event, arg) => {
         console.log(`Fetch the user's token via this one-time code: ${arg}`)
         peakAxiosClient.get(`/api/v1/session/load-user-with-oneTimeCode?one-time-code=${arg}`).then((res) => {
             const authedUser = res.data as Peaker
             console.log(authedUser)
             store.dispatch(setUser(authedUser));
-            window.location.href = "/main_window#/home/journal"
+            window.location.hash = journalHash
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");
+            window.location.hash = journalHash
         })
     })
 
     ipcRenderer.on('add-user', (event, arg) => {
         console.log(`Adding another user flow???`)
-        window.location.href = `/main_window#/temp-desktop-login`
+        window.location.hash = tempDesktopLoginHash
     })
 
     ipcRenderer.on('fullscreen', (event, arg) => {
@@ -48,7 +54,7 @@ if (isElectron) {
 
     ipcRenderer.on('go-to-journal', (event, arg) => {
         console.log(`GOING TO THE JOURNAL`)
-        window.location.href = "/main_window#/home/journal"
+        window.location.hash = journalHash
         store.dispatch(journalHotkeyPressed())
     })
 

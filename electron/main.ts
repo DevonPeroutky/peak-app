@@ -11,6 +11,7 @@ const protocol = config.electron_protocol;
 const log = require('electron-log');
 
 console.log(`Is Dev? ${isDev}`)
+console.log(`Dist ${process.env.REACT_APP_DIST}`)
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -86,8 +87,6 @@ const createWindow = (): void => {
       });
   })
 };
-
-
 
 // --------------------------------------------------------
 // Electron Listeners

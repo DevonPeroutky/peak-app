@@ -30,7 +30,7 @@ An elixir project built using Elixir, Phoenix, and Ecto. Also hosted on Render. 
 
 
 ## Electron
-Using [Electron-Builder](https://www.electron.build/) to package up the webapp.
+Using [Electron-Builder](https://www.electron.build/) to package up the webapp. Originally based off of this [boilerplate](https://github.com/yhirose/react-typescript-electron-sample-with-create-react-app-and-electron-builder)
 
 ### Publishing a new version of the Electron App
 - Merge the PR to main, with the version bumped in `package.json`. 
