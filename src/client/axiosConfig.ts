@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {backend_host_address} from "../constants/constants";
+import config from "../constants/environment-vars"
 
 const defaultConfig = {
     withCredentials: true,
-    baseURL: `http://${backend_host_address}`
+    baseURL: `${config.web_protocol}${config.backend_domain}`
 }
 const authedAxiosClient = axios.create(defaultConfig);
 

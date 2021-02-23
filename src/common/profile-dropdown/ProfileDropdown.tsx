@@ -17,7 +17,7 @@ export const ProfileDropdown = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()
 
     const signinAdditionalAccount = () => {
-        window.open(`${config.base_url}/#/welcome?desktop-login=${isElectron}&${EXISTING_PEAK_USER_ID}=${user.peak_user_id}&add-account=true`, '_blank')
+        window.open(`${config.web_protocol}${config.app_server_domain}/#/welcome?desktop-login=${isElectron}&${EXISTING_PEAK_USER_ID}=${user.peak_user_id}&add-account=true`, '_blank')
     }
 
     const menu = (

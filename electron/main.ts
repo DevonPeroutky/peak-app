@@ -5,7 +5,7 @@ import config from "../src/constants/environment-vars"
 import { autoUpdater } from "electron-updater"
 
 const { Deeplink } = require('electron-deeplink');
-const protocol = config.protocol;
+const protocol = config.electron_protocol;
 
 // on macOS: ~/Library/Logs/{app name}/{process type}.log
 const log = require('electron-log');
