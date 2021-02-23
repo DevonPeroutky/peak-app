@@ -1,16 +1,30 @@
 import {ELECTRON} from "./constants";
 
-const dev = {
-    base_url: "http://localhost:3001",
+interface PeakAppConfig {
+    app_server_domain: string
+    web_protocol: string
+    backend_domain: string
+    electron_protocol: string
+    env: string
+    dist: string
+
+}
+
+const dev: PeakAppConfig = {
+    web_protocol: "http://",
+    app_server_domain: "localhost:3001",
+    backend_domain: "localhost:4000",
     env: "dev",
-    protocol: "peak-dev-app",
+    electron_protocol: "peak-dev-app",
     dist: process.env.REACT_APP_DIST || ELECTRON
 }
 
-const prod = {
-    base_url: "https://peak-app-server.onrender.com",
+const prod: PeakAppConfig = {
+    web_protocol: "https://",
+    app_server_domain: process.env.REACT_APP_APP_SERVER_ADDRESS || "you-need-to-set-this.com",
+    backend_domain: process.env.REACT_APP_BACKEND_SERVER_ADDRESS || "you-need-to-set-this.com",
     env: "prod",
-    protocol: "peak-app",
+    electron_protocol: "peak-app",
     dist: process.env.REACT_APP_DIST || ELECTRON
 }
 

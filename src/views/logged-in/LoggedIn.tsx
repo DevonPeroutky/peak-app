@@ -10,7 +10,7 @@ export const LoggedIn = (props: { }) => {
     const query = useQuery();
     const oneTimeCode: string | null = query.get("one-time-code")
     // const addUserFlow: string | null = query.get("add-account")
-    const desktopDeepLinkUrl = (oneTimeCode) ? `${config.protocol}://login?returned-code=${oneTimeCode}` : `${config.protocol}://temp-desktop-login`
+    const desktopDeepLinkUrl = (oneTimeCode) ? `${config.electron_protocol}://login?returned-code=${oneTimeCode}` : `${config.electron_protocol}://temp-desktop-login`
 
     return (
         <div className={"logged-in-page-container"}>

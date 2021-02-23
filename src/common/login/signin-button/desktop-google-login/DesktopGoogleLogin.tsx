@@ -7,7 +7,7 @@ import "./desktop-google-login.scss"
 const DesktopGoogleLogin = (props: { }) => {
 
     return (
-        <Button className="peak-electron-welcome-button" type="primary" icon={<GoogleOutlined />} onClick={() => window.open(`${config.base_url}/#/welcome?desktop-login=true`, '_blank')} >
+        <Button className="peak-electron-welcome-button" type="primary" icon={<GoogleOutlined />} onClick={() => window.open(`${config.web_url}/#/welcome?desktop-login=true`, '_blank')} >
             Continue securely with Google
         </Button>
     )

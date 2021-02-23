@@ -40,12 +40,12 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boo
             dispatch(addUserAccount(authedUser));
             if (isDesktopLogin) {
                 if (addAccountFlow) {
-                    const desktopDeepLinkUrl = `${config.protocol}://temp-desktop-login`
+                    const desktopDeepLinkUrl = `${config.electron_protocol}://temp-desktop-login`
                     console.log(`SENDING THEM TO: ${desktopDeepLinkUrl}`)
                     window.location.replace(desktopDeepLinkUrl);
                     history.push(`/logged-in?one-time-code=${oneTimeCode}`);
                 } else {
-                    const desktopDeepLinkUrl = `${config.protocol}://login?returned-code=${oneTimeCode}`
+                    const desktopDeepLinkUrl = `${config.electron_protocol}://login?returned-code=${oneTimeCode}`
                     window.location.replace(desktopDeepLinkUrl);
                     history.push(`/logged-in?one-time-code=${oneTimeCode}`);
                 }
