@@ -19,7 +19,9 @@ export function establishSocketConnection(userId: string): Promise<Socket> {
         const socketAccessToken: SocketTokenPayload = res.data
 
         // TODO: Needs to be configured as another BACKEND URL
-        const socketConn = new Socket(`ws://${config.backend_domain}/socket`, {
+        const socketUrl = `${config.web_socket_protocol}://${config.backend_domain}/socket`
+        console.log(`Connecting to ${socketUrl}`)
+        const socketConn = new Socket(socketUrl, {
             // logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) }),
             params: socketAccessToken,
         })
