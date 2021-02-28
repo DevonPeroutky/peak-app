@@ -23,8 +23,9 @@ const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     height: 860,
     // width: 1320,
-    width: 600,
+    width: 1600,
     title: "Peak",
+    minWidth: 1000,
     frame: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {

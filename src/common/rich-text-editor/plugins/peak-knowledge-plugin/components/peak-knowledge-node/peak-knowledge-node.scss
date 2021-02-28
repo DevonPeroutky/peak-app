@@ -25,6 +25,10 @@ $web-body-padding: 20px;
     .title-section {
       display: flex;
       align-items: center;
+      max-width: 100%;
+      text-overflow: ellipsis!important;
+      white-space: nowrap;
+      overflow: hidden;
 
       .main-icon {
         margin-right: 10px;
@@ -46,13 +50,22 @@ $web-body-padding: 20px;
       }
 
       .knowledge-label {
+        max-width: inherit;
         color: $text-color;
+        text-overflow: ellipsis!important;
+        white-space: nowrap;
+        overflow: hidden;
+
+        .link-to-note {
+          max-width: inherit;
+        }
       }
     }
 
     .icon-section {
       display: flex;
       align-items: center;
+      min-width: 50px;
 
       .external-link-icon {
         margin-left: 10px;
