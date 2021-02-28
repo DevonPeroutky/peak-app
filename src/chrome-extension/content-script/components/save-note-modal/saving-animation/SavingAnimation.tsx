@@ -62,6 +62,8 @@ const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => v
 
 const HowToOpenNoteFooter = (props) => {
     return (
-        <span className="how-to-open-container">Press <span className="hotkey-decoration">⌘ + ⇧ + <span className="arrow">↵</span></span> to view your Note</span>
+        <span className="how-to-open-container animate__animated animate__fadeInUp">
+            Press <span className="hotkey-decoration">⌘ + ⇧ + <span className="arrow">↵</span></span> to view your Note
+        </span>
     )
 }
