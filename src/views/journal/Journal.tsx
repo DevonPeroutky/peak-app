@@ -13,7 +13,7 @@ import {
     useDebounceBulkJournalEntrySaver,
     useCurrentUser,
     useFetchJournal,
-    useJournal,
+    useJournal, useJournalHotkeyPressed,
 } from "../../utils/hooks";
 import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -43,11 +43,15 @@ import {journalOrdering} from "../../redux/slices/wikiPageSlice";
 import {sort} from "ramda"
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {OpenLibraryBook} from "../../client/openLibrary";
+import { resetJournalHotkeyPressed } from 'src/redux/slices/electronSlice';
+import {useDispatch} from "react-redux";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
 
     const currentUser = useCurrentUser()
+    const dispatch = useDispatch()
+    const journalHotkeyPressed = useJournalHotkeyPressed()
     const journalFetcher = useFetchJournal()
     const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
     const journal: PeakWikiPage = useJournal()
@@ -84,6 +88,13 @@ const PeakJournal = (props: { }) => {
             setJournalContent([{children: newJournal}])
         }
     }, [journal.body])
+
+    useEffect(() => {
+        if (journalHotkeyPressed) {
+            setSelection(editor)
+        }
+        dispatch(resetJournalHotkeyPressed())
+    }, [journalHotkeyPressed])
 
     // Initial Loading
     const [isLoading, setLoading] = useState<boolean>(true)

@@ -81,6 +81,10 @@ export function useIsFullscreen() {
     return useSelector<AppState, boolean>(state => state.electron.isFullscreen);
 }
 
+export function useJournalHotkeyPressed() {
+    return useSelector<AppState, boolean>(state => state.electron.journalHotKeyPressed);
+}
+
 // export function useJournalEditingState() {
 //     const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
 // }
