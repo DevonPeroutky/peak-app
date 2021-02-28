@@ -83,8 +83,7 @@ const PeakJournal = (props: { }) => {
         if (equals(todayInRedux, todayInComponent)) {
             console.log(`No outside updates were made to Redux`)
         } else {
-            const newJournal: SlateDocumentFragment = [...todayInRedux, ...drop(2, journalContent)] as SlateDocumentFragment
-            console.log(`OUTSIDE UPDATES TO REDUX`, newJournal)
+            const newJournal: SlateDocumentFragment = [...todayInRedux, ...drop(2, journalContent[0].children)] as SlateDocumentFragment
             setJournalContent([{children: newJournal}])
         }
     }, [journal.body])

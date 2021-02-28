@@ -111,7 +111,6 @@ export function useCurrentNoteId() {
 export function useCurrentNote(): PeakNote | undefined {
     const currentNoteId = useCurrentNoteId();
     const notes = useNotes()
-    console.log(`NOTES ${currentNoteId}`, notes)
     return notes.find(n => n.id === currentNoteId)
 }
 export function useSpecificNote(nodeId: string): PeakNote | undefined {
