@@ -1,7 +1,14 @@
 import React from "react";
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import cn from 'classnames';
-import {BookTwoTone, BulbOutlined, LinkOutlined, ReadOutlined, ShareAltOutlined} from "@ant-design/icons/lib";
+import {
+    BookTwoTone,
+    BulbOutlined,
+    LinkOutlined,
+    ReadFilled,
+    ReadOutlined,
+    ShareAltOutlined
+} from "@ant-design/icons/lib";
 import {isNodeEmpty} from "../../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../../../utils/strings";
@@ -10,6 +17,7 @@ import "./peak-knowledge-node.scss"
 import {PeakTag} from "../../../../../../types";
 import {Link} from "react-router-dom";
 import {message, Tooltip} from "antd";
+import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
@@ -25,7 +33,13 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
                 <div className="title-section">
                     <BookTwoTone className={"main-icon"}/>
                     <span>Saved the page </span>
-                        <img src={bookmark} className={"title-row-icon web"}/>
+                        <ImageLoader
+                            className="title-row-icon web"
+                            url={element.icon_url as string}
+                            fallbackElement={
+                                <img src={bookmark} className={"title-row-icon web"}/>
+                            }
+                        />
                         <span className={"knowledge-label"}>
                             <Link to={`/home/notes/${element.note_id}`} className={"link-to-note"}>{capitalize_and_truncate(element.title as string, 100)}</Link>
                         </span>
