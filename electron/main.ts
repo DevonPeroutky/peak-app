@@ -25,6 +25,7 @@ const createWindow = (): void => {
     // width: 1320,
     width: 600,
     title: "Peak",
+    frame: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       devTools: true,  // TODO: isDev,
@@ -108,6 +109,17 @@ app.whenReady().then(() => {
     details.requestHeaders['Access-Control-Allow-Origin'] = 'file://peak-electron-app';
     callback({cancel: false, requestHeaders: details.requestHeaders});
   });
+
+  const openNote = globalShortcut.register('CommandOrControl+Shift+Enter', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+
+    mainWindow && mainWindow.webContents.send('open-note')
+    // mainWindow && mainWindow.focus()
+    // mainWindow && mainWindow.webContents.focus()
+    mainWindow && mainWindow.show()
+  })
 
   const navigateToJournal = globalShortcut.register('CommandOrControl+Shift+J', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

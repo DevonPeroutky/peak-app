@@ -14,6 +14,7 @@ export interface PeakNote {
     url: string
     author?: string
     inserted_at?: string
+    updated_at?: string
 }
 const emptyBookList: PeakNote[] = []
 

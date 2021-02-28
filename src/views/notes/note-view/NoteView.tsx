@@ -11,7 +11,7 @@ import {Divider, Input} from "antd";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import {useCurrentUser} from "../../../utils/hooks";
 import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
-import {useLoadTags} from "../../../utils/notes";
+import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
 
 export const PeakNoteView = (props) => {

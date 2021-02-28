@@ -5,7 +5,6 @@ import {Lottie} from "@crello/react-lottie";
 import saving from "../../../../../assets/animations/saved.json"
 import saved from "../../../../../assets/animations/saving.json"
 import {sleep} from "../../../../utils/generalUtil";
-import {PeakLogo} from "../../../../../common/logo/PeakLogo";
 
 export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => void}) => {
     return (
