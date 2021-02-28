@@ -49,9 +49,9 @@ const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => v
                         name: 'complete',
                         callback: () => {
                             if (submittingState !== "submitting") {
-                                // sleep(10000).then(r => {
-                                //     closeDrawer()
-                                // })
+                                sleep(2000).then(r => {
+                                    closeDrawer()
+                                })
                             }
                         }
                     }
