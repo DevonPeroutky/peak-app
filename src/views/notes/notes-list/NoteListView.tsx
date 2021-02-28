@@ -35,7 +35,7 @@ export const PeakNoteListView = (props: { page_header: string, note_type: PeakKn
                     <List.Item key={item.title}>
                         <List.Item.Meta
                             className={"peak-note-meta-container"}
-                            avatar={<NoteAvatar item={item}/>}
+                            // avatar={<NoteAvatar item={item}/>}
                             title={
                                 <>
                                     <Link to={`/home/notes/${item.id}`}>
