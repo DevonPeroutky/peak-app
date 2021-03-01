@@ -69,6 +69,24 @@ const styleDraggableOptions = ({ type, level, component, ...options}: StyledNode
     ]
 )
 
+export const defaultStyleOptions = ({ type, rootProps, ...options}: StyledNodeConfig) => (
+    [
+        type,
+        {
+            ...options,
+            rootProps: {
+                ...rootProps,
+                styles: {
+                    root: {
+                        margin: 0,
+                        lineHeight: '1.5',
+                    },
+                },
+            },
+        },
+    ]
+)
+
 export const baseBehaviorPlugins = [
     SoftBreakPlugin({
         rules: [
@@ -188,31 +206,27 @@ export const snowflakePlugins = (level: number) => {
         }),
     ]
 }
-const levelDependentNormalizers = (level: number) => [
-    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
-]
+
+
+const deriveLevelAwareOptions = (editorLevel: number, draggable: boolean) => {
+    const levelAwareConfig = baseOptions.map(sup => {
+        return {...sup, level: editorLevel}
+    })
+    const styledOptions = (draggable) ? levelAwareConfig.map(styleDraggableOptions) : levelAwareConfig.map(defaultStyleOptions);
+    return { ...defaultOptions, ...Object.fromEntries(styledOptions) }
+}
 
 export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: SlatePlugin[] = [], draggable: boolean = true) => {
-    const levelAwareDragConfig = baseOptions.map(sup => {
-        return {...sup, level: baseNodeLevel}
-    })
-
-    const draggableOptions = levelAwareDragConfig.map(styleDraggableOptions);
-    const copyableOptions = [] // IMPLEMENT ME
-
-    const options = (draggable) ? { ...defaultOptions, ...Object.fromEntries(draggableOptions) } : defaultOptions
-
+    const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
     const slatePlugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
     return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...snowflakePlugins(baseNodeLevel)]
 }
+
+
+const levelDependentNormalizers = (level: number) => [
+    withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
+]
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[], draggable: boolean = true) => {
-    const levelAwareDragConfig = baseOptions.map(sup => {
-        return {...sup, level: baseNodeLevel}
-    })
-    const draggableOptions = levelAwareDragConfig.map(styleDraggableOptions);
-    const copyableOptions = [] // IMPLEMENT ME
-
-    const options = (draggable) ? { ...defaultOptions, ...Object.fromEntries(draggableOptions) } : defaultOptions
-
+    const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
     return [...baseNormalizers, withList(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
 }
