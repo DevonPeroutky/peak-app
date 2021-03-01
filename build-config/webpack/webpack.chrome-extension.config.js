@@ -39,7 +39,9 @@ const config = {
         ...plugins,
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('chrome_extension'),
-            'process.env.REACT_APP_ENV': JSON.stringify(process.env.REACT_APP_ENV)
+            'process.env.REACT_APP_ENV': JSON.stringify(process.env.REACT_APP_ENV),
+            'process.env.REACT_APP_BACKEND_SERVER_ADDRESS': JSON.stringify(process.env.REACT_APP_BACKEND_SERVER_ADDRESS),
+            'process.env.REACT_APP_APP_SERVER_ADDRESS': JSON.stringify(process.env.REACT_APP_APP_SERVER_ADDRESS),
         })
     ],
 };

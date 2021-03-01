@@ -8,7 +8,6 @@ interface PeakAppConfig {
     electron_protocol: string
     env: string
     dist: string
-
 }
 
 const dev: PeakAppConfig = {
