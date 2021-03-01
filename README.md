@@ -9,30 +9,34 @@ Good Luck.
 At one point based off of this [template](https://github.com/sivertschou/react-typescript-chrome-extension-boilerplate)
 
 
-### Publishing a new version of the Webapp
-1. Merge your PR into main with the version bumped `public/manifest.json`
-2. Remove the `key` field from `public/manifest.json`
-3. Run `yarn extension:build`
-4. Zip the output `/extension-dist` from the previous step  
-5. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
-6. *Re-add the `key` field back into `public/manifest.json`* (Needed for development, but can't be in production build)
-7. TODO make a script that does this.
+### Publishing a new version of the Chrome Extension
+1. Merge your PR into main with the version bumped in `scripts/base_manifest.json`
+2. Run `yarn extension:publish`
+3. Zip the output `/extension-dist` from the previous step  
+4. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
+
 
 ## Webapp
 Bootstrapped using `yarn create react-app antd-demo-ts --template typescript`
 
+
 ### Publishing a new version of the Webapp
 - Once a PR is merged to main, render will automatically re-deploy the webapp. 
 
+
 ## Backend Server
 An elixir project built using Elixir, Phoenix, and Ecto. Also hosted on Render. Source code lives in a private [Gitlab repo](https://gitlab.com/peak1/peak-backend), but will be open-sourced as well as some point.  
+
+
 
 #### Publishing a new version of the Backend
 - Once a PR is merged to main, render will automatically re-deploy the backend service 
 
 
+
 ## Electron
 Using [Electron-Builder](https://www.electron.build/) to package up the webapp. Originally based off of this [boilerplate](https://github.com/yhirose/react-typescript-electron-sample-with-create-react-app-and-electron-builder)
+
 
 ### Publishing a new version of the Electron App
 - Merge the PR to main, with the version bumped in `package.json`. 

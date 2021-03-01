@@ -96,3 +96,5 @@ dist/
 extension-dist/
 set-build-secrets.sh
 extension-dist.zip
+
+public/manifest.json
