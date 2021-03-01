@@ -18,6 +18,7 @@ import {
     PEAK_NOTE_STUB,
     PeakStubAction,
 } from "../common/rich-text-editor/plugins/peak-note-stub-plugin/types";
+import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -89,6 +90,7 @@ export function updatePeakNote(user: Peaker, noteId: string, note: UpdateNotePay
     return updateNoteRequest(user.id, noteId, note ).then(res => {
         const updatedNote: PeakNote = res.data.book
         store.dispatch(updateNote(updatedNote))
+        store.dispatch(endSavingPage())
         return updatedNote
     })
 }

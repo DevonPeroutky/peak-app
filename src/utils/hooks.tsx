@@ -305,6 +305,7 @@ export function useBulkJournalEntrySaver() {
                 const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
                 batch(() => {
                     dispatch(updateJournalEntries(updatedJournalEntries));
+                    dispatch(endSavingPage())
                 })
             }).catch((err) => {
                 console.log(err)

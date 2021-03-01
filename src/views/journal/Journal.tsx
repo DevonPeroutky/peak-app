@@ -41,14 +41,14 @@ import {PeakWikiPage} from "../../constants/wiki-types";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 import {journalOrdering} from "../../redux/slices/wikiPageSlice";
 import {sort} from "ramda"
-import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
+import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {OpenLibraryBook} from "../../client/openLibrary";
 import { resetJournalHotkeyPressed } from 'src/redux/slices/electronSlice';
 import {useDispatch} from "react-redux";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
-
+    const editorState = useActiveEditorState()
     const currentUser = useCurrentUser()
     const dispatch = useDispatch()
     const journalHotkeyPressed = useJournalHotkeyPressed()
@@ -182,6 +182,10 @@ const PeakJournal = (props: { }) => {
             // Immediately update component state
             // @ts-ignore
             setJournalContent(newValue)
+
+            if (!editorState.isSaving) {
+                dispatch(beginSavingPage());
+            }
 
             const rawSlateNodes = newValue[0].children as Node[]
             // Find the modified entries --> Bulk update to DB and sync to redux

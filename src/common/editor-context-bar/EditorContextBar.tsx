@@ -17,6 +17,7 @@ export const EditorContextBar = (props: {}) => {
 
 const PageEditingContext = (props: {}) => {
     const editorState = useActiveEditorState()
+    console.log(`Current Editor State `, editorState)
 
     if (editorState && editorState.isSaving) {
         return (
@@ -24,7 +25,7 @@ const PageEditingContext = (props: {}) => {
         )
     } else if (editorState && !editorState.isSaving) {
         return (
-            <span className={"editing-status animated fadeOut saved"}>Saved <CheckOutlined className={"saved-check"}/></span>
+            <span className={"editing-status animate__animated animate__fadeOut saved"}>Saved <CheckOutlined className={"saved-check"}/></span>
         )
     } else {
         return null

@@ -74,34 +74,4 @@ const ContentBody = (props: RenderElementProps) => {
             </div>
         )
     }
-
-}
-
-const CopyToolTip = (props) => {
-    const onClick = () => {
-        message.info("No implemented yet")
-    }
-    return (
-        <Tooltip
-            placement="top"
-            title="Copy ">
-            <ShareAltOutlined className={"external-link-icon"} onClick={onClick}/>
-        </Tooltip>
-    )
-}
-
-const ExternalLinkToolTip = (props: { url: string }) => {
-    const { url } = props
-
-    const onClick = () => console.log(`Clicked! `)
-
-    return (
-        <Tooltip
-            placement="top"
-            title="Go to link">
-            <a href={url} target="_blank">
-                <LinkOutlined className={"external-link-icon"} onClick={onClick}/>
-            </a>
-        </Tooltip>
-    )
 }
