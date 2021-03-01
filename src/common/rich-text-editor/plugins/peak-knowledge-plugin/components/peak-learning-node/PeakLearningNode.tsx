@@ -20,7 +20,9 @@ export const PeakLearningNode = (props: RenderElementProps) => {
                 <BulbOutlined className={"title-row-icon learning"}/>
                 <span className={"learning-label"}>Learning</span>
             </div>
-            {props.children}
+            <div className="learning-body">
+                {props.children}
+            </div>
             <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
         </div>
     )

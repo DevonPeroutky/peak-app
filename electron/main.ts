@@ -1,4 +1,4 @@
-import {app, BrowserWindow, shell, globalShortcut, ipcMain} from 'electron';
+import {app, BrowserWindow, shell, globalShortcut, ipcMain, session} from 'electron';
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import config from "../src/constants/environment-vars"
@@ -23,11 +23,14 @@ const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     height: 860,
     // width: 1320,
-    width: 600,
+    width: 1600,
     title: "Peak",
+    minWidth: 1000,
+    frame: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      devTools: true,  // TODO: isDev,
+      devTools: isDev,
+      webSecurity: false,
       nodeIntegration: true
     }
   });
@@ -96,6 +99,29 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 // app.on('ready', createWindow);
 app.whenReady().then(() => {
+  const filter = {
+    urls: ['*://peak-backend.onrender.com/*', 'http://localhost:4000/*']
+  }
+
+  session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+    console.log(details);
+    details.requestHeaders['User-Agent'] = 'MyAgent';
+    details.requestHeaders['Origin'] = 'file://peak-electron-app';
+    details.requestHeaders['Access-Control-Allow-Origin'] = 'file://peak-electron-app';
+    callback({cancel: false, requestHeaders: details.requestHeaders});
+  });
+
+  const openNote = globalShortcut.register('CommandOrControl+Shift+Enter', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+
+    mainWindow && mainWindow.webContents.send('open-note')
+    // mainWindow && mainWindow.focus()
+    // mainWindow && mainWindow.webContents.focus()
+    mainWindow && mainWindow.show()
+  })
+
   const navigateToJournal = globalShortcut.register('CommandOrControl+Shift+J', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

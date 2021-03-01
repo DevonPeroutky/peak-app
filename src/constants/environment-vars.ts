@@ -2,6 +2,7 @@ import {ELECTRON} from "./constants";
 
 interface PeakAppConfig {
     app_server_domain: string
+    web_socket_protocol: string
     web_protocol: string
     backend_domain: string
     electron_protocol: string
@@ -11,7 +12,8 @@ interface PeakAppConfig {
 }
 
 const dev: PeakAppConfig = {
-    web_protocol: "http://",
+    web_socket_protocol: "ws",
+    web_protocol: "http",
     app_server_domain: "localhost:3001",
     backend_domain: "localhost:4000",
     env: "dev",
@@ -20,7 +22,8 @@ const dev: PeakAppConfig = {
 }
 
 const prod: PeakAppConfig = {
-    web_protocol: "https://",
+    web_socket_protocol: "wss",
+    web_protocol: "https",
     app_server_domain: process.env.REACT_APP_APP_SERVER_ADDRESS || "you-need-to-set-this.com",
     backend_domain: process.env.REACT_APP_BACKEND_SERVER_ADDRESS || "you-need-to-set-this.com",
     env: "prod",

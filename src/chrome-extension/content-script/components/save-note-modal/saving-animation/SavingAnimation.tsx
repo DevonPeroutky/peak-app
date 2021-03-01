@@ -10,6 +10,7 @@ export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, close
     return (
         <div className={"submitting-container"}>
             <Spinner {...props}/>
+            { (props.submittingState === "submitting") ? null : <HowToOpenNoteFooter/>}
         </div>
     )
 }
@@ -17,37 +18,51 @@ export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, close
 
 const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => void}) => {
     const { submittingState, closeDrawer } = props
-    const defaultConfig = {
+
+    const savingConfig = {
         autoplay: true,
         loop: true,
-        animationData: (submittingState === "submitting") ? saving : saved,
+        animationData: saving,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
     };
+    const savedConfig = {
+        autoplay: true,
+        loop: false,
+        animationData: saved,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
+    const config = (submittingState === "submitting") ? savingConfig : savedConfig
+
     return (
         <div className={"animation-container"}>
             <Lottie
-                config={defaultConfig}
+                config={config}
                 speed={1}
                 className={"peak-saving-animation"}
                 lottieEventListeners={[
                     {
                         name: 'complete',
                         callback: () => {
-                            console.log(`The animation completed: ${submittingState}`);
-                        }
-                    },
-                    {
-                        name: 'loopComplete',
-                        callback: () => {
-                            if (submittingState === "submitted") {
-                                closeDrawer()
+                            if (submittingState !== "submitting") {
+                                sleep(2000).then(r => {
+                                    closeDrawer()
+                                })
                             }
-                            console.log(`LOOP IS COMPLETE: ${submittingState}`);
                         }
                     }
                 ]}/>
         </div>
+    )
+}
+
+const HowToOpenNoteFooter = (props) => {
+    return (
+        <span className="how-to-open-container animate__animated animate__fadeInUp">
+            Press <span className="hotkey-decoration">⌘ + ⇧ + <span className="arrow">↵</span></span> to view your Note
+        </span>
     )
 }

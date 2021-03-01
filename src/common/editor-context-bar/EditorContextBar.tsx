@@ -24,7 +24,7 @@ const PageEditingContext = (props: {}) => {
         )
     } else if (editorState && !editorState.isSaving) {
         return (
-            <span className={"editing-status animated fadeOut saved"}>Saved <CheckOutlined className={"saved-check"}/></span>
+            <span className={"editing-status animate__animated animate__fadeOut saved"}>Saved <CheckOutlined className={"saved-check"}/></span>
         )
     } else {
         return null

@@ -13,7 +13,7 @@ import {
     useDebounceBulkJournalEntrySaver,
     useCurrentUser,
     useFetchJournal,
-    useJournal,
+    useJournal, useJournalHotkeyPressed,
 } from "../../utils/hooks";
 import {formatDate} from "../../utils/time";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -41,13 +41,17 @@ import {PeakWikiPage} from "../../constants/wiki-types";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 import {journalOrdering} from "../../redux/slices/wikiPageSlice";
 import {sort} from "ramda"
-import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
+import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {OpenLibraryBook} from "../../client/openLibrary";
+import { resetJournalHotkeyPressed } from 'src/redux/slices/electronSlice';
+import {useDispatch} from "react-redux";
 
 const PeakJournal = (props: { }) => {
     const currentPageId = "journal"
-
+    const editorState = useActiveEditorState()
     const currentUser = useCurrentUser()
+    const dispatch = useDispatch()
+    const journalHotkeyPressed = useJournalHotkeyPressed()
     const journalFetcher = useFetchJournal()
     const saveBulkJournalEntries = useDebounceBulkJournalEntrySaver()
     const journal: PeakWikiPage = useJournal()
@@ -79,11 +83,17 @@ const PeakJournal = (props: { }) => {
         if (equals(todayInRedux, todayInComponent)) {
             console.log(`No outside updates were made to Redux`)
         } else {
-            const newJournal: SlateDocumentFragment = [...todayInRedux, ...drop(2, journalContent)] as SlateDocumentFragment
-            console.log(`OUTSIDE UPDATES TO REDUX`, newJournal)
+            const newJournal: SlateDocumentFragment = [...todayInRedux, ...drop(2, journalContent[0].children)] as SlateDocumentFragment
             setJournalContent([{children: newJournal}])
         }
     }, [journal.body])
+
+    useEffect(() => {
+        if (journalHotkeyPressed) {
+            setSelection(editor)
+        }
+        dispatch(resetJournalHotkeyPressed())
+    }, [journalHotkeyPressed])
 
     // Initial Loading
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -172,6 +182,10 @@ const PeakJournal = (props: { }) => {
             // Immediately update component state
             // @ts-ignore
             setJournalContent(newValue)
+
+            if (!editorState.isSaving) {
+                dispatch(beginSavingPage());
+            }
 
             const rawSlateNodes = newValue[0].children as Node[]
             // Find the modified entries --> Bulk update to DB and sync to redux

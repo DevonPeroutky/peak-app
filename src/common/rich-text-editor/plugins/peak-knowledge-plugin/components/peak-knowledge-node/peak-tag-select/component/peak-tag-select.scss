@@ -6,10 +6,6 @@
   width: 100%;
   height: 32px;
 
-  &.extra-margin {
-    margin-top: 16px;
-  }
-
   .peak-tag-icon {
     margin-right: 5px;
     color: rgba(9, 30, 66, 0.25);
@@ -17,7 +13,7 @@
 
   .ant-select-selector {
     position: relative!important;
-    //padding-left: 0!important;
+    padding-left: 0;
 
     .ant-select-selection-search {
       //margin-left: -7px;

@@ -66,9 +66,6 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     }, [pageTitle])
 
     useEffect(() => {
-    }, [submittingState])
-
-    useEffect(() => {
         const editorHasFocus: boolean = ReactEditor.isFocused(editor)
         if (nodesToAppend && !editorHasFocus) {
             if (isEmpty()) {

@@ -20,6 +20,8 @@ body {
 
   color: $text-color!important;
   letter-spacing: .1px;
+
+  text-overflow: ellipsis!important;
 }
 
 code {

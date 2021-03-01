@@ -6,16 +6,17 @@ import {
     DEFAULTS_PARAGRAPH, DEFAULTS_STRIKETHROUGH, DEFAULTS_SUBSUPSCRIPT, DEFAULTS_UNDERLINE,
     setDefaults
 } from "@udecode/slate-plugins";
-import {PEAK_LIST_SPECIFIC_STYLE, PEAK_STRIKETHROUGH_OVERRIDES} from "./constants";
+import {PEAK_BLOCKQUOTE_OVERRIDES, PEAK_LIST_SPECIFIC_STYLE, PEAK_STRIKETHROUGH_OVERRIDES} from "./plugin-overrides";
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 import {DEFAULTS_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {DEFAULTS_PEAK_KNOWLEDGE} from "./plugins/peak-knowledge-plugin/defaults";
+import {DEFAULTS_PEAK_NOTE_STUB} from "./plugins/peak-note-stub-plugin/defaults";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
     ...setDefaults(DEFAULTS_MENTION, {}),
-    ...setDefaults(DEFAULTS_BLOCKQUOTE, {}),
+    ...setDefaults(PEAK_BLOCKQUOTE_OVERRIDES, DEFAULTS_BLOCKQUOTE),
     ...setDefaults(DEFAULTS_IMAGE, {}),
     ...setDefaults(DEFAULTS_MEDIA_EMBED, {}),
     ...setDefaults(PEAK_LIST_SPECIFIC_STYLE, DEFAULTS_LIST),
@@ -30,4 +31,5 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
     ...setDefaults(DEFAULTS_PEAK_KNOWLEDGE, {}),
+    ...setDefaults(DEFAULTS_PEAK_NOTE_STUB, {}),
 };

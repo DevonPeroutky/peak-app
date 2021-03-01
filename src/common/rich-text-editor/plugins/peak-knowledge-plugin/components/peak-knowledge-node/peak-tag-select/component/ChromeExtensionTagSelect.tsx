@@ -6,6 +6,7 @@ import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tag
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import cn from "classnames";
+import {take} from "ramda";
 const { Option } = Select;
 
 /**
@@ -32,7 +33,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
     }
 
     const CREATE_NEW_TAG_OPTION: PeakTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakTag[] = tags.filter(o => !selected_tags.map(t => t.id).includes(o.id));
+    const filteredTags: PeakTag[] = take(3, tags.filter(o => !selected_tags.map(t => t.id).includes(o.id)));
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = [...tags, ...selected_tags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined

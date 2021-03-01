@@ -3,7 +3,7 @@ import config from "../constants/environment-vars"
 
 const defaultConfig = {
     withCredentials: true,
-    baseURL: `${config.web_protocol}${config.backend_domain}`
+    baseURL: `${config.web_protocol}://${config.backend_domain}`
 }
 const authedAxiosClient = axios.create(defaultConfig);
 

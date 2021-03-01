@@ -34,6 +34,8 @@
             flex-direction: column;
             line-height: 48px!important;
             height: fit-content!important;
+            width: 100%;
+            max-width: 100%;
 
             .peak-note-list-item-header {
               display: flex;
@@ -61,6 +63,10 @@
                 line-height: 32px;
                 font-size: 24px;
                 font-weight: normal;
+                max-width: 100%;
+                text-overflow: ellipsis!important;
+                white-space: nowrap;
+                overflow: hidden!important;
               }
             }
 

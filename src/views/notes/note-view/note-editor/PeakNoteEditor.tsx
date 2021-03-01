@@ -6,7 +6,7 @@ import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-l
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
 import {useDebouncePeakNoteSaver, useDebouncePeakStubCreator, useSpecificNote} from "../../../../client/notes";
-import {useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
+import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {
@@ -21,10 +21,12 @@ import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
 import {equals} from "ramda";
 import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/types";
+import {useDispatch} from "react-redux";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
     const currentNote: PeakNote | undefined = useSpecificNote(note_id)
+    const dispatch = useDispatch()
     const editorState = useActiveEditorState()
     const journal = useJournal()
     const currentUser = useCurrentUser()
@@ -49,6 +51,9 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
 
     const updateNoteContent = (newBody: Node[]) => {
         if (!equals(newBody, noteContent)) {
+            if (!editorState.isSaving) {
+                dispatch(beginSavingPage());
+            }
             setNoteContent(newBody)
             noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
         }

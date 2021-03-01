@@ -16,6 +16,12 @@
         "default_title": "Open the popup"
     },
     "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'",
+    "content_scripts" : [
+        {
+            "matches": [ "http://*/*", "https://*/*", "file:///*/*" ],
+            "css": ["assets/css/animate.min.css"]
+        }
+    ],
     "background": {
         "scripts": ["background.js"]
     },

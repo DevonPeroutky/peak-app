@@ -37,7 +37,10 @@ const config = {
     devtool: 'cheap-module-source-map',
     plugins: [
         ...plugins,
-        new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('chrome_extension') })
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('chrome_extension'),
+            'process.env.REACT_APP_ENV': JSON.stringify(process.env.REACT_APP_ENV)
+        })
     ],
 };
 

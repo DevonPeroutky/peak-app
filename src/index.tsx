@@ -16,6 +16,7 @@ import {
     setOffline,
     setOnline
 } from "./redux/slices/electronSlice";
+import {fetchNewestNote} from "./utils/notes";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -58,6 +59,10 @@ if (isElectron) {
         store.dispatch(journalHotkeyPressed())
     })
 
+    ipcRenderer.on('open-note', (event, arg) => {
+        const note = fetchNewestNote()
+        window.location.hash = `#/home/notes/${note.id}`
+    })
 
     // -----------------------------
     // Update Online/Offline Status

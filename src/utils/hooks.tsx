@@ -81,6 +81,10 @@ export function useIsFullscreen() {
     return useSelector<AppState, boolean>(state => state.electron.isFullscreen);
 }
 
+export function useJournalHotkeyPressed() {
+    return useSelector<AppState, boolean>(state => state.electron.journalHotKeyPressed);
+}
+
 // export function useJournalEditingState() {
 //     const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
 // }
@@ -106,10 +110,6 @@ export function useCurrentPage() {
     const url = location.pathname.split("/");
     const currentPageId = url.pop()!;
     const pageType = url.pop()!;
-
-    // if (pageId === "") {
-    //
-    // }
 
     if (pageType === "notes") {
         const note: PeakNote = notes.find(n => n.id === currentPageId)
@@ -301,6 +301,7 @@ export function useBulkJournalEntrySaver() {
                 const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
                 batch(() => {
                     dispatch(updateJournalEntries(updatedJournalEntries));
+                    dispatch(endSavingPage())
                 })
             }).catch((err) => {
                 console.log(err)

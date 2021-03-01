@@ -1,7 +1,11 @@
 import {
-    BlockquotePlugin, BoldPlugin, CodeBlockPlugin,
+    BlockquotePlugin,
+    BoldPlugin,
     CodePlugin,
-    ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin, LinkPlugin,
+    ELEMENT_PARAGRAPH,
+    ImagePlugin,
+    ItalicPlugin,
+    LinkPlugin,
     ListPlugin,
     ParagraphPlugin,
     StrikethroughPlugin, UnderlinePlugin, withAutoformat, withImageUpload,
@@ -9,7 +13,7 @@ import {
 } from "@udecode/slate-plugins";
 import {
     baseBehaviorPlugins,
-    baseOptions,
+    baseOptions, defaultStyleOptions,
     snowflakePlugins
 } from "../../base_config";
 import {PeakHeadingPlugin} from "../../plugins/peak-heading-plugin/PeakHeadingPlugin";
@@ -36,23 +40,6 @@ const basePlugins = [
     PeakCalloutPlugin
 ]
 
-const defaultStyleOptions = ({ type, rootProps, ...options}: StyledNodeConfig) => (
-    [
-        type,
-        {
-            ...options,
-            rootProps: {
-                ...rootProps,
-                styles: {
-                    root: {
-                        margin: 0,
-                        lineHeight: '1.5',
-                    },
-                },
-            },
-        },
-    ]
-)
 const levelAwareConfig = baseOptions.map(sup => {
     return {...sup, level: NODE_LEVEL}
 })
