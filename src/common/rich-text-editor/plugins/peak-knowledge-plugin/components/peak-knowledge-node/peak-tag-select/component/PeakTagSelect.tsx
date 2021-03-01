@@ -21,8 +21,8 @@ import {PeakTag} from "../../../../../../../../types";
 import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tags/types";
 const { Option } = Select;
 
-export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[] }) => {
-    const { nodeId, nodePath, selected_tags } = props
+export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[], disabled?: boolean, hideIcon?: boolean }) => {
+    const { nodeId, nodePath, selected_tags, disabled, hideIcon } = props
     const dispatch = useDispatch()
     const editor = useEditor()
     const existingTags = useTags()
@@ -134,7 +134,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
 
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>
-            <TagOutlined className={"peak-tag-icon"}/>
+            { (hideIcon) ? null : <TagOutlined className={"peak-tag-icon"}/> }
             <Select
                 onClick={() => {
                     setDropdownState(true)
@@ -142,6 +142,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
                 }}
                 ref={mainRef}
                 onBlur={saveAndLeave}
+                disabled={disabled || false}
                 open={open}
                 onFocus={() => {
                     setDropdownState(true)

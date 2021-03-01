@@ -2,17 +2,12 @@ import React from "react";
 import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
 import cn from 'classnames';
 import {
-    BookTwoTone,
-    BulbOutlined,
     LinkOutlined,
-    ReadFilled,
-    ReadOutlined,
     ShareAltOutlined
 } from "@ant-design/icons/lib";
 import {isNodeEmpty} from "../../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../../../utils/strings";
-import {ELEMENT_WEB_NOTE, PEAK_LEARNING} from "../../constants";
 import "./peak-knowledge-node.scss"
 import {PeakTag} from "../../../../../../types";
 import {Link} from "react-router-dom";
@@ -29,14 +24,23 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const og_link = element.url as string
     const base_domain = deriveHostname(og_link)
 
-    console.log(`Externl URL `, og_link)
-    console.log(`Base domain `, base_domain)
     return (
         <div className={cn("peak-knowledge-node-container")} {...props.attributes} key={0} tabIndex={0}>
             <div className={"peak-knowledge-title-row web"} contentEditable={false}>
                 <div className="title-section">
-                    <h2 className={"web-note-title"}>{capitalize_and_truncate(element.title as string, 100)}</h2>
-                    <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
+                    <Link to={`/home/notes/${element.note_id}`} className={"web-note-title"}>
+                        <h2>{capitalize_and_truncate(element.title as string, 100)}</h2>
+                    </Link>
+                    {
+                        (tags.length == 0 ) ?
+                            null :
+                            <PeakTagSelect
+                                nodeId={element.id as number}
+                                nodePath={path}
+                                selected_tags={(tags) ? tags : []}
+                                disabled={true}
+                                hideIcon={true}/>
+                    }
                 </div>
             </div>
             <ContentBody {...props}/>
@@ -48,7 +52,7 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
                         <img src={bookmark} className={"title-row-icon web"}/>
                     }
                 />
-                <Link to={og_link} className="external-link">{base_domain}</Link>
+                <a href={og_link} target="_blank" className="external-link">{base_domain}</a>
             </div>
         </div>
     )
