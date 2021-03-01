@@ -1,7 +1,11 @@
 import {
-    BlockquotePlugin, BoldPlugin, CodeBlockPlugin,
+    BlockquotePlugin,
+    BoldPlugin,
     CodePlugin,
-    ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH, getSelectableElement, ImagePlugin, ItalicPlugin, LinkPlugin,
+    ELEMENT_PARAGRAPH,
+    ImagePlugin,
+    ItalicPlugin,
+    LinkPlugin,
     ListPlugin,
     ParagraphPlugin,
     StrikethroughPlugin, UnderlinePlugin, withAutoformat, withImageUpload,

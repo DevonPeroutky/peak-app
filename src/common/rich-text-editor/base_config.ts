@@ -56,6 +56,7 @@ const styleDraggableOptions = ({ type, level, component, ...options}: StyledNode
                 },
             }),
             rootProps: {
+                ...options.rootProps,
                 styles: {
                     root: {
                         margin: 0,

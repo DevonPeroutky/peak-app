@@ -17,7 +17,6 @@ export const EditorContextBar = (props: {}) => {
 
 const PageEditingContext = (props: {}) => {
     const editorState = useActiveEditorState()
-    console.log(`Current Editor State `, editorState)
 
     if (editorState && editorState.isSaving) {
         return (

@@ -41,3 +41,12 @@ export const PEAK_LIST_SPECIFIC_STYLE: Record<ListKeyOption, ListPluginOptionsVa
     },
     ...DEFAULTS_PARAGRAPH,
 };
+
+export const PEAK_BLOCKQUOTE_OVERRIDES = {
+    blockquote: {
+        rootProps: {
+            className: 'slate-blockquote peak-blockquote',
+            as: 'blockquote'
+        }
+    }
+}
