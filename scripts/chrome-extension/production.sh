@@ -4,9 +4,9 @@
 
 # Build Production Manifest
 echo "Generating the production manifest.json..."
-REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com
-REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com
-REACT_APP_ENV=prod
+export REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com
+export REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com
+export REACT_APP_ENV=prod
 cp ./scripts/chrome-extension/base_manifest.json public/manifest.json
 
 echo "Building the production chrome-extension..."

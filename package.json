@@ -14,8 +14,9 @@
   "main": "build/electron/main.js",
   "version": "0.0.2-beta",
   "scripts": {
-    "extension:dev": "REACT_APP_ENV=dev webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
-    "extension:build": "REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com REACT_APP_ENV=prod webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
+    "extension:dev": "./scripts/chrome-extension/development.sh",
+    "extension:build": "./scripts/chrome-extension/production.sh",
+    "extension:publish": "./scripts/chrome-extension/publish.sh",
     "start": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
     "build": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
     "electron:dev": "concurrently \"BROWSER=none REACT_APP_DIST=electron REACT_APP_ENV=dev react-scripts start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",

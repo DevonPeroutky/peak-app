@@ -3,9 +3,9 @@
 #cd "$parent_path"
 
 echo "Generating the production manifest.json, WITHOUT THE key..."
-REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com
-REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com
-REACT_APP_ENV=prod
+export REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com
+export REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com
+export REACT_APP_ENV=prod
 cat ./scripts/chrome-extension/base_manifest.json | jq 'del(.key)' > 'public/manifest.json'
 
 echo "Building the production chrome-extension that can be submitted on the App Store"
