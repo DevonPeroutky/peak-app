@@ -12,7 +12,7 @@
   },
   "homepage": ".",
   "main": "build/electron/main.js",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "scripts": {
     "extension:dev": "REACT_APP_ENV=dev webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=development --watch",
     "extension:build": "webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production",
@@ -39,7 +39,6 @@
     "mac": {
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
-      "target": ["dmg", "zip"],
       "category": "public.app-category.productivity",
       "icon": "build/assets/icon.icns"
     },
