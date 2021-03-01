@@ -9,45 +9,33 @@ $web-body-padding: 20px;
   box-shadow: $peak-kn-box-shadow;
   //padding: $peak-kn-padding;
   border: none;
+  padding: $peak-kn-padding;
 
   .peak-knowledge-title-row {
     display: flex;
-    padding: $peak-kn-padding;
-    border-bottom: 1px solid $gray-accent-color;
+    //border-bottom: 1px solid $gray-accent-color;
     align-items: center;
     //padding-left: 10px;
     //padding-right: 10px;
-    height: $title-row-height;
     //color: $placeholder-text-color;
-    user-select: none;
     justify-content: space-between;
 
     .title-section {
       display: flex;
+      flex-direction: column;
       align-items: center;
       max-width: 100%;
       text-overflow: ellipsis!important;
       white-space: nowrap;
       overflow: hidden;
 
-      .main-icon {
-        margin-right: 10px;
+      .web-note-title {
+        margin-bottom: 0;
+        max-width: 100%;
       }
 
-      .title-row-icon {
-        height: 18px;
-        margin-right: 5px;
-        margin-left: 5px;
-
-        &.book {
-          color: $primary-blue;
-        }
-        &.learning {
-          color: $primary-green;
-        }
-        &.web {
-          color: $primary-red;
-        }
+      .main-icon {
+        margin-right: 10px;
       }
 
       .knowledge-label {
@@ -78,10 +66,8 @@ $web-body-padding: 20px;
   .web-body {
     display: flex;
     padding-top: 24px;
-    padding-left: 24px;
-    padding-right: 24px;
-    //line-height: 18px;
-    //padding-bottom: 24px;
+    padding-bottom: 24px;
+    color: rgba(42, 49, 53, .6)!important;
 
     &.empty::after {
       position: absolute;
@@ -99,8 +85,25 @@ $web-body-padding: 20px;
   }
 
   .web-footer {
-    padding-left: 24px;
-    padding-bottom: 24px;
-  }
+    font-size: 12px;
 
+    .title-row-icon {
+      height: 16px;
+      margin-right: 10px;
+
+      &.book {
+        color: $primary-blue;
+      }
+      &.learning {
+        color: $primary-green;
+      }
+      &.web {
+        color: $primary-red;
+      }
+    }
+
+    .external-link {
+      color: rgba(42, 49, 53, .5)!important;
+    }
+  }
 }

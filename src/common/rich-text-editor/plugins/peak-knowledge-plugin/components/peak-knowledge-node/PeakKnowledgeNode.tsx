@@ -18,6 +18,7 @@ import {PeakTag} from "../../../../../../types";
 import {Link} from "react-router-dom";
 import {message, Tooltip} from "antd";
 import {ImageLoader} from "../../../../../image-loader/ImageLoader";
+import {deriveHostname} from "../../../../../../utils/urls";
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
@@ -26,34 +27,31 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
     const isEmpty: boolean = isNodeEmpty(element)
+    const og_link = element.url as string
+    const base_domain = deriveHostname(og_link)
 
+    console.log(`Externl URL `, og_link)
+    console.log(`Base domain `, base_domain)
     return (
         <div className={cn("peak-knowledge-node-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
             <div className={"peak-knowledge-title-row web"} contentEditable={false}>
                 <div className="title-section">
-                    <BookTwoTone className={"main-icon"}/>
-                    <span>Saved the page </span>
-                        <ImageLoader
-                            className="title-row-icon web"
-                            url={element.icon_url as string}
-                            fallbackElement={
-                                <img src={bookmark} className={"title-row-icon web"}/>
-                            }
-                        />
-                        <span className={"knowledge-label"}>
-                            <Link to={`/home/notes/${element.note_id}`} className={"link-to-note"}>{capitalize_and_truncate(element.title as string, 100)}</Link>
-                        </span>
-                </div>
-                <div className="icon-section">
-                    <ExternalLinkToolTip url={element.url as string}/>
-                    <CopyToolTip/>
+                    <h2 className={"web-note-title"}>{capitalize_and_truncate(element.title as string, 100)}</h2>
+                    <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
                 </div>
             </div>
-            <div className={cn("web-body", (isEmpty) ? "empty" : "")}>
+            <div className={cn("web-body", (isEmpty) ? "empty" : "")} contentEditable={false}>
                 {props.children}
             </div>
-            <div className={"web-footer"}>
-                <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
+            <div className={"web-footer"} contentEditable={false}>
+                <ImageLoader
+                    className="title-row-icon web"
+                    url={element.icon_url as string}
+                    fallbackElement={
+                        <img src={bookmark} className={"title-row-icon web"}/>
+                    }
+                />
+                <Link to={og_link} className="external-link">{base_domain}</Link>
             </div>
         </div>
     )

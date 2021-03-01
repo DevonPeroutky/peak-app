@@ -133,7 +133,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const renderedTagList: PeakTag[] = (!isEmptyInput && !isExistingTag ) ? [...filteredTags, CREATE_NEW_TAG_OPTION] : filteredTags
 
     return (
-        <div className={"peak-learning-select-container extra-margin"} data-slate-editor>
+        <div className={"peak-learning-select-container"} data-slate-editor>
             <TagOutlined className={"peak-tag-icon"}/>
             <Select
                 onClick={() => {
