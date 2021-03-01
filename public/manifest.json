@@ -1,0 +1,82 @@
+{
+  "name": "Peak",
+  "manifest_version": 2,
+  "description": "Save and take notes of what your read to the Peak desktop app.",
+  "author": "Devon Peroutky",
+  "version": "0.0.1",
+  "icons": {
+    "16": "assets/peak-16.png",
+    "48": "assets/peak-48.png",
+    "128": "assets/peak-128.png"
+  },
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "tabs",
+    "http://localhost/*",
+    "identity"
+  ],
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  },
+  "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*/*"
+      ],
+      "css": [
+        "assets/css/animate.min.css"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "oauth2": {
+    "client_id": "261914177641-3jo4ronmd775i0fl4sbav4ojuq0t4oa0.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  },
+  "commands": {
+    "add-to-reading-list": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A",
+        "mac": "Command+Shift+A"
+      },
+      "description": "Add current page to Reading List"
+    },
+    "save-page": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Save current page to personal wiki"
+    },
+    "pop-from-reading-list": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+P",
+        "mac": "Command+Shift+P"
+      },
+      "description": "Read next item"
+    },
+    "add-journal-entry": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+7",
+        "mac": "Command+Shift+7"
+      },
+      "description": "Read",
+      "global": true
+    }
+  },
+  "web_accessible_resources": [
+    "assets/*"
+  ]
+}
