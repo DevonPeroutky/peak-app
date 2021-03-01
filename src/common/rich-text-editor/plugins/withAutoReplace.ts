@@ -13,6 +13,7 @@ import {createAndFocusCodeBlock} from "./peak-code-plugin/utils";
 const AUTO_REPLACE: { [key: string]: string } = {
     '-->': '→',
     '<--': '←',
+    '--': '⸺'
 };
 // const MARKDOWN_LINK_REGEX = /^\[([\w\s\d]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#]+)\)$/
 const MARKDOWN_LINK_REGEX = /\[([^\[]+)\](\(.*\))/gm
@@ -40,9 +41,13 @@ export const withAutoReplace = <T extends Editor>(editor: T) => {
 
             if (found) {
                 const afterText = AUTO_REPLACE[found];
-                Editor.deleteBackward(editor, {unit: "character"} );
-                Editor.deleteBackward(editor, {unit: "character"} );
-                Editor.deleteBackward(editor, {unit: "character"} );
+
+                let existing: number = found.length
+                while (existing > 0) {
+                    Editor.deleteBackward(editor, {unit: "character"} );
+                    existing-=1
+                }
+
                 Editor.insertText(editor, afterText);
             }
         }
