@@ -28,7 +28,6 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
             shouldSubmit: shouldSubmit,
             closeDrawer: () => removeDrawer(activeTabId.toString()),
         } as SaveNoteDrawerProps
-
         const app = document.getElementById('my-extension-root')
         ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     }
@@ -45,6 +44,9 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
             console.log(`SUBMITTING`)
             createDrawer(currTab.id, true)
         }
+
+        // Needed so users can still scroll w/Drawer open
+        document.body.style.setProperty("overflow", "auto")
     })
 
     setItemInChromeState(TAGS_KEY, tags)

@@ -22,6 +22,7 @@ import moment from "moment";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
+// - This does not show the modal.
 // ---------------------------------------------------
 chrome.storage.sync.get(function (data) {
     console.log(`----------> MOUNTING THE MODALLLL`)
