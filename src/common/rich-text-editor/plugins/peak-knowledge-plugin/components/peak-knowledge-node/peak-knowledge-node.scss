@@ -65,14 +65,15 @@ $web-body-padding: 20px;
 
   .web-body {
     display: flex;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     color: rgba(42, 49, 53, .6)!important;
 
     &.empty::after {
       position: absolute;
       padding-top: 3px;
-      top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
+      //top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
+      //top: 0;
       color: $placeholder-text-color;
       cursor: text;
       content: "Write down something that caught your attention....";
@@ -81,6 +82,10 @@ $web-body-padding: 20px;
       line-height: inherit;
       //padding-top: calc(#{$peak-kn-padding-top} + 5px);
       pointer-events:none;
+    }
+
+    .nothing {
+      display: none;
     }
   }
 

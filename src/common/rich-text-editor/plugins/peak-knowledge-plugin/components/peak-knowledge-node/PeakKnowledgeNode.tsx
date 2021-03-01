@@ -26,23 +26,20 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const editor = useEditor()
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
-    const isEmpty: boolean = isNodeEmpty(element)
     const og_link = element.url as string
     const base_domain = deriveHostname(og_link)
 
     console.log(`Externl URL `, og_link)
     console.log(`Base domain `, base_domain)
     return (
-        <div className={cn("peak-knowledge-node-container", (isEmpty) ? "empty" : "")} {...props.attributes} key={0} tabIndex={0}>
+        <div className={cn("peak-knowledge-node-container")} {...props.attributes} key={0} tabIndex={0}>
             <div className={"peak-knowledge-title-row web"} contentEditable={false}>
                 <div className="title-section">
                     <h2 className={"web-note-title"}>{capitalize_and_truncate(element.title as string, 100)}</h2>
                     <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
                 </div>
             </div>
-            <div className={cn("web-body", (isEmpty) ? "empty" : "")} contentEditable={false}>
-                {props.children}
-            </div>
+            <ContentBody {...props}/>
             <div className={"web-footer"} contentEditable={false}>
                 <ImageLoader
                     className="title-row-icon web"
@@ -55,6 +52,25 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
             </div>
         </div>
     )
+}
+
+const ContentBody = (props: RenderElementProps) => {
+    const { element } = props
+    const isEmpty: boolean = isNodeEmpty(element)
+    if (isEmpty) {
+        return (
+            <div className={cn("web-body")} contentEditable={false}>
+                <span className={"nothing"}>{props.children}</span>
+            </div>
+        )
+    } else {
+        return (
+            <div className={cn("web-body")} contentEditable={false}>
+                {props.children}
+            </div>
+        )
+    }
+
 }
 
 const CopyToolTip = (props) => {
