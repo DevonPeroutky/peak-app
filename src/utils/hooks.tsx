@@ -111,10 +111,6 @@ export function useCurrentPage() {
     const currentPageId = url.pop()!;
     const pageType = url.pop()!;
 
-    // if (pageId === "") {
-    //
-    // }
-
     if (pageType === "notes") {
         const note: PeakNote = notes.find(n => n.id === currentPageId)
         return { id: note.id, body: note.body, title: note.title }

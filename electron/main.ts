@@ -29,7 +29,7 @@ const createWindow = (): void => {
     frame: false,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      devTools: true,  // TODO: isDev,
+      devTools: isDev,
       webSecurity: false,
       nodeIntegration: true
     }

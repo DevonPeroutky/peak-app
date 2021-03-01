@@ -11,6 +11,7 @@ import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
 import {DEFAULTS_PEAK_CODE_BLOCK} from "./plugins/peak-code-plugin/defaults";
 import {DEFAULTS_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {DEFAULTS_PEAK_KNOWLEDGE} from "./plugins/peak-knowledge-plugin/defaults";
+import {DEFAULTS_PEAK_NOTE_STUB} from "./plugins/peak-note-stub-plugin/defaults";
 
 export const defaultOptions = {
     ...setDefaults(DEFAULTS_PARAGRAPH, {}),
@@ -30,4 +31,5 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_PEAK_CODE_BLOCK, {}),
     ...setDefaults(DEFAULTS_CALLOUT, {}),
     ...setDefaults(DEFAULTS_PEAK_KNOWLEDGE, {}),
+    ...setDefaults(DEFAULTS_PEAK_NOTE_STUB, {}),
 };

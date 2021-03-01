@@ -37,6 +37,7 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "./defaults";
+import {PeakNoteStubPlugin} from "./plugins/peak-note-stub-plugin/PeakNoteStubPlugin";
 
 const styleDraggableOptions = ({ type, level, component, ...options}: StyledNodeConfig) => (
     [
@@ -130,6 +131,7 @@ export const baseOptions = [
     defaultOptions.learning,
     defaultOptions.peak_book_note,
     defaultOptions.peak_web_note,
+    defaultOptions.peak_note_stub,
     defaultOptions.p
 ]
 const baseNormalizers = [
