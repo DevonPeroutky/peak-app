@@ -10,6 +10,7 @@ $web-body-padding: 20px;
   //padding: $peak-kn-padding;
   border: none;
   padding: $peak-kn-padding;
+  color: rgba(42, 49, 53, .6);
 
   .peak-knowledge-title-row {
     display: flex;
@@ -27,14 +28,14 @@ $web-body-padding: 20px;
       max-width: 100%;
 
       .web-note-title {
-        margin-bottom: 0;
         max-width: 100%;
-        display: block;
 
         h2 {
+          color: $text-color;
           text-overflow: ellipsis!important;
           white-space: nowrap!important;
           overflow: hidden;
+          margin-bottom: 0;
         }
       }
 
@@ -71,16 +72,15 @@ $web-body-padding: 20px;
     display: flex;
     padding-top: 20px;
     padding-bottom: 20px;
-    color: rgba(42, 49, 53, .6)!important;
 
     &.empty::after {
-      position: absolute;
+      position: relative;
       padding-top: 3px;
       //top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
       //top: 0;
       color: $placeholder-text-color;
       cursor: text;
-      content: "Write down something that caught your attention....";
+      content: "Write down something that caught your attention...";
       display: flex;
       align-items: center;
       line-height: inherit;
@@ -88,12 +88,17 @@ $web-body-padding: 20px;
       pointer-events:none;
     }
 
+  }
+
+  .space-block {
+    padding-top: 10px;
     .nothing {
       display: none;
     }
   }
 
   .web-footer {
+    padding-top: 2px;
     font-size: 12px;
 
     .title-row-icon {
@@ -112,7 +117,7 @@ $web-body-padding: 20px;
     }
 
     .external-link {
-      color: rgba(42, 49, 53, .5)!important;
+      color: inherit!important;
     }
   }
 }

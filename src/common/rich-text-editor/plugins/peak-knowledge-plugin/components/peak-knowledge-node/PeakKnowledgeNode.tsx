@@ -63,7 +63,7 @@ const ContentBody = (props: RenderElementProps) => {
     const isEmpty: boolean = isNodeEmpty(element)
     if (isEmpty) {
         return (
-            <div className={cn("web-body")} contentEditable={false}>
+            <div className={cn("space-block")} contentEditable={false}>
                 <span className={"nothing"}>{props.children}</span>
             </div>
         )
