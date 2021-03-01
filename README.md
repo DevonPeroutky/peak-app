@@ -10,7 +10,7 @@ At one point based off of this [template](https://github.com/sivertschou/react-t
 
 
 ### Publishing a new version of the Chrome Extension
-1. Merge your PR into main with the version bumped in `scripts/base_manifest.json`
+1. Merge your PR into main with the version bumped in `scripts/chrome-extension/base_manifest.json`
 2. Run `yarn extension:publish`
 3. Zip the output `/extension-dist` from the previous step  
 4. Upload the zip to [Chrome Extension Developer Console](https://chrome.google.com/webstore/devconsole/)
