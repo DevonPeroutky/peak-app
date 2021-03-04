@@ -107,7 +107,7 @@ export const baseBehaviorPlugins = [
                 predicate: isBlockAboveEmpty,
             },
             {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
                 defaultType: ELEMENT_PARAGRAPH,
                 predicate: isSelectionAtBlockStart,
@@ -199,6 +199,8 @@ export const snowflakePlugins = (level: number) => {
                     hotkey: 'enter',
                     level: level,
                     query: {
+                        start: true,
+                        end: true,
                         allow: [...HEADER_TYPES, TITLE],
                     },
                 },
@@ -206,7 +208,6 @@ export const snowflakePlugins = (level: number) => {
         }),
     ]
 }
-
 
 const deriveLevelAwareOptions = (editorLevel: number, draggable: boolean) => {
     const levelAwareConfig = baseOptions.map(sup => {
