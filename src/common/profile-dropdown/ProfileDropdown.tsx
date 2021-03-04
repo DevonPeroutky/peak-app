@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import "./profile-dropdown.scss"
 import {Dropdown, Menu, message} from 'antd';
-import {CheckOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
+import {CheckOutlined, LinkOutlined, LogoutOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
 import LogoutButton from "../login/logout/LogoutButton";
 import config from "../../constants/environment-vars";
 import {useCurrentUser, useIsContextElectron} from "../../utils/hooks";
@@ -23,11 +23,12 @@ export const ProfileDropdown = (props: {}) => {
     const menu = (
         <Menu className={"peak-account-setting-menu"}>
             {userAccounts.map((acc, index) => <UserAccountRow key={acc.id} userAccount={acc} currentUser={user} accountIndex={index}/>)}
-            <Menu.Item className={"peak-account-setting-row bottom"} onClick={signinAdditionalAccount}>
-                <span>Add another account from email</span>
+            <Menu.Item className={"peak-account-setting-row"} onClick={signinAdditionalAccount}>
+                <LinkOutlined className={"logout-row-icon"}/>
+                <span>Link another account</span>
             </Menu.Item>
             <Menu.Item className={"peak-account-setting-row bottom"}>
-                <LogoutButton />
+                <LogoutButton/>
             </Menu.Item>
         </Menu>
     );
@@ -66,6 +67,3 @@ const UserAccountRow = (props) => {
         </Menu.Item>
     )
 }
-
-
-export default ProfileDropdown;
