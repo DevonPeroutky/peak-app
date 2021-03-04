@@ -3,6 +3,7 @@ import {Tag} from "antd";
 import { capitalize } from "lodash";
 import {useTags} from "../../client/tags";
 import {PeakTag} from "../../types";
+import "./peak-tag-display.scss"
 
 export const PeakTagDisplay = (props: { tagId: string }) => {
     const { tagId } = props
@@ -14,6 +15,6 @@ export const PeakTagDisplay = (props: { tagId: string }) => {
         return null;
     }
     return (
-        <Tag color={tag.color} key={tagId}>{capitalize(tag.title)}</Tag>
+        <Tag color={tag.color} key={tagId} className={"peak-tag"}>{capitalize(tag.title)}</Tag>
     )
 };

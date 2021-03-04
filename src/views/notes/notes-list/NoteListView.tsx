@@ -34,65 +34,31 @@ export const PeakNoteListView = (props: { page_header: string, note_type: PeakKn
                     pageSize: 10
                 }}
                 dataSource={notes}
-                renderItem={(item) => (item.note_type === ELEMENT_WEB_NOTE) ? <WebNoteListItem item={item}/> : <BookListItem item={item}/>}
+                renderItem={(item) => <NoteListItem item={item}/>}
             />
         </div>
     )
 }
 
-const WebNoteListItem = (props: { item: PeakNote }) => {
-    const { item } = props
-    return (
-        <List.Item key={item.title}>
-            <List.Item.Meta
-                className={"peak-note-meta-container"}
-                avatar={null}
-                title={
-                    <>
-                        <Link to={`/home/notes/${item.id}`}>
-                            <div className={"peak-note-list-item-header"}>
-                                <NoteSubTitle item={item}/>
-                                <span className={"item-title"}>
-                                                {capitalize(item.title)}
-                                            </span>
-                            </div>
-                        </Link>
-                    </>
-                }
-                description={
-                    <div className="peak-note-tag-section">
-                        {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-                    </div>
-                }
-            />
-        </List.Item>
-    )
-}
-
-const BookListItem = (props: { item: PeakNote }) => {
+const NoteListItem = (props: { item: PeakNote }) => {
     const { item } = props
     return (
         <List.Item key={item.title}>
             <List.Item.Meta
                 className={"peak-note-book-container"}
-                avatar={<NoteAvatar item={item}/>}
+                avatar={ (item.note_type === ELEMENT_PEAK_BOOK ) ? <NoteAvatar item={item}/> : null }
                 title={
-                    <>
-                            <div className={"peak-note-list-item"}>
-                                    <div className={"title-container"}>
-                                        <Link to={`/home/notes/${item.id}`}>
-                                            <span className={"item-title"}>{capitalize(item.title)}</span>
-                                        </Link>
-                                        <NoteSubTitle item={item}/>
-                                    </div>
-                                <div className={"icon-section"}>
-                                    <div className="peak-note-tag-section">
-                                        {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-                                    </div>
-                                    <DeleteOutlined />
+                    <div className={"peak-note-list-item"}>
+                        <div className={"title-container"}>
+                            <Link to={`/home/notes/${item.id}`}>
+                                <div className={"peak-note-list-item-header"}>
+                                    <span className={"item-title"}>{capitalize(item.title)}</span>
+                                    <NoteSubTitle item={item}/>
                                 </div>
-                            </div>
-                    </>
+                            </Link>
+                        </div>
+                        <NoteIconSection item={item}/>
+                    </div>
                 }
             />
         </List.Item>
@@ -133,4 +99,17 @@ const NoteSubTitle = (props: { item: PeakNote }) => {
                : item.author}
        </div>
     )
+}
+
+const NoteIconSection = (props: { item: PeakNote }) => {
+    const { item } = props
+    return (
+        <div className={"icon-section"}>
+            <div className="peak-note-tag-section">
+                {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+            </div>
+            <DeleteOutlined />
+        </div>
+    )
+
 }
