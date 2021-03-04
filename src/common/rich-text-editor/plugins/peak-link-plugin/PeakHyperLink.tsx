@@ -1,11 +1,11 @@
 import {RenderElementProps, useSlate} from "slate-react";
-import {useCurrentPage} from "../../../../utils/hooks";
 import {useDispatch} from "react-redux";
 import {openEditLinkMenu, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import React from "react";
 import {ELEMENT_LINK, LinkPluginOptions} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
+import "./peak-hyperlink.scss"
 
 const PeakHyperLink = (props: RenderElementProps) => {
     const {
@@ -46,6 +46,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
             data-slate-type={ELEMENT_LINK}
             href={element.url as string}
             target="_blank"
+            className={"peak-hyperlink"}
             key={element.url as string}
             onClick={(e) => openUpMenu(e)}>
                 {children}
