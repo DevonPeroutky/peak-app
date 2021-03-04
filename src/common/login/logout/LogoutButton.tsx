@@ -45,6 +45,7 @@ const LogoutButton = (props: { }) => {
                clientId="261914177641-0gu5jam6arv5m6n95vdjmfu8hpa1kunj.apps.googleusercontent.com"
                render={ renderProps => (
                    <div className={"logout-row"}>
+                       <LogoutOutlined className={"logout-row-icon"}/>
                        <span onClick={renderProps.onClick}>Logout</span>
                    </div>
                )}

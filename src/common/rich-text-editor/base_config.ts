@@ -20,7 +20,7 @@ import {
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
-    withAutoformat,
+    withAutoformat, withDeserializeHTML, WithDeserializeHTMLOptions, withDeserializeMd,
     withImageUpload,
     withLink,
     withList,
@@ -107,7 +107,7 @@ export const baseBehaviorPlugins = [
                 predicate: isBlockAboveEmpty,
             },
             {
-                types: [...HEADER_TYPES, ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
                 hotkey: ['Backspace'],
                 defaultType: ELEMENT_PARAGRAPH,
                 predicate: isSelectionAtBlockStart,
@@ -199,6 +199,8 @@ export const snowflakePlugins = (level: number) => {
                     hotkey: 'enter',
                     level: level,
                     query: {
+                        start: true,
+                        end: true,
                         allow: [...HEADER_TYPES, TITLE],
                     },
                 },
@@ -206,7 +208,6 @@ export const snowflakePlugins = (level: number) => {
         }),
     ]
 }
-
 
 const deriveLevelAwareOptions = (editorLevel: number, draggable: boolean) => {
     const levelAwareConfig = baseOptions.map(sup => {
@@ -228,5 +229,6 @@ const levelDependentNormalizers = (level: number) => [
 ]
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[], draggable: boolean = true) => {
     const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
-    return [...baseNormalizers, withList(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
+    const plugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
+    return [...baseNormalizers, withList(options), withDeserializeHTML({ plugins }), withDeserializeMd(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
 }

@@ -2,11 +2,14 @@ import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
 import {List} from "antd";
-import {BookOutlined, ReadFilled} from "@ant-design/icons/lib";
+import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveHostname} from "../../../utils/urls";
-import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {
+    ELEMENT_PEAK_BOOK,
+    ELEMENT_WEB_NOTE
+} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
@@ -31,36 +34,36 @@ export const PeakNoteListView = (props: { page_header: string, note_type: PeakKn
                     pageSize: 10
                 }}
                 dataSource={notes}
-                renderItem={(item) => (
-                    <List.Item key={item.title}>
-                        <List.Item.Meta
-                            className={"peak-note-meta-container"}
-                            // avatar={<NoteAvatar item={item}/>}
-                            title={
-                                <>
-                                    <Link to={`/home/notes/${item.id}`}>
-                                        <div className={"peak-note-list-item-header"}>
-                                            <NoteSubTitle item={item}/>
-                                            <span className={"item-title"}>
-                                                {capitalize(item.title)}
-                                            </span>
-                                        </div>
-                                    </Link>
-                                </>
-                            }
-                            description={
-                                <div className="peak-note-tag-section">
-                                    {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-                                </div>
-                            }
-                        />
-                    </List.Item>
-                )}
+                renderItem={(item) => <NoteListItem item={item}/>}
             />
         </div>
     )
 }
 
+const NoteListItem = (props: { item: PeakNote }) => {
+    const { item } = props
+    return (
+        <List.Item key={item.title}>
+            <List.Item.Meta
+                className={"peak-note-book-container"}
+                avatar={ (item.note_type === ELEMENT_PEAK_BOOK ) ? <NoteAvatar item={item}/> : null }
+                title={
+                    <div className={"peak-note-list-item"}>
+                        <div className={"title-container"}>
+                            <Link to={`/home/notes/${item.id}`}>
+                                <div className={"peak-note-list-item-header"}>
+                                    <span className={"item-title"}>{capitalize(item.title)}</span>
+                                    <NoteSubTitle item={item}/>
+                                </div>
+                            </Link>
+                        </div>
+                        <NoteIconSection item={item}/>
+                    </div>
+                }
+            />
+        </List.Item>
+    )
+}
 
 const NoteAvatar = (props: { item: PeakNote }) => {
     const { item } = props
@@ -96,4 +99,17 @@ const NoteSubTitle = (props: { item: PeakNote }) => {
                : item.author}
        </div>
     )
+}
+
+const NoteIconSection = (props: { item: PeakNote }) => {
+    const { item } = props
+    return (
+        <div className={"icon-section"}>
+            <div className="peak-note-tag-section">
+                {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+            </div>
+            <DeleteOutlined />
+        </div>
+    )
+
 }

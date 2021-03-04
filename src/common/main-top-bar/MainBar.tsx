@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Input, message} from "antd";
 import "./main-bar.scss";
-import GoogleProfileIcon from "../profile-dropdown/ProfileDropdown";
+import { ProfileDropdown } from "../profile-dropdown/ProfileDropdown";
 import {SearchOutlined} from "@ant-design/icons/lib";
 import {OfflineAlert} from "../offline-alert/OfflineAlert";
 
@@ -24,7 +24,7 @@ const MainBar = (props: {}) => {
                 onPressEnter={search}
             />
             <OfflineAlert/>
-            <GoogleProfileIcon/>
+            <ProfileDropdown/>
         </div>
     )
 };
