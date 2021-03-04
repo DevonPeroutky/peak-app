@@ -20,7 +20,7 @@ import {
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
-    withAutoformat,
+    withAutoformat, withDeserializeHTML, WithDeserializeHTMLOptions, withDeserializeMd,
     withImageUpload,
     withLink,
     withList,
@@ -229,5 +229,6 @@ const levelDependentNormalizers = (level: number) => [
 ]
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[], draggable: boolean = true) => {
     const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
-    return [...baseNormalizers, withList(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
+    const plugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
+    return [...baseNormalizers, withList(options), withDeserializeHTML({ plugins }), withDeserializeMd(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
 }
