@@ -21,11 +21,11 @@ export const PeakHeading = (props: PeakHeadingProps) => {
     // @ts-ignore
     const renderSpecificHeading = () => {
         if (header_type === ELEMENT_H1) return <h1 className={"peak-divider"} {...attributes}>{props.children}</h1>;
-        if (header_type === ELEMENT_H2) return <h2 {...props} />;
-        if (header_type === ELEMENT_H3) return <h3 {...props} />;
-        if (header_type === ELEMENT_H4) return <h4 {...props} />;
-        if (header_type === ELEMENT_H5) return <h5 {...props} />;
-        if (header_type === ELEMENT_H6) return <h6 {...props} />;
+        if (header_type === ELEMENT_H2) return <h2 {...props}>{props.children}</h2>;
+        if (header_type === ELEMENT_H3) return <h3 {...props}>{props.children}</h3>;
+        if (header_type === ELEMENT_H4) return <h4 {...props}>{props.children}</h4>;
+        if (header_type === ELEMENT_H5) return <h5 {...props}>{props.children}</h5>;
+        if (header_type === ELEMENT_H6) return <h6 {...props}>{props.children}</h6>;
     }
 
     const copyToKeyboard = () => {
@@ -39,9 +39,6 @@ export const PeakHeading = (props: PeakHeadingProps) => {
             className={"peak-heading-container"}
             onMouseEnter={() => setShowLink(true)}
             onMouseLeave={() => setShowLink(false)}>
-            <a href={`#${props.element.header_id as string}`}>
-                <div style={{ height: 0, overflow: "hidden" }}>{props.children}</div>
-            </a>
             {renderSpecificHeading()}
         </div>
     )
