@@ -1265,6 +1265,11 @@
     "@uifabric/utilities" "^7.33.4"
     tslib "^1.10.0"
 
+"@fontsource/inter@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-4.2.2.tgz#efe97167aac992db3fadf60ea0dd72aacd3e1fc4"
+  integrity sha512-lvR1PQe+8FTTd3YRW84KGcgUR8leZ7S3aY+51MQ90MQHI0VQe3cDH6T6jjs1qTm+wPmWfdSVjN8ugvNZpGUnvA==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"

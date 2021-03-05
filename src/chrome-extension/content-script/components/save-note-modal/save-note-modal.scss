@@ -4,7 +4,6 @@ $drawer-padding-amount: 24px;
 $drawer-header-vert-padding: 16px;
 $drawer-title-height: 45px;
 .peak-note-drawer {
-  font-family: $font-family!important;
   z-index: 2147483645;
   outline: none!important;
   background: white;
@@ -26,7 +25,6 @@ $drawer-title-height: 45px;
       }
 
       .page-peak-title-input {
-        font-family: $font-family!important;
         font-weight: 600!important;
         color: rgba(0, 0, 0, 0.85); // #828282;
         font-size: 24px;
@@ -71,7 +69,6 @@ $drawer-title-height: 45px;
         width: 100%;
 
         .peak-note-drawer-header {
-          font-family: $font-family!important;
           font-weight: 600!important;
           color: #828282;// rgba(0, 0, 0, 0.85);
         }

@@ -1,15 +1,15 @@
+// I know there are better ways, I'm just lazy.
+
 // --------------
 // Global
 // --------------
-$text-color: rgb(42, 49, 53);
+$text-color: #374151;//#6b7280;//rgb(42, 49, 53);
 $text-accent-color: rgba(42, 49, 53, .4);
 $gray-accent-color: #E6ECF1;
 $c-accent-color: rgb(235, 236, 240);
 $placeholder-text-color: #bfbfbf;
 $background-color: #FFF;
-
-$font-family: "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji";
-
+$heading-color: rgb(17, 24, 39);
 
 // ---------
 // Sidebar
@@ -32,15 +32,9 @@ $horizontal-padding: 170px;
 // Headers
 // ---------
 // Title
-$title-font-size: 2.5rem!important;
-$title-font-weight: 600!important;
-$title-line-height: 2.6rem;
-
-// REMOVE THIS ONCE YOU GET RID OF THE PAGE TITLE
-$h1-font-size: 2.2rem!important;
-$h1-line-height: 2.5rem!important;
-$heading-font-weight: 600;
-$heading-color: $text-color;
+$title-font-size: 3rem!important;
+$title-font-weight: 800!important;
+$title-line-height: 3.5rem;
 
 // --------------
 // Search Bar Row
