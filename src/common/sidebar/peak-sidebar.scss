@@ -24,6 +24,7 @@ $section-heading-size: 1.3rem;
 
   &.fullscreen {
     padding-top: 0;
+    min-width: $fullscreen-sidebar-width!important;
     padding-left: $fullscreen-sidebar-padding;
     width: $fullscreen-sidebar-width;
   }
