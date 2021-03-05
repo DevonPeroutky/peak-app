@@ -20,14 +20,15 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
     // If inserting a new Link
     const insertLink = (newText: string, newUrl: string, theSelection: Range) => {
         const isCollapsed = theSelection && Range.isCollapsed(theSelection);
-        const newLinkId = generateIdForLink(newUrl, newText)
+        const newLinkText: string = (newText.length > 0) ? newText : newUrl
+        const newLinkId = generateIdForLink(newUrl, newLinkText)
 
         const link: Node = {
             id: newLinkId,
             selectionRange: theSelection,
             type: ELEMENT_LINK,
             link: newUrl,
-            children: [{ text: newText }]
+            children: [{ text: newLinkText }]
         };
 
         if (isCollapsed) {
@@ -42,7 +43,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
     }
 
     // If removing the link
-    if (!link || !text) {
+    if (!link) {
         unWrapLink(editor, selection)
         return null
     }
@@ -56,7 +57,8 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
             Transforms.setNodes(editor, { link: link, id: id }, {
                 at: existingLink[1],
             });
-            Transforms.insertText(editor, text, { at: existingLink[1]})
+            const updateText = text || link
+            Transforms.insertText(editor, updateText, { at: existingLink[1]})
         } else {
             message.info(`Links on links confuse me. Try removing the first link before adding the second`)
         }
