@@ -9,12 +9,12 @@ export interface LinkEditMenuProps {
     searchInputElRef: any
     text: string
     setText: (text: string) => void
-    url: string
+    link: string
     setUrl: (text: string) => void
     addLink: () => void
 }
 export const EditingLinkMenu = (props: LinkEditMenuProps) => {
-    const { addLink, setUrl, setText, url, text, textInputElRef, searchInputElRef } = props
+    const { addLink, setUrl, setText, link, text, textInputElRef, searchInputElRef } = props
     const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false)
 
     return (
@@ -47,7 +47,7 @@ export const EditingLinkMenu = (props: LinkEditMenuProps) => {
                     inputRef={searchInputElRef}
                     submitLink={addLink}
                     currentText={text}
-                    currentUrl={url}/>
+                    currentUrl={link}/>
             </div>
         </div>
     )

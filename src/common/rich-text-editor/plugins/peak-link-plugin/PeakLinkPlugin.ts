@@ -1,6 +1,5 @@
 import {
     DEFAULTS_LINK,
-    deserializeLink,
     setDefaults,
     SlatePlugin
 } from "@udecode/slate-plugins";
@@ -15,7 +14,6 @@ export const PeakLinkPlugin = (options?: any): SlatePlugin => {
 
     return {
         renderElement: renderElementLink(options),
-        deserialize: deserializeLink(options),
         onKeyDown: peakLinkOnKeyDownHandler,
         inlineTypes: [link.type]
     }
@@ -33,12 +31,12 @@ export const peakLinkOnKeyDownHandler = (event: any, editor: Editor) => {
             const theNode = match[0]
             const linkNode: Node = theNode[0]
             const text: string = Node.string(linkNode)
-            const url: string = linkNode.url as string
+            const link: string = linkNode.link as string
             const linkId: string = linkNode.id as string
             const linkSelection: Range = linkNode.selection_range as Range
             const currentHyperlink: PeakHyperlinkState = {
                 currentHyperLinkId: linkId,
-                currentLinkUrl: url,
+                currentLinkUrl: link,
                 currentText: text,
                 currentSelection: linkSelection
             };
