@@ -1,6 +1,6 @@
 import {TopicHeaderRow} from "../topic-header-row/TopicHeaderRow";
 import {capitalize_and_truncate} from "../../../../utils/strings";
-import React  from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
 import {PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
 import {DropTargetMonitor, useDrag, useDrop} from "react-dnd";
@@ -8,6 +8,13 @@ import cn from "classnames";
 import {useHistory} from "react-router-dom";
 import "./topic-page-group.scss"
 import { useMovePageToNewTopic } from "../../../../utils/topics";
+import {useSelector} from "react-redux";
+import {AppState} from "../../../../redux";
+import {PeakTopicNode} from "../../../../redux/slices/user/types";
+import {cloneDeep} from "lodash";
+import {clone} from "ramda";
+import {convertHierarchyToSearchableList} from "../../../../utils/hierarchy";
+import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
@@ -23,27 +30,32 @@ interface DragItem {
 
 export const TopicSection = (props: {topics: PeakTopic[]}) => {
     const { topics } = props
+    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
+    const movePageToNewTopic = useCallback(useMovePageToNewTopic(cloneDeep(currentHierarchy)), [currentHierarchy])
     return (
         <div className={"topic-group-container"}>
-            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic}/>)}
+            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic} movePage={movePageToNewTopic}/>)}
         </div>
     )
 }
 
-const TopicPageGroup = (props: { topic: PeakTopic }) => {
-    const { topic } = props
+const TopicPageGroup = (props: { topic: PeakTopic, movePage }) => {
+    const { topic, movePage } = props
     const user = useCurrentUser()
-    const movePageToNewTopic = useMovePageToNewTopic()
+
+    const movePageCallback = (item: DragItem) => {
+        if (item.topicId === topic.id) {
+            console.log(`Do nothing`)
+        } else {
+            console.log(`Moving: ${item.pageId} to ${topic.name}`)
+            movePage(item.pageId, item.topicId, topic.id, user)
+        }
+    }
 
     const [{canDrop, isOver}, drop] = useDrop(() => ({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
         drop(item: DragItem, monitor: DropTargetMonitor) {
-            if (item.topicId === topic.id) {
-                console.log(`Do nothing`)
-            } else {
-                console.log(`Moving: ${item.pageId} to ${topic.name}`)
-                movePageToNewTopic(item.pageId, item.topicId, topic.id)
-            }
+            movePageCallback(item)
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),

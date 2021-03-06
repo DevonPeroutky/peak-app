@@ -27,9 +27,7 @@ const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     const [antList, setAntList] = useState<PeakDisplayNode[]>([])
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
-    console.log(`RE-RENDERING SEARCHER INPUT`)
     useEffect(() => {
-        console.log(`RE-BUILDING SEARCHER hierarchy`)
         if (hierarchy) {
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
@@ -56,9 +54,6 @@ const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
         }
     }
 
-
-    console.log(`Filtered ANt List `, filteredAntList)
-    console.log(`NODES `, renderPeakDisplayNodesInList(filteredAntList))
     return (
         <AutoComplete
             autoFocus

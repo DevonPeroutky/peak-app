@@ -91,6 +91,7 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 // Exported Functions
 // --------------------------------------------
 export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], notes: PeakNote[]): PeakDisplayNode[] {
+    console.log(`REBUILDING THE HIERARCHY`)
     const journalNode: PeakDisplayNode = {
         title: "Journal",
         url: "/home/journal",
@@ -103,8 +104,6 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], not
         path: (n.note_type === ELEMENT_PEAK_BOOK) ? capitalize(n.author) : deriveHostname(n.url),
         header_type: n.note_type,
     }))
-    console.log(`NOTE NODES, `, noteNodes)
-
 
     function convertToDisplayNode(node: PeakStructureNode, path: string): PeakDisplayNode {
         const headerString = (node.header_id) ? `#${node.header_id}` : ""
@@ -167,6 +166,7 @@ export const useUpdatePageInHierarchy = () => {
     const usableHierarchy: PeakTopicNode[] = cloneDeep(currentHierarchy)
 
     return (newBody: Node[], topicId: string, pageId: string) => {
+        console.log(`CALCULATING THE HIERARCHY`)
         const topicHierarchy = usableHierarchy.find(t => t.topic_id === topicId)!
         const updatedTopicHierarchy: PeakTopicNode = deriveStructureForTopic(newBody, topicHierarchy, pageId)
 

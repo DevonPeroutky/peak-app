@@ -15,7 +15,6 @@ import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 import {buildNoteUrl} from "../../../utils/notes";
-const bookmark = require('../../../assets/icons/bookmark.svg');
 
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
     const { page_header, note_type } = props

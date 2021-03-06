@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {AutoComplete, Modal } from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { AppState} from "../../redux";
-import { closeSwitcher } from "../../redux/slices/quickSwitcherSlice";
+import {closeSwitcher, quickSwitcherSlice} from "../../redux/slices/quickSwitcherSlice";
 import "./quick-switcher.scss"
 import {convertHierarchyToSearchableList} from "../../utils/hierarchy";
 import { cloneDeep} from "lodash";
@@ -24,7 +24,6 @@ const QuickSwitcher = (props: { }) => {
 
     useEffect(() => {
         if (hierarchy) {
-            console.log(`USING THe QUICKSWITCHER HIERARCHY USEEFFECT`, hierarchy)
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)
@@ -68,8 +67,6 @@ const QuickSwitcher = (props: { }) => {
             setFilteredAntList(antList)
         }
     }
-
-    console.log(`FILTERED LIST `, filteredAntList)
 
     return (
         <Modal
