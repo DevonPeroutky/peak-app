@@ -1,8 +1,8 @@
 import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
-import {List} from "antd";
-import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
+import {List, message, Popconfirm} from "antd";
+import {BookOutlined, DeleteOutlined, QuestionCircleOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveHostname} from "../../../utils/urls";
@@ -103,12 +103,17 @@ const NoteSubTitle = (props: { item: PeakNote }) => {
 
 const NoteIconSection = (props: { item: PeakNote }) => {
     const { item } = props
+    const mockOut = () => {
+        message.info("Not implemented yet")
+    }
     return (
         <div className={"icon-section"}>
             <div className="peak-note-tag-section">
                 {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
             </div>
-            <DeleteOutlined />
+            <Popconfirm title="Are you sure？" icon={<DeleteOutlined style={{ color: 'red' }}/>} onConfirm={mockOut}>
+                <DeleteOutlined />
+            </Popconfirm>
         </div>
     )
 
