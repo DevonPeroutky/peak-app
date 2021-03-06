@@ -156,7 +156,6 @@ export const baseOptions = [
     defaultOptions.peak_note_stub,
     defaultOptions.p
 ]
-console.log(`AUTOFORMAT RULES `, autoformatRules)
 const baseNormalizers = [
     withReact,
     withHistory,

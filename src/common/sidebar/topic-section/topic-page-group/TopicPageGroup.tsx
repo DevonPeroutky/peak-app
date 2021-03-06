@@ -31,37 +31,34 @@ interface DragItem {
 export const TopicSection = (props: {topics: PeakTopic[]}) => {
     const { topics } = props
     const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
-    const movePageToNewTopic = useCallback(useMovePageToNewTopic(cloneDeep(currentHierarchy)), [currentHierarchy])
+    const FUCK_THIS = cloneDeep(currentHierarchy)
+    console.log(`UG`, FUCK_THIS)
+    const movePageToNewTopic = useMovePageToNewTopic()
     return (
         <div className={"topic-group-container"}>
-            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic} movePage={movePageToNewTopic}/>)}
+            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic} movePage={movePageToNewTopic(FUCK_THIS)} test={FUCK_THIS}/>)}
         </div>
     )
 }
 
-const TopicPageGroup = (props: { topic: PeakTopic, movePage }) => {
-    const { topic, movePage } = props
+const TopicPageGroup = (props: { topic: PeakTopic, movePage, test }) => {
+    const { topic, movePage, test } = props
     const user = useCurrentUser()
-
-    const movePageCallback = (item: DragItem) => {
-        if (item.topicId === topic.id) {
-            console.log(`Do nothing`)
-        } else {
-            console.log(`Moving: ${item.pageId} to ${topic.name}`)
-            movePage(item.pageId, item.topicId, topic.id, user)
-        }
-    }
 
     const [{canDrop, isOver}, drop] = useDrop(() => ({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
         drop(item: DragItem, monitor: DropTargetMonitor) {
-            movePageCallback(item)
+            if (item.topicId === topic.id) {
+                console.log(`Do nothing`)
+            } else {
+                movePage(item.pageId, item.topicId, topic.id, user)
+            }
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: monitor.canDrop(),
         })
-    }))
+    }), [test])
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>
