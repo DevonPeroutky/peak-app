@@ -31,7 +31,7 @@ const LinkMenu = (props: LinkMenuProps) => {
 
     // These will be to new Text/URL combo
     const [text, setText] = useState<string>('');
-    const [link, setLink] = useState<string>('');
+    const [url, setUrl] = useState<string>('');
 
     const closeOnEscapeHandler = (e: any) => {
         if (e.key === "Escape") {
@@ -87,7 +87,7 @@ const LinkMenu = (props: LinkMenuProps) => {
         }
 
         if (!showLinkMenu) {
-            setLink('')
+            setUrl('')
             el.removeAttribute('style');
             return undefined
         }
@@ -104,7 +104,7 @@ const LinkMenu = (props: LinkMenuProps) => {
         if (linkState.currentHyperLinkId) {
             setEditing(false)
             setText(linkState.currentText)
-            setLink(linkState.currentLinkUrl)
+            setUrl(linkState.currentLinkUrl)
         } else {
             // We need to grab text of selection because it's highlight + CMD-l.
             setText(Editor.string(editor, editor.selection))
@@ -137,7 +137,7 @@ const LinkMenu = (props: LinkMenuProps) => {
      * Close the menu (should we reset selection)
      */
     const closeMenu = (resetDefaultSelection: boolean = true) => {
-        setLink('');
+        setUrl('');
         setText('')
         setDropdownOpen(false)
         setEditing(true)
@@ -156,13 +156,13 @@ const LinkMenu = (props: LinkMenuProps) => {
      * Adding a Link
      */
     const addLink = () => {
-        if (link === '') {
+        if (url === '') {
             clearLink()
         } else {
             const insertedLinkGenerator = upsertLink({
                 editor: editor,
                 text: text,
-                link: link,
+                url: url,
                 selection: savedSelection!,
                 id: linkState.currentHyperLinkId
             });
@@ -225,13 +225,13 @@ const LinkMenu = (props: LinkMenuProps) => {
                         setDropdownState={setDropdownOpen}
                         textInputRef={textInputEl}
                         setLinkText={setText}
-                        setUrl={setLink}
+                        setUrl={setUrl}
                         inputRef={searchInputEl}
                         submitLink={addLink}
                         currentText={text}
-                        currentUrl={link}/>
+                        currentUrl={url}/>
                 </div>
-            </div> : <DisplayLinkMenu clearLink={clearLink} link={link} setEditing={setEditing}/>
+            </div> : <DisplayLinkMenu clearLink={clearLink} url={url} setEditing={setEditing}/>
     }
 
     return (

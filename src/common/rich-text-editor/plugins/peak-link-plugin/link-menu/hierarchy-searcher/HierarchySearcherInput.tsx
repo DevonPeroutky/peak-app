@@ -25,8 +25,8 @@ const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     const [antList, setAntList] = useState<PeakDisplayNode[]>([])
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
+    console.log(`Current Hierarchy `, hierarchy)
     useEffect(() => {
-        // console.log(`USING THE LINK MENU useEFFECT`)
         if (hierarchy) {
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy))
             setAntList(derivedAntList)
