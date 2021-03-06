@@ -37,7 +37,9 @@ import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "./defaults";
+import React from "react";
 import {PeakNoteStubPlugin} from "./plugins/peak-note-stub-plugin/PeakNoteStubPlugin";
+import {DragOutlined} from "@ant-design/icons/lib";
 
 const styleDraggableOptions = ({ type, level, component, ...options}: StyledNodeConfig) => (
     [
@@ -47,6 +49,7 @@ const styleDraggableOptions = ({ type, level, component, ...options}: StyledNode
             component: getSelectableElement({
                 component,
                 level,
+                dragIcon: <DragOutlined/>,
                 styles: {
                     blockAndGutter: {
                         padding: '4px 0',
@@ -55,6 +58,7 @@ const styleDraggableOptions = ({ type, level, component, ...options}: StyledNode
                         height: '1.5em',
                     },
                 },
+
             }),
             rootProps: {
                 ...options.rootProps,
@@ -213,7 +217,9 @@ const deriveLevelAwareOptions = (editorLevel: number, draggable: boolean) => {
     const levelAwareConfig = baseOptions.map(sup => {
         return {...sup, level: editorLevel}
     })
+    // TODO CHANGE BACK TO ABOVE
     const styledOptions = (draggable) ? levelAwareConfig.map(styleDraggableOptions) : levelAwareConfig.map(defaultStyleOptions);
+    // const styledOptions = (draggable) ? levelAwareConfig.map(defaultStyleOptions) : levelAwareConfig.map(defaultStyleOptions);
     return { ...defaultOptions, ...Object.fromEntries(styledOptions) }
 }
 
