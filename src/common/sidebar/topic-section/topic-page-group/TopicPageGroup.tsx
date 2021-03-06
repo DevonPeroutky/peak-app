@@ -35,7 +35,7 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
     const user = useCurrentUser()
     const movePageToNewTopic = useMovePageToNewTopic()
 
-    const [{isOver}, drop] = useDrop({
+    const [{canDrop, isOver}, drop] = useDrop(() => ({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
         drop(item: DragItem, monitor: DropTargetMonitor) {
             if (item.topicId === topic.id) {
@@ -46,9 +46,10 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             }
         },
         collect: (monitor) => ({
-            isOver: !!monitor.isOver()
+            isOver: !!monitor.isOver(),
+            canDrop: monitor.canDrop(),
         })
-    })
+    }))
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>
