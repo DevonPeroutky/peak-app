@@ -16,8 +16,7 @@ import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
-import {isEmpty, not} from "ramda";
-import {PeakPage, PeakTopic, updatePageTitleInSidebar, updateTopic} from "../redux/slices/topicSlice";
+import {PeakPage, PeakTopic, updatePageTitleInSidebar} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
@@ -198,14 +197,14 @@ export function usePagePublisher() {
 
 export function useSavePageRequest() {
     const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
-    // const topics: PeakTopic[] = useTopics()
-    // const deriveNewHierarchy = useUpdatePageInHierarchy()
+    const topics: PeakTopic[] = useTopics()
+    const deriveNewHierarchy = useUpdatePageInHierarchy()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
         // TODO: This breaks with CodeEditing in Notes because the pageId is different.
-        // const currentTopic: PeakTopic = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
-        // const newHierarchy = deriveNewHierarchy(newValue, currentTopic.id, pageId)
-        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, user.hierarchy)
+        const currentTopic: PeakTopic | undefined = topics.find(t => t.pages.map(p => p.id).includes(pageId))!
+        const newHierarchy = (currentTopic) ? deriveNewHierarchy(newValue, currentTopic.id, pageId) : user.hierarchy
+        return updatePage(user.id, pageId, {body: newValue, title: pageTitle}, newHierarchy)
     }
 }
 
