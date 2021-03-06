@@ -95,6 +95,10 @@ const QuickSwitcher = (props: { }) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault()
                             }
+                            if (e.key === 'Escape') {
+                                e.preventDefault()
+                                closeModal()
+                            }
                         }}
                         open={mounted}
                         style={{width: '100%'}}

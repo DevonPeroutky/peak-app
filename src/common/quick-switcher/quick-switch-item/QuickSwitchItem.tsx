@@ -7,6 +7,7 @@ import {JOURNAL, TIMELINE, TITLE} from "../../rich-text-editor/types";
 import {PeakDisplayNode} from "../../../redux/slices/user/types";
 import {ELEMENT_PEAK_BOOK, ELEMENT_WEB_NOTE} from "../../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../image-loader/ImageLoader";
+const bookmark = require('../../../assets/icons/bookmark.svg');
 const { Option } = AutoComplete;
 
 const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {
@@ -17,8 +18,10 @@ const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {
             case ELEMENT_PEAK_BOOK:
                 return <ReadOutlined className="quick-switch-item-icon"/>
             case ELEMENT_WEB_NOTE:
+                // TODO: Once we are downloading and caching imaging, we can update this.
+                return <img src={bookmark} className={"quick-switch-item-icon"}/>
                 // return <EditOutlined className="quick-switch-item-icon"/>
-                return <ImageLoader className={"quick-switch-item-icon"} url={node.icon_url} fallbackElement={<EditOutlined className="quick-switch-item-icon"/>}/>
+                // return <ImageLoader className={"quick-switch-item-icon"} url={node.icon_url} fallbackElement={<EditOutlined className="quick-switch-item-icon"/>}/>
             case TITLE:
                 return <FileOutlined className="quick-switch-item-icon"/>
             case JOURNAL:
