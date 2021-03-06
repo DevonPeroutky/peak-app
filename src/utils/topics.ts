@@ -11,10 +11,8 @@ import {Peaker} from "../types";
 
 export function useMovePageToNewTopic() {
     const dispatch = useDispatch()
-    console.log(`RE-RENDERING`)
 
     return (pageId: string, sourceTopicId: string, destTopicId: string, currentUser: Peaker, usableHierarchy: PeakTopicNode[]) => {
-        console.log(`DA FUCKKKK `, usableHierarchy)
         const sourceTopicHierarchy: PeakTopicNode = usableHierarchy.find(t => t.topic_id === sourceTopicId)!
         const destTopicHierarchy: PeakTopicNode = usableHierarchy.find(t => t.topic_id === destTopicId)!
         const pageHierarchy: PeakStructureNode = sourceTopicHierarchy.children.find(p => p.page_id === pageId)
