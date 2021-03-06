@@ -41,7 +41,6 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
     const { topic } = props
     const user = useCurrentUser()
     const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
-    const FUCK_THIS = cloneDeep(currentHierarchy)
     const movePage = useMovePageToNewTopic()
 
     const [{canDrop, isOver}, drop] = useDrop(() => ({
@@ -50,6 +49,7 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             if (item.topicId === topic.id) {
                 console.log(`Do nothing`)
             } else {
+                const FUCK_THIS = cloneDeep(currentHierarchy)
                 movePage(item.pageId, item.topicId, topic.id, user, FUCK_THIS)
             }
         },
@@ -57,7 +57,7 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             isOver: !!monitor.isOver(),
             canDrop: monitor.canDrop(),
         })
-    }), [FUCK_THIS])
+    }), [currentHierarchy])
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>
