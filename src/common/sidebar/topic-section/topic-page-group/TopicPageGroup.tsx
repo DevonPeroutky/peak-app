@@ -30,20 +30,19 @@ interface DragItem {
 
 export const TopicSection = (props: {topics: PeakTopic[]}) => {
     const { topics } = props
-    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
-    const FUCK_THIS = cloneDeep(currentHierarchy)
-    console.log(`UG`, FUCK_THIS)
-    const movePageToNewTopic = useMovePageToNewTopic()
     return (
         <div className={"topic-group-container"}>
-            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic} movePage={movePageToNewTopic(FUCK_THIS)} test={FUCK_THIS}/>)}
+            {topics.map(topic => <TopicPageGroup key={topic.id} topic={topic}/>)}
         </div>
     )
 }
 
-const TopicPageGroup = (props: { topic: PeakTopic, movePage, test }) => {
-    const { topic, movePage, test } = props
+const TopicPageGroup = (props: { topic: PeakTopic }) => {
+    const { topic } = props
     const user = useCurrentUser()
+    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
+    const FUCK_THIS = cloneDeep(currentHierarchy)
+    const movePage = useMovePageToNewTopic()
 
     const [{canDrop, isOver}, drop] = useDrop(() => ({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
@@ -51,14 +50,14 @@ const TopicPageGroup = (props: { topic: PeakTopic, movePage, test }) => {
             if (item.topicId === topic.id) {
                 console.log(`Do nothing`)
             } else {
-                movePage(item.pageId, item.topicId, topic.id, user)
+                movePage(item.pageId, item.topicId, topic.id, user, FUCK_THIS)
             }
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: monitor.canDrop(),
         })
-    }), [test])
+    }), [FUCK_THIS])
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>

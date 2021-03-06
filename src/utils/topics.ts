@@ -13,7 +13,7 @@ export function useMovePageToNewTopic() {
     const dispatch = useDispatch()
     console.log(`RE-RENDERING`)
 
-    return (usableHierarchy: PeakTopicNode[]) => (pageId: string, sourceTopicId: string, destTopicId: string, currentUser: Peaker) => {
+    return (pageId: string, sourceTopicId: string, destTopicId: string, currentUser: Peaker, usableHierarchy: PeakTopicNode[]) => {
         console.log(`DA FUCKKKK `, usableHierarchy)
         const sourceTopicHierarchy: PeakTopicNode = usableHierarchy.find(t => t.topic_id === sourceTopicId)!
         const destTopicHierarchy: PeakTopicNode = usableHierarchy.find(t => t.topic_id === destTopicId)!
