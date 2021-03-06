@@ -2,9 +2,9 @@ import {withReact} from "slate-react";
 import {withHistory} from "slate-history";
 import {
     BlockquotePlugin,
-    BoldPlugin,
+    BoldPlugin, CodeBlockPlugin,
     CodePlugin,
-    ELEMENT_BLOCKQUOTE,
+    ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK,
     ELEMENT_PARAGRAPH,
     ExitBreakPlugin,
     getSelectableElement,
@@ -96,7 +96,7 @@ export const baseBehaviorPlugins = [
             {
                 hotkey: 'enter',
                 query: {
-                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
+                    allow: [ELEMENT_BLOCKQUOTE, JOURNAL_ENTRY, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK, ELEMENT_CODE_BLOCK],
                 },
             },
         ],
@@ -104,13 +104,13 @@ export const baseBehaviorPlugins = [
     ResetBlockTypePlugin({
         rules: [
             {
-                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, ELEMENT_CODE_BLOCK],
                 hotkey: ['Enter'],
                 defaultType: ELEMENT_PARAGRAPH,
                 predicate: isBlockAboveEmpty,
             },
             {
-                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT],
+                types: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, ELEMENT_CODE_BLOCK ],
                 hotkey: ['Backspace'],
                 defaultType: ELEMENT_PARAGRAPH,
                 predicate: isSelectionAtBlockStart,
@@ -128,8 +128,9 @@ const basePlugins = [
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
+    CodeBlockPlugin,
     PeakHeadingPlugin,
-    PeakCodePlugin,
+    // PeakCodePlugin,
     PeakLinkPlugin,
     PeakCalloutPlugin,
     PeakKnowledgePlugin
@@ -155,6 +156,7 @@ export const baseOptions = [
     defaultOptions.peak_note_stub,
     defaultOptions.p
 ]
+console.log(`AUTOFORMAT RULES `, autoformatRules)
 const baseNormalizers = [
     withReact,
     withHistory,
@@ -174,7 +176,7 @@ export const snowflakePlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK, ELEMENT_CODE_BLOCK],
                         filter: (entry => {
                             const [node, path] = Array.from(entry)
                             return path.length === level + 2
@@ -185,7 +187,7 @@ export const snowflakePlugins = (level: number) => {
                 {
                     hotkey: 'mod+enter',
                     query: {
-                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK],
+                        allow: [ELEMENT_BLOCKQUOTE, PEAK_CALLOUT, PEAK_LEARNING, ELEMENT_PEAK_BOOK, ELEMENT_CODE_BLOCK],
                         filter: (entry => {
                             const [node, path] = Array.from(entry)
                             return path.length === level + 1
@@ -227,7 +229,6 @@ export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: S
     const slatePlugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
     return [...slatePlugins, ...baseBehaviorPlugins, ...additionalPlugins, ...snowflakePlugins(baseNodeLevel)]
 }
-
 
 const levelDependentNormalizers = (level: number) => [
     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
