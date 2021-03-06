@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import cn from "classnames"
 import {useCurrentPageId, useIsFullscreen, useTopics} from "../../utils/hooks";
 import {EditOutlined, MenuOutlined, ReadOutlined} from "@ant-design/icons/lib";
-import {TopicSection} from "./topic-section/topic-page-group/TopicPageGroup";
+import { TopicSection } from "./topic-section/topic-page-group/TopicPageGroup";
 import {isElectron} from "../../utils/environment";
 import 'antd/dist/antd.css';
 import "./peak-sidebar.scss";
@@ -43,7 +43,7 @@ const PeakSidebar = (props: { }) => {
                     </Link>
                 </Menu.Item>
             </Menu>
-            <h3 className="topics-header">Wiki</h3>
+            <h4 className="topics-header">Wiki</h4>
             <TopicSection topics={topics}/>
             <AddTopicModal/>
         </Sider>

@@ -1,7 +1,5 @@
 @import "../../constants/variables";
 
-$section-heading-size: 1.3rem;
-
 .peak-sidebar {
   min-width: $sidebar-width!important;
   background: $sidebar-background-color;
@@ -24,6 +22,7 @@ $section-heading-size: 1.3rem;
 
   &.fullscreen {
     padding-top: 0;
+    min-width: $fullscreen-sidebar-width!important;
     padding-left: $fullscreen-sidebar-padding;
     width: $fullscreen-sidebar-width;
   }
@@ -53,9 +52,7 @@ $section-heading-size: 1.3rem;
     width: 100%;
     align-items: center;
     padding-right: 16px;
-    font-weight: 600!important;
     padding-top: 35px;
-    font-size: $section-heading-size!important;
   }
 
   .overview-menu {
@@ -91,7 +88,6 @@ $section-heading-size: 1.3rem;
     margin-top: 50px;
     padding-right: 16px;
     font-weight: 600!important;
-    font-size: $section-heading-size!important;
   }
 }
 

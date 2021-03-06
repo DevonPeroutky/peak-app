@@ -10,7 +10,7 @@ import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentPage, useOnlineStatus} from "../../utils/hooks";
+import {useCurrentUser, useCurrentPage, useOnlineStatus, useCurrentPageId, useIsFullscreen} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
@@ -26,6 +26,8 @@ import {
     ELEMENT_PEAK_BOOK,
     ELEMENT_WEB_NOTE
 } from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {isElectron} from "../../utils/environment";
+import cn from "classnames"
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -36,6 +38,7 @@ const PeakLayout = (props: {}) => {
     const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()
+    const isFullscreen = useIsFullscreen()
 
     useJournalSubscription()
 
@@ -68,37 +71,39 @@ const PeakLayout = (props: {}) => {
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">
                 <PeakSidebar/>
-                <Content className="peak-main-content">
+                <Content className={cn((isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen", "peak-main-content")}>
                     <MainBar/>
                     <Content className="peak-content-container">
-                       <Switch>
-                           <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
-                           <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
-                           <Route path={`${match.path}/notes/:id`} render={(props) => {
-                               if (props.match.params && props.match.params.id) {
-                                   return <PeakNoteView key={props.match.params.id} {...props} />
-                               } else {
-                                   return <Redirect to={"/"} />
-                               }
-                           }} />
-                           <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
-                           <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
-                           <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
-                           <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
-                           <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
-                           <Route path={`${match.path}/wiki/:id`} render={(props) => {
-                               if (currentWikiPage) {
-                                   return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
-                               } else {
-                                   return <Redirect to={"/"} />
-                               }
-                           }}/>
-                           <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
-                           <Route path="*">
-                               <h1>NOT FOUND</h1>
-                           </Route>
-                           </Switch>
-                       </Content>
+                        <div className="peak-content-holder">
+                            <Switch>
+                                <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                                <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
+                                <Route path={`${match.path}/notes/:id`} render={(props) => {
+                                    if (props.match.params && props.match.params.id) {
+                                        return <PeakNoteView key={props.match.params.id} {...props} />
+                                    } else {
+                                        return <Redirect to={"/"} />
+                                    }
+                                }} />
+                                <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
+                                <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
+                                <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
+                                <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
+                                <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
+                                <Route path={`${match.path}/wiki/:id`} render={(props) => {
+                                    if (currentWikiPage) {
+                                        return <TopicWiki key={props.match.params.id} {...props} topic_id={topic_id}/>
+                                    } else {
+                                        return <Redirect to={"/"} />
+                                    }
+                                }}/>
+                                <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
+                                <Route path="*">
+                                    <h1>NOT FOUND</h1>
+                                </Route>
+                            </Switch>
+                        </div>
+                    </Content>
                     <EditorContextBar/>
                 </Content>
             </Layout>

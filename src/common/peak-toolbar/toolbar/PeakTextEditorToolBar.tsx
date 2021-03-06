@@ -13,8 +13,9 @@ import {useSlate} from "slate-react";
 import cn from "classnames";
 import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 import {PublishButton} from "../save-button/SaveButton";
-import {ELEMENT_PARAGRAPH, isNodeTypeIn} from "@udecode/slate-plugins";
+import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {toggleHeader} from "../../rich-text-editor/plugins/peak-heading-plugin/header-utils";
+import {isNodeTypeIn} from "../../rich-text-editor/utils/base-utils";
 
 const { Option } = Select;
 

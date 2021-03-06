@@ -7,7 +7,6 @@ import {any} from "ramda";
 import {
     ELEMENT_CODE_BLOCK,
     isMarkActive,
-    isNodeTypeIn,
     toggleList,
     toggleMark,
     toggleWrapNodes
@@ -15,6 +14,7 @@ import {
 import { PeakEditorControlDisplay} from "../toolbar-controls";
 import { capitalize } from "lodash";
 import {useActiveEditorState} from "../../../redux/slices/activeEditor/activeEditorSlice";
+import {isNodeTypeIn} from "../../rich-text-editor/utils/base-utils";
 
 export const EditorToolBarIcon = (props: {
     isDisabled: boolean,

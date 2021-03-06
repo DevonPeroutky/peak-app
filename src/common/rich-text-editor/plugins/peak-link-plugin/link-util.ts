@@ -4,7 +4,7 @@ import {message} from "antd";
 
 interface UpsertLinkProps {
     text: string
-    url: string
+    link: string
     selection: Range
     editor: Editor
     id?: string
@@ -15,19 +15,20 @@ interface UpsertLinkProps {
  * @param upsertLinkProps
  */
 export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
-    const { text, url, selection, editor, id } = upsertLinkProps;
+    const { text, link, selection, editor, id } = upsertLinkProps;
 
     // If inserting a new Link
     const insertLink = (newText: string, newUrl: string, theSelection: Range) => {
         const isCollapsed = theSelection && Range.isCollapsed(theSelection);
-        const newLinkId = generateIdForLink(newUrl, newText)
+        const newLinkText: string = (newText.length > 0) ? newText : newUrl
+        const newLinkId = generateIdForLink(newUrl, newLinkText)
 
         const link: Node = {
             id: newLinkId,
             selectionRange: theSelection,
             type: ELEMENT_LINK,
-            url: newUrl,
-            children: [{ text: newText }]
+            link: newUrl,
+            children: [{ text: newLinkText }]
         };
 
         if (isCollapsed) {
@@ -42,7 +43,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
     }
 
     // If removing the link
-    if (!url || !text) {
+    if (!link) {
         unWrapLink(editor, selection)
         return null
     }
@@ -53,16 +54,17 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         const existingLink = findLink(editor, id);
 
         if (existingLink) {
-            Transforms.setNodes(editor, { url: url, id: id }, {
+            Transforms.setNodes(editor, { link: link, id: id }, {
                 at: existingLink[1],
             });
-            Transforms.insertText(editor, text, { at: existingLink[1]})
+            const updateText = text || link
+            Transforms.insertText(editor, updateText, { at: existingLink[1]})
         } else {
             message.info(`Links on links confuse me. Try removing the first link before adding the second`)
         }
         return existingLink
     } else {
-        return insertLink(text, url, selection)
+        return insertLink(text, link, selection)
     }
 };
 
@@ -90,40 +92,20 @@ export const isLinkActiveAtSelection = (editor: Editor, selection: Range) => {
     return !!link;
 };
 
-// /**
-//  * This is a bug waiting to happen. If multiple links have the exact same text and url, we won't be able to tell
-//  * which one was 'clicked' and thus which menu to open. We need to add an id when wrapping with a Link, but this would
-//  * require our own `withLink` normalizer which is more trouble than it's worth
-//  * @param editor
-//  * @param text
-//  * @param url
-//  */
-// export const findLinkNodeByTextAndUrl = (editor: Editor, text: string, url: string) => {
-//     const [nodes] = Editor.nodes(editor, {
-//         mode: 'all',
-//         at: [],
-//         match: n => {
-//             return (n.type === ELEMENT_LINK && n.url && n.url == url && Node.string(n) == text)
-//         },
-//     });
-//     // const matchingNodes = nodes.map(n => n[0])
-//     return nodes
-// };
-
 export const findLink = (editor: Editor, id: string) => {
     const [nodes] = Editor.nodes(editor, {
         mode: 'all',
         at: [],
         match: n => {
-            return (n.type === ELEMENT_LINK && n.url && n.id == id )
+            return (n.type === ELEMENT_LINK && n.link && n.id == id )
         },
     });
     // const matchingNodes = nodes.map(n => n[0])
     return nodes
 };
 
-const generateIdForLink = (url: string, displayText: string) => {
+const generateIdForLink = (link: string, displayText: string) => {
     // Return a random number between 1 and 100 for the ID
     const rand = Math.floor((Math.random() * 100) + 1);
-    return `${url}-${displayText}-${rand}`
+    return `${link}-${displayText}-${rand}`
 }

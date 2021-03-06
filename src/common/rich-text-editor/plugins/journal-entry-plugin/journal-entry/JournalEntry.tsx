@@ -9,7 +9,7 @@ import {FileSyncOutlined} from "@ant-design/icons/lib";
 import {useSlate} from "slate-react";
 import {JOURNAL_ENTRY} from "../../../types";
 import {convertJournalEntryToSlateNodes} from "../../../editors/journal/utils";
-import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL, isList} from "@udecode/slate-plugins";
+import {ELEMENT_LI, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL} from "@udecode/slate-plugins";
 import "./journal-entry.scss";
 import {PeakWikiPage} from "../../../../../constants/wiki-types";
 import {JournalEntry} from "../../../editors/journal/types";

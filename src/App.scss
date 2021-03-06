@@ -1,14 +1,19 @@
 @import "constants/variables";
+@import "~@fontsource/inter/index.css";
 
 .App {
   text-align: center;
   height: 100vh;
 }
 
+body {
+  font-family: "Inter"!important;
+}
 
 // The styles below apply to all editors. Don't have a good place to put them
 .peak-blockquote {
   font-style: italic;
   font-size: 1.5em;
   font-weight: 600;
+  //color: #6b7280;
 }

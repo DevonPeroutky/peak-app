@@ -21,7 +21,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
     const openUpMenu = (e: any) => {
         if (editorState.isEditing) {
             const linkText: string = element.children[0].text as string
-            const linkUrl: string = element.url as string
+            const linkUrl: string = element.link as string
             const linkId: string = element.id as string
 
             const currentHyperlink: PeakHyperlinkState = {
@@ -32,10 +32,10 @@ const PeakHyperLink = (props: RenderElementProps) => {
             };
             dispatch(openEditLinkMenu({ hyperlinkState: currentHyperlink} ));
         } else {
-            const url: string = element.url as string
-            if (url.startsWith("/")) {
+            const link: string = element.link as string
+            if (link.startsWith("/")) {
                 e.preventDefault()
-                history.push(url);
+                history.push(link);
             }
         }
     }
@@ -44,10 +44,10 @@ const PeakHyperLink = (props: RenderElementProps) => {
         <a
             {...attributes}
             data-slate-type={ELEMENT_LINK}
-            href={element.url as string}
+            href={element.link as string}
             target="_blank"
             className={"peak-hyperlink"}
-            key={element.url as string}
+            key={element.link as string}
             onClick={(e) => openUpMenu(e)}>
                 {children}
         </a>

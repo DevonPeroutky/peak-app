@@ -1,20 +1,36 @@
 @import "../../constants/variables";
 
 .peak-parent-layout {
+  display: flex;
   min-height: 100vh;
 
   .peak-main-content {
+    display: flex;
+    flex-direction: column;
     margin-left: $sidebar-width;
     background-color: white;
-    max-width: calc(100vw - #{$sidebar-width});
+    flex-grow: 1;
+    max-width: calc(100vw - #{$sidebar-width}) !important;
+    width: calc(100vw - #{$sidebar-width}) !important;
+
+    &.fullscreen {
+      margin-left: $fullscreen-sidebar-width;
+      max-width: calc(100vw - #{$fullscreen-sidebar-width}) !important;
+      width: calc(100vw - #{$fullscreen-sidebar-width}) !important;
+    }
 
     .peak-content-container {
       height: calc(100% - 55px);
-      padding: $vertical-padding $horizontal-padding;
-      min-width: 500px;
-      max-width: 1500px;
+      width: 100%;
       display: flex;
       flex-direction: column;
+      align-items: center;
+
+      .peak-content-holder {
+        width: 85%;
+        max-width: 1175px;
+        padding-top: $vertical-padding;
+      }
     }
   }
 }

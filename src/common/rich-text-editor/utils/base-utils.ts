@@ -1,11 +1,9 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Point, Range, Transforms} from "slate";
 import {isEqual} from "lodash";
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
+import {ELEMENT_PARAGRAPH, someNode} from "@udecode/slate-plugins";
 import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/utils";
 import {EMPTY_PARAGRAPH_NODE} from "../editors/constants";
-import {JOURNAL_ENTRY} from "../types";
-import {isCurrentDay} from "../../../utils/time";
 
 export function previous(editor: ReactEditor): Node | undefined {
     const currentPath = editor.selection?.anchor.path
@@ -79,7 +77,6 @@ export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
     return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
 }
 
-
 // TODO: Replace w/findNode in slate-plugins
 export function findNode(editor: Editor, match: (n: Node) => boolean) {
     const [res] = Editor.nodes(editor, {
@@ -89,3 +86,6 @@ export function findNode(editor: Editor, match: (n: Node) => boolean) {
     return res
 }
 
+export function isNodeTypeIn(editor: Editor, format: string): boolean {
+    return someNode(editor, { match: { type: format } })
+}
