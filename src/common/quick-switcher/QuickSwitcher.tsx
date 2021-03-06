@@ -9,11 +9,13 @@ import { cloneDeep} from "lodash";
 import { useHistory } from 'react-router-dom';
 import {renderPeakDisplayNodesInList} from "./quick-switch-item/QuickSwitchItem";
 import {PeakDisplayNode, PeakTopicNode} from "../../redux/slices/user/types";
+import {useNotes} from "../../client/notes";
 
 const QuickSwitcher = (props: { }) => {
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const isOpen = useSelector<AppState, boolean>(state => state.quickSwitcher.isOpen);
     const dispatch = useDispatch()
+    const notes = useNotes()
     const history = useHistory()
     const [value, setValue] = useState<string | undefined>(undefined)
     const [mounted, setMounted] = useState<boolean>(false)
@@ -21,13 +23,13 @@ const QuickSwitcher = (props: { }) => {
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
     useEffect(() => {
-        console.log(`USING THe QUICKSWITCHER HIERARCHY USEEFFECT`)
         if (hierarchy) {
-            const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy))
+            console.log(`USING THe QUICKSWITCHER HIERARCHY USEEFFECT`, hierarchy)
+            const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)
         }
-    }, [ hierarchy ]);
+    }, [ hierarchy, notes ]);
 
     useEffect(() => {
         let timer = null;
@@ -66,6 +68,8 @@ const QuickSwitcher = (props: { }) => {
             setFilteredAntList(antList)
         }
     }
+
+    console.log(`FILTERED LIST `, filteredAntList)
 
     return (
         <Modal

@@ -5,6 +5,7 @@ import { EditTwoTone, FireTwoTone, ReadOutlined } from "@ant-design/icons/lib";
 import "./peak-note-stub.scss"
 import {Link} from "react-router-dom";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
+import {buildNoteUrl} from "../../../../../utils/notes";
 
 export const PeakNoteStub = (props: RenderElementProps) => {
     const { element } = props
@@ -14,7 +15,7 @@ export const PeakNoteStub = (props: RenderElementProps) => {
                 <span className={"knowledge-label"}>
                     {element.action === 'created' ? <CreatedStub/> : <AddedStub/>}
                     <ReadOutlined className={"title-row-icon book"}/>
-                    <Link to={`/home/notes/${element.note_id}`} className={"link-to-note"}>{capitalize_and_truncate(element.title as string, 100)}</Link>
+                    <Link to={buildNoteUrl(element.note_id as string)} className={"link-to-note"}>{capitalize_and_truncate(element.title as string, 100)}</Link>
                     {(element.author) ? `by ${capitalize_and_truncate(element.author as string, 30)}` : ""}
                 </span>
             </div>

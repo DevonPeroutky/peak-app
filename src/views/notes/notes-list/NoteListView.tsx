@@ -14,6 +14,7 @@ import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
+import {buildNoteUrl} from "../../../utils/notes";
 const bookmark = require('../../../assets/icons/bookmark.svg');
 
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
@@ -51,7 +52,7 @@ const NoteListItem = (props: { item: PeakNote }) => {
                 title={
                     <div className={"peak-note-list-item"}>
                         <div className={"title-container"}>
-                            <Link to={`/home/notes/${item.id}`}>
+                            <Link to={buildNoteUrl(item.id)}>
                                 <div className={"peak-note-list-item-header"}>
                                     <span className={"item-title"}>{capitalize(item.title)}</span>
                                     <NoteSubTitle item={item}/>
@@ -68,10 +69,6 @@ const NoteListItem = (props: { item: PeakNote }) => {
 
 const NoteAvatar = (props: { item: PeakNote }) => {
     const { item } = props
-
-    if (item.note_type === ELEMENT_WEB_NOTE) {
-        return (<img src={bookmark} className={"web-note-icon"}/>)
-    }
 
     if (!item.icon_url) {
         return (<ReadFilled className="default-note-icon"/>)

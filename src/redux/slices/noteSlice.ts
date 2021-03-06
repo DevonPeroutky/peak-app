@@ -1,7 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Node} from "slate";
 import {PeakKnowledgeKeyOption} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
-import {PeakTopic} from "./topicSlice";
 import {sort} from "ramda";
 
 export const STUB_BOOK_ID = "new-book"

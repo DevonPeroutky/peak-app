@@ -13,21 +13,25 @@ $icon-dimension: 16px;
     display: flex;
     align-items: center;
 
-
     .quick-switch-icon-container {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 25px;
+      max-height: 25px;
       min-width: 25px;
       max-width: 25px;
 
       .quick-switch-header-icon {
         font-size: 20px!important;
+        width: 25px;
       }
 
       .quick-switch-item-icon {
         display: flex;
+        max-height: 25px;
+        min-width: 25px;
+        max-width: 25px;
         align-items: center;
         justify-content: center;
         color: silver;

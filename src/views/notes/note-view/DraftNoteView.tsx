@@ -10,6 +10,7 @@ import {useQuery} from "../../../utils/urls";
 import {getCoverImageUrl} from "../../../client/openLibrary";
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import "./draft-note-view.scss"
+import {buildNoteUrl} from "../../../utils/notes";
 
 export const PeakDraftNoteView = (props) => {
     const history = useHistory()
@@ -34,10 +35,10 @@ export const PeakDraftNoteView = (props) => {
 
         if (existingBook) {
             // setCurrentNote(existingBook)
-            history.push(`/home/notes/${existingBook.id}`)
+            history.push(buildNoteUrl(existingBook.id))
         } else {
             noteCreator(currentUser, {title: titleParam, iconUrl: bookIconUrl, author: author}).then((note) => {
-                history.push(`/home/notes/${note.id}`)
+                history.push(buildNoteUrl(note.id))
             })
         }
     }, [])
