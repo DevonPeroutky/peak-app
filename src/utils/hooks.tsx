@@ -215,7 +215,8 @@ function usePageSaver() {
     const editorState = useActiveEditorState()
 
     return (newValue: Node[], pageTitle: string, pageId: string) => {
-        if (!isEmpty(editorState.focusMap)) {
+        const anyActiveCodeEditors: boolean = R.any(a => a, R.values(editorState.focusMap))
+        if (anyActiveCodeEditors) {
             console.log("NOT SUBMITTING")
             // @ts-ignore
             return

@@ -125,7 +125,7 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[]): Pe
             addNodes(peakNode, parentPath, theList)
         })
     })
-    return [journalNode, timelineNode, ...theList]
+    return [journalNode, ...theList]
 }
 
 export function convertPeakNodeToTreeNode(obj: PeakNode): TreeNodeNormal {
