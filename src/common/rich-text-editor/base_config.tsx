@@ -6,11 +6,10 @@ import {
     CodePlugin,
     ELEMENT_BLOCKQUOTE,
     ELEMENT_PARAGRAPH,
-    ExitBreakPlugin, getBlockAbove,
+    ExitBreakPlugin,
     getSelectableElement,
     ImagePlugin,
-    isAncestorEmpty, isBlockAboveEmpty,
-    isSelectionAtBlockEnd,
+    isBlockAboveEmpty,
     isSelectionAtBlockStart,
     ItalicPlugin,
     ListPlugin,
@@ -20,7 +19,9 @@ import {
     SoftBreakPlugin,
     StrikethroughPlugin,
     UnderlinePlugin,
-    withAutoformat, withDeserializeHTML, WithDeserializeHTMLOptions, withDeserializeMd,
+    withAutoformat,
+    withDeserializeHTML,
+    withDeserializeMd,
     withImageUpload,
     withLink,
     withList,
@@ -32,13 +33,12 @@ import {PeakHeadingPlugin} from "./plugins/peak-heading-plugin/PeakHeadingPlugin
 import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
 import {StyledNodeConfig, HEADER_TYPES, JOURNAL_ENTRY, SlateNormalizer, TITLE} from "./types";
-import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
+import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {PeakCodePlugin} from "./plugins/peak-code-plugin/PeakCodePlugin";
 import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "./defaults";
 import React from "react";
-import {PeakNoteStubPlugin} from "./plugins/peak-note-stub-plugin/PeakNoteStubPlugin";
 import {DragOutlined} from "@ant-design/icons/lib";
 
 const styleDraggableOptions = ({ type, level, component, ...options}: StyledNodeConfig) => (
@@ -58,7 +58,6 @@ const styleDraggableOptions = ({ type, level, component, ...options}: StyledNode
                         height: '1.5em',
                     },
                 },
-
             }),
             rootProps: {
                 ...options.rootProps,

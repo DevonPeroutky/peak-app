@@ -5,13 +5,20 @@ import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
 import {PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
 import {DropTargetMonitor, useDrag, useDrop} from "react-dnd";
 import cn from "classnames";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import "./topic-page-group.scss"
 import { useMovePageToNewTopic } from "../../../../utils/topics";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
     TOPIC_HEADER: 'topic_header'
+}
+interface DragItem {
+    index: number
+    id: string
+    topicId: string
+    pageId: string
+    type: string
 }
 
 export const TopicSection = (props: {topics: PeakTopic[]}) => {
@@ -51,14 +58,6 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             )}
         </div>
     )
-}
-
-interface DragItem {
-    index: number
-    id: string
-    topicId: string
-    pageId: string
-    type: string
 }
 const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number}) => {
     const { page, topicId } = props

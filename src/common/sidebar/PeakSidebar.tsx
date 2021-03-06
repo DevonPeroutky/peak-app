@@ -44,7 +44,7 @@ const PeakSidebar = (props: { }) => {
                 </Menu.Item>
             </Menu>
             <h4 className="topics-header">Wiki</h4>
-            <TopicSection topics={topics}/>
+            {/*<TopicSection topics={topics}/>*/}
             <AddTopicModal/>
         </Sider>
     )
