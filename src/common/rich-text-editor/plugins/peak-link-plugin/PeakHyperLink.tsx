@@ -21,7 +21,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
     const openUpMenu = (e: any) => {
         if (editorState.isEditing) {
             const linkText: string = element.children[0].text as string
-            const linkUrl: string = element.link as string
+            const linkUrl: string = element.url as string
             const linkId: string = element.id as string
 
             const currentHyperlink: PeakHyperlinkState = {
@@ -32,10 +32,10 @@ const PeakHyperLink = (props: RenderElementProps) => {
             };
             dispatch(openEditLinkMenu({ hyperlinkState: currentHyperlink} ));
         } else {
-            const link: string = element.link as string
-            if (link.startsWith("/")) {
+            const url: string = element.url as string
+            if (url.startsWith("/")) {
                 e.preventDefault()
-                history.push(link);
+                history.push(url);
             }
         }
     }

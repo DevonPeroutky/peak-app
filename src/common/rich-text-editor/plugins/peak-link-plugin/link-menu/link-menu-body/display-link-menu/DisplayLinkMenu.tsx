@@ -4,12 +4,12 @@ import "./display-link-menu.scss"
 import {Divider} from "antd";
 
 interface DisplayLinkProps {
-    link: string,
+    url: string,
     setEditing: (isEditing: boolean) => void
     clearLink: () => void
 }
 export const DisplayLinkMenu = (props: DisplayLinkProps) => {
-    const { link, setEditing, clearLink } = props
+    const { url, setEditing, clearLink } = props
 
     return (
         <div className="display-link-content-body">
@@ -19,7 +19,7 @@ export const DisplayLinkMenu = (props: DisplayLinkProps) => {
                 setEditing(true)
             }}>Edit Link</div>
             <Divider type={"vertical"} className={"link-menu-divider"}/>
-            <a href={link} target="_blank">
+            <a href={url} target="_blank">
                 <LinkOutlined className="link-icon"/>
             </a>
             <Divider type={"vertical"} className={"link-menu-divider"}/>

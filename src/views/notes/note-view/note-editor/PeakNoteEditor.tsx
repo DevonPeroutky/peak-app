@@ -58,10 +58,10 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
             noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
         }
 
-        if (readyToStub && !stubCreated) {
-            createStub(currentUser, currentNote, journal.body as JournalEntry[], "added_notes")
-            setStubCreated(true)
-        }
+        // if (readyToStub && !stubCreated) {
+        //     createStub(currentUser, currentNote, journal.body as JournalEntry[], "added_notes")
+        //     setStubCreated(true)
+        // }
         onChangeMention(editor);
     }
 

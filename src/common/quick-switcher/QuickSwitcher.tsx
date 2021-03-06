@@ -21,7 +21,7 @@ const QuickSwitcher = (props: { }) => {
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
     useEffect(() => {
-        // console.log(`USING THe QUICKSWITCHER USEEFFECT`)
+        console.log(`USING THe QUICKSWITCHER HIERARCHY USEEFFECT`)
         if (hierarchy) {
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy))
             setAntList(derivedAntList)

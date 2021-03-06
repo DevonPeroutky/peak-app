@@ -4,7 +4,7 @@ import {message} from "antd";
 
 interface UpsertLinkProps {
     text: string
-    link: string
+    url: string
     selection: Range
     editor: Editor
     id?: string
@@ -15,7 +15,7 @@ interface UpsertLinkProps {
  * @param upsertLinkProps
  */
 export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
-    const { text, link, selection, editor, id } = upsertLinkProps;
+    const { text, url, selection, editor, id } = upsertLinkProps;
 
     // If inserting a new Link
     const insertLink = (newText: string, newUrl: string, theSelection: Range) => {
@@ -27,7 +27,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
             id: newLinkId,
             selectionRange: theSelection,
             type: ELEMENT_LINK,
-            link: newUrl,
+            url: newUrl,
             children: [{ text: newLinkText }]
         };
 
@@ -43,7 +43,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
     }
 
     // If removing the link
-    if (!link) {
+    if (!url) {
         unWrapLink(editor, selection)
         return null
     }
@@ -54,17 +54,17 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         const existingLink = findLink(editor, id);
 
         if (existingLink) {
-            Transforms.setNodes(editor, { link: link, id: id }, {
+            Transforms.setNodes(editor, { url: url, id: id }, {
                 at: existingLink[1],
             });
-            const updateText = text || link
+            const updateText = text || url
             Transforms.insertText(editor, updateText, { at: existingLink[1]})
         } else {
             message.info(`Links on links confuse me. Try removing the first link before adding the second`)
         }
         return existingLink
     } else {
-        return insertLink(text, link, selection)
+        return insertLink(text, url, selection)
     }
 };
 
@@ -97,15 +97,15 @@ export const findLink = (editor: Editor, id: string) => {
         mode: 'all',
         at: [],
         match: n => {
-            return (n.type === ELEMENT_LINK && n.link && n.id == id )
+            return (n.type === ELEMENT_LINK && n.url && n.id == id )
         },
     });
     // const matchingNodes = nodes.map(n => n[0])
     return nodes
 };
 
-const generateIdForLink = (link: string, displayText: string) => {
+const generateIdForLink = (url: string, displayText: string) => {
     // Return a random number between 1 and 100 for the ID
     const rand = Math.floor((Math.random() * 100) + 1);
-    return `${link}-${displayText}-${rand}`
+    return `${url}-${displayText}-${rand}`
 }

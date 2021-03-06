@@ -8,7 +8,6 @@ import {
     unwrapList,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../peak-toolbar/toolbar-controls";
-import {createAndFocusCodeBlock} from "./peak-code-plugin/utils";
 
 const AUTO_REPLACE: { [key: string]: string } = {
     '-->': '→',

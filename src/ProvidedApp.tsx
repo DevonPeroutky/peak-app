@@ -23,7 +23,7 @@ const ProvidedApp = (props: {}) => {
         <div className="App">
             <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
             <Router>
-                {/*<QuickSwitcher/>*/}
+                <QuickSwitcher/>
                 <Switch>
                     <Route path="/timeline">
                         <PeakTimeline/>

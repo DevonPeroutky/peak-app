@@ -87,7 +87,7 @@ export const BookHeaderSection = (props: {note_id: string, icon_url: string, sel
     return (
         <div className={"note-header-section peak_book"}>
             <div className={"note-subheader-section"}>
-                <Link to={`/home/notes`}><CaretLeftFilled/> Back to Notes</Link>
+                <Link to={`/home/books`}><CaretLeftFilled/> Back to Books</Link>
             </div>
             <div className={"book-note-header-row"}>
                 <div className={"image-section"}>

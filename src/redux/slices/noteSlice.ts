@@ -1,6 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Node} from "slate";
 import {PeakKnowledgeKeyOption} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
+import {PeakTopic} from "./topicSlice";
+import {sort} from "ramda";
 
 export const STUB_BOOK_ID = "new-book"
 
@@ -18,16 +20,21 @@ export interface PeakNote {
 }
 const emptyBookList: PeakNote[] = []
 
+const noteOrderingByDate = (a: PeakNote, b: PeakNote) => {
+    return (a.inserted_at <= b.inserted_at) ? -1 : 1
+};
+
 export const noteSlice = createSlice({
     name: 'notes',
     initialState: emptyBookList,
     reducers: {
         setNotes(state, action: PayloadAction<PeakNote[]>) {
-            return action.payload;
+            return sort(noteOrderingByDate, action.payload);
         },
         upsertNote(state, action: PayloadAction<PeakNote>) {
             const noteToUpsert: PeakNote = action.payload
-            return [...state.filter(n => n.id !== noteToUpsert.id), action.payload]
+            const newNotes: PeakNote[] = [action.payload, ...state.filter(n => n.id !== noteToUpsert.id)]
+            return newNotes
         },
         updateNote(state, action: PayloadAction<PeakNote>) {
             const updatedNote: PeakNote = action.payload

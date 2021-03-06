@@ -146,16 +146,25 @@ const PEAK_LINK: PeakEditorControlDisplay = {
     hotkeyInstructionArray: ['⌘', 'K'],
     customFormat: (editor => toggleMark(editor, ELEMENT_LINK)),
 };
-const PEAK_CODE_BLOCK: PeakEditorControlDisplay = {
-    controlType: ELEMENT_CODE_BLOCK,
+// const PEAK_CODE_BLOCK: PeakEditorControlDisplay = {
+//     controlType: ELEMENT_CODE_BLOCK,
+//     icon: <CodeOutlined className={"peak-editor-control-icon"}/>,
+//     label: "Code Block",
+//     description: "Display code with syntax highlighting",
+//     elementType: ELEMENT_CODE_BLOCK,
+//     markup: ['``'],
+//     trigger: ['`'],
+//     markupLabel: ["```", "Space"],
+//     customFormat: (editor => createAndFocusCodeBlock(editor)),
+// };
+const BASIC_CODE_BLOCK: PeakEditorControlDisplay = {
+    controlType: "block",
     icon: <CodeOutlined className={"peak-editor-control-icon"}/>,
     label: "Code Block",
     description: "Display code with syntax highlighting",
     elementType: ELEMENT_CODE_BLOCK,
-    markup: ['``'],
-    trigger: ['`'],
+    markup: ['```'],
     markupLabel: ["```", "Space"],
-    customFormat: (editor => createAndFocusCodeBlock(editor)),
 };
 const PEAK_QUOTE: PeakEditorControlDisplay = {
     controlType: "block",
@@ -296,7 +305,8 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     HEADER_FIVE,
     UNORDERED_LIST,
     ORDERED_LIST,
-    PEAK_CODE_BLOCK,
+    // PEAK_CODE_BLOCK,
+    BASIC_CODE_BLOCK,
     PEAK_QUOTE,
     TABLE_MARK,
     PEAK_CALLOUT_BLOCK,
@@ -310,7 +320,7 @@ export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = NODE_CONTENT_TY
 // These three below are only used for Toolbar and are thus deprecated
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
-export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_CODE_BLOCK, PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK, IMAGE_MARK];
+export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK, IMAGE_MARK];
 
 // Undo, Clear formatting, Code?, Redo, Emoji, Quick Insert?
 export const KEYBOARD_SHORTCUTS: PeakEditorControlDisplay[] = [
@@ -341,6 +351,6 @@ export const MARKDOWN_SHORTCUTS: PeakEditorControlDisplay[] = [
     ORDERED_LIST,
     PEAK_CODE_MARK,
     PEAK_CALLOUT_BLOCK,
-    PEAK_CODE_BLOCK,
     PEAK_QUOTE,
+    BASIC_CODE_BLOCK
 ]

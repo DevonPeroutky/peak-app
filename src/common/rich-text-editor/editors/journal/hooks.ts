@@ -32,10 +32,10 @@ export const useJournalSubscription = () => {
             channel.on("web_note_created", res => {
                 console.log(`Received nodes of web_note from backend broadcast`, res)
                 const newlyCreatedNote: PeakNote = res.note
-                const appState: AppState = store.getState()
-                const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.journal_nodes, appState.peakWikiState[JOURNAL], newlyCreatedNote.id)
+                // const appState: AppState = store.getState()
+                // const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.journal_nodes, appState.peakWikiState[JOURNAL], newlyCreatedNote.id)
                 batch(() => {
-                    dispatch(updateJournalEntry(newJournalEntryForToday))
+                    // dispatch(updateJournalEntry(newJournalEntryForToday))
                     dispatch(upsertNote(newlyCreatedNote))
                 })
             })
