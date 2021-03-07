@@ -25,7 +25,7 @@ export interface OpenLibraryBook {
 
 // EXAMPLE: http://openlibrary.org/search.json?title=the+lord+of+the+rings
 const searchForBookByTitle = (title: string, callBackFunc: (books: OpenLibraryBook[]) => void) => {
-    const url = `http://openlibrary.org/search.json?title=${title}`
+    const url = `https://openlibrary.org/search.json?title=${title}`
     console.log(`SEARCHING FOR ${title}`)
     axios.get<OpenLibraryResponse>(url).then(res => {
         console.log(`SETTING OL books`, res.data.docs.slice(0, 5))
@@ -43,5 +43,5 @@ export function useDebounceOpenLibrarySearcher() {
 
 // EXAMPLE: http://covers.openlibrary.org/b/id/8814444-L.jpg
 export function getCoverImageUrl(openLibraryBookId: number, size: "S" | "M" | "L"): string {
-    return `http://covers.openlibrary.org/b/id/${openLibraryBookId}-${size}.jpg`
+    return `https://covers.openlibrary.org/b/id/${openLibraryBookId}-${size}.jpg`
 }
