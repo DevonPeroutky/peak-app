@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
-import {loadUserRequest} from "../../client/user";
+import {loadUserRequest, login_via_chrome_extension} from "../../client/user";
 import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
@@ -31,7 +31,8 @@ chrome.identity.getAuthToken({
     axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
         const chrome_user: ChromeUser = r.data as ChromeUser;
         console.log(chrome_user)
-        loadUserRequest(chrome_user.id)
+        // loadUserRequest(chrome_user.id)
+        login_via_chrome_extension(chrome_user.id)
             .then(r => {
                 const user: Peaker = r.data.data as Peaker;
                 console.log(`Syncing user to chrome storage`, user)

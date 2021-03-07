@@ -22,6 +22,7 @@ import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowl
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
 import {useHistory} from "react-router-dom";
+import {buildNoteUrl} from "../../../../utils/notes";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
     editorLevel: number
@@ -103,7 +104,7 @@ export const useNodeContentSelect = (
                             return new Promise(function(resolve, reject) {
                                 resetNodeMenuItem()
                                 resolve(setTargetRange(null))
-                            }).then(() => history.push(`/home/notes/${data.noteId}`))
+                            }).then(() => history.push(buildNoteUrl(data.noteId)))
 
                         }
                     }

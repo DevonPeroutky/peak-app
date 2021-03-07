@@ -1,6 +1,6 @@
 import {TopicHeaderRow} from "../topic-header-row/TopicHeaderRow";
 import {capitalize_and_truncate} from "../../../../utils/strings";
-import React  from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useCurrentPageId, useCurrentUser} from "../../../../utils/hooks";
 import {PeakPage, PeakTopic} from "../../../../redux/slices/topicSlice";
 import {DropTargetMonitor, useDrag, useDrop} from "react-dnd";
@@ -8,6 +8,13 @@ import cn from "classnames";
 import {useHistory} from "react-router-dom";
 import "./topic-page-group.scss"
 import { useMovePageToNewTopic } from "../../../../utils/topics";
+import {useSelector} from "react-redux";
+import {AppState} from "../../../../redux";
+import {PeakTopicNode} from "../../../../redux/slices/user/types";
+import {cloneDeep} from "lodash";
+import {clone} from "ramda";
+import {convertHierarchyToSearchableList} from "../../../../utils/hierarchy";
+import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
@@ -33,7 +40,8 @@ export const TopicSection = (props: {topics: PeakTopic[]}) => {
 const TopicPageGroup = (props: { topic: PeakTopic }) => {
     const { topic } = props
     const user = useCurrentUser()
-    const movePageToNewTopic = useMovePageToNewTopic()
+    const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
+    const movePage = useMovePageToNewTopic()
 
     const [{canDrop, isOver}, drop] = useDrop(() => ({
         accept: DragItemTypes.TOPIC_PAGE_ITEM,
@@ -41,15 +49,15 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
             if (item.topicId === topic.id) {
                 console.log(`Do nothing`)
             } else {
-                console.log(`Moving: ${item.pageId} to ${topic.name}`)
-                movePageToNewTopic(item.pageId, item.topicId, topic.id)
+                const FUCK_THIS = cloneDeep(currentHierarchy)
+                movePage(item.pageId, item.topicId, topic.id, user, FUCK_THIS)
             }
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: monitor.canDrop(),
         })
-    }))
+    }), [currentHierarchy])
 
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>

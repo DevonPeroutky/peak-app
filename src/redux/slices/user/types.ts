@@ -12,13 +12,14 @@ export interface PeakDisplayNode {
     url: string,
     title: string,
     path?: string,
+    icon_url?: string
     topic_id?: string
     page_id?: string
     header_id?: string
     header_type: PeakNodeType
 }
 
-export type PeakNodeType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "title" | "journal" | "timeline" | string
+export type PeakNodeType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "title" | "journal" | "timeline" | "peak_web_note" | "peak_book_note" | string
 export interface PeakStructureNode extends PeakNode {
     parent: PeakStructureNode | null
     children: PeakStructureNode[]

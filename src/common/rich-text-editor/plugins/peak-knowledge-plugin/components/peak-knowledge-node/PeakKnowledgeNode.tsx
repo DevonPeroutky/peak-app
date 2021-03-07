@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import {message, Tooltip} from "antd";
 import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 import {deriveHostname} from "../../../../../../utils/urls";
+import {buildNoteUrl} from "../../../../../../utils/notes";
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
@@ -28,7 +29,7 @@ export const PeakKnowledgeNode = (props: RenderElementProps) => {
         <div className={cn("peak-knowledge-node-container")} {...props.attributes} key={0} tabIndex={0}>
             <div className={"peak-knowledge-title-row web"} contentEditable={false}>
                 <div className="title-section">
-                    <Link to={`/home/notes/${element.note_id}`} className={"web-note-title"}>
+                    <Link to={buildNoteUrl(element.note_id as string)} className={"web-note-title"}>
                         <h2>{capitalize_and_truncate(element.title as string, 100)}</h2>
                     </Link>
                     {

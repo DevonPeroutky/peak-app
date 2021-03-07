@@ -156,7 +156,6 @@ export const baseOptions = [
     defaultOptions.peak_note_stub,
     defaultOptions.p
 ]
-console.log(`AUTOFORMAT RULES `, autoformatRules)
 const baseNormalizers = [
     withReact,
     withHistory,
@@ -236,5 +235,5 @@ const levelDependentNormalizers = (level: number) => [
 export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[], draggable: boolean = true) => {
     const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
     const plugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
-    return [...baseNormalizers, withList(options), withDeserializeHTML({ plugins }), withDeserializeMd(options), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
+    return [...baseNormalizers, withList(options), withDeserializeHTML({ plugins }), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]
 }

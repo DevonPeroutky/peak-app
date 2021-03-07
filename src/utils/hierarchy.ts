@@ -8,6 +8,10 @@ import { TreeNodeNormal} from "antd/es/tree/Tree";
 import { capitalize } from "lodash";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6 } from "@udecode/slate-plugins";
 import {HEADER_TYPES, TITLE} from "../common/rich-text-editor/types";
+import {PeakNote} from "../redux/slices/noteSlice";
+import {buildNoteUrl} from "./notes";
+import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {deriveHostname} from "./urls";
 
 const priority = (node: PeakStructureNode) => {
     const HIERARCHY_PRIORITIES: string[] = [TITLE, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6].map(x => x as string)
@@ -86,17 +90,21 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 // --------------------------------------------
 // Exported Functions
 // --------------------------------------------
-export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[]): PeakDisplayNode[] {
+export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], notes: PeakNote[]): PeakDisplayNode[] {
+    console.log(`REBUILDING THE HIERARCHY`)
     const journalNode: PeakDisplayNode = {
         title: "Journal",
         url: "/home/journal",
         header_type: "journal"
     }
-    const timelineNode: PeakDisplayNode = {
-        url: "/home/timeline",
-        title: "Timeline",
-        header_type: "timeline"
-    }
+    const noteNodes: PeakDisplayNode[] = notes.map(n => ({
+        title: n.title,
+        url: buildNoteUrl(n.id),
+        icon_url: n.icon_url,
+        path: (n.note_type === ELEMENT_PEAK_BOOK) ? capitalize(n.author) : deriveHostname(n.url),
+        header_type: n.note_type,
+    }))
+
     function convertToDisplayNode(node: PeakStructureNode, path: string): PeakDisplayNode {
         const headerString = (node.header_id) ? `#${node.header_id}` : ""
         return {
@@ -110,7 +118,9 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[]): Pe
         }
     }
     function addNodes(node: PeakStructureNode, path: string, theList: PeakDisplayNode[]): void {
-        theList.push(convertToDisplayNode(node, path))
+        if (!(HEADER_TYPES.includes(node.header_type) && !node.header_id)) {
+            theList.push(convertToDisplayNode(node, path))
+        }
         node.children.map((peakNode) => {
             addNodes(peakNode, `${path} > ${capitalize(node.title)}`, theList)
         })
@@ -125,7 +135,7 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[]): Pe
             addNodes(peakNode, parentPath, theList)
         })
     })
-    return [journalNode, ...theList]
+    return [journalNode, ...noteNodes, ...theList]
 }
 
 export function convertPeakNodeToTreeNode(obj: PeakNode): TreeNodeNormal {
@@ -156,6 +166,7 @@ export const useUpdatePageInHierarchy = () => {
     const usableHierarchy: PeakTopicNode[] = cloneDeep(currentHierarchy)
 
     return (newBody: Node[], topicId: string, pageId: string) => {
+        console.log(`CALCULATING THE HIERARCHY`)
         const topicHierarchy = usableHierarchy.find(t => t.topic_id === topicId)!
         const updatedTopicHierarchy: PeakTopicNode = deriveStructureForTopic(newBody, topicHierarchy, pageId)
 

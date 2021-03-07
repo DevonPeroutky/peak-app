@@ -7,6 +7,7 @@ import {convertHierarchyToSearchableList} from "../../../../../../utils/hierarch
 import { cloneDeep} from "lodash";
 import {renderPeakDisplayNodesInList} from "../../../../../quick-switcher/quick-switch-item/QuickSwitchItem";
 import "./hierarchy-searcher-input.scss"
+import {useNotes} from "../../../../../../client/notes";
 
 interface HierarchySearcherInputProps {
     textInputRef: any
@@ -22,17 +23,17 @@ interface HierarchySearcherInputProps {
 const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     const { setLinkText, setUrl, inputRef, currentUrl, textInputRef, isDropdownOpen, setDropdownState, currentText } = props
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
+    const notes = useNotes()
     const [antList, setAntList] = useState<PeakDisplayNode[]>([])
     const [filteredAntList, setFilteredAntList] = useState<PeakDisplayNode[]>([])
 
-    console.log(`Current Hierarchy `, hierarchy)
     useEffect(() => {
         if (hierarchy) {
-            const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy))
+            const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)
         }
-    }, [hierarchy]);
+    }, [hierarchy, notes]);
 
     const selectPageAsLink = (val: string, option: any) => {
         const peakNode: PeakDisplayNode = option.children.props.node as PeakDisplayNode

@@ -2,7 +2,7 @@ import moment from "moment";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {store} from "../redux/store";
 import {AppState} from "../redux";
-import { sort } from 'ramda';
+import {not, sort} from 'ramda';
 
 export function fetchNewestNote(): PeakNote | undefined {
     const notes: PeakNote[] = (store.getState() as AppState).notes
@@ -12,4 +12,8 @@ export function fetchNewestNote(): PeakNote | undefined {
         return (dateA.isAfter(dateB)) ? -1 : 1
     }, notes)
     return sortedNotes[0]
+}
+
+export function buildNoteUrl(noteId: string) {
+    return `/home/notes/${noteId}`
 }
