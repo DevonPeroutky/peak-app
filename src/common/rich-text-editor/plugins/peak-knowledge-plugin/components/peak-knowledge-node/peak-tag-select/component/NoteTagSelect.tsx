@@ -121,7 +121,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
                 notFoundContent={<span>No more tags.</span>}
                 tagRender={tagRender}
                 style={{ width: '100%' }}>
-                {renderedTagList.map(tag => (
+                {renderedTagList.slice(0, 5).map(tag => (
                     <Option key={tag.id} value={tag.title as string}>
                         <div className={"peak-learning-select-option"}>
                             <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
