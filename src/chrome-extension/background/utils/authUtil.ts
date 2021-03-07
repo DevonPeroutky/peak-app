@@ -5,7 +5,6 @@ import {Peaker} from "../../../types";
 import {setItemInChromeState} from "../../utils/storageUtils";
 
 export function logUserIn(callback: (user: Peaker) => void) {
-
     chrome.identity.getAuthToken({
         interactive: true
     }, function(token) {
@@ -20,7 +19,7 @@ export function logUserIn(callback: (user: Peaker) => void) {
             const chrome_user: ChromeUser = r.data as ChromeUser;
             login_via_chrome_extension(chrome_user.id)
                 .then(r => {
-                    const user = r.data.data as Peaker;
+                    const user = r.data as Peaker;
                     console.log(`Syncing user to chrome storage`, user)
                     setItemInChromeState("user", user)
                     // TODO WATER WE DOING HERE BOYZZZ

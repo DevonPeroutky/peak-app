@@ -54,6 +54,7 @@ export function injectContentScriptOpenDrawer() {
     chrome.storage.sync.get("user", data => {
         const user: Peaker | null | undefined = data["user"]
         if (user) {
+            console.log(`User Already exists.`)
             injectContentScript(user)
         } else {
             logUserIn(injectContentScript)

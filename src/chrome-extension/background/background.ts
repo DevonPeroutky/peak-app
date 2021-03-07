@@ -11,39 +11,20 @@ import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
 import {establishSocketChannelConnection} from "./utils/socketHelper";
 import {message} from "antd";
+import {logUserIn} from "./utils/authUtil";
 
 let channel: Channel
 
 chrome.storage.sync.clear()
 
-// --------------------------------
-// Fetch User Auth Token
-// --------------------------------
-chrome.identity.getAuthToken({
-    interactive: true
-}, function(token) {
-    if (chrome.runtime.lastError) {
-        console.error("ERROR RETRIEVING THE AUTH TOKEN", chrome.runtime.lastError.message);
-        return;
-    }
-    console.log(`Token: ${token}`)
-
-    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
-        const chrome_user: ChromeUser = r.data as ChromeUser;
-        console.log(`CHROME USER: `, chrome_user)
-        // loadUserRequest(chrome_user.id)
-        login_via_chrome_extension(chrome_user.id)
-            .then(r => {
-                const user: Peaker = r.data as Peaker;
-                console.log(`Syncing user to chrome storage`, user)
-                setItemInChromeState("user", user)
-
-                establishSocketChannelConnection(channel, user.id).then(c => {
-                    channel = c
-                })
-            }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
-    }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
-});
+// -------------------------------------
+// Log user in and Fetch User Auth Token
+// -------------------------------------
+logUserIn((user) => {
+    establishSocketChannelConnection(channel, user.id).then(c => {
+        channel = c
+    })
+})
 
 // --------------------------------
 // Create Context Menu
