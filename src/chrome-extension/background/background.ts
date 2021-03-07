@@ -30,11 +30,11 @@ chrome.identity.getAuthToken({
 
     axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
         const chrome_user: ChromeUser = r.data as ChromeUser;
-        console.log(chrome_user)
+        console.log(`CHROME USER: `, chrome_user)
         // loadUserRequest(chrome_user.id)
         login_via_chrome_extension(chrome_user.id)
             .then(r => {
-                const user: Peaker = r.data.data as Peaker;
+                const user: Peaker = r.data as Peaker;
                 console.log(`Syncing user to chrome storage`, user)
                 setItemInChromeState("user", user)
 
@@ -42,7 +42,6 @@ chrome.identity.getAuthToken({
                     channel = c
                 })
             }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
-
     }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
 });
 

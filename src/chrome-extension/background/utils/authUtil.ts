@@ -1,6 +1,6 @@
 import axios from "axios";
 import {ChromeUser} from "../../constants/models";
-import {loadUserRequest} from "../../../client/user";
+import {loadUserRequest, login_via_chrome_extension} from "../../../client/user";
 import {Peaker} from "../../../types";
 import {setItemInChromeState} from "../../utils/storageUtils";
 
@@ -13,11 +13,12 @@ export function logUserIn(callback: (user: Peaker) => void) {
             console.error("ERROR RETRIEVING THE AUTH TOKEN", chrome.runtime.lastError.message);
             return;
         }
+
         console.log(`Logging the user in with the Token: ${token}`)
 
         axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
             const chrome_user: ChromeUser = r.data as ChromeUser;
-            loadUserRequest(chrome_user.id)
+            login_via_chrome_extension(chrome_user.id)
                 .then(r => {
                     const user = r.data.data as Peaker;
                     console.log(`Syncing user to chrome storage`, user)
