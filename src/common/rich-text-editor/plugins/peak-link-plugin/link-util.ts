@@ -111,6 +111,6 @@ const generateIdForLink = (url: string, displayText: string) => {
 }
 
 
-export function isExternalLink(url: string): boolean {
-    return url.startsWith("http")
+export function isExternalLink(url: string | undefined): boolean {
+    return url !== undefined && url.startsWith("http")
 }
