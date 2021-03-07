@@ -34,7 +34,9 @@ export const DisplayLinkMenu = (props: DisplayLinkProps) => {
 export const DaLink = (props: { url: string }) => {
     const { url } = props;
 
-    if (isExternalLink(url)) {
+
+    if (url && isExternalLink(url)) {
+        console.log(`THE LINK??? ${url}. External? ${isExternalLink(url)}`)
        return (
            <a href={url} target={(isExternalLink(url)) ? "_blank" : "_self"}>
                <LinkOutlined className="link-icon"/>
