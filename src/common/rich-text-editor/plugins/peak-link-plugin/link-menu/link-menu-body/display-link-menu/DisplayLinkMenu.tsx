@@ -1,7 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React from "react";
 import {DeleteOutlined, LinkOutlined} from "@ant-design/icons/lib";
 import "./display-link-menu.scss"
 import {Divider} from "antd";
+import {isExternalLink} from "../../../link-util";
+import {Link} from "react-router-dom";
 
 interface DisplayLinkProps {
     url: string,
@@ -19,9 +21,7 @@ export const DisplayLinkMenu = (props: DisplayLinkProps) => {
                 setEditing(true)
             }}>Edit Link</div>
             <Divider type={"vertical"} className={"link-menu-divider"}/>
-            <a href={url} target="_blank">
-                <LinkOutlined className="link-icon"/>
-            </a>
+            <DaLink url={url}/>
             <Divider type={"vertical"} className={"link-menu-divider"}/>
             <div>
                 <DeleteOutlined className="delete-icon" onClick={clearLink}/>
@@ -29,3 +29,23 @@ export const DisplayLinkMenu = (props: DisplayLinkProps) => {
         </div>
     )
 };
+
+
+export const DaLink = (props: { url: string }) => {
+    const { url } = props;
+
+    if (isExternalLink(url)) {
+       return (
+           <a href={url} target={(isExternalLink(url)) ? "_blank" : "_self"}>
+               <LinkOutlined className="link-icon"/>
+           </a>
+       )
+    } else {
+        return (
+            <Link to={url}>
+                <LinkOutlined className="link-icon"/>
+            </Link>
+        )
+    }
+
+}

@@ -109,3 +109,8 @@ const generateIdForLink = (url: string, displayText: string) => {
     const rand = Math.floor((Math.random() * 100) + 1);
     return `${url}-${displayText}-${rand}`
 }
+
+
+export function isExternalLink(url: string): boolean {
+    return url.startsWith("http")
+}

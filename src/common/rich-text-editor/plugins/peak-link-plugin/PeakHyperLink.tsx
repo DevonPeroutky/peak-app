@@ -6,6 +6,7 @@ import {ELEMENT_LINK, LinkPluginOptions} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 import "./peak-hyperlink.scss"
+import {isExternalLink} from "./link-util";
 
 const PeakHyperLink = (props: RenderElementProps) => {
     const {
@@ -40,12 +41,13 @@ const PeakHyperLink = (props: RenderElementProps) => {
         }
     }
 
+    const externalLink: boolean = isExternalLink(element.url as string)
     return (
         <a
             {...attributes}
             data-slate-type={ELEMENT_LINK}
-            href={element.link as string}
-            target="_blank"
+            href={element.url as string}
+            target={(externalLink) ? "_blank" : "_self"}
             className={"peak-hyperlink"}
             key={element.link as string}
             onClick={(e) => openUpMenu(e)}>
