@@ -14,6 +14,8 @@ import {
 } from "../../../../utils/socketUtil";
 import {JOURNAL_CHANNEL_ID} from "./constants";
 import {PeakNote} from "../../../../redux/slices/noteSlice";
+import {PeakTag} from "../../../../types";
+import { addTags } from "src/redux/slices/tags/tagSlice";
 
 export const useJournalSubscription = () => {
     function appendWebNoteToJournal(webNoteNodes: Node[], journal: PeakWikiPage, note_id: string): JournalEntry {
@@ -32,11 +34,13 @@ export const useJournalSubscription = () => {
             channel.on("web_note_created", res => {
                 console.log(`Received nodes of web_note from backend broadcast`, res)
                 const newlyCreatedNote: PeakNote = res.note
+                const tags: PeakTag[] = res.tags
                 // const appState: AppState = store.getState()
                 // const newJournalEntryForToday: JournalEntry = appendWebNoteToJournal(res.journal_nodes, appState.peakWikiState[JOURNAL], newlyCreatedNote.id)
                 batch(() => {
                     // dispatch(updateJournalEntry(newJournalEntryForToday))
                     dispatch(upsertNote(newlyCreatedNote))
+                    dispatch(addTags(tags))
                 })
             })
         } else {
