@@ -53,19 +53,19 @@
                 display: flex;
                 padding-right: 25px;
                 flex-direction: column;
-                //flex-grow: 3;
+                flex-grow: 1;
                 margin-bottom: 0px;
 
                 a {
                   color: $text-color;
-                  max-width: 500px;
+                  width: 100%;
 
                   .item-title {
+                    color: rgba(22,30,46,var(--text-opacity));
                     display: inline-block;
                     line-height: 32px;
                     font-size: 24px;
-                    font-weight: normal;
-                    width: 400px !important;
+                    width: 100%;
                     text-overflow: ellipsis!important;
                     white-space: nowrap!important;
                     overflow: hidden!important;
