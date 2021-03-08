@@ -1,6 +1,6 @@
 import {PeakTag} from "../../../../../../../../types";
 import React, {useRef, useState} from "react";
-import {Select, Tag} from "antd";
+import {Empty, Select, Tag} from "antd";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tags/types";
 import {LabeledValue} from "antd/es/select";
@@ -118,7 +118,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
                 onSelect={onSelect}
                 dropdownClassName={cn("peak-tag-select-dropdown", (open) ? "" : "closed")}
                 onDeselect={onDeselect}
-                notFoundContent={<span>No more tags.</span>}
+                notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
                 tagRender={tagRender}
                 style={{ width: '100%' }}>
                 {renderedTagList.slice(0, 5).map(tag => (
