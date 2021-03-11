@@ -22,8 +22,7 @@
     width: 75%;
     max-width: 600px;
     min-width: 600px;
-    box-shadow: rgb(15, 15, 15 / 5%) 0px 0px 0px 1px, rgb(15, 15, 15 / 10%) 0px 5px 10px, rgb(15, 15, 15 / 20%) 0px 15px 40px;
-    //box-shadow: rgb(15 15 15 / 5%) 0px 0px 0px 1px, rgb(15 15 15 / 10%) 0px 5px 10px, rgb(15 15 15 / 20%) 0px 15px 40px;
+    box-shadow: rgba(15, 15, 15, .05) 0px 0px 0px 1px, rgba(15, 15, 15, .10) 0px 5px 10px, rgba(15, 15, 15, .20) 0px 15px 40px;
 
     border-radius: 3px;
     background: white;
