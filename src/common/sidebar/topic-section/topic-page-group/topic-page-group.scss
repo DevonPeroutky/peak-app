@@ -20,6 +20,9 @@
       height: 40px;
       line-height: 40px;
 
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       &:hover {
         color: $primary-blue;
         cursor: pointer;

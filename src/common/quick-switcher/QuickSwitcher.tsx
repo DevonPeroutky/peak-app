@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import {AutoComplete, Modal } from "antd";
+import {AutoComplete } from "antd";
 import { useDispatch, useSelector} from "react-redux";
 import { AppState} from "../../redux";
-import {closeSwitcher, quickSwitcherSlice} from "../../redux/slices/quickSwitcherSlice";
+import {closeSwitcher} from "../../redux/slices/quickSwitcherSlice";
 import "./quick-switcher.scss"
 import {convertHierarchyToSearchableList} from "../../utils/hierarchy";
 import { cloneDeep} from "lodash";
@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import {renderPeakDisplayNodesInList} from "./quick-switch-item/QuickSwitchItem";
 import {PeakDisplayNode, PeakTopicNode} from "../../redux/slices/user/types";
 import {useNotes} from "../../client/notes";
+import {PeakModal} from "../peak-modal/PeakModal";
 
 const QuickSwitcher = (props: { }) => {
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
@@ -31,25 +32,14 @@ const QuickSwitcher = (props: { }) => {
     }, [ hierarchy, notes ]);
 
     useEffect(() => {
-        let timer = null;
-        if (isOpen) {
-            timer = setTimeout(() => {
-                setChildOpen(true)
-            }, 275);
-        }
-        return () => {
-            clearTimeout(timer!)
-        };
+        setChildOpen(isOpen)
     }, [ isOpen ]);
 
     const closeModal = () => {
         setChildOpen(false)
         setFilteredAntList(antList)
-
-        setTimeout(() => {
-            setValue(undefined)
-            dispatch(closeSwitcher())
-        }, 50);
+        setValue(undefined)
+        dispatch(closeSwitcher())
     }
 
     const goTo = async (val: string, option: any) => {
@@ -68,18 +58,11 @@ const QuickSwitcher = (props: { }) => {
         }
     }
 
+
     return (
-        <Modal
-            visible={isOpen}
-            maskClosable={true}
-            onCancel={closeModal}
-            footer={null}
-            closable={false}
-            keyboard={true}
-            destroyOnClose={false}
-            className={"quick-switch-modal"}>
-             <DropdownThatActuallyListens filteredAntList={filteredAntList} closeModal={closeModal} handleSearch={handleSearch} goTo={goTo} value={value} isOpen={childOpen}/>
-        </Modal>
+        <PeakModal isOpen={isOpen} onClose={() => closeModal()}>
+            <DropdownThatActuallyListens filteredAntList={filteredAntList} closeModal={closeModal} handleSearch={handleSearch} goTo={goTo} value={value} isOpen={childOpen}/>
+        </PeakModal>
     )
 };
 
@@ -108,7 +91,7 @@ const DropdownThatActuallyListens = (props) => {
                         closeModal()
                     }
                 }}
-                open={isOpen}
+                open={true}
                 style={{width: '100%'}}
                 value={value}
                 dropdownClassName={"peak-dropdown"}

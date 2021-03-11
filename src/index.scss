@@ -19,6 +19,8 @@ body {
   color: $text-color!important;
 
   text-overflow: ellipsis!important;
+  white-space: nowrap!important;
+  //text-overflow: ellipsis!important;
 }
 
 code {

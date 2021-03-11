@@ -6,6 +6,7 @@ import {store} from "../redux/store";
 import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
 import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
+import { useHistory } from "react-router-dom";
 
 export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
     return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
@@ -33,13 +34,15 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
 
 export const useAccountSwitcher = () => {
     const dispatch = useDispatch()
+    const history = useHistory()
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
         if (selectedAccount.id !== currentAccountId) {
             // @ts-ignore
             document.activeElement.blur()
             await syncCurrentStateToLocalStorage(currentAccountId)
             await dispatch(switch_user_accounts(selectedAccount))
-            window.history.pushState({}, null, "/home/journal")
+            // window.history.pushState({}, null, "#/home/journal")
+            history.push("/")
         }
     }
 }
