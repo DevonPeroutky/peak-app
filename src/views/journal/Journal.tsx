@@ -277,6 +277,8 @@ const Journal = (props: InternalJournalProps) => {
     } = props
     const editorState = useActiveEditorState()
 
+    console.log(`Current Journal State `, journalContent)
+
     return (
         <Slate
             editor={editor}
