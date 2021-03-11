@@ -12,9 +12,9 @@ import {PeakDisplayNode, PeakTopicNode} from "../../redux/slices/user/types";
 import {useNotes} from "../../client/notes";
 import {PeakModal} from "../peak-modal/PeakModal";
 
-const QuickSwitcher = (props: { }) => {
+const QuickSwitcher = (props: { isOpen: boolean }) => {
+    const { isOpen } = props
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
-    const isOpen = useSelector<AppState, boolean>(state => state.quickSwitcher.isOpen);
     const dispatch = useDispatch()
     const notes = useNotes()
     const history = useHistory()
