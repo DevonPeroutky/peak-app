@@ -32,19 +32,14 @@ const QuickSwitcher = (props: { }) => {
     }, [ hierarchy, notes ]);
 
     useEffect(() => {
-        if (isOpen) {
-            setChildOpen(true)
-        }
+        setChildOpen(isOpen)
     }, [ isOpen ]);
 
     const closeModal = () => {
         setChildOpen(false)
         setFilteredAntList(antList)
-
-        setTimeout(() => {
-            setValue(undefined)
-            dispatch(closeSwitcher())
-        }, 50);
+        setValue(undefined)
+        dispatch(closeSwitcher())
     }
 
     const goTo = async (val: string, option: any) => {
