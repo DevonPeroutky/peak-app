@@ -12,9 +12,9 @@ import {PeakDisplayNode, PeakTopicNode} from "../../redux/slices/user/types";
 import {useNotes} from "../../client/notes";
 import {PeakModal} from "../peak-modal/PeakModal";
 
-const QuickSwitcher = (props: { }) => {
+const QuickSwitcher = (props: { isOpen: boolean }) => {
+    const { isOpen } = props
     const hierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
-    const isOpen = useSelector<AppState, boolean>(state => state.quickSwitcher.isOpen);
     const dispatch = useDispatch()
     const notes = useNotes()
     const history = useHistory()
@@ -61,45 +61,38 @@ const QuickSwitcher = (props: { }) => {
 
     return (
         <PeakModal isOpen={isOpen} onClose={() => closeModal()}>
-            <DropdownThatActuallyListens filteredAntList={filteredAntList} closeModal={closeModal} handleSearch={handleSearch} goTo={goTo} value={value} isOpen={childOpen}/>
+            {
+                (!isOpen) ? null :
+                <div className={"quick-switch-modal-container"}>
+                    <AutoComplete
+                    autoFocus
+                    children={renderPeakDisplayNodesInList(filteredAntList)}
+                    className={"quick-switch-input"}
+                    autoClearSearchValue={true}
+                    defaultActiveFirstOption={true}
+                    showArrow={false}
+                    showSearch={false}
+                    placeholder="Jump to..."
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault()
+                        }
+                        if (e.key === 'Escape') {
+                            e.preventDefault()
+                            closeModal()
+                        }
+                    }}
+                    open={true}
+                    style={{width: '100%'}}
+                    value={value}
+                    dropdownClassName={"peak-dropdown"}
+                    onSearch={handleSearch}
+                    onSelect={goTo}
+                    />
+                </div>
+            }
         </PeakModal>
     )
 };
-
-const DropdownThatActuallyListens = (props) => {
-    const { filteredAntList, closeModal, handleSearch, goTo, value, isOpen } = props
-    if (!isOpen) {
-        return null
-    }
-    return (
-        <div className={"quick-switch-modal-container"}>
-            <AutoComplete
-                autoFocus
-                children={renderPeakDisplayNodesInList(filteredAntList)}
-                className={"quick-switch-input"}
-                autoClearSearchValue={true}
-                defaultActiveFirstOption={true}
-                showArrow={false}
-                showSearch={false}
-                placeholder="Jump to..."
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault()
-                    }
-                    if (e.key === 'Escape') {
-                        e.preventDefault()
-                        closeModal()
-                    }
-                }}
-                open={true}
-                style={{width: '100%'}}
-                value={value}
-                dropdownClassName={"peak-dropdown"}
-                onSearch={handleSearch}
-                onSelect={goTo}
-            />
-        </div>
-    )
-}
 
 export default QuickSwitcher

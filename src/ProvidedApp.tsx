@@ -14,16 +14,20 @@ import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {KeybindingHandlerWrapper} from "./utils/loading-util";
 import {Peaker} from "./types";
 import {TempDesktopLogin} from "./views/temp-desktop-login/TempDesktopLogin";
+import {useSelector} from "react-redux";
+import {AppState} from "./redux";
+import cn from "classnames"
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()
+    const isQuickSwitcherOpen = useSelector<AppState, boolean>(state => state.quickSwitcher.isOpen);
     const user: Peaker = useCurrentUser()
 
     return (
-        <div className="App">
+        <div className={cn("App", (isQuickSwitcherOpen) ? "no-scroll" : "")}>
             <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
             <Router>
-                <QuickSwitcher/>
+                <QuickSwitcher isOpen={isQuickSwitcherOpen}/>
                 <Switch>
                     <Route path="/timeline">
                         <PeakTimeline/>
