@@ -20,6 +20,7 @@ const config = {
     entry: {
         content: path.join(__dirname, "../../src/chrome-extension/content-script/content.tsx"),
         background: path.join(__dirname, "../../src/chrome-extension/background/background.ts"),
+        popup: path.join(__dirname, "../../src/chrome-extension/pop-up/index.tsx"),
     },
     module: {
         rules: chrome_extension_rules

@@ -1,0 +1,69 @@
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 333px;
+  padding: 15px;
+
+  .popup-peak-logo {
+    width: 102px;
+    height: auto;
+  }
+
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    h3 {
+      color: rgba(0,0,0,.45);
+      margin-top: 0px;
+      margin-bottom: 25px;
+    }
+  }
+
+  .hints-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .hint {
+      display: flex;
+
+      .hint-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        h2 {
+          margin-top: 0px
+        }
+      }
+
+    }
+
+    .hotkey-decoration {
+      background-color: rgb(244, 245, 247);
+      border-radius: 3px;
+      padding: 1px 3px;
+      display: inline-block;
+      vertical-align: center;
+      horiz-align: center;
+      text-align: center;
+    }
+
+    .success {
+      font-size: 24px;
+      height: auto;
+      margin-right: 15px;
+    }
+
+  }
+}
