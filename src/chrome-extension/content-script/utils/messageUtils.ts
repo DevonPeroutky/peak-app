@@ -1,7 +1,7 @@
 import {PeakTag} from "../../../types";
 import {Node} from "slate";
 import {MessageType, SubmitNoteMessage} from "../../constants/models";
-import {setItemInChromeState} from "../../utils/storageUtils";
+import {setItem} from "../../utils/storageUtils";
 
 export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTags: PeakTag[], pageTitle: string, pageUrl: string, favIconUrl: string, body: Node[]) => {
     const message: SubmitNoteMessage = {
@@ -28,7 +28,7 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
         "favIconUrl": favIconUrl,
         "tabId": tabId
     };
-    setItemInChromeState(tabId.toString(), message)
+    setItem(tabId.toString(), message)
 };
 
 export const getCurrentTabFromBackground = () => {

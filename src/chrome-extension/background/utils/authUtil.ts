@@ -2,7 +2,7 @@ import axios from "axios";
 import {ChromeUser} from "../../constants/models";
 import {loadUserRequest, login_via_chrome_extension} from "../../../client/user";
 import {Peaker} from "../../../types";
-import {setItemInChromeState} from "../../utils/storageUtils";
+import {setItem} from "../../utils/storageUtils";
 
 export function logUserIn(callback: (user: Peaker) => void) {
     chrome.identity.getAuthToken({
@@ -21,7 +21,7 @@ export function logUserIn(callback: (user: Peaker) => void) {
                 .then(r => {
                     const user = r.data as Peaker;
                     console.log(`Syncing user to chrome storage`, user)
-                    setItemInChromeState("user", user)
+                    setItem("user", user)
                     // TODO WATER WE DOING HERE BOYZZZ
                     // if (!channel) {
                     //     channel = establishSocketConnectionToUsersChannel(userId)

@@ -19,12 +19,13 @@ import {addSelectionAsBlockQuote} from "./utils/editorUtils";
 import {openDrawer, removeDrawer, removeDrawerWithSavedMessage, rerenderDrawer} from "./utils/drawerUtils";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import moment from "moment";
+import {getItem} from "../utils/storageUtils";
 
 // ---------------------------------------------------
 // Mount Drawer to DOM
 // - This does not show the modal.
 // ---------------------------------------------------
-chrome.storage.sync.get(function (data) {
+getItem(null, function (data) {
     console.log(`----------> MOUNTING THE MODALLLL`)
     console.log(`THE DATA`, data)
     const app = document.createElement('div');
@@ -96,7 +97,7 @@ document.addEventListener('mouseup', (event) => {
         const node_id: number = moment().valueOf()
         const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
 
-        chrome.storage.sync.get(ACTIVE_TAB_KEY, data => {
+        getItem(ACTIVE_TAB_KEY, data => {
             const activeTabId: string = data[ACTIVE_TAB_KEY].toString()
             rerenderDrawer(activeTabId, nodes)
         })

@@ -4,6 +4,7 @@ import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
 import {Peaker, PeakTag} from "../../../types";
 import {logUserIn} from "./authUtil";
 import {TAGS_KEY} from "../../constants/constants";
+import {getItem} from "../../utils/storageUtils";
 
 type Tab = chrome.tabs.Tab;
 
@@ -13,7 +14,7 @@ function fetchTagsAndOpenDrawer(userId: string, activeTab: Tab) {
             sendOpenSavePageDrawerMessage(activeTab, userId, tags)
         }).catch(err => {
             sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
-            chrome.storage.sync.get(TAGS_KEY, (data) => {
+            getItem(TAGS_KEY, (data) => {
                 const tags = data[TAGS_KEY] || []
                 sendOpenSavePageDrawerMessage(activeTab, userId, tags)
             })
@@ -21,7 +22,7 @@ function fetchTagsAndOpenDrawer(userId: string, activeTab: Tab) {
 }
 
 function tellDrawerToSubmit(userId: string, activeTab: Tab) {
-    chrome.storage.sync.get([TAGS_KEY], (data) => {
+    getItem([TAGS_KEY], (data) => {
         const tags: PeakTag[] = data[TAGS_KEY]
         sendOpenSavePageDrawerMessage(activeTab, userId, tags)
     })
@@ -51,7 +52,7 @@ export function injectContentScriptOpenDrawer() {
         })
     }
 
-    chrome.storage.sync.get("user", data => {
+    getItem("user", data => {
         const user: Peaker | null | undefined = data["user"]
         if (user) {
             console.log(`User Already exists.`)

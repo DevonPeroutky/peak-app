@@ -4,7 +4,7 @@ import {loadUserRequest, login_via_chrome_extension} from "../../client/user";
 import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
-import {setItemInChromeState} from "../utils/storageUtils";
+import {deleteItem, getItemSizeFromChromeState, setItem} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
@@ -15,7 +15,10 @@ import {logUserIn} from "./utils/authUtil";
 
 let channel: Channel
 
-chrome.storage.sync.clear()
+// Do we want to do this????
+chrome.storage.local.clear()
+
+getItemSizeFromChromeState()
 
 // -------------------------------------
 // Log user in and Fetch User Auth Token
@@ -54,7 +57,7 @@ chrome.commands.onCommand.addListener(function(command) {
 // Maintain activeTab in Storage for content script
 // ------------------------------------------------
 chrome.tabs.onActivated.addListener(function (tab) {
-    setItemInChromeState(ACTIVE_TAB_KEY, tab.tabId)
+    setItem(ACTIVE_TAB_KEY, tab.tabId)
 })
 
 // ---------------------------------------
@@ -95,4 +98,11 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 })
             })
     }
+});
+
+// -------------------------------------------
+// Listen for tabs refreshing
+// -------------------------------------------
+chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+    deleteItem([ACTIVE_TAB_KEY, tabId.toString()])
 });

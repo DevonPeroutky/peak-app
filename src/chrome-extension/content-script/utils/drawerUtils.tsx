@@ -4,9 +4,8 @@ import ReactDOM, {unmountComponentAtNode} from 'react-dom';
 import Tab = chrome.tabs.Tab;
 import {PeakTag} from "../../../types";
 import {SUBMITTING_STATE, TAGS_KEY} from "../../constants/constants";
-import {setItemInChromeState} from "../../utils/storageUtils";
+import {deleteItem, getItem, setItem} from "../../utils/storageUtils";
 import {SubmitNoteMessage} from "../../constants/models";
-import {sleep} from "../../utils/generalUtil";
 import {Node} from "slate";
 import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal/SaveNoteDrawer";
 import {is, isEmpty} from "ramda";
@@ -32,7 +31,7 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
         ReactDOM.render(<SaveNoteDrawer {...props} />, app)
     }
 
-    chrome.storage.sync.get(null, (data) => {
+    getItem(null, (data) => {
         console.log(data)
         const isTabActive = data[currTab.id.toString()]
         console.log(`Tab active? `, isTabActive)
@@ -49,17 +48,17 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
         document.body.style.setProperty("overflow", "auto")
     })
 
-    setItemInChromeState(TAGS_KEY, tags)
+    setItem(TAGS_KEY, tags)
 }
 
 export function removeDrawer(activeTabId: string) {
-    chrome.storage.sync.remove([activeTabId], () => {
+    deleteItem([activeTabId], () => {
         unmountComponentAtNode(document.getElementById('my-extension-root'))
     })
 }
 
 export function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
-    chrome.storage.sync.get(["tags"], data => {
+    getItem(["tags"], data => {
         const tags: PeakTag[] = data["tags"]
 
         const props: SaveNoteDrawerProps = {
@@ -81,7 +80,7 @@ export function removeDrawerWithSavedMessage(message: SubmitNoteMessage) {
 }
 
 export function rerenderDrawer(activeTabId: string, nodesToAppend: Node[]) {
-    chrome.storage.sync.get([activeTabId], data => {
+    getItem([activeTabId], data => {
         if (isEmpty(data)) {
             return
         }

@@ -1,4 +1,4 @@
-import { setItemInChromeState} from "../../utils/storageUtils";
+import {getItem, setItem} from "../../utils/storageUtils";
 import {PeakTag} from "../../../types";
 import {loadTagsRequests} from "../../../client/tags-base";
 import {uniqBy} from "ramda";
@@ -13,10 +13,10 @@ export function loadTagsFromBackend(userId: string): Promise<PeakTag[]> {
 }
 
 const addTagsToState = (tags: PeakTag[], callbackFunc: () => void) => {
-    chrome.storage.sync.get(TAGS_KEY, (data) => {
+    getItem(TAGS_KEY, (data) => {
         const existing_tags: PeakTag[] = data[TAGS_KEY] || []
         const new_tags = uniqBy(t => t.id, existing_tags.concat(tags))
-        setItemInChromeState(TAGS_KEY, new_tags, callbackFunc)
+        setItem(TAGS_KEY, new_tags, callbackFunc)
     })
 }
 
