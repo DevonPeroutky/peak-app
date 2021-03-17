@@ -1,0 +1,25 @@
+$transition: all .5s ease-in-out;
+
+.saved-page-message {
+  //transition: max-height 1s ease-in-out 1s;
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -o-transition: $transition;
+  -ms-transition: $transition;
+  transition: $transition;
+  margin-top: 24px;
+  height: 150px;
+}
+
+.drawer-mode {
+  //transition: max-height 1s ease-in-out 1s;
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -o-transition: $transition;
+  -ms-transition: $transition;
+  transition: $transition;
+
+  height: 100vh;
+  margin-top: 0;
+  margin-right: -24px;
+}
