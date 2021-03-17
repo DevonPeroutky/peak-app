@@ -2,6 +2,7 @@ import * as React from "react";
 import "./popup.scss"
 import {PeakLogo} from "../../../common/logo/PeakLogo";
 import {CheckOutlined, BookOutlined, BookTwoTone} from "@ant-design/icons/lib";
+import WebappGoogleLogin from "../../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
 
 export const Popup = (props) => {
     return (

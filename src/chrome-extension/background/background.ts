@@ -16,9 +16,7 @@ import {logUserIn} from "./utils/authUtil";
 let channel: Channel
 
 // Do we want to do this????
-chrome.storage.local.clear()
-
-getItemSizeFromChromeState()
+chrome.storage.sync.clear()
 
 // -------------------------------------
 // Log user in and Fetch User Auth Token

@@ -15,6 +15,7 @@ export function logUserIn(callback: (user: Peaker) => void) {
 
         console.log(`Logging the user in with the Token: ${token}`)
 
+        // TODO: Actually authenticate the User. Anyone could hit this input with a garbase access_token
         axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`).then(r => {
             const chrome_user: ChromeUser = r.data as ChromeUser;
             login_via_chrome_extension(chrome_user.id)
