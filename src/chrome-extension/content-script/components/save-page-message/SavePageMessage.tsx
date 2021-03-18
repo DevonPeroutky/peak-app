@@ -63,8 +63,9 @@ export const openMessage = (props: SavedPageProps) => {
 
 // Called whenever user saves the page by pressing CMD+SHIFT+S
 export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[]): void {
-    getItem(null, (data) => {
+    getItem(ACTIVE_TAB_KEY, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
+        console.log(`ACTIVE TAB: `, activeTab)
 
         if (activeTab && activeTab.tabId === currTab.id) {
             console.log(`SAVING THE MESSAGE `, activeTab)
@@ -134,7 +135,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
         const tabState: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
         const editingState = (tabState && tabState.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
-        syncActiveTabState(submitNoteMessage.tabId, editingState, () =>
+        syncActiveTabState(submitNoteMessage.tabId, { editingState: editingState }, () =>
             openMessage({
                 tabId: submitNoteMessage.tabId,
                 userId: submitNoteMessage.userId,
@@ -151,6 +152,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
 
 }
 
+// Removes the message from the user's screen
 export const closeMessage = (tabId: number) => {
     deleteItem([tabId.toString(), ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)

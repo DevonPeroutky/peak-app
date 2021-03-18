@@ -95,7 +95,7 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
     const { editing, body, updateThatBody, editor, tabId } = props
 
     const openEditor = () => {
-        syncActiveTabState(tabId, EDITING_STATE.Editing, () => openMessage({...props, editing: EDITING_STATE.Editing}))
+        syncActiveTabState(tabId, { editingState: EDITING_STATE.Editing }, () => openMessage({...props, editing: EDITING_STATE.Editing}))
     }
 
     if (editing === EDITING_STATE.Editing) {

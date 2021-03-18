@@ -1,3 +1,6 @@
+import {PeakTag} from "../../types";
+import {Node} from "slate";
+
 export const TAGS_KEY = "tags"
 export const ACTIVE_TAB_KEY = "activeTab"
 
@@ -14,5 +17,11 @@ export enum SUBMISSION_STATE {
 
 export interface ActiveTabState {
     tabId: number,
+    userId: string,
+    pageTitle: string,
+    pageUrl: string,
+    favIconUrl: string,
+    selectedTags: PeakTag[]
+    body?: Node[],
     editingState: EDITING_STATE
 }

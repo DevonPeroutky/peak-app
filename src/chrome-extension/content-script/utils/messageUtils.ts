@@ -1,7 +1,7 @@
 import {PeakTag} from "../../../types";
 import {Node} from "slate";
 import {MessageType, SubmitNoteMessage} from "../../constants/models";
-import {setItem} from "../../utils/storageUtils";
+import {getItem, setItem} from "../../utils/storageUtils";
 import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE} from "../../constants/constants";
 import {openMessage} from "../components/save-page-message/SavePageMessage";
 
@@ -33,7 +33,10 @@ export const syncCurrentDrawerState = (tabId: number, userId: string, selectedTa
     setItem(tabId.toString(), message)
 };
 
-export const syncActiveTabState = (tabId: number, editingState: EDITING_STATE, callback?) => {
-    const activeTabState: ActiveTabState = { tabId: tabId, editingState: editingState }
-    setItem(ACTIVE_TAB_KEY, activeTabState, () => callback())
+export const syncActiveTabState = (tabId: number, payload: {}, callback?) => {
+    getItem(ACTIVE_TAB_KEY, data => {
+        const currTabState: ActiveTabState = data[ACTIVE_TAB_KEY]
+        const newTabState = { ...currTabState, ...payload, tabId: tabId }
+        setItem(ACTIVE_TAB_KEY, newTabState, () => callback())
+    })
 }

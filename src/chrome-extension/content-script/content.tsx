@@ -14,14 +14,17 @@ import {
 import {Node} from "slate";
 import {message} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
-import {ACTIVE_TAB_KEY, ActiveTabState} from "../constants/constants";
+import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE, TAGS_KEY} from "../constants/constants";
 import moment from "moment";
 import {getItem} from "../utils/storageUtils";
 import {
     closeMessage,
+    openMessage,
     openSavePageMessage,
+    SavedPageProps,
     updateSavePageMessage
 } from "./components/save-page-message/SavePageMessage";
+import {PeakTag} from "../../types";
 
 console.log(`THE CONTENTTTT`)
 
@@ -31,11 +34,7 @@ console.log(`THE CONTENTTTT`)
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (const key in changes) {
         const storageChange = changes[key];
-        console.log('Storage key "%s" in namespace "%s" changed. ' + 'Old value was "%s", new value is: ".',
-            key,
-            namespace,
-            storageChange.oldValue,
-            storageChange.newValue);
+        console.log(`Storage key ${key} changed. Old value was ${JSON.stringify(storageChange.oldValue)}, new value is: ${JSON.stringify(storageChange.newValue)}`);
     }
 });
 
@@ -93,8 +92,10 @@ document.addEventListener('mouseup', (event) => {
         const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
 
         getItem(ACTIVE_TAB_KEY, data => {
-            const activeTabId: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
-            // rerenderDrawer(activeTabId, nodes)
+            const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
+            if (activeTab.editingState === EDITING_STATE.Editing) {
+                appendNodesAsBlockquote(activeTab.tabId, nodes)
+            }
         })
 
     } else {
@@ -102,3 +103,13 @@ document.addEventListener('mouseup', (event) => {
     }
 });
 
+const appendNodesAsBlockquote = (tabId, nodes: Node[]) => {
+    getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
+        const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
+        const tags: PeakTag[] = data[TAGS_KEY]
+
+        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
+        console.log(`EXISTING PAGE `, existingPage)
+        openMessage({...existingPage, nodesToAppend: nodes})
+    })
+}
