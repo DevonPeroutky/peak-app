@@ -68,7 +68,6 @@ function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFoc
 export const openMessage = (props: SavedPageProps) => {
     const { saving, editing, tabId, focusState } = props
     const duration = deriveDuration(saving, editing, focusState)
-    console.log(`STATE OF DA WURLD, `, props)
     notification.open({
         message: <SavePageHeaderContent saving={saving} editing={editing}/>,
         className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
@@ -83,10 +82,8 @@ export const openMessage = (props: SavedPageProps) => {
 export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[]): void {
     getItem(ACTIVE_TAB_KEY, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
-        console.log(`ACTIVE TAB: `, activeTab)
 
         if (activeTab && activeTab.tabId === currTab.id) {
-            console.log(`SAVING THE MESSAGE `, activeTab)
             // User pressed the Save hotkey with the Message already open, which means they are saving the metadata
             // --> Fetch the selectedTags, body, and pageTitle
             // --> Re-save the bookmark w/metadata and close the message
@@ -106,7 +103,6 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
         } else {
             // User initiating the Sequence on a new Tab
             // --> Save the bookmark and give the user the option to additionally add tags/notes
-            console.log(`OPENING NEW MESSAGE`)
             openMessage({
                 tabId: currTab.id,
                 userId: userId,
@@ -146,6 +142,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
         const focusState = (activeTab) ? activeTab.focusState : FOCUS_STATE.NotFocused
         const newActiveTabState: ActiveTabState = {...submitNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
+
         syncActiveTabState(submitNoteMessage.tabId, newActiveTabState, () =>
             openMessage({
                 tabId: submitNoteMessage.tabId,
@@ -175,9 +172,7 @@ export const reRenderMessage = () => {
     getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
         const tags: PeakTag[] = data[TAGS_KEY]
-        console.log(`Existing Page `, activeTab)
         const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
-        console.log(`CANDIDATE PAGE `, existingPage)
         openMessage(existingPage)
     })
 }

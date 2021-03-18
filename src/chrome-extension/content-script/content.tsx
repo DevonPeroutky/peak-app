@@ -26,8 +26,6 @@ import {
 } from "./components/save-page-message/SavePageMessage";
 import {PeakTag} from "../../types";
 
-console.log(`THE CONTENTTTT`)
-
 // ---------------------------------------------------
 // Debugging state changes
 // ---------------------------------------------------
@@ -45,7 +43,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     switch (request.message_type) {
         case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
-            console.log(`[CONTENT]`, openDrawerMessage)
             openSavePageMessage(
                 openDrawerMessage.tab,
                 openDrawerMessage.user_id,
@@ -109,7 +106,6 @@ const appendNodesAsBlockquote = (tabId, nodes: Node[]) => {
         const tags: PeakTag[] = data[TAGS_KEY]
 
         const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
-        console.log(`EXISTING PAGE `, existingPage)
         openMessage({...existingPage, nodesToAppend: nodes})
     })
 }

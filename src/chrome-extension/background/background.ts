@@ -67,7 +67,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const submitNodeMessage: SubmitNoteMessage = request as SubmitNoteMessage;
             establishSocketChannelConnection(channel, submitNodeMessage.userId).then(c => {
                 channel = c
-                console.log(`NOW WE ARE HERE??? `, c)
                 const notesubmitFuture = submitNoteViaWebsockets(
                     c,
                     submitNodeMessage.userId,

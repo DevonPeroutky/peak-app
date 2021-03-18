@@ -88,11 +88,9 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
                 onBlur={() => {
-                    console.log(`NOOO`)
                     syncActiveTabState(tabId, { focusState: FOCUS_STATE.NotFocused }, reRenderMessage)
                 }}
                 onFocus={() => {
-                    console.log(`BROOO`)
                     syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
                 }}
                 className={"page-peak-title-input"}
