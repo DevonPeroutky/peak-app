@@ -44,11 +44,11 @@ export interface SavedPageContentProps {
     tags: PeakTag[]
     nodesToAppend?: Node[],
 }
-export interface SavedPageProps extends SavedPageContentProps, SavedPageStateProps { closeDrawer: () => void };
+export interface SavedPageProps extends SavedPageContentProps, SavedPageStateProps { };
 export const NOTIFICATION_KEY = "saved-page-message"
 
 export const openMessage = (props: SavedPageProps) => {
-    const { saving, editing } = props
+    const { saving, editing, tabId } = props
     notification.open({
         message: <SavePageHeaderContent saving={saving}/>,
         className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
@@ -58,6 +58,7 @@ export const openMessage = (props: SavedPageProps) => {
         onClick: () => {
             console.log('Notification Clicked!');
         },
+        onClose: () => closeMessage(tabId.toString())
     });
 };
 
@@ -82,7 +83,6 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 tags: tags,
                 nodesToAppend: null,
                 shouldSubmit: true,
-                closeDrawer: () => removeDrawer(currTab.id.toString()),
             })
 
             sleep(500).then(() => {
@@ -111,7 +111,6 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 tags: tags,
                 nodesToAppend: null,
                 shouldSubmit: false,
-                closeDrawer: () => removeDrawer(currTab.id.toString()),
             })
 
             sendSubmitNoteMessage(
@@ -145,7 +144,6 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
                 pageUrl: submitNoteMessage.pageUrl,
                 tags: submitNoteMessage.selectedTags,
                 favIconUrl: submitNoteMessage.favIconUrl,
-                closeDrawer: () => removeDrawer(submitNoteMessage.tabId.toString()),
                 saving: SUBMISSION_STATE.Saved,
                 editing: editingState,
                 shouldSubmit: false
@@ -156,7 +154,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
 }
 
 export const closeMessage = (tabId: string) => {
-    deleteItem([tabId], () => {
+    deleteItem([tabId, ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)
     })
 }

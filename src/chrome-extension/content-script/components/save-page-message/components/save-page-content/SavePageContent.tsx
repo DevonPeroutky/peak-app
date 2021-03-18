@@ -69,8 +69,8 @@ export const SavePageContent = (props: SavePageContentProps) => {
     )
 }
 
-const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle: string) => void, favIconUrl: string, closeDrawer: () => void}) => {
-    const { editedPageTitle, setPageTitle, favIconUrl, closeDrawer } = props
+const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle: string) => void, favIconUrl: string}) => {
+    const { editedPageTitle, setPageTitle, favIconUrl } = props
     const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

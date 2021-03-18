@@ -23,6 +23,8 @@ import {
     updateSavePageMessage
 } from "./components/save-page-message/SavePageMessage";
 
+console.log(`THE CONTENTTTT`)
+
 // ---------------------------------------------------
 // Debugging state changes
 // ---------------------------------------------------
