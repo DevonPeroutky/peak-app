@@ -1,30 +1,30 @@
-import {Drawer, Input, message, Spin} from "antd";
+import {Drawer, Input} from "antd";
 import React, {useEffect, useMemo, useState} from "react";
 // import 'antd/lib/empty/style/css'; This fuck up the styling for everything
-import 'antd/lib/modal/style/index.css';
-import 'antd/lib/drawer/style/index.css';
-import 'antd/lib/divider/style/index.css';
-import 'antd/lib/select/style/index.css';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/dropdown/style/index.css';
-import 'antd/lib/list/style/index.css';
-import 'antd/lib/menu/style/index.css';
-import 'antd/lib/icon/style/index.css';
-import 'antd/lib/tag/style/index.css';
-import 'antd/lib/auto-complete/style/index.css';
-import 'antd/lib/spin/style/index.css';
+// import 'antd/lib/modal/style/index.css';
+// import 'antd/lib/drawer/style/index.css';
+// import 'antd/lib/divider/style/index.css';
+// import 'antd/lib/select/style/index.css';
+// import 'antd/lib/input/style/index.css';
+// import 'antd/lib/dropdown/style/index.css';
+// import 'antd/lib/list/style/index.css';
+// import 'antd/lib/menu/style/index.css';
+// import 'antd/lib/icon/style/index.css';
+// import 'antd/lib/tag/style/index.css';
+// import 'antd/lib/auto-complete/style/index.css';
+// import 'antd/lib/spin/style/index.css';
 import "./save-note-modal.scss"
 import {createEditor, Node} from "slate";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {PeakTag} from "../../../../types";
-import {SUBMITTING_STATE} from "../../../constants/constants";
+import {SUBMISSION_STATE} from "../../../constants/constants";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
-import {sendSubmitNoteMessage, syncCurrentDrawerState} from "../../utils/messageUtils";
+import {syncCurrentDrawerState} from "../../utils/messageUtils";
 import {chromeExtensionNormalizers} from "../../../../common/rich-text-editor/editors/chrome-extension/config";
 import cn from "classnames";
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
-import {CheckOutlined, TagsOutlined} from "@ant-design/icons/lib";
+import {TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakLogo} from "../../../../common/logo/PeakLogo";
 import {SavingAnimation} from "./saving-animation/SavingAnimation";
@@ -38,7 +38,7 @@ export interface SaveNoteDrawerProps {
     tags: PeakTag[]
     nodesToAppend: Node[]
     visible: boolean
-    submittingState: SUBMITTING_STATE
+    submittingState: SUBMISSION_STATE
     shouldSubmit: boolean
     closeDrawer: () => void
 }
@@ -57,7 +57,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 
     useEffect(() => {
         if (shouldSubmit) {
-            sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
+            // sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
 
@@ -85,7 +85,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
     return (
         <Drawer
             title={<PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>}
-            className={cn("peak-note-drawer", (submittingState == "submitting") ? "submitting" : "")}
+            className={cn("peak-note-drawer", (submittingState == SUBMISSION_STATE.Saving) ? "submitting" : "")}
             placement="right"
             closable={false}
             onClose={closeDrawer}
@@ -97,7 +97,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
             visible={visible || false}
         >
             <>
-                {(submittingState == "no") ?
+                {(submittingState == SUBMISSION_STATE.Saved) ?
                     <DrawerContent
                         {...props}
                         body={body}

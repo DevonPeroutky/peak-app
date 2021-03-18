@@ -14,9 +14,10 @@ export enum MessageType {
     Message_User,
     Ping,
     Pong,
-    SaveToPeak,
+    SaveToPeakHotkeyPressed,
     SuccessfullySavedNote,
     PostFromBackgroundScript,
+    SuccessfullySavedNoteMetadata,
     AddToReadingList
 }
 

@@ -1,11 +1,9 @@
 /*global chrome*/
 import React from 'react';
-import ReactDOM from 'react-dom';
 import "./content.scss";
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
-import {SaveNoteDrawer, SaveNoteDrawerProps} from "./components/save-note-modal/SaveNoteDrawer";
 import {
     ChromeExtMessage,
     MessageType,
@@ -16,23 +14,16 @@ import {
 import {Node} from "slate";
 import {message} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
-import {openDrawer, removeDrawer, removeDrawerWithSavedMessage, rerenderDrawer} from "./utils/drawerUtils";
-import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {ACTIVE_TAB_KEY, EDITING_STATE, SUBMISSION_STATE} from "../constants/constants";
 import moment from "moment";
 import {getItem} from "../utils/storageUtils";
-
-// ---------------------------------------------------
-// Mount Drawer to DOM
-// - This does not show the modal.
-// ---------------------------------------------------
-getItem(null, function (data) {
-    console.log(`----------> MOUNTING THE MODALLLL`)
-    console.log(`THE DATA`, data)
-    const app = document.createElement('div');
-    app.id = "my-extension-root";
-    document.body.appendChild(app);
-    ReactDOM.render(<SaveNoteDrawer {...data as SaveNoteDrawerProps} />, app)
-});
+import {
+    closeMessage,
+    openMessage,
+    openSavePageMessage,
+    updateSavePageMessage
+} from "./components/save-page-message/SavePageMessage";
+import {removeDrawer} from "./utils/drawerUtils";
 
 // ---------------------------------------------------
 // Debugging state changes
@@ -53,25 +44,29 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 // ---------------------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
     switch (request.message_type) {
-        case MessageType.SaveToPeak:
+        case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
             console.log(`[CONTENT]`, openDrawerMessage)
-            openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
+            openSavePageMessage(
+                openDrawerMessage.tab,
+                openDrawerMessage.user_id,
+                openDrawerMessage.tags
+            )
             break;
         case MessageType.SuccessfullySavedNote:
-            const saveAndCloseDrawerMessage: SubmitNoteMessage = request as SubmitNoteMessage;
-            removeDrawerWithSavedMessage(saveAndCloseDrawerMessage)
+            const m: SubmitNoteMessage = request as SubmitNoteMessage;
+            updateSavePageMessage(m)
             break;
         case MessageType.Ping:
+            // This is the healthcheck the background script uses to figure out if the content script is already injected
             sendResponse({ message_type: MessageType.Pong })
-            // chrome.runtime.sendMessage({ message_type: MessageType.Pong });
             break;
         case MessageType.Message_User:
             const messageUser: MessageUserMessage = request as MessageUserMessage;
             switch (messageUser.message_theme) {
                 case "error":
                     message.error(messageUser.message)
-                    removeDrawer(messageUser.tabId.toString())
+                    closeMessage(messageUser.tabId.toString())
                     break;
                 case "info":
                     message.info(messageUser.message)
@@ -99,7 +94,7 @@ document.addEventListener('mouseup', (event) => {
 
         getItem(ACTIVE_TAB_KEY, data => {
             const activeTabId: string = data[ACTIVE_TAB_KEY].toString()
-            rerenderDrawer(activeTabId, nodes)
+            // rerenderDrawer(activeTabId, nodes)
         })
 
     } else {

@@ -1,7 +1,7 @@
 import * as React from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Input} from "antd";
-import {useMemo, useState} from "react";
-import {openEditingNotification, openSavedPageMessage, SavedPageProps} from "../../SavePageMessage";
+import {openMessage, SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakTag} from "../../../../../../types";
@@ -13,6 +13,7 @@ import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
+import {EDITING_STATE} from "../../../../../constants/constants";
 
 interface SavePageContentProps extends SavedPageProps { };
 
@@ -20,6 +21,7 @@ export const SavePageContent = (props: SavePageContentProps) => {
     const { editing, saving, pageTitle, tags } = props
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+
     return (
         <div className={"peak-message-content-container"}>
             <PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>
@@ -50,23 +52,38 @@ const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle:
 }
 
 const PageNoteBody = (props: SavePageContentProps) => {
-    const { editing } = props
+    const { editing, nodesToAppend } = props
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
-
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
 
+    const isEmpty = () => {
+        return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)
+    }
+
+    useEffect(() => {
+        const editorHasFocus: boolean = ReactEditor.isFocused(editor)
+        if (nodesToAppend && !editorHasFocus) {
+            if (isEmpty()) {
+                updateThatBody([{children: nodesToAppend}])
+            } else {
+                const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
+                updateThatBody([{children: newBodyChildren}])
+            }
+        }
+    }, [nodesToAppend])
+
     const updateThatBody = (newBod: Node[]) => {
         setBody(newBod)
+        // TODO: DEBOUNCE THIS
         // syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
     }
 
-
-    if (editing) {
+    if (editing === EDITING_STATE.Editing) {
         return (<SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>)
     } else {
         return (
-            <div onClick={() => openEditingNotification(props)} className={"add-note-button"}>
+            <div onClick={() => openMessage({...props, editing: EDITING_STATE.Editing})} className={"add-note-button"}>
                 <PlusOutlined className="peak-message-icon" /> Add notes...
             </div>
         )

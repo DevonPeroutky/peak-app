@@ -9,7 +9,7 @@ import {PeakTag} from "../../../types";
 
 export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, tags: PeakTag[]) => {
     const message: SavePageMessage = {
-        "message_type": MessageType.SaveToPeak,
+        "message_type": MessageType.SaveToPeakHotkeyPressed,
         "user_id": userId,
         "tags": tags,
         "tab": activeTab

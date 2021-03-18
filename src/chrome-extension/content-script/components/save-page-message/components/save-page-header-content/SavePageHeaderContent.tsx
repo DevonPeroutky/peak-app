@@ -3,8 +3,9 @@ import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import "./saved-page-content.scss"
 import {LoadingOutlined} from "@ant-design/icons/lib";
 import {Spin} from "antd";
+import {SUBMISSION_STATE} from "../../../../../constants/constants";
 
-export const SavePageHeaderContent = (props: { saving: boolean }) => {
+export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE}) => {
     const { saving } = props
     return (
         <div className={"peak-message-header"}>

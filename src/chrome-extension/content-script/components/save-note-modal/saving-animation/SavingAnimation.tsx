@@ -1,4 +1,4 @@
-import {SUBMITTING_STATE} from "../../../../constants/constants";
+import {SUBMISSION_STATE} from "../../../../constants/constants";
 import React from "react";
 import "./saving-animation.scss"
 import {Lottie} from "@crello/react-lottie";
@@ -6,17 +6,17 @@ import saving from "../../../../../assets/animations/saved.json"
 import saved from "../../../../../assets/animations/saving.json"
 import {sleep} from "../../../../utils/generalUtil";
 
-export const SavingAnimation = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => void}) => {
+export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, closeDrawer: () => void}) => {
     return (
         <div className={"submitting-container"}>
             <Spinner {...props}/>
-            { (props.submittingState === "submitting") ? null : <HowToOpenNoteFooter/>}
+            { (props.submittingState === SUBMISSION_STATE.Saving) ? null : <HowToOpenNoteFooter/>}
         </div>
     )
 }
 
 
-const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => void}) => {
+const Spinner = (props: {submittingState: SUBMISSION_STATE, closeDrawer: () => void}) => {
     const { submittingState, closeDrawer } = props
 
     const savingConfig = {
@@ -35,7 +35,7 @@ const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => v
             preserveAspectRatio: 'xMidYMid slice'
         }
     };
-    const config = (submittingState === "submitting") ? savingConfig : savedConfig
+    const config = (submittingState === SUBMISSION_STATE.Saving) ? savingConfig : savedConfig
 
     return (
         <div className={"animation-container"}>
@@ -47,7 +47,7 @@ const Spinner = (props: {submittingState: SUBMITTING_STATE, closeDrawer: () => v
                     {
                         name: 'complete',
                         callback: () => {
-                            if (submittingState !== "submitting") {
+                            if (submittingState !== SUBMISSION_STATE.Saving) {
                                 sleep(2000).then(r => {
                                     closeDrawer()
                                 })
