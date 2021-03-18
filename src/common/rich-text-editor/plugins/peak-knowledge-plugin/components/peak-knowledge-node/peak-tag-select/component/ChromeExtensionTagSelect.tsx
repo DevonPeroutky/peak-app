@@ -65,6 +65,8 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         }
     }
 
+    console.log(`RENDERING `, renderedTagList)
+
     // @ts-ignore
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>

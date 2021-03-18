@@ -11,7 +11,7 @@ import {SaveNoteDrawer, SaveNoteDrawerProps} from "../components/save-note-modal
 import {is, isEmpty} from "ramda";
 import {syncCurrentDrawerState} from "./messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../constants/editor";
-import {openSavingNotification, openSavedNotification} from "../components/save-page-message/SavePageMessage";
+import {openSavedPageMessage, SavedPageProps} from "../components/save-page-message/SavePageMessage";
 import {sleep} from "../../utils/generalUtil";
 
 export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void {
@@ -40,9 +40,17 @@ export function openDrawer(currTab: Tab, userId: string, tags: PeakTag[]): void 
         if (!isTabActive) {
             console.log(`Creating New Drawer`)
             // createDrawer(currTab.id, false)
-            openSavingNotification()
+            const props: SavedPageProps = {
+                saving: true,
+                editing: false,
+                favIconUrl: currTab.favIconUrl,
+                pageTitle: currTab.title,
+                tags: tags,
+                closeDrawer: () => removeDrawer(currTab.id.toString()),
+            }
+            openSavedPageMessage(props)
             sleep(1000).then(() => {
-                openSavedNotification()
+                openSavedPageMessage({...props, saving: false})
             })
             // syncCurrentDrawerState(currTab.id, userId, [], currTab.title, currTab.url, currTab.favIconUrl, INITIAL_PAGE_STATE.body as Node[])
         } else {
