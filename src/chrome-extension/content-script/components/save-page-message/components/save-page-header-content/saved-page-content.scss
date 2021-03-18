@@ -1,17 +1,21 @@
-.peak-message-header {
+@import "../../../../../../constants/variables";
+
+.peak-message-header-container {
   display: flex;
   align-items: center;
+
+  .peak-message-header {
+    font-size: 20px!important;
+    font-weight: 600!important;
+    color: $text-color!important;
+    margin-bottom: 0px!important;
+    margin-top: 0px!important;
+  }
 
   .peak-message-header-logo {
     margin-right: 10px;
     height: 24px;
     max-height: 24px;
     width: auto;
-  }
-
-  h3 {
-    font-size: 20px!important;
-    font-weight: 600!important;
-    margin-bottom: 0px;
   }
 }

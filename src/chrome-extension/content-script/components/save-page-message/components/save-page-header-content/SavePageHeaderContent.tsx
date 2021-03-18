@@ -8,7 +8,7 @@ import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constant
 export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE}) => {
     const { saving, editing } = props
     return (
-        <div className={"peak-message-header"}>
+        <div className={"peak-message-header-container"}>
             {(saving === SUBMISSION_STATE.Saving && editing !== EDITING_STATE.Editing)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
             <HeaderText {...props}/>
         </div>
@@ -23,9 +23,6 @@ export const SavingLoader = (props) => {
 }
 
 const HeaderText = ({ editing, saving }) => {
-    if (editing === EDITING_STATE.Editing) {
-       return (<h3>Add your notes!</h3>)
-    }
-
-    return (<h3>{(saving === SUBMISSION_STATE.Saving) ? `Saving...` : `Saved!`}</h3>)
+    const content = (editing === EDITING_STATE.Editing) ? "Add your notes!" : (saving === SUBMISSION_STATE.Saving) ? "Saving..." : "Saved!"
+    return <h3 className={"peak-message-header"}>{content}</h3>
 }

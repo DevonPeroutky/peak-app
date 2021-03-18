@@ -48,7 +48,7 @@ const Spinner = (props: {submittingState: SUBMISSION_STATE, onComplete: () => vo
                         name: 'complete',
                         callback: () => {
                             if (submittingState !== SUBMISSION_STATE.Saving) {
-                                sleep(2000).then(r => {
+                                sleep(1500).then(r => {
                                     onComplete()
                                 })
                             }
