@@ -7,25 +7,59 @@ import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-
 import {PeakTag} from "../../../../../../types";
 import "./save-page-content.scss"
 import {SaveNoteEditor} from "../../../save-note-modal/save-note-editor/SaveNoteEditor";
-import {createEditor, Node} from "slate";
+import {createEditor, Editor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../../../../constants/editor";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE} from "../../../../../constants/constants";
+import {sendSubmitNoteMessage} from "../../../../utils/messageUtils";
 
 interface SavePageContentProps extends SavedPageProps { };
+interface SavePageContentBodyProps extends SavedPageProps { body: Node[], updateThatBody: (n: Node[]) => void, editor: ReactEditor };
 
 export const SavePageContent = (props: SavePageContentProps) => {
-    const { editing, saving, pageTitle, tags } = props
+    const { editing, saving, userId, pageTitle, tags, nodesToAppend, shouldSubmit, pageUrl, favIconUrl, tabId } = props
+    // @ts-ignore
+    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
+    const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
 
+    const isEmpty = () => {
+        return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)
+    }
+
+    useEffect(() => {
+        const editorHasFocus: boolean = ReactEditor.isFocused(editor)
+        if (nodesToAppend && !editorHasFocus) {
+            if (isEmpty()) {
+                updateThatBody([{children: nodesToAppend}])
+            } else {
+                const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
+                updateThatBody([{children: newBodyChildren}])
+            }
+        }
+    }, [nodesToAppend])
+
+    const updateThatBody = (newBod: Node[]) => {
+        setBody(newBod)
+        // TODO: DEBOUNCE THIS
+        // syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
+    }
+
+    useEffect(() => {
+        if (shouldSubmit) {
+            sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
+        }
+    }, [shouldSubmit])
+
+    const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
     return (
         <div className={"peak-message-content-container"}>
             <PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>
-            <PageNoteBody {...props}/>
+            <PageNoteBody {...propsWithBody}/>
             <div className="peak-message-tag-container">
                 <TagsOutlined/>
                 <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags}/>
@@ -51,33 +85,8 @@ const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle:
     )
 }
 
-const PageNoteBody = (props: SavePageContentProps) => {
-    const { editing, nodesToAppend } = props
-    const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
-    // @ts-ignore
-    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
-
-    const isEmpty = () => {
-        return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)
-    }
-
-    useEffect(() => {
-        const editorHasFocus: boolean = ReactEditor.isFocused(editor)
-        if (nodesToAppend && !editorHasFocus) {
-            if (isEmpty()) {
-                updateThatBody([{children: nodesToAppend}])
-            } else {
-                const newBodyChildren: Node[] = (body[0].children as Node[]).concat(nodesToAppend)
-                updateThatBody([{children: newBodyChildren}])
-            }
-        }
-    }, [nodesToAppend])
-
-    const updateThatBody = (newBod: Node[]) => {
-        setBody(newBod)
-        // TODO: DEBOUNCE THIS
-        // syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
-    }
+const PageNoteBody = (props: SavePageContentBodyProps) => {
+    const { editing, body, updateThatBody, editor } = props
 
     if (editing === EDITING_STATE.Editing) {
         return (<SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>)

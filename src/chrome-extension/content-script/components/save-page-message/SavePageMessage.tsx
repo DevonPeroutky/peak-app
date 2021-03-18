@@ -5,8 +5,8 @@ import {SavePageHeaderContent} from "./components/save-page-header-content/SaveP
 import {SavePageContent} from "./components/save-page-content/SavePageContent";
 import {PeakTag} from "../../../../types";
 import cn from 'classnames';
-import {EDITING_STATE, SUBMISSION_STATE} from "../../../constants/constants";
-import {deleteItem, getItem} from "../../../utils/storageUtils";
+import {ACTIVE_TAB_KEY, EDITING_STATE, SUBMISSION_STATE} from "../../../constants/constants";
+import {deleteItem, getItem, setItem} from "../../../utils/storageUtils";
 import {removeDrawer} from "../../utils/drawerUtils";
 import {Node} from "slate";
 import {sleep} from "../../../utils/generalUtil";
@@ -20,6 +20,7 @@ import 'antd/lib/dropdown/style/index.css';
 import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
 import {sendSubmitNoteMessage} from "../../utils/messageUtils";
+import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
 
 notification.config({
     placement: 'topRight',
@@ -35,6 +36,7 @@ interface SavedPageStateProps {
 }
 
 export interface SavedPageContentProps {
+    tabId: number,
     userId: string,
     pageTitle: string,
     pageUrl: string,
@@ -62,40 +64,15 @@ export const openMessage = (props: SavedPageProps) => {
 // Called whenever user saves the page by pressing CMD+SHIFT+S
 export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[]): void {
     getItem(null, (data) => {
-        const isTabActive = data[currTab.id.toString()]
+        const activeTab: number | undefined = data[ACTIVE_TAB_KEY] as number
 
-        console.log(`DA TAB? `, isTabActive)
-        // User initiating the Sequence on a new Tab
-        // --> Save the bookmark and give the user the option to additionally add tags/notes
-        if (!isTabActive) {
-            console.log(`OPENING NEW MESSAGE`)
-            openMessage({
-                userId: userId,
-                saving: SUBMISSION_STATE.Saving,
-                editing: EDITING_STATE.NotEditing,
-                favIconUrl: currTab.favIconUrl,
-                pageUrl: currTab.url,
-                pageTitle: currTab.title,
-                tags: tags,
-                nodesToAppend: null,
-                shouldSubmit: false,
-                closeDrawer: () => removeDrawer(currTab.id.toString()),
-            })
-
-            sendSubmitNoteMessage({
-                tabId: currTab.id,
-                userId: userId,
-                selectedTags: [],
-                pageTitle: currTab.title,
-                pageUrl: currTab.url,
-                favIconUrl: currTab.favIconUrl
-            })
-        } else {
+        if (activeTab && activeTab === currTab.id) {
             console.log(`SAVING THE MESSAGE`)
             // User pressed the Save hotkey with the Message already open, which means they are saving the metadata
             // --> Fetch the selectedTags, body, and pageTitle
             // --> Re-save the bookmark w/metadata and close the message
             openMessage({
+                tabId: currTab.id,
                 userId: userId,
                 saving: SUBMISSION_STATE.Saving,
                 editing: EDITING_STATE.Editing,
@@ -119,12 +96,38 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                     console.log(tabInfo)
                 })
             })
+        } else {
+            // User initiating the Sequence on a new Tab
+            // --> Save the bookmark and give the user the option to additionally add tags/notes
+            console.log(`OPENING NEW MESSAGE`)
+            openMessage({
+                tabId: currTab.id,
+                userId: userId,
+                saving: SUBMISSION_STATE.Saving,
+                editing: EDITING_STATE.NotEditing,
+                favIconUrl: currTab.favIconUrl,
+                pageUrl: currTab.url,
+                pageTitle: currTab.title,
+                tags: tags,
+                nodesToAppend: null,
+                shouldSubmit: false,
+                closeDrawer: () => removeDrawer(currTab.id.toString()),
+            })
+
+            sendSubmitNoteMessage(
+                currTab.id,
+                userId,
+                [],
+                currTab.title,
+                currTab.url,
+                currTab.favIconUrl,
+                INITIAL_PAGE_STATE.body as Node[]
+            )
         }
 
         // Needed so users can still scroll w/Drawer open
         document.body.style.setProperty("overflow", "auto")
     })
-    // setItem(TAGS_KEY, tags)
 }
 
 // Called after we have successfully saved a note (either initial or metadata)
@@ -134,17 +137,20 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
         const tabState = data[submitNoteMessage.tabId.toString()]
         console.log(`TAB STATE: `, tabState)
         const editingState = (tabState && tabState.editing === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
-        openMessage({
-            userId: submitNoteMessage.userId,
-            pageTitle: submitNoteMessage.pageTitle,
-            pageUrl: submitNoteMessage.pageUrl,
-            tags: submitNoteMessage.selectedTags,
-            favIconUrl: submitNoteMessage.favIconUrl,
-            closeDrawer: () => removeDrawer(submitNoteMessage.tabId.toString()),
-            saving: SUBMISSION_STATE.Saved,
-            editing: editingState,
-            shouldSubmit: false
-        })
+        setItem(ACTIVE_TAB_KEY, submitNoteMessage.tabId, () =>
+            openMessage({
+                tabId: submitNoteMessage.tabId,
+                userId: submitNoteMessage.userId,
+                pageTitle: submitNoteMessage.pageTitle,
+                pageUrl: submitNoteMessage.pageUrl,
+                tags: submitNoteMessage.selectedTags,
+                favIconUrl: submitNoteMessage.favIconUrl,
+                closeDrawer: () => removeDrawer(submitNoteMessage.tabId.toString()),
+                saving: SUBMISSION_STATE.Saved,
+                editing: editingState,
+                shouldSubmit: false
+            })
+        )
     })
 
 }
