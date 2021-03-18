@@ -8,6 +8,22 @@ $drawer-title-height: 45px;
 .peak-message-content-container {
   width: 100%;
 
+  .peak-message-icon {
+    height: 14px;
+    width: auto;
+    margin-right: 12px;
+  }
+
+  .peak-message-tag-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .add-note-button {
+    cursor: pointer;
+  }
+
   .page-peak-note-title-container {
     display: flex;
     align-items: center;
@@ -15,7 +31,7 @@ $drawer-title-height: 45px;
     min-height: $drawer-title-height!important;
 
     .page-peak-favicon {
-      height: 25px;
+      height: 14px;
       width: auto;
       margin-right: 12px;
     }
@@ -33,14 +49,29 @@ $drawer-title-height: 45px;
       padding-bottom: 4px!important;
       background-color: white;
     }
-
-    .peak-close-icon {
-      cursor: pointer;
-      position: absolute;
-      width: 16px;
-      right: 10px;
-      top: 10px;
-    }
   }
 
+  .peak-note-drawer-footer {
+    //margin: -$drawer-padding-amount;
+    border-top: 1px solid #f0f0f0;
+    width: 100% !important;
+    color: $placeholder-text-color;
+    padding-top: 24px;
+    padding-bottom: 24px;
+
+    height: 78px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .hotkey-decoration {
+      background-color: rgb(244, 245, 247);
+      border-radius: 3px;
+      padding: 1px 3px;
+      display: inline-block;
+      vertical-align: center;
+      horiz-align: center;
+      text-align: center;
+    }
+  }
 }

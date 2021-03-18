@@ -1,12 +1,14 @@
 $transition: all .5s ease-in-out;
-
+$og-padding: 16px;
+$margin-top: 24px;//Also seet in the component via notification.config
 .saved-page-message {
   -webkit-transition: $transition;
   -moz-transition: $transition;
   -o-transition: $transition;
   -ms-transition: $transition;
   transition: $transition;
-  margin-top: 24px;
+  margin-top: $margin-top;
+  padding-top: $og-padding;
   min-height: 150px;
 
   .ant-notification-notice-message {

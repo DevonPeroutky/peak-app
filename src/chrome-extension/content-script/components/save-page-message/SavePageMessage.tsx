@@ -25,14 +25,15 @@ export interface SavedPageContentProps {
 
 export interface SavedPageProps extends SavedPageContentProps, SavedPageStateProps { closeDrawer: () => void };
 
-export const openEditingNotification = () => {
+export const openEditingNotification = (props: SavedPageProps) => {
+    const { saving, editing } = props
+    const sup = {...props, editing: true}
     notification.open({
-        message: 'Notification Title',
-        className: 'saved-page-message',
+        message: <SavePageHeaderContent saving={saving}/>,
+        className: 'saved-page-message drawer-mode',
         duration: 0,
         key: "saved-page-message",
-        description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        description: <SavePageContent {...sup} />,
         onClick: () => {
             console.log('Notification Clicked!');
         },

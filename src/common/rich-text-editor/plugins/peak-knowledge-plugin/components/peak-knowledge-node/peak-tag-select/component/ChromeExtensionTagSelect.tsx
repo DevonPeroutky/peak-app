@@ -1,5 +1,5 @@
 import {PeakTag} from "../../../../../../../../types";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Select, Tag} from "antd";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tags/types";
@@ -21,6 +21,7 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
     const [open, setDropdownState] = useState(false);
     const [tags, setTags] = useState<PeakTag[]>(existing_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
+    const [show, setShow] = useState(false)
 
     function tagRender(props) {
         const { label, value, closable, onClose } = props;
@@ -65,51 +66,59 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         }
     }
 
-    console.log(`RENDERING `, renderedTagList)
+
+    // I have no idea why this is necessary for the Notification not to Flash
+    useEffect(() => {
+        setShow(true)
+    }, [])
 
     // @ts-ignore
     return (
         <div className={"peak-learning-select-container"} data-slate-editor>
-            <Select
-                onClick={() => {
-                    setDropdownState(true)
-                    // TODO: lockFocus(true)
-                }}
-                ref={mainRef}
-                open={open}
-                onBlur={() => {
-                    setDropdownState(false)
-                }}
-                onFocus={() => {
-                    setDropdownState(true)
-                }}
-                onSearch={(value) => {
-                    setDropdownState(true)
-                    setCurrentSearch(value)
-                }}
-                optionLabelProp="value"
-                mode="multiple"
-                value={selected_tags.map(t => {
-                    return { value: t.title, label: t.color } as LabeledValue
-                })}
-                labelInValue={true}
-                bordered={false}
-                onInputKeyDown={onKeyDown}
-                placeholder="Tab to start selecting tags"
-                onSelect={onSelect}
-                dropdownClassName={cn("peak-tag-select-dropdown", (open) ? "" : "closed")}
-                onDeselect={onDeselect}
-                notFoundContent={<span>No more tags.</span>}
-                tagRender={tagRender}
-                style={{ width: '100%' }}>
-                {renderedTagList.map(tag => (
-                    <Option key={tag.id} value={tag.title as string}>
-                        <div className={"peak-learning-select-option"}>
-                            <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
-                        </div>
-                    </Option>
-                ))}
-            </Select>
+            {
+                (show) ?
+                    <Select
+                        onClick={() => {
+                            setDropdownState(true)
+                            // TODO: lockFocus(true)
+                        }}
+                        ref={mainRef}
+                        open={open}
+                        onBlur={() => {
+                            setDropdownState(false)
+                        }}
+                        onFocus={() => {
+                            setDropdownState(true)
+                        }}
+                        onSearch={(value) => {
+                            setDropdownState(true)
+                            setCurrentSearch(value)
+                        }}
+                        optionLabelProp="value"
+                        mode="multiple"
+                        value={selected_tags.map(t => {
+                            return { value: t.title, label: t.color } as LabeledValue
+                        })}
+                        labelInValue={true}
+                        bordered={false}
+                        onInputKeyDown={onKeyDown}
+                        placeholder="Add tags"
+                        onSelect={onSelect}
+                        dropdownClassName={cn("peak-tag-select-dropdown", (open) ? "" : "closed")}
+                        onDeselect={onDeselect}
+                        notFoundContent={<span>No more tags.</span>}
+                        tagRender={tagRender}
+                        style={{ width: '100%' }}>
+                        {renderedTagList.map(tag => (
+                            <Option key={tag.id} value={tag.title as string}>
+                                <div className={"peak-learning-select-option"}>
+                                    <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
+                                </div>
+                            </Option>
+                        ))}
+                    </Select> :
+                    null
+            }
         </div>
     )
 }
