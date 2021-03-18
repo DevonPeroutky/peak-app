@@ -1,13 +1,18 @@
 export const TAGS_KEY = "tags"
-export const ACTIVE_TAB_KEY = "activeTabId"
+export const ACTIVE_TAB_KEY = "activeTab"
 
 export type ANT_MESSAGE_THEME = "success" | "info" | "warning" | "error"
 export enum EDITING_STATE {
+    NotEditing,
     Editing,
-    NotEditing
 }
 export enum SUBMISSION_STATE {
     Saving,
     Saved,
     MetadataSaved,
+}
+
+export interface ActiveTabState {
+    tabId: number,
+    editingState: EDITING_STATE
 }

@@ -1,5 +1,5 @@
 import {PeakTag} from "../../../../../../../../types";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, KeyboardEvent} from "react";
 import {Select, Tag} from "antd";
 import {capitalize_and_truncate} from "../../../../../../../../utils/strings";
 import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tags/types";
@@ -15,8 +15,8 @@ const { Option } = Select;
  * @param props
  * @constructor
  */
-export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void }) => {
-    const { selected_tags, setSelectedTags, existing_tags } = props
+export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void, forceClose?: boolean }) => {
+    const { selected_tags, setSelectedTags, existing_tags, forceClose } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const [tags, setTags] = useState<PeakTag[]>(existing_tags)
@@ -32,6 +32,12 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
             </Tag>
         );
     }
+
+    useEffect(() => {
+        if (forceClose) {
+            setDropdownState(false)
+        }
+    }, [forceClose])
 
     const CREATE_NEW_TAG_OPTION: PeakTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
     const filteredTags: PeakTag[] = take(3, tags.filter(o => !selected_tags.map(t => t.id).includes(o.id)));
@@ -56,8 +62,16 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
         setCurrentSearch("")
     }
 
-    const onKeyDown = (event) => {
+    const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        console.log(`EVENT `, event)
         if (open && event.key === "Escape") {
+            event.stopPropagation()
+            event.preventDefault()
+            console.log(`CLOSING THE SHOP`)
+            setCurrentSearch('')
+            setDropdownState(false)
+        }
+        if (open && event.key === 's' && event.metaKey && event.shiftKey) {
             event.stopPropagation()
             event.preventDefault()
             console.log(`CLOSING THE SHOP`)

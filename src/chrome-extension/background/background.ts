@@ -4,7 +4,7 @@ import {loadUserRequest, login_via_chrome_extension} from "../../client/user";
 import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
-import {deleteItem, getItemSizeFromChromeState, setItem} from "../utils/storageUtils";
+import {deleteItem, getItem, getItemSizeFromChromeState, setItem} from "../utils/storageUtils";
 import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
@@ -54,9 +54,9 @@ chrome.commands.onCommand.addListener(function(command) {
 // ------------------------------------------------
 // Maintain activeTab in Storage for content script
 // ------------------------------------------------
-chrome.tabs.onActivated.addListener(function (tab) {
-    setItem(ACTIVE_TAB_KEY, tab.tabId)
-})
+// chrome.tabs.onActivated.addListener(function (tab) {
+//     setItem(ACTIVE_TAB_KEY, tab.tabId)
+// })
 
 // ---------------------------------------
 // Listen for Messages from Content Script
@@ -102,5 +102,5 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
 // Listen for tabs refreshing
 // -------------------------------------------
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
-    deleteItem([ACTIVE_TAB_KEY, tabId.toString()])
+    deleteItem([ACTIVE_TAB_KEY, tabId.toString()] )
 });

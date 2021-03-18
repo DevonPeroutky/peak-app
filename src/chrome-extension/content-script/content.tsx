@@ -14,7 +14,7 @@ import {
 import {Node} from "slate";
 import {message} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
-import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {ACTIVE_TAB_KEY, ActiveTabState} from "../constants/constants";
 import moment from "moment";
 import {getItem} from "../utils/storageUtils";
 import {
@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             switch (messageUser.message_theme) {
                 case "error":
                     message.error(messageUser.message)
-                    closeMessage(messageUser.tabId.toString())
+                    closeMessage(messageUser.tabId)
                     break;
                 case "info":
                     message.info(messageUser.message)
@@ -93,7 +93,7 @@ document.addEventListener('mouseup', (event) => {
         const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
 
         getItem(ACTIVE_TAB_KEY, data => {
-            const activeTabId: string = data[ACTIVE_TAB_KEY].toString()
+            const activeTabId: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
             // rerenderDrawer(activeTabId, nodes)
         })
 

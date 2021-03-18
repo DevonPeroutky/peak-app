@@ -6,7 +6,7 @@ import saving from "../../../../../assets/animations/saved.json"
 import saved from "../../../../../assets/animations/saving.json"
 import {sleep} from "../../../../utils/generalUtil";
 
-export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, closeDrawer: () => void}) => {
+export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {
     return (
         <div className={"submitting-container"}>
             <Spinner {...props}/>
@@ -16,8 +16,8 @@ export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, close
 }
 
 
-const Spinner = (props: {submittingState: SUBMISSION_STATE, closeDrawer: () => void}) => {
-    const { submittingState, closeDrawer } = props
+const Spinner = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {
+    const { submittingState, onComplete } = props
 
     const savingConfig = {
         autoplay: true,
@@ -49,7 +49,7 @@ const Spinner = (props: {submittingState: SUBMISSION_STATE, closeDrawer: () => v
                         callback: () => {
                             if (submittingState !== SUBMISSION_STATE.Saving) {
                                 sleep(2000).then(r => {
-                                    closeDrawer()
+                                    onComplete()
                                 })
                             }
                         }
