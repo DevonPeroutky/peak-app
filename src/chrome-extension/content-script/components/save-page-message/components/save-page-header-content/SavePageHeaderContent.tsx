@@ -9,8 +9,8 @@ export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE}) => {
     const { saving } = props
     return (
         <div className={"peak-message-header"}>
-            {saving ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
-            <h3>{(saving) ? `Saving...` : `Saved!`}</h3>
+            {(saving === SUBMISSION_STATE.Saving)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
+            <h3>{(saving === SUBMISSION_STATE.Saving) ? `Saving...` : `Saved!`}</h3>
         </div>
     )
 }

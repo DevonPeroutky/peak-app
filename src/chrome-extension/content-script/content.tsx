@@ -14,16 +14,14 @@ import {
 import {Node} from "slate";
 import {message} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
-import {ACTIVE_TAB_KEY, EDITING_STATE, SUBMISSION_STATE} from "../constants/constants";
+import {ACTIVE_TAB_KEY} from "../constants/constants";
 import moment from "moment";
 import {getItem} from "../utils/storageUtils";
 import {
     closeMessage,
-    openMessage,
     openSavePageMessage,
     updateSavePageMessage
 } from "./components/save-page-message/SavePageMessage";
-import {removeDrawer} from "./utils/drawerUtils";
 
 // ---------------------------------------------------
 // Debugging state changes

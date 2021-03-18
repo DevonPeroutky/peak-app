@@ -19,6 +19,7 @@ import 'antd/lib/input/style/index.css';
 import 'antd/lib/dropdown/style/index.css';
 import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
+import {sendSubmitNoteMessage} from "../../utils/messageUtils";
 
 notification.config({
     placement: 'topRight',
@@ -81,15 +82,14 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 closeDrawer: () => removeDrawer(currTab.id.toString()),
             })
 
-
-            // sendSubmitNoteMessage({
-            //     tabId: currTab.id,
-            //     userId: userId,
-            //     selectedTags: [],
-            //     pageTitle: currTab.title,
-            //     pageUrl: currTab.url,
-            //     favIconUrl: currTab.favIconUrl
-            // })
+            sendSubmitNoteMessage({
+                tabId: currTab.id,
+                userId: userId,
+                selectedTags: [],
+                pageTitle: currTab.title,
+                pageUrl: currTab.url,
+                favIconUrl: currTab.favIconUrl
+            })
         } else {
             console.log(`SAVING THE MESSAGE`)
             // User pressed the Save hotkey with the Message already open, which means they are saving the metadata
@@ -130,8 +130,10 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
 // Called after we have successfully saved a note (either initial or metadata)
 export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
     getItem(null, (data) => {
+        console.log(`THE STATE: `, data)
         const tabState = data[submitNoteMessage.tabId.toString()]
-        const editingState = (tabState && tabState.editing === EDITING_STATE.NotEditing) ? EDITING_STATE.NotEditing : EDITING_STATE.Editing
+        console.log(`TAB STATE: `, tabState)
+        const editingState = (tabState && tabState.editing === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         openMessage({
             userId: submitNoteMessage.userId,
             pageTitle: submitNoteMessage.pageTitle,
