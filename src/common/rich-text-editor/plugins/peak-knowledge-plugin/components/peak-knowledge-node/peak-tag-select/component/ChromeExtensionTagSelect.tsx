@@ -7,6 +7,9 @@ import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import cn from "classnames";
 import {take} from "ramda";
+import {syncActiveTabState} from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
+import {FOCUS_STATE} from "../../../../../../../../chrome-extension/constants/constants";
+import {reRenderMessage} from "../../../../../../../../chrome-extension/content-script/components/save-page-message/SavePageMessage";
 const { Option } = Select;
 
 /**
@@ -15,8 +18,8 @@ const { Option } = Select;
  * @param props
  * @constructor
  */
-export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void, forceClose?: boolean }) => {
-    const { selected_tags, setSelectedTags, existing_tags, forceClose } = props
+export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void, forceClose?: boolean }) => {
+    const { tabId, selected_tags, setSelectedTags, existing_tags, forceClose } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
     const [tags, setTags] = useState<PeakTag[]>(existing_tags)
@@ -100,9 +103,11 @@ export const TagSelect = (props: { selected_tags: PeakTag[], existing_tags: Peak
                         open={open}
                         onBlur={() => {
                             setDropdownState(false)
+                            syncActiveTabState(tabId, { focusState: FOCUS_STATE.NotFocused }, reRenderMessage)
                         }}
                         onFocus={() => {
                             setDropdownState(true)
+                            syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
                         }}
                         onSearch={(value) => {
                             setDropdownState(true)

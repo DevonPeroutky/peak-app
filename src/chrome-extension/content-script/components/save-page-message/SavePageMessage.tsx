@@ -5,10 +5,15 @@ import {SavePageHeaderContent} from "./components/save-page-header-content/SaveP
 import {SavePageContent} from "./components/save-page-content/SavePageContent";
 import {PeakTag} from "../../../../types";
 import cn from 'classnames';
-import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE} from "../../../constants/constants";
+import {
+    ACTIVE_TAB_KEY,
+    ActiveTabState,
+    EDITING_STATE,
+    FOCUS_STATE,
+    SUBMISSION_STATE, TAGS_KEY
+} from "../../../constants/constants";
 import {deleteItem, getItem} from "../../../utils/storageUtils";
 import {Node} from "slate";
-import {sleep} from "../../../utils/generalUtil";
 import {SubmitNoteMessage} from "../../../constants/models";
 import 'antd/lib/divider/style/index.css';
 import 'antd/lib/select/style/index.css';
@@ -24,13 +29,14 @@ import Tab = chrome.tabs.Tab;
 notification.config({
     placement: 'topRight',
     top: 0,
-    duration: 0,
+    duration: 1,
     rtl: false,
 });
 
 interface SavedPageStateProps {
     editing?: EDITING_STATE,
     saving: SUBMISSION_STATE,
+    focusState: FOCUS_STATE,
     shouldSubmit: boolean
 }
 
@@ -46,17 +52,29 @@ export interface SavedPageContentProps {
 export interface SavedPageProps extends SavedPageContentProps, SavedPageStateProps { };
 export const NOTIFICATION_KEY = "saved-page-message"
 
+function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFocus: FOCUS_STATE): number {
+   if (tagFocus === FOCUS_STATE.Focus) {
+       return 0
+   }
+
+   if (saving === SUBMISSION_STATE.Saving || editing === EDITING_STATE.Editing) {
+       return 0
+   }
+   return 2
+
+}
+
+
 export const openMessage = (props: SavedPageProps) => {
-    const { saving, editing, tabId } = props
+    const { saving, editing, tabId, focusState } = props
+    const duration = deriveDuration(saving, editing, focusState)
+    console.log(`STATE OF DA WURLD, `, props)
     notification.open({
         message: <SavePageHeaderContent saving={saving} editing={editing}/>,
         className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
-        duration: 0,
         key: NOTIFICATION_KEY,
+        duration: duration,
         description: <SavePageContent editing={editing} {...props}/>,
-        onClick: () => {
-            console.log('Notification Clicked!');
-        },
         onClose: () => closeMessage(tabId)
     });
 };
@@ -81,20 +99,9 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 favIconUrl: currTab.favIconUrl,
                 pageTitle: currTab.title,
                 tags: tags,
+                focusState: activeTab.focusState,
                 nodesToAppend: null,
                 shouldSubmit: true,
-            })
-
-            sleep(500).then(() => {
-                console.log(`DA FUCK WE DOING IN HERE???`)
-                getItem(null, data => {
-                    const tabInfo = data[currTab.id.toString()]
-                    if (!tabInfo) {
-                        console.error("We were expecting the tab information in chrome.storage")
-                        return
-                    }
-                    console.log(`TAB INFO: `, tabInfo)
-                })
             })
         } else {
             // User initiating the Sequence on a new Tab
@@ -109,6 +116,7 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 pageUrl: currTab.url,
                 pageTitle: currTab.title,
                 tags: tags,
+                focusState: FOCUS_STATE.NotFocused,
                 nodesToAppend: null,
                 shouldSubmit: false,
             })
@@ -132,10 +140,13 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
 // Called after we have successfully saved a note (either initial or metadata)
 export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
     getItem(null, (data) => {
-        const tabState: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
-        const editingState = (tabState && tabState.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
+        const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
+
+        const editingState = (activeTab && activeTab.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
-        syncActiveTabState(submitNoteMessage.tabId, { editingState: editingState }, () =>
+        const focusState = (activeTab) ? activeTab.focusState : FOCUS_STATE.NotFocused
+        const newActiveTabState: ActiveTabState = {...submitNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
+        syncActiveTabState(submitNoteMessage.tabId, newActiveTabState, () =>
             openMessage({
                 tabId: submitNoteMessage.tabId,
                 userId: submitNoteMessage.userId,
@@ -143,6 +154,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
                 pageUrl: submitNoteMessage.pageUrl,
                 tags: submitNoteMessage.selectedTags,
                 favIconUrl: submitNoteMessage.favIconUrl,
+                focusState: focusState,
                 saving: saving,
                 editing: editingState,
                 shouldSubmit: false
@@ -156,5 +168,16 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
 export const closeMessage = (tabId: number) => {
     deleteItem([tabId.toString(), ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)
+    })
+}
+
+export const reRenderMessage = () => {
+    getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
+        const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
+        const tags: PeakTag[] = data[TAGS_KEY]
+        console.log(`Existing Page `, activeTab)
+        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
+        console.log(`CANDIDATE PAGE `, existingPage)
+        openMessage(existingPage)
     })
 }

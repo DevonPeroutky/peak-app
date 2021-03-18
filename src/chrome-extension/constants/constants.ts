@@ -5,6 +5,10 @@ export const TAGS_KEY = "tags"
 export const ACTIVE_TAB_KEY = "activeTab"
 
 export type ANT_MESSAGE_THEME = "success" | "info" | "warning" | "error"
+export enum FOCUS_STATE {
+    Focus,
+    NotFocused
+}
 export enum EDITING_STATE {
     NotEditing,
     Editing,
@@ -21,7 +25,8 @@ export interface ActiveTabState {
     pageTitle: string,
     pageUrl: string,
     favIconUrl: string,
-    selectedTags: PeakTag[]
+    selectedTags: PeakTag[],
     body?: Node[],
+    focusState: FOCUS_STATE,
     editingState: EDITING_STATE
 }

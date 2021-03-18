@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
-import {Input} from "antd";
-import {closeMessage, openMessage, SavedPageProps} from "../../SavePageMessage";
+import {Input, Select} from "antd";
+import {closeMessage, openMessage, reRenderMessage, SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakTag} from "../../../../../../types";
@@ -13,7 +13,7 @@ import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
-import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
+import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, syncActiveTabState} from "../../../../utils/messageUtils";
 import {SavingAnimation} from "../../../save-note-modal/saving-animation/SavingAnimation";
 
@@ -64,20 +64,20 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     return (
         <div className={"peak-message-content-container"}>
-            <PageTitle editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} {...props}/>
+            <PageTitle tabId={tabId} editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} favIconUrl={favIconUrl}/>
             <PageNoteBody {...propsWithBody}/>
             <div className="peak-message-tag-container">
                 <TagsOutlined/>
-                <TagSelect selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags} forceClose={saving === SUBMISSION_STATE.Saving}/>
+                <TagSelect tabId={tabId} selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags} forceClose={saving === SUBMISSION_STATE.Saving}/>
             </div>
             { (editing === EDITING_STATE.Editing) ? <PeakDrawerFooter/> : null }
         </div>
     )
 }
 
-const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle: string) => void, favIconUrl: string}) => {
-    const { editedPageTitle, setPageTitle, favIconUrl } = props
-    const baseUrl = chrome.runtime.getURL("../../../assets/logos/grayscale-with-sun.svg")
+const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle: (newPageTitle: string) => void, favIconUrl: string}) => {
+    const { tabId, editedPageTitle, setPageTitle, favIconUrl } = props
+    const baseUrl = chrome.runtime.getURL("../../../assets/icons/bookmark.svg")
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPageTitle(e.target.value)
@@ -86,7 +86,19 @@ const PageTitle = (props: {editedPageTitle: string, setPageTitle: (newPageTitle:
     return (
         <div className={"page-peak-note-title-container"}>
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
-            <Input className={"page-peak-title-input"} bordered={false} value={editedPageTitle} onChange={onChange}/>
+            <Input
+                onBlur={() => {
+                    console.log(`NOOO`)
+                    syncActiveTabState(tabId, { focusState: FOCUS_STATE.NotFocused }, reRenderMessage)
+                }}
+                onFocus={() => {
+                    console.log(`BROOO`)
+                    syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
+                }}
+                className={"page-peak-title-input"}
+                bordered={false}
+                value={editedPageTitle}
+                onChange={onChange}/>
         </div>
     )
 }

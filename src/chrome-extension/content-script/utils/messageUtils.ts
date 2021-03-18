@@ -37,6 +37,6 @@ export const syncActiveTabState = (tabId: number, payload: {}, callback?) => {
     getItem(ACTIVE_TAB_KEY, data => {
         const currTabState: ActiveTabState = data[ACTIVE_TAB_KEY]
         const newTabState = { ...currTabState, ...payload, tabId: tabId }
-        setItem(ACTIVE_TAB_KEY, newTabState, () => callback())
+        setItem(ACTIVE_TAB_KEY, newTabState, callback)
     })
 }
