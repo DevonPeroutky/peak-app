@@ -5,6 +5,7 @@ import {Lottie} from "@crello/react-lottie";
 import saving from "../../../../../assets/animations/saved.json"
 import saved from "../../../../../assets/animations/saving.json"
 import {sleep} from "../../../../utils/generalUtil";
+import {Divider, Skeleton} from "antd";
 
 export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {
     return (
@@ -14,6 +15,19 @@ export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, onCom
         </div>
     )
 }
+
+export const SavingSkeleton = (props) => {
+    return (
+        <>
+            <Skeleton active={true} title={false} className={"peak-saving-skeleton"} paragraph={{ rows: 1 }}/>
+            <Divider className={"peak-extension-divider"}/>
+            <Skeleton active={true} title={false} className={"peak-saving-skeleton"} paragraph={{ rows: 1 }}/>
+            <Divider className={"peak-extension-divider"}/>
+            <Skeleton active={true} title={false} className={"peak-saving-skeleton"} paragraph={{ rows: 1 }}/>
+        </>
+    )
+}
+
 
 
 const Spinner = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {

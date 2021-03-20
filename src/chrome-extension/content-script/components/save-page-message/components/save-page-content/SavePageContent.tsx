@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
-import {Divider, Input, Select} from "antd";
+import {Divider, Input} from "antd";
 import {closeMessage, SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
@@ -15,7 +15,7 @@ import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-edi
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
-import {SavingAnimation} from "../../../save-note-modal/saving-animation/SavingAnimation";
+import {SavingAnimation, SavingSkeleton} from "../../../save-note-modal/saving-animation/SavingAnimation";
 
 interface SavePageContentProps extends SavedPageProps { };
 interface SavePageContentBodyProps extends SavedPageProps { body: Node[], updateThatBody: (n: Node[]) => void, editor: ReactEditor };
@@ -58,12 +58,24 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
 
-    if ((saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) && editingState === EDITING_STATE.Editing) {
-        return (<SavingAnimation submittingState={saving} onComplete={() => closeMessage(tabId)}/>)
+    // return (<div className={"peak-message-content-container"}>
+    //         <Divider className={"peak-extension-divider"}/>
+    //         <SavingSkeleton/>
+    //     </div>)
+    if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
+        return (
+            <div className={"peak-message-content-container"}>
+                <Divider className={"peak-extension-divider"}/>
+                {(editingState === EDITING_STATE.Editing) ?
+                    <SavingAnimation submittingState={saving} onComplete={() => closeMessage(tabId)}/>
+                    : <SavingSkeleton/>
+                }
+            </div>
+        )
     }
 
     return (
-        <div className={"peak-message-content-container"}>
+        <div className={"peak-message-content-container animate__animated animate__fadeIn"}>
             <Divider className={"peak-extension-divider"}/>
             <PageTitle tabId={tabId} editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} favIconUrl={favIconUrl}/>
             <Divider className={"peak-extension-divider"}/>

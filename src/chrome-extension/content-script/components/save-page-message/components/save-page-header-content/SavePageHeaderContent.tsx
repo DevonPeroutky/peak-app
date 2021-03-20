@@ -40,7 +40,7 @@ const HeaderText = ({ editing, saving }) => {
         }
     }
 
-    return <h3 className={"peak-message-header"}>{pickText(saving, editing)}</h3>
+    return <h3 className={"peak-message-header animate__animated animate__fadeIn"}>{pickText(saving, editing)}</h3>
 }
 
 const HeaderIcon = ({ editing, saving, sendDeletePageMessage, goBack }) => {

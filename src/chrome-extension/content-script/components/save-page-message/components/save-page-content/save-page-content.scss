@@ -1,6 +1,6 @@
 @import "../../../../../../constants/variables";
 
-$drawer-padding-amount: 24px;
+$drawer-padding-amount: 24px; // We bad --> Look at saving-animation.scss before touching this
 $drawer-header-vert-padding: 16px;
 $font-family: "Inter"; //, ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"!important;
 $drawer-title-height: 45px;

@@ -23,6 +23,7 @@ import 'antd/lib/dropdown/style/index.css';
 import 'antd/lib/popconfirm/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/list/style/index.css';
+import 'antd/lib/skeleton/style/index.css';
 import "./save-page-message.scss";
 import {sendDeletePageMessage, sendSubmitNoteMessage, updateMessageInPlace} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
