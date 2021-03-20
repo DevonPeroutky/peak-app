@@ -3,19 +3,24 @@
 .peak-message-header-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  .peak-message-header {
-    font-size: 20px!important;
-    font-weight: 600!important;
-    color: $text-color!important;
-    margin-bottom: 0px!important;
-    margin-top: 0px!important;
-  }
+  .peak-header-group {
+    display: flex;
 
-  .peak-message-header-logo {
-    margin-right: 10px;
-    height: 24px;
-    max-height: 24px;
-    width: auto;
+    .peak-message-header {
+      font-size: 20px!important;
+      font-weight: 600!important;
+      color: $text-color!important;
+      margin-bottom: 0px!important;
+      margin-top: 0px!important;
+    }
+
+    .peak-message-header-logo {
+      margin-right: 10px;
+      height: 24px;
+      max-height: 24px;
+      width: auto;
+    }
   }
 }

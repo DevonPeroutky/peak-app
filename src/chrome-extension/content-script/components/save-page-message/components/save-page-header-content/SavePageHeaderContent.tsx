@@ -1,16 +1,20 @@
 import * as React from "react";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import "./saved-page-content.scss"
+import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
+import {NullButton, UndoCloseButton} from "./undo-close-button/UndoCloseButton";
 import {LoadingOutlined} from "@ant-design/icons/lib";
 import {Spin} from "antd";
-import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 
 export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE}) => {
     const { saving, editing } = props
     return (
         <div className={"peak-message-header-container"}>
-            {(saving === SUBMISSION_STATE.Saving && editing !== EDITING_STATE.Editing)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
-            <HeaderText {...props}/>
+            <div className={"peak-header-group"}>
+                {(saving === SUBMISSION_STATE.Saving && editing !== EDITING_STATE.Editing)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
+                <HeaderText {...props}/>
+            </div>
+            { (saving === SUBMISSION_STATE.Saving) ? null : <UndoCloseButton /> }
         </div>
     )
 }

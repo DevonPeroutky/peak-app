@@ -27,7 +27,7 @@ import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
 import {sendSubmitNoteMessage, syncActiveTabState} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
-import {UndoCloseButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
+import {NullButton, UndoCloseButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
 import Tab = chrome.tabs.Tab;
 
 notification.config({
@@ -77,7 +77,7 @@ export const openMessage = (props: SavedPageProps) => {
         key: NOTIFICATION_KEY,
         duration: 0,
         description: <SavePageContent editing={editing} {...props}/>,
-        closeIcon: <UndoCloseButton tabId={tabId}/>,
+        closeIcon: <NullButton/>,
         onClick: () => console.log(`CLICKED`),
         onClose: () => closeMessage(tabId)
     });
