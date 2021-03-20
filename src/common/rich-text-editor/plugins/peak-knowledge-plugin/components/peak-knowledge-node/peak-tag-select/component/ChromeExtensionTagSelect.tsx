@@ -42,7 +42,7 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
     }, [forceClose])
 
     const CREATE_NEW_TAG_OPTION: PeakTag = { id: TEMP_HOLDER, title: currentSearch.toLowerCase(), label: `Create new tag: ${currentSearch}` }
-    const filteredTags: PeakTag[] = take(3, tags.filter(o => !selected_tags.map(t => t.id).includes(o.id)));
+    const filteredTags: PeakTag[] = tags.filter(o => !selected_tags.map(t => t.id).includes(o.id));
 
     const isEmptyInput: boolean = currentSearch.length === 0
     const isExistingTag: boolean = [...tags, ...selected_tags].find(t => t.title === CREATE_NEW_TAG_OPTION.title) !== undefined

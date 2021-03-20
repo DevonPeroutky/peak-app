@@ -58,6 +58,12 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
 
+    // return (
+    //     <div className={"peak-message-content-container"}>
+    //         <Divider className={"peak-extension-divider"}/>
+    //         <SavingSkeleton/>
+    //     </div>
+    // )
     if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
         return (
             <div className={"peak-message-content-container"}>
