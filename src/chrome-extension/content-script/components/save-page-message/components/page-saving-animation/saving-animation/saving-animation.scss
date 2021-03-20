@@ -40,15 +40,20 @@ $drawer-padding-amount: 24px;// We bad --> Look at save-page-content.scss before
   padding: 10px $drawer-padding-amount!important;
   //width: calc(100% - #{$drawer-padding-amount *2})!important;
 
-  .ant-skeleton-content {
-    width: 100%!important;
+  .ant-skeleton {
     box-sizing: border-box!important;
 
-    .ant-skeleton-paragraph {
-      margin: 0px;
-      li {
-        height: 30px!important;
-        width: 100%!important;
+    .ant-skeleton-content {
+
+      width: 100%!important;
+      box-sizing: inherit;
+
+      .ant-skeleton-paragraph {
+        margin: 0px;
+        li {
+          height: 30px!important;
+          width: 100%!important;
+        }
       }
     }
   }
