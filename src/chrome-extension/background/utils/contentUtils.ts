@@ -29,26 +29,22 @@ function tellDrawerToSubmit(userId: string, activeTab: Tab) {
 }
 
 export function injectContentScriptOpenDrawer() {
-    function injectContentScript(user: Peaker) {
-        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
-            const activeTab: Tab = tabs[0]
-
-            // Idempotently Inject ContentScript
-            chrome.tabs.sendMessage(activeTab.id, { message_type: MessageType.Ping }, responseMessage => {
-                // Content Script did respond so it must not be there
-                if (!responseMessage) {
-
-                    /**
-                     * We have to inject lazily vs. declaratively in the manifest, because the css has conflicts with varies website
-                     * and this way we minimize the potential conflicts. We also need to inject the content script, as opposed
-                     * to injectCSS, because injecting stylesheets with injectCSS will not respect !important.
-                     */
-                    chrome.tabs.executeScript({ file: 'content.js'}, () => fetchTagsAndOpenDrawer(user.id, activeTab));
-                } else {
+    function injectContentScriptAndLoadDrawer(user: Peaker) {
+        idempotentlyInjectContentScript().then(result => {
+            console.log(`DA RESPONSE< `, result)
+            switch (result.res) {
+                case INJECT_CONTENT_SCRIPT_STATE.INJECTED:
+                    fetchTagsAndOpenDrawer(user.id, result.tab)
+                    break
+                case INJECT_CONTENT_SCRIPT_STATE.ALREADY_THERE:
                     console.log(`Content script already there. Stand down.`)
-                    tellDrawerToSubmit(user.id, activeTab)
-                }
-            });
+                    tellDrawerToSubmit(user.id, result.tab)
+                    break
+                default:
+                    idempotentlyInjectContentScript().then(_ => {
+                        sendMessageToUser(result.tab.id, "error", "Unexpected Error", "Failed to inject the content script for an unknown reason. Tell Devon.")
+                    })
+            }
         })
     }
 
@@ -56,14 +52,14 @@ export function injectContentScriptOpenDrawer() {
         const user: Peaker | null | undefined = data["user"]
         if (user) {
             console.log(`User Already exists.`)
-            injectContentScript(user)
+            injectContentScriptAndLoadDrawer(user)
         } else {
-            logUserIn(injectContentScript)
+            logUserIn(injectContentScriptAndLoadDrawer)
         }
     })
 }
 
-export function idempotentlyInjectContentScript(): Promise<INJECT_CONTENT_SCRIPT_STATE> {
+export function idempotentlyInjectContentScript(): Promise<{res: INJECT_CONTENT_SCRIPT_STATE, tab: Tab}> {
     return new Promise ((resolve, reject) => {
         chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
             const activeTab: Tab = tabs[0]
@@ -78,10 +74,10 @@ export function idempotentlyInjectContentScript(): Promise<INJECT_CONTENT_SCRIPT
                      * and this way we minimize the potential conflicts. We also need to inject the content script, as opposed
                      * to injectCSS, because injecting stylesheets with injectCSS will not respect !important.
                      */
-                    chrome.tabs.executeScript({ file: 'content.js'}, () => resolve(INJECT_CONTENT_SCRIPT_STATE.INJECTED));
+                    chrome.tabs.executeScript({ file: 'content.js'}, () => resolve({ res: INJECT_CONTENT_SCRIPT_STATE.INJECTED, tab: activeTab }));
                 } else {
                     console.log(`Content script already there. Stand down.`)
-                    resolve(INJECT_CONTENT_SCRIPT_STATE.ALREADY_THERE)
+                    resolve({ res: INJECT_CONTENT_SCRIPT_STATE.ALREADY_THERE, tab: activeTab })
                 }
             });
         })

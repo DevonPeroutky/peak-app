@@ -1,8 +1,8 @@
-import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
+import {ChromeExtMessage, MessageType, SubmitNoteMessage} from "../constants/models";
 import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
-import {deleteItem, getItem, getItemSizeFromChromeState, setItem} from "../utils/storageUtils";
+import {deleteItem} from "../utils/storageUtils";
 import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";

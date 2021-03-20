@@ -24,6 +24,6 @@ $margin-top: 24px;//Also seet in the component via notification.config
 
 .drawer-mode {
   height: 100vh;
-  margin-top: 0;
+  margin-top: 0!important;
   margin-right: -24px;
 }

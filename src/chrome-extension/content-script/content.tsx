@@ -40,7 +40,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 // Listen for Messages
 // ---------------------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
-    console.log(`RECEIVED MESSSGE `, request)
     switch (request.message_type) {
         case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
@@ -64,7 +63,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 message: messageUser.messageTitle,
                 description: messageUser.messageContext,
                 duration: messageUser.duration || 2,
-                key: "one-off-message"
+                className: "peak-custom-user-notification",
+                key: "one-off-message",
             })
             closeMessage(messageUser.tabId)
     }

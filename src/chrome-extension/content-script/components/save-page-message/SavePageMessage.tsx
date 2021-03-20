@@ -10,7 +10,8 @@ import {
     ActiveTabState,
     EDITING_STATE,
     FOCUS_STATE,
-    SUBMISSION_STATE, TAGS_KEY
+    SUBMISSION_STATE,
+    TAGS_KEY
 } from "../../../constants/constants";
 import {deleteItem, getItem} from "../../../utils/storageUtils";
 import {Node} from "slate";

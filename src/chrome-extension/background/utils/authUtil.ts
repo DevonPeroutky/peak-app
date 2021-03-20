@@ -1,6 +1,6 @@
 import axios from "axios";
 import {ChromeUser} from "../../constants/models";
-import {loadUserRequest, login_via_chrome_extension} from "../../../client/user";
+import {login_via_chrome_extension} from "../../../client/user";
 import {Peaker} from "../../../types";
 import {setItem} from "../../utils/storageUtils";
 import {sendMessageToUser} from "./messageUtil";
@@ -13,6 +13,9 @@ export function logUserIn(callback: (user: Peaker) => void) {
     }, function(token) {
         if (chrome.runtime.lastError) {
             console.error("ERROR RETRIEVING THE AUTH TOKEN", chrome.runtime.lastError.message);
+            idempotentlyInjectContentScript().then(res =>
+                sendMessageToUser(res.tab.id, "error", "Peak Chrome Extension was unable to authenticate with Google", "Tell Devon, the chrome.identity.getAuthToken call failed.")
+            )
             return;
         }
 
@@ -32,11 +35,15 @@ export function logUserIn(callback: (user: Peaker) => void) {
                     // }
                     callback(user)
                 }).catch(err => {
-                doInCurrentTab((tab) => {
-                    idempotentlyInjectContentScript().then(_ =>
-                        sendMessageToUser(tab.id, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
-                    )
-                })
+                    doInCurrentTab((tab) => {
+                        idempotentlyInjectContentScript().then(_ =>
+                            sendMessageToUser(
+                                tab.id,
+                                "error",
+                                "Failed log you in",
+                                "Received an error response from the backend. Tell Devon.")
+                        )
+                    })
                 console.log(`Failed to load user from Backend: ${err.toString()}`)
             })
         }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
