@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
-import {Input, Select} from "antd";
+import {Divider, Input, Select} from "antd";
 import {closeMessage, SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
@@ -64,13 +64,13 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     return (
         <div className={"peak-message-content-container"}>
+            <Divider className={"peak-extension-divider"}/>
             <PageTitle tabId={tabId} editedPageTitle={editedPageTitle} setPageTitle={setPageTitle} favIconUrl={favIconUrl}/>
+            <Divider className={"peak-extension-divider"}/>
             <PageNoteBody {...propsWithBody}/>
-            <div className="peak-message-tag-container">
-                <TagsOutlined/>
-                <TagSelect tabId={tabId} selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags} forceClose={saving === SUBMISSION_STATE.Saving}/>
-            </div>
-            { (editingState === EDITING_STATE.Editing) ? <PeakDrawerFooter/> : null }
+            <Divider className={"peak-extension-divider"}/>
+            <PeakTagSection tabId={tabId} selectedTags={selectedTags} existingTags={tags} setSelectedTags={setSelectedTags} saving={saving}/>
+            <PeakDrawerFooter editing={editingState}/>
         </div>
     )
 }
@@ -84,7 +84,7 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
     }
 
     return (
-        <div className={"page-peak-note-title-container"}>
+        <div className={"peak-extension-row-container title"}>
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
                 onBlur={() => {
@@ -98,6 +98,7 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
                 bordered={false}
                 value={editedPageTitle}
                 onChange={onChange}/>
+            <span className={"underline-animation"}/>
         </div>
     )
 }
@@ -110,22 +111,42 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
     }
 
     if (editingState === EDITING_STATE.Editing) {
-        return (<SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>)
+        return (
+            <div className={"peak-extension-row-container editor"}>
+                <SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>
+            </div>
+        )
     } else {
         return (
-            <div onClick={openEditor} className={"add-note-button"}>
+            <div onClick={openEditor} className={"peak-extension-row-container add-note-button"}>
                 <PlusOutlined className="peak-message-icon" /> Add notes...
             </div>
         )
     }
 }
 
-const PeakDrawerFooter = (props) => {
+const PeakTagSection = ({tabId, selectedTags, existingTags, setSelectedTags, saving} ) => {
     console.log(`RE-RENDERING THE FOOTER`)
     return (
-        <div className={"peak-note-drawer-footer"}>
-            <PeakLogo/>
-            <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+        <div className="peak-extension-row-container tag-section">
+            <TagsOutlined/>
+            <TagSelect tabId={tabId} selected_tags={selectedTags} existing_tags={existingTags} setSelectedTags={setSelectedTags} forceClose={saving === SUBMISSION_STATE.Saving}/>
         </div>
+    )
+}
+
+const PeakDrawerFooter = ({editing}) => {
+    console.log(`RE-RENDERING THE FOOTER`)
+    if (editing !== EDITING_STATE.Editing) {
+        return null
+    }
+    return (
+        <>
+            <Divider className={"peak-extension-divider"}/>
+            <div className={"peak-extension-row-container footer"}>
+                <PeakLogo/>
+                <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+            </div>
+        </>
     )
 }

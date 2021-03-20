@@ -74,7 +74,7 @@ export const openMessage = (props: SavedPageProps) => {
     console.log(`ReRendering Message: `, props)
     notification.open({
         message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage} goBack={goBack}/>,
-        className: cn('saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
+        className: cn('peak-saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
         duration: 0,
         description: <SavePageContent editingState={editingState} {...props}/>,

@@ -6,72 +6,124 @@ $font-family: "Inter"; //, ui-sans-serif, system-ui, -apple-system, system-ui, "
 $drawer-title-height: 45px;
 
 .peak-message-content-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   width: 100%;
 
-  .peak-message-icon {
-    height: 14px;
-    width: auto;
-    margin-right: 12px;
+  .peak-extension-divider {
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 
-  .peak-message-tag-container {
-    width: 100%;
+  .peak-extension-row-container {
     display: flex;
     align-items: center;
-  }
+    padding: 10px $drawer-padding-amount;
+    min-height: 50px;
+    height: 50px;
 
-  .add-note-button {
-    cursor: pointer;
-  }
-
-  .page-peak-note-title-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: $drawer-title-height!important;
-
-    .page-peak-favicon {
-      height: 14px;
-      width: auto;
-      margin-right: 12px;
-    }
-
-    .page-peak-title-input {
-      font-family: $font-family!important;
+    &.title {
+      display: flex;
+      align-items: center;
       width: 100%;
-      color: rgba(0, 0, 0, 0.85); // #828282;
-      font-size: 14px;
-      padding-left: 0px!important;
-      border: none!important;
-      outline: none!important;
-      box-shadow: none!important;
-      padding-top: 4px!important;
-      padding-bottom: 4px!important;
-      background-color: white;
+      position: relative;
+      min-height: $drawer-title-height!important;
+
+      .page-peak-favicon {
+        height: 14px;
+        width: auto;
+        margin-right: 12px;
+      }
+
+      .page-peak-title-input {
+        position: relative!important;
+        font-family: $font-family!important;
+        width: 100%;
+        color: rgba(0, 0, 0, 0.85); // #828282;
+        font-size: 14px;
+        padding-left: 0px!important;
+        border: none!important;
+        outline: none!important;
+        box-shadow: none!important;
+        padding-top: 4px!important;
+        padding-bottom: 4px!important;
+        background-color: white!important;
+      }
+
+      input:hover::-webkit-input-placeholder {
+        color: dodgerblue;
+      }
+
+      .page-peak-title-input:hover+.underline-animation {
+        transform: scale(1);
+      }
+
+      .underline-animation {
+        background-color: dodgerblue;
+        display: inline-block;
+        height: 2px;
+        left: $drawer-padding-amount;
+        margin-top: -4px;
+        position: absolute;
+        bottom: 10px;
+        -webkit-transform: scale(0, 1);
+        transform: scale(0, 1);
+        -webkit-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        width: calc(100% - #{$drawer-padding-amount * 2});
+      }
     }
-  }
 
-  .peak-note-drawer-footer {
-    //margin: -$drawer-padding-amount;
-    border-top: 1px solid #f0f0f0;
-    width: 100% !important;
-    color: $placeholder-text-color;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    &.add-note-button {
+      position: relative!important;
+      cursor: pointer;
+      &:hover {
+        background: rgba(55, 53, 47, 0.08);
+      }
 
-    height: 78px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+      .peak-message-icon {
+        height: 14px;
+        width: auto;
+        margin-right: 12px;
+      }
+    }
 
-    .hotkey-decoration {
-      background-color: rgb(244, 245, 247);
-      border-radius: 3px;
-      padding: 1px 3px;
-      display: inline-block;
-      vertical-align: center;
-      horiz-align: center;
-      text-align: center;
+    &.editor {
+      display: flex;
+      flex-grow: 1;
+      align-items: flex-start;
+      padding-top: 24px;
+    }
+
+    &.tag-section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    &.footer {
+      //margin: -$drawer-padding-amount;
+      //border-top: 1px solid #f0f0f0;
+      width: 100% !important;
+      color: $placeholder-text-color;
+      padding-top: 48px;
+      padding-bottom: 48px;
+      font-size: 18px;
+      height: 126px!important;
+
+      justify-content: center;
+      align-items: center;
+
+      .hotkey-decoration {
+        background-color: rgb(244, 245, 247);
+        border-radius: 3px;
+        padding: 1px 3px;
+        display: inline-block;
+        vertical-align: center;
+        horiz-align: center;
+        text-align: center;
+      }
     }
   }
 }

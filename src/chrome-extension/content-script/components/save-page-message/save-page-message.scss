@@ -1,7 +1,7 @@
 $transition: all .5s ease-in-out;
 $og-padding: 16px;
 $margin-top: 24px;//Also seet in the component via notification.config
-.saved-page-message {
+.peak-saved-page-message {
   -webkit-transition: $transition;
   -moz-transition: $transition;
   -o-transition: $transition;
@@ -10,17 +10,33 @@ $margin-top: 24px;//Also seet in the component via notification.config
   margin-top: $margin-top;
   padding-top: $og-padding;
   min-height: 150px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
 
-  .ant-notification-notice-message {
-    border-bottom: 1px solid rgb(240, 240, 240);
-    padding-bottom: 10px;
-    padding-right: 0px!important;
-  }
+  .ant-notification-notice-content {
+    height: 100% !important;
 
-  .ant-notification-notice-description {
-    display: flex;
-    align-items: center;
-    padding-right: 0px!important;;
+    div[role=alert] {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .ant-notification-notice-message {
+        //border-bottom: 1px solid rgb(240, 240, 240);
+        padding-bottom: 10px;
+        padding-right: 24px!important;
+        padding-left: 24px!important;
+      }
+
+      .ant-notification-notice-description {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        padding-right: 0px!important;;
+      }
+    }
   }
 }
 
