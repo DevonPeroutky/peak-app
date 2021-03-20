@@ -70,9 +70,10 @@ export const openMessage = (props: SavedPageProps) => {
     const { saving, editingState, tabId, focusState, userId, noteId } = props
     const duration = deriveDuration(saving, editingState, focusState)
     const deletePage = buildDeletePageCalback(tabId, userId, noteId)
+    const goBack = () => updateMessageInPlace(tabId, { editingState: EDITING_STATE.NotEditing } )
     console.log(`ReRendering Message: `, props)
     notification.open({
-        message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage}/>,
+        message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage} goBack={goBack}/>,
         className: cn('saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
         duration: 0,

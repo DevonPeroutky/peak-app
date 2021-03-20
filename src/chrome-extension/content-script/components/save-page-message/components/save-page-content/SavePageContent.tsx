@@ -88,6 +88,7 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
                 onBlur={() => {
+                    console.log(`Lost focus of the TItle`)
                     updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
                 }}
                 onFocus={() => {

@@ -2,12 +2,12 @@ import * as React from "react";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import "./saved-page-content.scss"
 import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
-import {UndoCloseButton} from "./undo-close-button/UndoCloseButton";
+import {GoBackButton, UndoCloseButton} from "./undo-close-button/UndoCloseButton";
 import {LoadingOutlined} from "@ant-design/icons/lib";
 import {Spin} from "antd";
 
-export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE, sendDeletePageMessage: () => void }) => {
-    const { saving, editing, sendDeletePageMessage } = props
+export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE, sendDeletePageMessage: () => void, goBack: () => void }) => {
+    const { saving, editing } = props
     console.log(`EDITING!!! `)
     return (
         <div className={"peak-message-header-container"}>
@@ -15,7 +15,7 @@ export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing
                 {(saving === SUBMISSION_STATE.Saving && editing !== EDITING_STATE.Editing)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
                 <HeaderText {...props}/>
             </div>
-            { (saving === SUBMISSION_STATE.Saving) ? null : <UndoCloseButton deleteBookmark={sendDeletePageMessage}/> }
+            <HeaderIcon {...props}/>
         </div>
     )
 }
@@ -34,11 +34,22 @@ const HeaderText = ({ editing, saving }) => {
         } else if (editingState === EDITING_STATE.Editing) {
             return "Add your notes!"
         } else if (subState === SUBMISSION_STATE.Saving) {
-            return "Saving"
+            return "Saving to Peak..."
         } else {
             return "Saved!"
         }
     }
 
     return <h3 className={"peak-message-header"}>{pickText(saving, editing)}</h3>
+}
+
+const HeaderIcon = ({ editing, saving, sendDeletePageMessage, goBack }) => {
+    if (saving === SUBMISSION_STATE.Saving) {
+        return null
+    } else if (editing === EDITING_STATE.Editing) {
+        return <GoBackButton goBack={goBack} />
+    } else {
+        return <UndoCloseButton deleteBookmark={sendDeletePageMessage}/>
+    }
+
 }
