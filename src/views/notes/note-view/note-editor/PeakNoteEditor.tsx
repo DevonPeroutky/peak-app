@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {ReactEditor, Slate} from "slate-react";
-import {EditablePlugins, pipe} from "@udecode/slate-plugins";
+import {EditablePlugins, pipe, SlateDocumentFragment} from "@udecode/slate-plugins";
 import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
@@ -19,9 +19,11 @@ import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
-import {equals} from "ramda";
+import {drop, equals, sort} from "ramda";
 import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/types";
 import {useDispatch} from "react-redux";
+import {journalOrdering} from "../../../../redux/slices/wikiPageSlice";
+import {convertJournalEntryToSlateNodes} from "../../../../common/rich-text-editor/editors/journal/utils";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props

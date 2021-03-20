@@ -64,7 +64,7 @@ const HeaderText = ({ editing, saving }) => {
 }
 
 const HeaderIcon = ({ editing, saving, sendDeletePageMessage, goBack }) => {
-    if (saving === SUBMISSION_STATE.Saving) {
+    if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
         return null
     } else if (editing === EDITING_STATE.Editing) {
         return <GoBackButton goBack={goBack} />

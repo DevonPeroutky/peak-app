@@ -1,10 +1,10 @@
-import {SUBMISSION_STATE} from "../../../../constants/constants";
+import {SUBMISSION_STATE} from "../../../../../../constants/constants";
 import React from "react";
 import "./saving-animation.scss"
 import {Lottie} from "@crello/react-lottie";
-import saving from "../../../../../assets/animations/saved.json"
-import saved from "../../../../../assets/animations/saving.json"
-import {sleep} from "../../../../utils/generalUtil";
+import saving from "../../../../../../../assets/animations/saved.json"
+import saved from "../../../../../../../assets/animations/saving.json"
+import {sleep} from "../../../../../../utils/generalUtil";
 import {Divider, Skeleton} from "antd";
 
 export const SavingAnimation = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {
@@ -27,8 +27,6 @@ export const SavingSkeleton = (props) => {
         </>
     )
 }
-
-
 
 const Spinner = (props: {submittingState: SUBMISSION_STATE, onComplete: () => void}) => {
     const { submittingState, onComplete } = props

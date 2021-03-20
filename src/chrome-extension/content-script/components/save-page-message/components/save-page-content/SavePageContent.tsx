@@ -1,12 +1,12 @@
 import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
 import {Divider, Input} from "antd";
-import {closeMessage, SavedPageProps} from "../../SavePageMessage";
+import {SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakTag} from "../../../../../../types";
 import "./save-page-content.scss"
-import {SaveNoteEditor} from "../../../save-note-modal/save-note-editor/SaveNoteEditor";
+import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 import {createEditor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../../../../constants/editor";
 import {ReactEditor} from "slate-react";
@@ -15,7 +15,7 @@ import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-edi
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
-import {SavingAnimation, SavingSkeleton} from "../../../save-note-modal/saving-animation/SavingAnimation";
+import {PageSavingAnimation} from "../page-saving-animation/PageSavingAnimation";
 
 interface SavePageContentProps extends SavedPageProps { };
 interface SavePageContentBodyProps extends SavedPageProps { body: Node[], updateThatBody: (n: Node[]) => void, editor: ReactEditor };
@@ -46,7 +46,8 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     const updateThatBody = (newBod: Node[]) => {
         setBody(newBod)
-        // TODO: DEBOUNCE THIS
+        // TODO: debounce this
+        // REAL TODO: DO WE EVEN NEED THIS????
         // syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
     }
 
@@ -56,26 +57,11 @@ export const SavePageContent = (props: SavePageContentProps) => {
         }
     }, [shouldSubmit])
 
-    const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
-
-    // return (
-    //     <div className={"peak-message-content-container"}>
-    //         <Divider className={"peak-extension-divider"}/>
-    //         <SavingSkeleton/>
-    //     </div>
-    // )
     if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
-        return (
-            <div className={"peak-message-content-container"}>
-                <Divider className={"peak-extension-divider"}/>
-                {(editingState === EDITING_STATE.Editing) ?
-                    <SavingAnimation submittingState={saving} onComplete={() => closeMessage(tabId)}/>
-                    : <SavingSkeleton/>
-                }
-            </div>
-        )
+        return <PageSavingAnimation saving={saving} editingState={editingState} tabId={tabId}/>
     }
 
+    const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
     return (
         <div className={"peak-message-content-container animate__animated animate__fadeIn"}>
             <Divider className={"peak-extension-divider"}/>

@@ -2,7 +2,7 @@ import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
 import {List, message, Popconfirm} from "antd";
-import {BookOutlined, DeleteOutlined, QuestionCircleOutlined, ReadFilled} from "@ant-design/icons/lib";
+import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveHostname} from "../../../utils/urls";
