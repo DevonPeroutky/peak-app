@@ -22,6 +22,7 @@ $drawer-title-height: 45px;
     padding: 10px $drawer-padding-amount;
     min-height: 50px;
     height: 50px;
+    box-sizing: border-box;
 
     &.title {
       display: flex;
@@ -50,10 +51,15 @@ $drawer-title-height: 45px;
         padding-bottom: 4px!important;
         background-color: white!important;
         min-height: 50px!important;
+
+
+        &:hover {
+          color: $text-accent-color;
+        }
       }
 
       input:hover::-webkit-input-placeholder {
-        color: dodgerblue;
+        color: $text-accent-color;
       }
 
       .page-peak-title-input:hover+.underline-animation {
@@ -61,7 +67,8 @@ $drawer-title-height: 45px;
       }
 
       .underline-animation {
-        background-color: dodgerblue;
+        background-color: $text-accent-color;
+        color: $text-accent-color;
         display: inline-block;
         height: 2px;
         left: $drawer-padding-amount;

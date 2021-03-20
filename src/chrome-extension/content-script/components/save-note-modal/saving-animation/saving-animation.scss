@@ -49,6 +49,8 @@ $drawer-padding-amount: 24px;// We bad --> Look at save-page-content.scss before
 
   .ant-skeleton-content {
     width: 100%!important;
+    box-sizing: border-box!important;
+
     .ant-skeleton-paragraph {
       margin: 0px;
       li {
