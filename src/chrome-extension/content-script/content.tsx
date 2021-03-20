@@ -1,6 +1,8 @@
 /*global chrome*/
 import React from 'react';
 import "./content.scss";
+import "../../index.scss";
+import "../../constants/utilities.scss";
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
@@ -9,7 +11,6 @@ import {
     MessageType,
     MessageUserMessage,
     SavePageMessage,
-    SubmitNoteMessage,
     SuccessfullyCreatedNoteMessage
 } from "../constants/models";
 import {Node} from "slate";

@@ -23,4 +23,18 @@
       width: auto;
     }
   }
+
+  .peak-link-icon-to-note {
+    margin-left: 10px;
+
+    &:hover {
+      cursor: pointer;
+      color: $primary-blue;
+    }
+  }
+
+  .view-note-instruction {
+    font-size: 10px;
+    color: rgba(42, 49, 53, .6);
+  }
 }

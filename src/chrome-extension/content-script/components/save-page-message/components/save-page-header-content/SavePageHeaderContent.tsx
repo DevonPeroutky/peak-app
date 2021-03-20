@@ -3,7 +3,7 @@ import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import "./saved-page-header-content.scss"
 import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {GoBackButton, UndoCloseButton} from "./undo-close-button/UndoCloseButton";
-import {LoadingOutlined} from "@ant-design/icons/lib";
+import {LinkOutlined, LoadingOutlined} from "@ant-design/icons/lib";
 import {Spin} from "antd";
 
 export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE, sendDeletePageMessage: () => void, goBack: () => void }) => {
@@ -14,9 +14,24 @@ export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing
                 {(saving === SUBMISSION_STATE.Saving && editing !== EDITING_STATE.Editing)  ? <SavingLoader/> : <PeakLogo className={"peak-message-header-logo"}/> }
                 <HeaderText {...props}/>
             </div>
+            <NoteLinkIcon saving={saving} editing={editing}/>
             <HeaderIcon {...props}/>
         </div>
     )
+}
+
+export const NoteLinkIcon = ({ saving, editing }) => {
+    if (saving === SUBMISSION_STATE.Saving || editing !== EDITING_STATE.NotEditing) {
+        return null
+    } else {
+        return (
+            <span className={"view-note-instruction animate__animated animate__fadeInUp"}>
+                <span className="peak-hotkey-decoration">⌘ + ⇧ +
+                    <span className="arrow">↵</span>
+                </span> to view your Note
+            </span>
+        )
+    }
 }
 
 export const SavingLoader = (props) => {
