@@ -157,6 +157,7 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
             console.log(currTabState)
 
             const newTabState = { ...currTabState, ...newActiveTabState, tabId: submitNoteMessage.tabId }
+            console.log(`NEW TAB STATE: `, newTabState)
 
             setItem(ACTIVE_TAB_KEY, newTabState, () =>
                 openMessage({

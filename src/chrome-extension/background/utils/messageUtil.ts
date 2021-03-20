@@ -1,7 +1,9 @@
 import {
     MessageType,
     MessageUserMessage,
-    SavePageMessage, SubmitNoteMessage
+    SavePageMessage,
+    SubmitNoteMessage,
+    SuccessfullyCreatedNoteMessage
 } from "../../constants/models";
 import Tab = chrome.tabs.Tab;
 import {ANT_MESSAGE_THEME} from "../../constants/constants";
@@ -17,9 +19,10 @@ export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, ta
     chrome.tabs.sendMessage(activeTab.id, message);
 };
 
-export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage) => {
-    const message: SubmitNoteMessage = {
+export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage, noteId: string) => {
+    const message: SuccessfullyCreatedNoteMessage = {
         ...ogMessage,
+        noteId: noteId,
         "message_type": MessageType.SuccessfullySavedNote
     };
     chrome.tabs.sendMessage(ogMessage.tabId, message);

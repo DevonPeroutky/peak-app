@@ -9,7 +9,8 @@ import {
     MessageType,
     MessageUserMessage,
     SavePageMessage,
-    SubmitNoteMessage
+    SubmitNoteMessage,
+    SuccessfullyCreatedNoteMessage
 } from "../constants/models";
 import {Node} from "slate";
 import {message, notification} from "antd";
@@ -50,7 +51,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             )
             break;
         case MessageType.SuccessfullySavedNote:
-            const m: SubmitNoteMessage = request as SubmitNoteMessage;
+            const m: SuccessfullyCreatedNoteMessage = request as SuccessfullyCreatedNoteMessage;
             updateSavePageMessage(m)
             break;
         case MessageType.SuccessfullyRemovedNote:

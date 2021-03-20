@@ -1,16 +1,11 @@
 import {ChromeExtMessage, MessageType, SubmitNoteMessage} from "../constants/models";
-import {submitNote, submitNoteViaWebsockets} from "./utils/noteUtil";
+import {submitNote} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {deleteItem} from "../utils/storageUtils";
-import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
-import {establishSocketChannelConnection} from "./utils/socketHelper";
-import {message} from "antd";
 import {logUserIn} from "./utils/authUtil";
-
-let channel: Channel
 
 // Do we want to do this????
 chrome.storage.sync.clear()
@@ -18,11 +13,7 @@ chrome.storage.sync.clear()
 // -------------------------------------
 // Log user in and Fetch User Auth Token
 // -------------------------------------
-logUserIn((user) => {
-    establishSocketChannelConnection(channel, user.id).then(c => {
-        channel = c
-    })
-})
+logUserIn((user) => console.log(`Successfully logged in user: `, user))
 
 // --------------------------------
 // Create Context Menu
@@ -65,7 +56,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const { userId, selectedTags, pageTitle, favIconUrl, body, pageUrl } = submitNodeMessage
             submitNote(userId, selectedTags, pageTitle, favIconUrl, body, pageUrl)
                 .then(res => {
-                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
+                    const createdNote = res.data
+                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage, createdNote.id))
                 }).catch(err => {
                     sleep(500)
                         .then(() =>
@@ -76,36 +68,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                                 "Server timed out. Tell Devon."
                             ))
             })
-
-            // establishSocketChannelConnection(channel, submitNodeMessage.userId).then(c => {
-            //     channel = c
-            //     const notesubmitFuture = submitNoteViaWebsockets(
-            //         c,
-            //         submitNodeMessage.userId,
-            //         submitNodeMessage.selectedTags,
-            //         submitNodeMessage.pageTitle,
-            //         submitNodeMessage.favIconUrl,
-            //         submitNodeMessage.body,
-            //         submitNodeMessage.pageUrl
-            //     )
-            //
-            //     notesubmitFuture.then(res => {
-            //         res
-            //             .receive("ok", _ => {
-            //                 console.log(`Received the message`)
-            //                 sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage))
-            //             })
-            //             .receive("timeout", _ => {
-            //                 console.log(`WE ARE TIMING OUT?????`)
-            //                 sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
-            //             })
-            //             .receive("error", _ => {
-            //                 sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your bookmark", "Server timed out. Tell Devon."))
-            //             })
-            //     }).catch(res => {
-            //         message.warn("Failed to create the new tags. Let Devon know")
-            //     })
-            // })
     }
 });
 

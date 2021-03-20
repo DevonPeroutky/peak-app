@@ -14,9 +14,8 @@ export const submitNote = (userId: string, selectedTags: PeakTag[], pageTitle: s
     })
 
     const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
-    return createWebNoteRequest(userId, newWebNote, selectedTags).then(res => {
-        message.success("Saved your note!")
-    })
+    return createWebNoteRequest(userId, newWebNote, selectedTags)
+
 }
 
 export function submitNoteViaWebsockets(socketChannel: Channel, userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string): Promise<Push> {

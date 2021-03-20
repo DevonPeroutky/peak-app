@@ -3,7 +3,6 @@ import {JOURNAL_CHANNEL_ID} from "../../../common/rich-text-editor/editors/journ
 import {Channel} from "phoenix";
 
 /**
- * TODO: Send message to user if this fails.
  * @param channel
  * @param userId
  */

@@ -57,3 +57,7 @@ export interface SubmitNoteMessage extends ChromeExtMessage {
     tabId: number
 }
 
+export interface SuccessfullyCreatedNoteMessage extends SubmitNoteMessage {
+    noteId: string
+}
+
