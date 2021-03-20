@@ -3,7 +3,7 @@ import {loadTagsFromBackend} from "./tagUtil";
 import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
 import {Peaker, PeakTag} from "../../../types";
 import {logUserIn} from "./authUtil";
-import {TAGS_KEY} from "../../constants/constants";
+import {INJECT_CONTENT_SCRIPT_STATE, TAGS_KEY} from "../../constants/constants";
 import {getItem} from "../../utils/storageUtils";
 
 type Tab = chrome.tabs.Tab;
@@ -60,5 +60,30 @@ export function injectContentScriptOpenDrawer() {
         } else {
             logUserIn(injectContentScript)
         }
+    })
+}
+
+export function idempotentlyInjectContentScript(): Promise<INJECT_CONTENT_SCRIPT_STATE> {
+    return new Promise ((resolve, reject) => {
+        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+            const activeTab: Tab = tabs[0]
+
+            // Idempotently Inject ContentScript
+            chrome.tabs.sendMessage(activeTab.id, { message_type: MessageType.Ping }, responseMessage => {
+                // Content Script did respond so it must not be there
+                if (!responseMessage) {
+
+                    /**
+                     * We have to inject lazily vs. declaratively in the manifest, because the css has conflicts with varies website
+                     * and this way we minimize the potential conflicts. We also need to inject the content script, as opposed
+                     * to injectCSS, because injecting stylesheets with injectCSS will not respect !important.
+                     */
+                    chrome.tabs.executeScript({ file: 'content.js'}, () => resolve(INJECT_CONTENT_SCRIPT_STATE.INJECTED));
+                } else {
+                    console.log(`Content script already there. Stand down.`)
+                    resolve(INJECT_CONTENT_SCRIPT_STATE.ALREADY_THERE)
+                }
+            });
+        })
     })
 }

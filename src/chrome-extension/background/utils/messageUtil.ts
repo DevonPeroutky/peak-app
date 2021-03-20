@@ -25,12 +25,12 @@ export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage) => {
     chrome.tabs.sendMessage(ogMessage.tabId, message);
 };
 
-export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string) => {
-    console.log(`SENDING A MESSAGE TO USER ON TAB: `, tabId)
+export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string, duration?: number) => {
     const message: MessageUserMessage = {
         message_type: MessageType.Message_User,
         message_theme: messageTheme,
         tabId: tabId,
+        duration: duration,
         messageTitle: messageTitle,
         messageContext: messageContext
     }

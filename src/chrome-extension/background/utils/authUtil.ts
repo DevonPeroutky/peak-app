@@ -5,6 +5,7 @@ import {Peaker} from "../../../types";
 import {setItem} from "../../utils/storageUtils";
 import {sendMessageToUser} from "./messageUtil";
 import Tab = chrome.tabs.Tab;
+import {idempotentlyInjectContentScript} from "./contentUtils";
 
 export function logUserIn(callback: (user: Peaker) => void) {
     chrome.identity.getAuthToken({
@@ -32,7 +33,9 @@ export function logUserIn(callback: (user: Peaker) => void) {
                     callback(user)
                 }).catch(err => {
                 doInCurrentTab((tab) => {
-                    sendMessageToUser(tab.id, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
+                    idempotentlyInjectContentScript().then(_ =>
+                        sendMessageToUser(tab.id, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
+                    )
                 })
                 console.log(`Failed to load user from Backend: ${err.toString()}`)
             })

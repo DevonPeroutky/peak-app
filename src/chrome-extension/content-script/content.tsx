@@ -63,6 +63,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             notification[messageUser.message_theme]({
                 message: messageUser.messageTitle,
                 description: messageUser.messageContext,
+                duration: messageUser.duration || 2,
                 key: "one-off-message"
             })
             closeMessage(messageUser.tabId)

@@ -30,3 +30,9 @@ export interface ActiveTabState {
     focusState: FOCUS_STATE,
     editingState: EDITING_STATE
 }
+
+export enum INJECT_CONTENT_SCRIPT_STATE {
+    FAILED,
+    INJECTED,
+    ALREADY_THERE
+}

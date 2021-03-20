@@ -28,6 +28,7 @@ export interface ChromeExtMessage {
 export interface MessageUserMessage extends ChromeExtMessage {
     messageTitle: string
     messageContext: string
+    duration?: number
     tabId: number
     message_theme: ANT_MESSAGE_THEME
 }
