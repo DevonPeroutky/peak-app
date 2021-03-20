@@ -19,6 +19,7 @@ import {
     PeakStubAction,
 } from "../common/rich-text-editor/plugins/peak-note-stub-plugin/types";
 import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
+import {deleteNoteRequest} from "./webNotes";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -49,11 +50,19 @@ function updateNoteRequest(userId: string, noteId: string, book: UpdateNotePaylo
         "book": book
     })
 }
-function deleteNoteRequest(userId: string, noteId: string) {
-    return peakAxiosClient.delete(`/api/v1/users/${userId}/books/${noteId}`)
-}
 function fetchNotesRequest(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/books`)
+}
+
+export function deletePeakNote(userId: string, noteId: string): Promise<string> {
+    return deleteNoteRequest(userId, noteId).then(res => {
+        store.dispatch(deleteNote(noteId))
+        return noteId
+    }).catch(err => {
+        console.log(`DID NOT successfully delete the tag: ${noteId}`)
+        console.log(err)
+        return noteId
+    })
 }
 
 // Requests + Reduxs
@@ -64,16 +73,6 @@ export function loadPeakNotes(userId: string) {
     }).catch(err => {
         console.log(`DID NOT successfully load the books for user: ${userId}`)
         console.log(err)
-    })
-}
-export function deletePeakNote(userId: string, noteId: string): Promise<string> {
-    return deleteNoteRequest(userId, noteId).then(res => {
-        store.dispatch(deleteNote(noteId))
-        return noteId
-    }).catch(err => {
-        console.log(`DID NOT successfully delete the tag: ${noteId}`)
-        console.log(err)
-        return noteId
     })
 }
 export function createNewPeakBook(userId: string, book: CreateNotePayload): Promise<PeakNote> {

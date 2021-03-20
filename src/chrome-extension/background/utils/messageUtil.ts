@@ -1,4 +1,5 @@
 import {
+    DeletePageMessage,
     MessageType,
     MessageUserMessage,
     SavePageMessage,
@@ -25,7 +26,16 @@ export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage, noteId: 
         noteId: noteId,
         "message_type": MessageType.SuccessfullySavedNote
     };
-    chrome.tabs.sendMessage(ogMessage.tabId, message);
+    console.log(`----> SENDING SAVED MESSAGE: `, message)
+    chrome.tabs.sendMessage(message.tabId, message);
+};
+
+export const sendSuccessfulDeleteMessage = (successfulDeleteMessage: DeletePageMessage) => {
+    const message: DeletePageMessage = {
+        ...successfulDeleteMessage,
+        "message_type": MessageType.SuccessfullyRemovedNote
+    };
+    chrome.tabs.sendMessage(successfulDeleteMessage.tabId, message);
 };
 
 export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string, duration?: number) => {

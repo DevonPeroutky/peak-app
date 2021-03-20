@@ -4,6 +4,10 @@ import {Node} from "slate";
 import {getCurrentFormattedDate} from "../utils/time";
 import {PeakTag} from "../types";
 
+export function deleteNoteRequest(userId: string, noteId: string) {
+    return peakAxiosClient.delete(`/api/v1/users/${userId}/books/${noteId}`)
+}
+
 // TODO: APPEND TAGS TO BODY
 export function createWebNoteRequest(userId: string, web_note: { title: string, url: string, favIconUrl: string, body: Node[] }, selected_tags: PeakTag[]) {
     const currentDate = getCurrentFormattedDate()

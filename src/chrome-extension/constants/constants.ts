@@ -12,6 +12,7 @@ export enum FOCUS_STATE {
 export enum EDITING_STATE {
     NotEditing,
     Editing,
+    Deleting,
 }
 export enum SUBMISSION_STATE {
     Saving,

@@ -10,12 +10,11 @@ import {
     ActiveTabState,
     EDITING_STATE,
     FOCUS_STATE,
-    SUBMISSION_STATE,
-    TAGS_KEY
+    SUBMISSION_STATE
 } from "../../../constants/constants";
 import {deleteItem, getItem, setItem} from "../../../utils/storageUtils";
 import {Node} from "slate";
-import {SubmitNoteMessage} from "../../../constants/models";
+import {SuccessfullyCreatedNoteMessage} from "../../../constants/models";
 import 'antd/lib/divider/style/index.css';
 import 'antd/lib/select/style/index.css';
 import 'antd/lib/tag/style/index.css';
@@ -25,9 +24,9 @@ import 'antd/lib/popconfirm/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
-import {sendSubmitNoteMessage} from "../../utils/messageUtils";
+import {sendDeletePageMessage, sendSubmitNoteMessage, updateMessageInPlace} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
-import {NullButton, UndoCloseButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
+import {NullButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
 import Tab = chrome.tabs.Tab;
 
 notification.config({
@@ -38,13 +37,13 @@ notification.config({
 });
 
 interface SavedPageStateProps {
-    editing?: EDITING_STATE,
+    editingState?: EDITING_STATE,
     saving: SUBMISSION_STATE,
     focusState: FOCUS_STATE,
     shouldSubmit: boolean
 }
-
 export interface SavedPageContentProps {
+    noteId?: string,
     tabId: number,
     userId: string,
     pageTitle: string,
@@ -61,22 +60,23 @@ function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFoc
        return 0
    }
 
-   if (saving === SUBMISSION_STATE.Saving || editing === EDITING_STATE.Editing) {
+   if (saving === SUBMISSION_STATE.Saving || editing === EDITING_STATE.Editing || editing === EDITING_STATE.Deleting) {
        return 0
    }
    return 2
 }
 
-
 export const openMessage = (props: SavedPageProps) => {
-    const { saving, editing, tabId, focusState } = props
-    const duration = deriveDuration(saving, editing, focusState)
+    const { saving, editingState, tabId, focusState, userId, noteId } = props
+    const duration = deriveDuration(saving, editingState, focusState)
+    const deletePage = buildDeletePageCalback(tabId, userId, noteId)
+    console.log(`ReRendering Message: `, props)
     notification.open({
-        message: <SavePageHeaderContent saving={saving} editing={editing}/>,
-        className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
+        message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage}/>,
+        className: cn('saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
         duration: duration,
-        description: <SavePageContent editing={editing} {...props}/>,
+        description: <SavePageContent editingState={editingState} {...props}/>,
         closeIcon: <NullButton/>,
         onClick: () => console.log(`CLICKED`),
         onClose: () => closeMessage(tabId)
@@ -96,7 +96,7 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 tabId: currTab.id,
                 userId: userId,
                 saving: SUBMISSION_STATE.Saving,
-                editing: activeTab.editingState,
+                editingState: activeTab.editingState,
                 pageUrl: currTab.url,
                 favIconUrl: currTab.favIconUrl,
                 pageTitle: currTab.title,
@@ -112,7 +112,7 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
                 tabId: currTab.id,
                 userId: userId,
                 saving: SUBMISSION_STATE.Saving,
-                editing: EDITING_STATE.NotEditing,
+                editingState: EDITING_STATE.NotEditing,
                 favIconUrl: currTab.favIconUrl,
                 pageUrl: currTab.url,
                 pageTitle: currTab.title,
@@ -139,14 +139,15 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
 }
 
 // Called after we have successfully saved a note (either initial or metadata)
-export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
+export function updateSavePageMessage(createdNoteMessage: SuccessfullyCreatedNoteMessage) {
+    console.log(`CREATED NOTE MESSAGE: `, createdNoteMessage)
     getItem(null, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
 
         const editingState = (activeTab && activeTab.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
         const focusState = (activeTab) ? activeTab.focusState : FOCUS_STATE.NotFocused
-        const newActiveTabState: ActiveTabState = {...submitNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
+        const newActiveTabState: ActiveTabState = {...createdNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
 
         console.log(`Time to Update the MEssage: `, activeTab)
         console.log(newActiveTabState)
@@ -156,20 +157,21 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
             console.log(`CURRENT vs NEW`)
             console.log(currTabState)
 
-            const newTabState = { ...currTabState, ...newActiveTabState, tabId: submitNoteMessage.tabId }
+            const newTabState = { ...currTabState, ...newActiveTabState, tabId: createdNoteMessage.tabId }
             console.log(`NEW TAB STATE: `, newTabState)
 
             setItem(ACTIVE_TAB_KEY, newTabState, () =>
                 openMessage({
-                    tabId: submitNoteMessage.tabId,
-                    userId: submitNoteMessage.userId,
-                    pageTitle: submitNoteMessage.pageTitle,
-                    pageUrl: submitNoteMessage.pageUrl,
-                    tags: submitNoteMessage.selectedTags,
-                    favIconUrl: submitNoteMessage.favIconUrl,
+                    tabId: createdNoteMessage.tabId,
+                    userId: createdNoteMessage.userId,
+                    pageTitle: createdNoteMessage.pageTitle,
+                    pageUrl: createdNoteMessage.pageUrl,
+                    tags: createdNoteMessage.selectedTags,
+                    favIconUrl: createdNoteMessage.favIconUrl,
                     focusState: focusState,
                     saving: saving,
-                    editing: editingState,
+                    editingState: editingState,
+                    noteId: createdNoteMessage.noteId,
                     shouldSubmit: false
                 })
             )
@@ -179,23 +181,16 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
 
 // Removes the message from the user's screen
 export const closeMessage = (tabId: number) => {
-    // sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
-    // getItem(ACTIVE_TAB_KEY, data => {
-    //     const activeTab = data[ACTIVE_TAB_KEY] as ActiveTabState
-    //     const { tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body} = activeTab
-    //     console.log(`TAB WE ARE SYNCING: `, activeTab)
-    //     sendSubmitNoteMessage(
-    //         tabId,
-    //         userId,
-    //         selectedTags,
-    //         pageTitle,
-    //         pageUrl,
-    //         favIconUrl,
-    //         body
-    //     )
-    // })
-
+    console.log(`CLOSING THE MESSAGE!`)
     deleteItem([tabId.toString(), ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)
     })
+}
+
+function buildDeletePageCalback(tabId: number, userId: string, noteId: string): () => void {
+    console.log(`Rebuilding Page Callback with nId `, noteId)
+    return () => {
+        updateMessageInPlace(tabId, { editingState: EDITING_STATE.Deleting })
+        sendDeletePageMessage(tabId, userId, noteId)
+    }
 }

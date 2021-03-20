@@ -5,7 +5,7 @@ import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
 import {
-    ChromeExtMessage,
+    ChromeExtMessage, DeletePageMessage,
     MessageType,
     MessageUserMessage,
     SavePageMessage,
@@ -55,8 +55,8 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             updateSavePageMessage(m)
             break;
         case MessageType.SuccessfullyRemovedNote:
-            // const m: SubmitNoteMessage = request as SubmitNoteMessage;
-            updateSavePageMessage(m)
+            const d = request as DeletePageMessage;
+            closeMessage(d.tabId)
             break;
         case MessageType.Ping:
             // This is the healthcheck the background script uses to figure out if the content script is already injected
@@ -103,7 +103,7 @@ const appendNodesAsBlockquote = (nodes: Node[]) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
         const tags: PeakTag[] = data[TAGS_KEY]
 
-        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
+        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editingState: activeTab.editingState}
         openMessage({...existingPage, nodesToAppend: nodes})
     })
 }

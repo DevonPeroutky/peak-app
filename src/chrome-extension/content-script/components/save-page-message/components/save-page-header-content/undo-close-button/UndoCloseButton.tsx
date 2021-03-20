@@ -3,10 +3,8 @@ import cn from "classnames";
 import React from "react";
 import "./undo-close-button.scss"
 
-export const UndoCloseButton = (props: { }) => {
-    const deleteBookmark = () => {
-        console.log(`IMPLEMENT THIS DICK`)
-    }
+export const UndoCloseButton = (props: { deleteBookmark: () => void }) => {
+    const { deleteBookmark } = props
 
     return (
         <DeleteOutlined

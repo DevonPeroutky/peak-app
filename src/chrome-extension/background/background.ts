@@ -1,11 +1,12 @@
-import {ChromeExtMessage, MessageType, SubmitNoteMessage} from "../constants/models";
+import {ChromeExtMessage, DeletePageMessage, MessageType, SubmitNoteMessage} from "../constants/models";
 import {submitNote} from "./utils/noteUtil";
-import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
+import {sendMessageToUser, sendSuccessfulDeleteMessage, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {deleteItem} from "../utils/storageUtils";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
 import {logUserIn} from "./utils/authUtil";
+import {deleteNoteRequest} from "../../client/webNotes";
 
 // Do we want to do this????
 chrome.storage.sync.clear()
@@ -54,20 +55,28 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
         case MessageType.PostFromBackgroundScript:
             const submitNodeMessage = request as SubmitNoteMessage;
             const { userId, selectedTags, pageTitle, favIconUrl, body, pageUrl } = submitNodeMessage
-            submitNote(userId, selectedTags, pageTitle, favIconUrl, body, pageUrl)
-                .then(res => {
-                    const createdNote = res.data
-                    sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage, createdNote.id))
-                }).catch(err => {
-                    sleep(500)
-                        .then(() =>
-                            sendMessageToUser(
-                                submitNodeMessage.tabId,
-                                "error",
-                                "Failed to save your bookmark",
-                                "Server timed out. Tell Devon."
-                            ))
+            submitNote(userId, selectedTags, pageTitle, favIconUrl, body, pageUrl).then(res => {
+                const createdNote = res.data.book
+                console.log(res)
+                sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage, createdNote.id))
+            }).catch(err => {
+                sleep(500)
+                    .then(() =>
+                        sendMessageToUser(
+                            submitNodeMessage.tabId,
+                            "error",
+                            "Failed to save your bookmark",
+                            "Server timed out. Tell Devon."
+                        ))
             })
+            break
+        case MessageType.DeleteFromBackgroundScript:
+            const deletePageMessage = request as DeletePageMessage
+            const { noteId } = deletePageMessage
+            deleteNoteRequest(deletePageMessage.userId, noteId).then(res => {
+                sleep(500).then(_ => sendSuccessfulDeleteMessage(deletePageMessage))
+            })
+            break
     }
 });
 

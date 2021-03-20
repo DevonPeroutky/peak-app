@@ -24,7 +24,7 @@ export const sendSubmitNoteMessage = (tabId: number, userId: string, selectedTag
     chrome.runtime.sendMessage(message);
 };
 
-export const deletePage = (tabId: number, userId: string, noteId: string) => {
+export const sendDeletePageMessage = (tabId: number, userId: string, noteId: string) => {
     const message: DeletePageMessage = {
         "message_type": MessageType.DeleteFromBackgroundScript,
         "userId": userId,
@@ -44,7 +44,7 @@ export const updateMessageInPlace = (tabId: number, payload: {}) => {
             tags: tags,
             saving: SUBMISSION_STATE.Saved,
             shouldSubmit: false,
-            editing: currTabState.editingState,
+            editingState: currTabState.editingState,
 
             // Payload last so whatever was specified persists
             ...payload

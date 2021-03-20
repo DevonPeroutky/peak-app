@@ -21,7 +21,7 @@ interface SavePageContentProps extends SavedPageProps { };
 interface SavePageContentBodyProps extends SavedPageProps { body: Node[], updateThatBody: (n: Node[]) => void, editor: ReactEditor };
 
 export const SavePageContent = (props: SavePageContentProps) => {
-    const { editing, saving, userId, pageTitle, tags, nodesToAppend, shouldSubmit, pageUrl, favIconUrl, tabId } = props
+    const { editingState, saving, userId, pageTitle, tags, nodesToAppend, shouldSubmit, pageUrl, favIconUrl, tabId } = props
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...chromeExtensionNormalizers), []);
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
@@ -58,7 +58,7 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
 
-    if ((saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) && editing === EDITING_STATE.Editing) {
+    if ((saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) && editingState === EDITING_STATE.Editing) {
         return (<SavingAnimation submittingState={saving} onComplete={() => closeMessage(tabId)}/>)
     }
 
@@ -70,7 +70,7 @@ export const SavePageContent = (props: SavePageContentProps) => {
                 <TagsOutlined/>
                 <TagSelect tabId={tabId} selected_tags={selectedTags} existing_tags={tags} setSelectedTags={setSelectedTags} forceClose={saving === SUBMISSION_STATE.Saving}/>
             </div>
-            { (editing === EDITING_STATE.Editing) ? <PeakDrawerFooter/> : null }
+            { (editingState === EDITING_STATE.Editing) ? <PeakDrawerFooter/> : null }
         </div>
     )
 }
@@ -102,13 +102,13 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
 }
 
 const PageNoteBody = (props: SavePageContentBodyProps) => {
-    const { editing, body, updateThatBody, editor, tabId } = props
+    const { editingState, body, updateThatBody, editor, tabId } = props
 
     const openEditor = () => {
         updateMessageInPlace(tabId, { editingState: EDITING_STATE.Editing })
     }
 
-    if (editing === EDITING_STATE.Editing) {
+    if (editingState === EDITING_STATE.Editing) {
         return (<SaveNoteEditor content={body} setContent={updateThatBody} editor={editor}/>)
     } else {
         return (
