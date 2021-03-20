@@ -65,18 +65,15 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
     }
 
     const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-        console.log(`EVENT `, event)
         if (open && event.key === "Escape") {
             event.stopPropagation()
             event.preventDefault()
-            console.log(`CLOSING THE SHOP`)
             setCurrentSearch('')
             setDropdownState(false)
         }
         if (open && event.key === 's' && event.metaKey && event.shiftKey) {
             event.stopPropagation()
             event.preventDefault()
-            console.log(`CLOSING THE SHOP`)
             setCurrentSearch('')
             setDropdownState(false)
         }

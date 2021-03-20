@@ -5,4 +5,3 @@ import { Popup } from "./component/Popup";
 var mountNode = document.getElementById("popup");
 ReactDOM.render(<Popup />, mountNode);
 
-console.log(`Running the Popup index`)

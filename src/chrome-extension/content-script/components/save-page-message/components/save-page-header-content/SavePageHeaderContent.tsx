@@ -8,7 +8,6 @@ import {Spin} from "antd";
 
 export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE, sendDeletePageMessage: () => void, goBack: () => void }) => {
     const { saving, editing } = props
-    console.log(`EDITING!!! `)
     return (
         <div className={"peak-message-header-container animate__animated animate__fadeIn"}>
             <div className={"peak-header-group"}>

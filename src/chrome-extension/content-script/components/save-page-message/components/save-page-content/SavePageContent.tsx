@@ -58,10 +58,6 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
 
-    // return (<div className={"peak-message-content-container"}>
-    //         <Divider className={"peak-extension-divider"}/>
-    //         <SavingSkeleton/>
-    //     </div>)
     if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
         return (
             <div className={"peak-message-content-container"}>
@@ -100,7 +96,6 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
                 onBlur={() => {
-                    console.log(`Lost focus of the TItle`)
                     updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
                 }}
                 onFocus={() => {
@@ -138,7 +133,6 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
 }
 
 const PeakTagSection = ({tabId, selectedTags, existingTags, setSelectedTags, saving} ) => {
-    console.log(`RE-RENDERING THE FOOTER`)
     return (
         <div className="peak-extension-row-container tag-section">
             <TagsOutlined/>
@@ -148,7 +142,6 @@ const PeakTagSection = ({tabId, selectedTags, existingTags, setSelectedTags, sav
 }
 
 const PeakDrawerFooter = ({editing}) => {
-    console.log(`RE-RENDERING THE FOOTER`)
     if (editing !== EDITING_STATE.Editing) {
         return null
     }

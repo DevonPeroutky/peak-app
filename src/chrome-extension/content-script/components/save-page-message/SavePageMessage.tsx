@@ -10,7 +10,7 @@ import {
     ActiveTabState,
     EDITING_STATE,
     FOCUS_STATE,
-    SUBMISSION_STATE
+    SUBMISSION_STATE, TAGS_KEY
 } from "../../../constants/constants";
 import {deleteItem, getItem, setItem} from "../../../utils/storageUtils";
 import {Node} from "slate";
@@ -142,25 +142,18 @@ export function openSavePageMessage(currTab: Tab, userId: string, tags: PeakTag[
 
 // Called after we have successfully saved a note (either initial or metadata)
 export function updateSavePageMessage(createdNoteMessage: SuccessfullyCreatedNoteMessage) {
-    console.log(`CREATED NOTE MESSAGE: `, createdNoteMessage)
     getItem(null, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
+        const tags: PeakTag[] = data[TAGS_KEY] as PeakTag[]
 
         const editingState = (activeTab && activeTab.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
         const focusState = (activeTab) ? activeTab.focusState : FOCUS_STATE.NotFocused
         const newActiveTabState: ActiveTabState = {...createdNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
 
-        console.log(`Time to Update the MEssage: `, activeTab)
-        console.log(newActiveTabState)
-
         getItem(ACTIVE_TAB_KEY, data => {
             const currTabState: ActiveTabState = data[ACTIVE_TAB_KEY]
-            console.log(`CURRENT vs NEW`)
-            console.log(currTabState)
-
             const newTabState = { ...currTabState, ...newActiveTabState, tabId: createdNoteMessage.tabId }
-            console.log(`NEW TAB STATE: `, newTabState)
 
             setItem(ACTIVE_TAB_KEY, newTabState, () =>
                 openMessage({
@@ -168,7 +161,7 @@ export function updateSavePageMessage(createdNoteMessage: SuccessfullyCreatedNot
                     userId: createdNoteMessage.userId,
                     pageTitle: createdNoteMessage.pageTitle,
                     pageUrl: createdNoteMessage.pageUrl,
-                    tags: createdNoteMessage.selectedTags,
+                    tags: tags,
                     favIconUrl: createdNoteMessage.favIconUrl,
                     focusState: focusState,
                     saving: saving,

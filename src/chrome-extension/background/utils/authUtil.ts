@@ -55,7 +55,6 @@ function doInCurrentTab(tabCallback: (tab: Tab) => void) {
         function (tabArray) {
             const currTab: Tab | undefined = tabArray[0]
             if (currTab) {
-                console.log(`Current TabId `, currTab)
                 tabCallback(currTab);
             } else {
                 console.log(`Current Tab is undefined`)

@@ -45,6 +45,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
     switch (request.message_type) {
         case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
+            console.log(`OPEN DRAWER MESSAGE `, openDrawerMessage)
             openSavePageMessage(
                 openDrawerMessage.tab,
                 openDrawerMessage.user_id,
