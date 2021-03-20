@@ -31,6 +31,9 @@ export const useJournalSubscription = () => {
         console.log(`Subscribing to journal for ${currentUserAccountId}`, socket)
         if (socket) {
             const channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(user.id))
+            channel.on("test", res => {
+                console.log(`WE RECEIVED A TESTIE `, res)
+            })
             channel.on("web_note_created", res => {
                 console.log(`Received nodes of web_note from backend broadcast`, res)
                 const newlyCreatedNote: PeakNote = res.note
