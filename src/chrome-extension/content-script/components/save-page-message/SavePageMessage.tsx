@@ -21,10 +21,13 @@ import 'antd/lib/select/style/index.css';
 import 'antd/lib/tag/style/index.css';
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/dropdown/style/index.css';
+import 'antd/lib/popconfirm/style/index.css';
+import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
 import {sendSubmitNoteMessage, syncActiveTabState} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
+import {UndoCloseButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
 import Tab = chrome.tabs.Tab;
 
 notification.config({
@@ -62,7 +65,6 @@ function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFoc
        return 0
    }
    return 2
-
 }
 
 
@@ -73,8 +75,10 @@ export const openMessage = (props: SavedPageProps) => {
         message: <SavePageHeaderContent saving={saving} editing={editing}/>,
         className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
-        duration: duration,
+        duration: 0,
         description: <SavePageContent editing={editing} {...props}/>,
+        closeIcon: <UndoCloseButton tabId={tabId}/>,
+        onClick: () => console.log(`CLICKED`),
         onClose: () => closeMessage(tabId)
     });
 };
@@ -177,3 +181,4 @@ export const reRenderMessage = () => {
         openMessage(existingPage)
     })
 }
+

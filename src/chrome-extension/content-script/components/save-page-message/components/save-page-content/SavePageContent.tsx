@@ -105,6 +105,7 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
     const { editing, body, updateThatBody, editor, tabId } = props
 
     const openEditor = () => {
+        // WTF ???? Setting the state twice???
         syncActiveTabState(tabId, { editingState: EDITING_STATE.Editing }, () => openMessage({...props, editing: EDITING_STATE.Editing}))
     }
 
@@ -120,6 +121,7 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
 }
 
 const PeakDrawerFooter = (props) => {
+    console.log(`RE-RENDERING THE FOOTER`)
     return (
         <div className={"peak-note-drawer-footer"}>
             <PeakLogo/>

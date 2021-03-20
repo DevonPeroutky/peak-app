@@ -53,6 +53,10 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             const m: SubmitNoteMessage = request as SubmitNoteMessage;
             updateSavePageMessage(m)
             break;
+        case MessageType.SuccessfullyRemovedNote:
+            // const m: SubmitNoteMessage = request as SubmitNoteMessage;
+            updateSavePageMessage(m)
+            break;
         case MessageType.Ping:
             // This is the healthcheck the background script uses to figure out if the content script is already injected
             sendResponse({ message_type: MessageType.Pong })
@@ -84,7 +88,7 @@ document.addEventListener('mouseup', (event) => {
         getItem(ACTIVE_TAB_KEY, data => {
             const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
             if (activeTab.editingState === EDITING_STATE.Editing) {
-                appendNodesAsBlockquote(activeTab.tabId, nodes)
+                appendNodesAsBlockquote(nodes)
             }
         })
 
@@ -93,7 +97,7 @@ document.addEventListener('mouseup', (event) => {
     }
 });
 
-const appendNodesAsBlockquote = (tabId, nodes: Node[]) => {
+const appendNodesAsBlockquote = (nodes: Node[]) => {
     getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
         const tags: PeakTag[] = data[TAGS_KEY]

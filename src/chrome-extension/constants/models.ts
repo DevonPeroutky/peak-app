@@ -16,6 +16,7 @@ export enum MessageType {
     Pong,
     SaveToPeakHotkeyPressed,
     SuccessfullySavedNote,
+    SuccessfullyRemovedNote,
     PostFromBackgroundScript,
     SuccessfullySavedNoteMetadata,
     AddToReadingList

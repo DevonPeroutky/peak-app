@@ -7,7 +7,10 @@ import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import cn from "classnames";
 import {take} from "ramda";
-import {syncActiveTabState} from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
+import {
+    syncActiveTabState,
+    updateMessageInPlace
+} from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
 import {FOCUS_STATE} from "../../../../../../../../chrome-extension/constants/constants";
 import {reRenderMessage} from "../../../../../../../../chrome-extension/content-script/components/save-page-message/SavePageMessage";
 const { Option } = Select;
@@ -107,7 +110,9 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
                         }}
                         onFocus={() => {
                             setDropdownState(true)
-                            syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
+                            // syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
+                            console.log(`FOCUINSG!!!!`)
+                            updateMessageInPlace(tabId, { focusState: FOCUS_STATE.Focus })
                         }}
                         onSearch={(value) => {
                             setDropdownState(true)

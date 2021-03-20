@@ -1,0 +1,13 @@
+@import "../../../../../../../constants/variables";
+
+.peak-undo-icon {
+
+  &:hover {
+    color: $primary-blue;
+  }
+}
+
+.peak-undo-icon-tooltip {
+  z-index: 2147483645!important;
+  cursor: pointer;
+}
