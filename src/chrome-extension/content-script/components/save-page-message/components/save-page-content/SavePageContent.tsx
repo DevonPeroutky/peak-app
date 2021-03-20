@@ -156,7 +156,7 @@ const PeakDrawerFooter = ({editing}) => {
             <Divider className={"peak-extension-divider"}/>
             <div className={"peak-extension-row-container footer"}>
                 <PeakLogo/>
-                <span>Press <span className="hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
+                <span>Press <span className="peak-hotkey-decoration">⌘ + ⇧ + S</span> again to Save</span>
             </div>
         </>
     )

@@ -1,7 +1,8 @@
 import * as React from "react";
-import "./popup.scss"
+import "./popup.scss";
+import "../../../constants/utilities.scss";
 import {PeakLogo} from "../../../common/logo/PeakLogo";
-import {CheckOutlined, BookOutlined, BookTwoTone} from "@ant-design/icons/lib";
+import {BookTwoTone} from "@ant-design/icons/lib";
 
 export const Popup = (props) => {
     return (
@@ -16,7 +17,7 @@ export const Popup = (props) => {
                     <BookTwoTone className={"success"}/>
                     <div className={"hint-body"}>
                         <h2>Want to save a page to Peak?</h2>
-                        <span>Simply press <span className="hotkey-decoration">⌘ + ⇧ + S</span> on any page to save to Peak</span>
+                        <span>Simply press <span className="peak-hotkey-decoration">⌘ + ⇧ + S</span> on any page to save it!</span>
                     </div>
                 </div>
             </div>

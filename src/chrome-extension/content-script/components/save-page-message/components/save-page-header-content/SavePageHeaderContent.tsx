@@ -45,8 +45,6 @@ const HeaderText = ({ editing, saving }) => {
     function pickText(subState: SUBMISSION_STATE, editingState: EDITING_STATE): string {
         if (editingState === EDITING_STATE.Deleting) {
             return "Removing..."
-        } else if (editingState === EDITING_STATE.Editing) {
-            return "Add your notes!"
         } else if (subState === SUBMISSION_STATE.Saving) {
             return "Saving to Peak..."
         } else {
@@ -54,7 +52,15 @@ const HeaderText = ({ editing, saving }) => {
         }
     }
 
-    return <h3 className={"peak-message-header animate__animated animate__fadeIn"}>{pickText(saving, editing)}</h3>
+    if (editing === EDITING_STATE.Editing && saving === SUBMISSION_STATE.Saved) {
+        return (
+            <h3 className={"peak-message-header instruction animate__animated animate__fadeIn animate__slow"}>
+                Press <span className="peak-hotkey-decoration">⌘ + ⇧ + S</span> again to Save
+            </h3>
+        )
+    } else {
+        return <h3 className={"peak-message-header animate__animated animate__fadeIn"}>{pickText(saving, editing)}</h3>
+    }
 }
 
 const HeaderIcon = ({ editing, saving, sendDeletePageMessage, goBack }) => {

@@ -7,6 +7,7 @@
 
   .peak-header-group {
     display: flex;
+    align-items: center;
 
     .peak-message-header {
       font-size: 20px!important;
@@ -14,6 +15,10 @@
       color: $text-color!important;
       margin-bottom: 0px!important;
       margin-top: 0px!important;
+
+      &.instruction {
+        font-size: 16px!important;
+      }
     }
 
     .peak-message-header-logo {
