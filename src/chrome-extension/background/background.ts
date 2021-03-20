@@ -1,11 +1,8 @@
-import axios from 'axios';
 import {ChromeExtMessage, ChromeUser, MessageType, SubmitNoteMessage} from "../constants/models";
-import {loadUserRequest, login_via_chrome_extension} from "../../client/user";
 import {submitNoteViaWebsockets} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulSyncMessage} from "./utils/messageUtil";
 import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
 import {deleteItem, getItem, getItemSizeFromChromeState, setItem} from "../utils/storageUtils";
-import {Peaker} from "../../types";
 import {Channel} from 'phoenix';
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
@@ -85,10 +82,10 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                         })
                         .receive("timeout", _ => {
                             console.log(`WE ARE TIMING OUT?????`)
-                            sendMessageToUser(submitNodeMessage.tabId, "error", "Server timed out. Tell Devon.")
+                            sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
                         })
                         .receive("error", _ => {
-                            sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your note. Tell Devon."))
+                            sleep(500).then(() => sendMessageToUser(submitNodeMessage.tabId, "error", "Failed to save your bookmark", "Server timed out. Tell Devon."))
                         })
                 }).catch(res => {
                     message.warn("Failed to create the new tags. Let Devon know")

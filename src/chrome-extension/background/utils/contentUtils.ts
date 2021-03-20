@@ -13,7 +13,7 @@ function fetchTagsAndOpenDrawer(userId: string, activeTab: Tab) {
         .then(tags => {
             sendOpenSavePageDrawerMessage(activeTab, userId, tags)
         }).catch(err => {
-            sendMessageToUser(activeTab.id, "error", "Failed to load your tags. Tell Devon.")
+            sendMessageToUser(activeTab.id, "error", "Failed to load your tags.", "Received an error response from the backend, tell Devon he sucks at programming")
             getItem(TAGS_KEY, (data) => {
                 const tags = data[TAGS_KEY] || []
                 sendOpenSavePageDrawerMessage(activeTab, userId, tags)

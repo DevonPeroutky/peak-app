@@ -12,7 +12,7 @@ import {
     SubmitNoteMessage
 } from "../constants/models";
 import {Node} from "slate";
-import {message} from "antd";
+import {message, notification} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
 import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE, TAGS_KEY} from "../constants/constants";
 import moment from "moment";
@@ -40,6 +40,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 // Listen for Messages
 // ---------------------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
+    console.log(`RECEIVED MESSSGE `, request)
     switch (request.message_type) {
         case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
@@ -59,21 +60,12 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             break;
         case MessageType.Message_User:
             const messageUser: MessageUserMessage = request as MessageUserMessage;
-            switch (messageUser.message_theme) {
-                case "error":
-                    message.error(messageUser.message)
-                    closeMessage(messageUser.tabId)
-                    break;
-                case "info":
-                    message.info(messageUser.message)
-                    break;
-                case "success":
-                    message.success(messageUser.message)
-                    break;
-                case "warning":
-                    message.warning(messageUser.message)
-                    break;
-            }
+            notification[messageUser.message_theme]({
+                message: messageUser.messageTitle,
+                description: messageUser.messageContext,
+                key: "one-off-message"
+            })
+            closeMessage(messageUser.tabId)
     }
 });
 

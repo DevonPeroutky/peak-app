@@ -3,6 +3,8 @@ import {ChromeUser} from "../../constants/models";
 import {loadUserRequest, login_via_chrome_extension} from "../../../client/user";
 import {Peaker} from "../../../types";
 import {setItem} from "../../utils/storageUtils";
+import {sendMessageToUser} from "./messageUtil";
+import Tab = chrome.tabs.Tab;
 
 export function logUserIn(callback: (user: Peaker) => void) {
     chrome.identity.getAuthToken({
@@ -28,7 +30,27 @@ export function logUserIn(callback: (user: Peaker) => void) {
                     //     channel = establishSocketConnectionToUsersChannel(userId)
                     // }
                     callback(user)
-                }).catch(err => console.log(`Failed to load user from Backend: ${err.toString()}`))
+                }).catch(err => {
+                doInCurrentTab((tab) => {
+                    sendMessageToUser(tab.id, "error", "Failed to save your bookmark", "Server timed out. Tell Devon.")
+                })
+                console.log(`Failed to load user from Backend: ${err.toString()}`)
+            })
         }).catch(err => console.error(`ERRORINGGGGGGG: ${err.toString()}`));
     });
+}
+
+function doInCurrentTab(tabCallback: (tab: Tab) => void) {
+    chrome.tabs.query(
+        { currentWindow: true, active: true },
+        function (tabArray) {
+            const currTab: Tab | undefined = tabArray[0]
+            if (currTab) {
+                console.log(`Current TabId `, currTab)
+                tabCallback(currTab);
+            } else {
+                console.log(`Current Tab is undefined`)
+            }
+        }
+    );
 }
