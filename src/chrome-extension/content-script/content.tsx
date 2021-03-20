@@ -26,6 +26,7 @@ import {
     updateSavePageMessage
 } from "./components/save-page-message/SavePageMessage";
 import {PeakTag} from "../../types";
+import {sleep} from "../utils/generalUtil";
 
 // ---------------------------------------------------
 // Debugging state changes
@@ -64,14 +65,16 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             break;
         case MessageType.Message_User:
             const messageUser: MessageUserMessage = request as MessageUserMessage;
-            notification[messageUser.message_theme]({
-                message: messageUser.messageTitle,
-                description: messageUser.messageContext,
-                duration: messageUser.duration || 2,
-                className: "peak-custom-user-notification",
-                key: "one-off-message",
-            })
             closeMessage(messageUser.tabId)
+            sleep(100).then(() => {
+                notification[messageUser.message_theme]({
+                    message: messageUser.messageTitle,
+                    description: messageUser.messageContext,
+                    duration: messageUser.duration || 2,
+                    className: "peak-custom-user-notification",
+                    key: "one-off-message",
+                })
+            })
     }
 });
 

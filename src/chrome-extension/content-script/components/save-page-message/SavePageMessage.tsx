@@ -75,7 +75,7 @@ export const openMessage = (props: SavedPageProps) => {
         message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage}/>,
         className: cn('saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
-        duration: duration,
+        duration: 0,
         description: <SavePageContent editingState={editingState} {...props}/>,
         closeIcon: <NullButton/>,
         onClick: () => console.log(`CLICKED`),

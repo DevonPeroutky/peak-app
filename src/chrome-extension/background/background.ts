@@ -1,7 +1,7 @@
 import {ChromeExtMessage, DeletePageMessage, MessageType, SubmitNoteMessage} from "../constants/models";
 import {submitNote} from "./utils/noteUtil";
 import {sendMessageToUser, sendSuccessfulDeleteMessage, sendSuccessfulSyncMessage} from "./utils/messageUtil";
-import {injectContentScriptOpenDrawer} from "./utils/contentUtils";
+import {openDrawer} from "./utils/contentUtils";
 import {deleteItem} from "../utils/storageUtils";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";
@@ -33,7 +33,7 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.commands.onCommand.addListener(function(command) {
     switch (command) {
         case "save-page":
-            injectContentScriptOpenDrawer()
+            openDrawer()
             break;
         default:
             console.log(`Command: ${command} ???`);

@@ -28,7 +28,7 @@ function tellDrawerToSubmit(userId: string, activeTab: Tab) {
     })
 }
 
-export function injectContentScriptOpenDrawer() {
+export function openDrawer() {
     function injectContentScriptAndLoadDrawer(user: Peaker) {
         idempotentlyInjectContentScript().then(result => {
             switch (result.res) {
