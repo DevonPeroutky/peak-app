@@ -31,7 +31,6 @@ function tellDrawerToSubmit(userId: string, activeTab: Tab) {
 export function injectContentScriptOpenDrawer() {
     function injectContentScriptAndLoadDrawer(user: Peaker) {
         idempotentlyInjectContentScript().then(result => {
-            console.log(`DA RESPONSE< `, result)
             switch (result.res) {
                 case INJECT_CONTENT_SCRIPT_STATE.INJECTED:
                     fetchTagsAndOpenDrawer(user.id, result.tab)

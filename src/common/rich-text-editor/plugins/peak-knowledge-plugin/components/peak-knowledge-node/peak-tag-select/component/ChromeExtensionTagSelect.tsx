@@ -7,12 +7,8 @@ import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import cn from "classnames";
 import {take} from "ramda";
-import {
-    syncActiveTabState,
-    updateMessageInPlace
-} from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
+import { updateMessageInPlace } from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
 import {FOCUS_STATE} from "../../../../../../../../chrome-extension/constants/constants";
-import {reRenderMessage} from "../../../../../../../../chrome-extension/content-script/components/save-page-message/SavePageMessage";
 const { Option } = Select;
 
 /**
@@ -106,12 +102,10 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
                         open={open}
                         onBlur={() => {
                             setDropdownState(false)
-                            syncActiveTabState(tabId, { focusState: FOCUS_STATE.NotFocused }, reRenderMessage)
+                            updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
                         }}
                         onFocus={() => {
                             setDropdownState(true)
-                            // syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
-                            console.log(`FOCUINSG!!!!`)
                             updateMessageInPlace(tabId, { focusState: FOCUS_STATE.Focus })
                         }}
                         onSearch={(value) => {

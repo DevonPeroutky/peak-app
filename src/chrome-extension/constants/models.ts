@@ -18,12 +18,19 @@ export enum MessageType {
     SuccessfullySavedNote,
     SuccessfullyRemovedNote,
     PostFromBackgroundScript,
+    DeleteFromBackgroundScript,
     SuccessfullySavedNoteMetadata,
     AddToReadingList
 }
 
 export interface ChromeExtMessage {
     message_type: MessageType
+}
+
+export interface DeletePageMessage extends ChromeExtMessage {
+    userId: string,
+    tabId: number,
+    noteId: string,
 }
 
 export interface MessageUserMessage extends ChromeExtMessage {

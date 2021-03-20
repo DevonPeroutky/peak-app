@@ -20,7 +20,6 @@ import {pipe} from "@udecode/slate-plugins";
 import {PeakTag} from "../../../../types";
 import {SUBMISSION_STATE} from "../../../constants/constants";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
-import {syncCurrentDrawerState} from "../../utils/messageUtils";
 import {chromeExtensionNormalizers} from "../../../../common/rich-text-editor/editors/chrome-extension/config";
 import cn from "classnames";
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
@@ -79,7 +78,7 @@ export const SaveNoteDrawer = (props: SaveNoteDrawerProps) => {
 
     const updateThatBody = (newBod: Node[]) => {
         setBody(newBod)
-        syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
+        // syncCurrentDrawerState(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, newBod)
     }
 
     return (

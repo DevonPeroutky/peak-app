@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
 import {Input, Select} from "antd";
-import {closeMessage, openMessage, reRenderMessage, SavedPageProps} from "../../SavePageMessage";
+import {closeMessage, SavedPageProps} from "../../SavePageMessage";
 import {PlusOutlined, TagsOutlined} from "@ant-design/icons/lib";
 import {TagSelect} from "../../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/ChromeExtensionTagSelect";
 import {PeakTag} from "../../../../../../types";
@@ -14,7 +14,7 @@ import {pipe} from "@udecode/slate-plugins";
 import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
-import {sendSubmitNoteMessage, syncActiveTabState} from "../../../../utils/messageUtils";
+import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
 import {SavingAnimation} from "../../../save-note-modal/saving-animation/SavingAnimation";
 
 interface SavePageContentProps extends SavedPageProps { };
@@ -88,10 +88,10 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
                 onBlur={() => {
-                    syncActiveTabState(tabId, { focusState: FOCUS_STATE.NotFocused }, reRenderMessage)
+                    updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
                 }}
                 onFocus={() => {
-                    syncActiveTabState(tabId, { focusState: FOCUS_STATE.Focus }, reRenderMessage)
+                    updateMessageInPlace(tabId, { focusState: FOCUS_STATE.Focus })
                 }}
                 className={"page-peak-title-input"}
                 bordered={false}
@@ -105,8 +105,7 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
     const { editing, body, updateThatBody, editor, tabId } = props
 
     const openEditor = () => {
-        // WTF ???? Setting the state twice???
-        syncActiveTabState(tabId, { editingState: EDITING_STATE.Editing }, () => openMessage({...props, editing: EDITING_STATE.Editing}))
+        updateMessageInPlace(tabId, { editingState: EDITING_STATE.Editing })
     }
 
     if (editing === EDITING_STATE.Editing) {

@@ -13,7 +13,7 @@ import {
     SUBMISSION_STATE,
     TAGS_KEY
 } from "../../../constants/constants";
-import {deleteItem, getItem} from "../../../utils/storageUtils";
+import {deleteItem, getItem, setItem} from "../../../utils/storageUtils";
 import {Node} from "slate";
 import {SubmitNoteMessage} from "../../../constants/models";
 import 'antd/lib/divider/style/index.css';
@@ -25,7 +25,7 @@ import 'antd/lib/popconfirm/style/index.css';
 import 'antd/lib/tooltip/style/index.css';
 import 'antd/lib/list/style/index.css';
 import "./save-page-message.scss";
-import {sendSubmitNoteMessage, syncActiveTabState} from "../../utils/messageUtils";
+import {sendSubmitNoteMessage} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
 import {NullButton, UndoCloseButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
 import Tab = chrome.tabs.Tab;
@@ -75,7 +75,7 @@ export const openMessage = (props: SavedPageProps) => {
         message: <SavePageHeaderContent saving={saving} editing={editing}/>,
         className: cn('saved-page-message', (editing === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
-        duration: 0,
+        duration: duration,
         description: <SavePageContent editing={editing} {...props}/>,
         closeIcon: <NullButton/>,
         onClick: () => console.log(`CLICKED`),
@@ -148,37 +148,53 @@ export function updateSavePageMessage(submitNoteMessage: SubmitNoteMessage) {
         const focusState = (activeTab) ? activeTab.focusState : FOCUS_STATE.NotFocused
         const newActiveTabState: ActiveTabState = {...submitNoteMessage, focusState: focusState, editingState: editingState} as ActiveTabState
 
-        syncActiveTabState(submitNoteMessage.tabId, newActiveTabState, () =>
-            openMessage({
-                tabId: submitNoteMessage.tabId,
-                userId: submitNoteMessage.userId,
-                pageTitle: submitNoteMessage.pageTitle,
-                pageUrl: submitNoteMessage.pageUrl,
-                tags: submitNoteMessage.selectedTags,
-                favIconUrl: submitNoteMessage.favIconUrl,
-                focusState: focusState,
-                saving: saving,
-                editing: editingState,
-                shouldSubmit: false
-            })
-        )
-    })
+        console.log(`Time to Update the MEssage: `, activeTab)
+        console.log(newActiveTabState)
 
+        getItem(ACTIVE_TAB_KEY, data => {
+            const currTabState: ActiveTabState = data[ACTIVE_TAB_KEY]
+            console.log(`CURRENT vs NEW`)
+            console.log(currTabState)
+
+            const newTabState = { ...currTabState, ...newActiveTabState, tabId: submitNoteMessage.tabId }
+
+            setItem(ACTIVE_TAB_KEY, newTabState, () =>
+                openMessage({
+                    tabId: submitNoteMessage.tabId,
+                    userId: submitNoteMessage.userId,
+                    pageTitle: submitNoteMessage.pageTitle,
+                    pageUrl: submitNoteMessage.pageUrl,
+                    tags: submitNoteMessage.selectedTags,
+                    favIconUrl: submitNoteMessage.favIconUrl,
+                    focusState: focusState,
+                    saving: saving,
+                    editing: editingState,
+                    shouldSubmit: false
+                })
+            )
+        })
+    })
 }
 
 // Removes the message from the user's screen
 export const closeMessage = (tabId: number) => {
+    // sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
+    // getItem(ACTIVE_TAB_KEY, data => {
+    //     const activeTab = data[ACTIVE_TAB_KEY] as ActiveTabState
+    //     const { tabId, userId, selectedTags, pageTitle, pageUrl, favIconUrl, body} = activeTab
+    //     console.log(`TAB WE ARE SYNCING: `, activeTab)
+    //     sendSubmitNoteMessage(
+    //         tabId,
+    //         userId,
+    //         selectedTags,
+    //         pageTitle,
+    //         pageUrl,
+    //         favIconUrl,
+    //         body
+    //     )
+    // })
+
     deleteItem([tabId.toString(), ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)
     })
 }
-
-export const reRenderMessage = () => {
-    getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
-        const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
-        const tags: PeakTag[] = data[TAGS_KEY]
-        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editing: activeTab.editingState}
-        openMessage(existingPage)
-    })
-}
-
