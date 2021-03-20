@@ -45,7 +45,7 @@
 
     .note-header-row {
       display: flex;
-      padding-top: 24px;
+      padding-top: 0px;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
@@ -55,6 +55,7 @@
       }
 
       .web-title-input {
+        resize: none;
         margin-bottom: 0;
         font-size: 2.2rem!important;
         font-weight: 600;
@@ -66,7 +67,8 @@
 
     .book-note-header-row {
       display: flex;
-      margin-top: 24px;
+      margin-top: 0px;
+      padding-top: 20px;
       align-items: center;
       justify-content: flex-start;
       min-height: 88px;
@@ -74,11 +76,15 @@
       .image-section {
         display: flex;
         min-width: 72px;
+        max-height: 200px;
+        width: auto;
+        flex-grow: 1;
 
         .book-note-cover-image {
           max-width: 100%;
-          width: 64px;
-          height: auto;
+          width: auto;
+          height: 100%;
+          max-height: inherit;
 
           svg {
             width: 48px;
@@ -87,28 +93,36 @@
         }
       }
 
-      .note-header {
+      .note-header-section {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        margin-left: 15px;
-        width: 100%;
+        flex-grow: 4;
 
-        .book-title-input {
-          margin-bottom: 0;
-          font-size: 2.2rem!important;
-          font-weight: 600;
-          width: 100%;
-          text-align: left;
-          padding-left: 0;
-          text-transform: capitalize;
-        }
+        .note-header {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-left: 15px;
+          //flex-grow: 1;
 
-        .author-subtitle {
-          padding-left: 0;
-          text-transform: uppercase;
-          font-weight: 700;
-          color: $text-accent-color;
+          .book-title-input {
+            display: flex;
+            flex-grow: 2;
+            resize: none;
+            margin-bottom: 0;
+            font-size: 2.2rem!important;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            padding-left: 0;
+            text-transform: capitalize;
+          }
+
+          .author-subtitle {
+            padding-left: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: $text-accent-color;
+          }
         }
       }
     }

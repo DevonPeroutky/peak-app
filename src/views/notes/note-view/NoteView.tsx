@@ -13,6 +13,7 @@ import {useCurrentUser} from "../../../utils/hooks";
 import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
+const { TextArea } = Input;
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -76,7 +77,7 @@ const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTitleChan
                 </a>
             </div>
             <div className={"note-header-row"}>
-                <Input className={"web-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
+                <TextArea className={"web-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
                 <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
             </div>
         </div>
@@ -93,10 +94,12 @@ export const BookHeaderSection = (props: {note_id: string, icon_url: string, sel
                 <div className={"image-section"}>
                     <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
                 </div>
-                <div className={"note-header"}>
-                    <Input className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
-                    <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
-                    <NoteTagSelect selected_tags={selected_tags} note_id={note_id}/>
+                <div className={"note-header-section"}>
+                    <div className={"note-header"}>
+                        <TextArea autoSize={true} className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
+                        <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
+                        <NoteTagSelect selected_tags={selected_tags} note_id={note_id}/>
+                    </div>
                 </div>
             </div>
         </div>
