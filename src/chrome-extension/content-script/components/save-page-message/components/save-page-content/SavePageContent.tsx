@@ -57,9 +57,9 @@ export const SavePageContent = (props: SavePageContentProps) => {
         }
     }, [shouldSubmit])
 
-    // if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
+    if (saving === SUBMISSION_STATE.Saving || saving === SUBMISSION_STATE.MetadataSaved) {
         return <PageSavingAnimation saving={saving} editingState={editingState} tabId={tabId}/>
-    // }
+    }
 
     const propsWithBody = {...props, body: body, updateThatBody: updateThatBody, editor: editor as ReactEditor}
     return (

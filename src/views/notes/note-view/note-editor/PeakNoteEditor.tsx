@@ -5,7 +5,12 @@ import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
-import {useDebouncePeakNoteSaver, useDebouncePeakStubCreator, useSpecificNote} from "../../../../client/notes";
+import {
+    useCurrentNote,
+    useDebouncePeakNoteSaver,
+    useDebouncePeakStubCreator,
+    useSpecificNote
+} from "../../../../client/notes";
 import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -30,10 +35,10 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const currentNote: PeakNote | undefined = useSpecificNote(note_id)
     const dispatch = useDispatch()
     const editorState = useActiveEditorState()
-    const journal = useJournal()
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
     const createStub = useDebouncePeakStubCreator()
+    const noteInRedux = useCurrentNote()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
     const [readyToStub, setReadyToStub] = useState(false)
@@ -66,6 +71,19 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         // }
         onChangeMention(editor);
     }
+
+
+    useEffect(() => {
+        const noteBodyInRedux: Node[] = noteInRedux.body
+
+        if (equals(noteBodyInRedux, bodyContent)) {
+            console.log(`No outside updates were made to Redux`)
+        } else {
+            setNoteContent(noteBodyInRedux)
+            const newNoteContent = [{ children: noteBodyInRedux }]
+            setNoteContent(newNoteContent)
+        }
+    }, [noteInRedux.body])
 
     // Why the fuck is this needed
     useEffect(() => {

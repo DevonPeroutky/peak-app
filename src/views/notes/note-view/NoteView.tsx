@@ -17,12 +17,16 @@ import {PeakTag} from "../../../types";
 export const PeakNoteView = (props) => {
     const history = useHistory()
     const currentNote: PeakNote | undefined = useCurrentNote()
-
     const noteSaver = useDebouncePeakNoteSaver()
     const currentUser = useCurrentUser()
-    const selected_tags: PeakTag[] = useLoadTags(currentNote.tag_ids)
-    const [title, setTitle] = useState(currentNote.title)
-    const [author, setAuthor] = useState(currentNote.author)
+    const selected_tags: PeakTag[] = useLoadTags((currentNote) ? currentNote.tag_ids : [])
+    const [title, setTitle] = useState((currentNote) ? currentNote.title : "")
+    const [author, setAuthor] = useState((currentNote) ? currentNote.author : "")
+
+    if (!currentNote) {
+        history.push(`/home/notes`)
+        return null
+    }
 
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -32,10 +36,6 @@ export const PeakNoteView = (props) => {
     const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthor(e.target.value)
         noteSaver(currentUser, currentNote.id, { author: e.target.value })
-    }
-
-    if (!currentNote) {
-        history.push(`/home/journal`)
     }
 
     return (

@@ -4,7 +4,7 @@ import {AppState} from "../redux";
 import {store} from "../redux/store";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID} from "../redux/slices/noteSlice";
-import {useLocation} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
 import {debounce} from "lodash";
@@ -112,7 +112,14 @@ export function useCurrentNoteId() {
 export function useCurrentNote(): PeakNote | undefined {
     const currentNoteId = useCurrentNoteId();
     const notes = useNotes()
-    return notes.find(n => n.id === currentNoteId)
+    const history = useHistory()
+    const note: PeakNote | undefined = notes.find(n => n.id === currentNoteId)
+    if (!note) {
+        console.log(`That note does not seem to exist`)
+        history.push(`/home/notes`)
+        return undefined
+    }
+    return note
 }
 export function useSpecificNote(nodeId: string): PeakNote | undefined {
     const notes = useNotes()
