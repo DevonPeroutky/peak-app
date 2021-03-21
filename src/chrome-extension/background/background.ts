@@ -65,7 +65,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 console.log(res)
                 sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage, createdNote.id))
             }).catch(err => {
-                console.log(`The error `, err)
                 sleep(500)
                     .then(() => {
                         if (err.response.status === 401) {

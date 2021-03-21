@@ -1,0 +1,17 @@
+.peak-login-message-header {
+  display: flex;
+  align-items: center;
+}
+.peak-login-body-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+
+  div {
+    text-align: inherit;
+    margin-bottom: 10px!important;
+  }
+}

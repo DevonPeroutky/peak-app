@@ -2,6 +2,7 @@ import Tab = chrome.tabs.Tab;
 import {Node} from "slate";
 import {ANT_MESSAGE_THEME} from "./constants";
 import {PeakTag} from "../../types";
+import { ReactNode } from "react";
 
 export interface ChromeUser {
     id: string
@@ -12,6 +13,7 @@ export interface ChromeUser {
 
 export enum MessageType {
     Message_User,
+    Message_User_To_Login,
     Ping,
     Pong,
     SaveToPeakHotkeyPressed,
@@ -34,11 +36,15 @@ export interface DeletePageMessage extends ChromeExtMessage {
 }
 
 export interface MessageUserMessage extends ChromeExtMessage {
-    messageTitle: string
-    messageContext: string
+    messageTitle: ReactNode
+    messageContext: ReactNode
     duration?: number
     tabId: number
     message_theme: ANT_MESSAGE_THEME
+}
+
+export interface MessageUserToLoginMessage extends ChromeExtMessage {
+    tabId: number
 }
 
 export interface SavePageMessage extends ChromeExtMessage {

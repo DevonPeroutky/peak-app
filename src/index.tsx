@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
+import './constants/utilities.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {isElectron} from "./utils/environment";
