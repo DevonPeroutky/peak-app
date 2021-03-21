@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {message, notification} from "antd";
 import {batch, useDispatch, useSelector} from "react-redux";
 import {AppState} from "../redux";
@@ -103,6 +103,7 @@ export function useCurrentPageId() {
  * back null for pages that are not wiki Pages.
  */
 export function useCurrentPage() {
+    const history = useHistory()
     const location = useLocation();
     const notes = useNotes()
     const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
@@ -112,6 +113,13 @@ export function useCurrentPage() {
 
     if (pageType === "notes") {
         const note: PeakNote = notes.find(n => n.id === currentPageId)
+
+        if (!note) {
+            console.log(`That note seems to no longer exist`)
+            history.push(`/home/notes`)
+            return
+        }
+
         return { id: note.id, body: note.body, title: note.title }
     } else {
         return peakWikiState[currentPageId];

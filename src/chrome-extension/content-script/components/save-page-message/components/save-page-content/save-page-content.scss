@@ -1,0 +1,129 @@
+@import "../../../../../../constants/variables";
+
+$drawer-padding-amount: 24px; // We bad --> Look at saving-animation.scss before touching this
+$drawer-header-vert-padding: 16px;
+$font-family: "Inter"; //, ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"!important;
+$drawer-title-height: 45px;
+
+.peak-message-content-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+
+  .peak-extension-divider {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .peak-extension-row-container {
+    display: flex;
+    align-items: center;
+    padding: 10px $drawer-padding-amount;
+    min-height: 50px;
+    height: 50px;
+    box-sizing: border-box;
+
+    &.title {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      min-height: $drawer-title-height!important;
+
+      .page-peak-favicon {
+        height: 14px;
+        width: auto;
+        margin-right: 12px;
+      }
+
+      .page-peak-title-input {
+        position: relative!important;
+        font-family: $font-family!important;
+        width: 100%;
+        color: rgba(0, 0, 0, 0.85); // #828282;
+        font-size: 14px;
+        padding-left: 0px!important;
+        border: none!important;
+        outline: none!important;
+        box-shadow: none!important;
+        padding-top: 4px!important;
+        padding-bottom: 4px!important;
+        background-color: white!important;
+        min-height: 50px!important;
+        margin: 0!important;
+
+
+        &:hover {
+          color: $text-accent-color;
+        }
+      }
+
+      input:hover::-webkit-input-placeholder {
+        color: $text-accent-color;
+      }
+
+      .page-peak-title-input:hover+.underline-animation {
+        transform: scale(1);
+      }
+
+      .underline-animation {
+        background-color: $text-accent-color;
+        color: $text-accent-color;
+        display: inline-block;
+        height: 2px;
+        left: $drawer-padding-amount;
+        margin-top: -4px;
+        position: absolute;
+        bottom: 10px;
+        -webkit-transform: scale(0, 1);
+        transform: scale(0, 1);
+        -webkit-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        width: calc(100% - #{$drawer-padding-amount * 2});
+      }
+    }
+
+    &.add-note-button {
+      position: relative!important;
+      cursor: pointer;
+      &:hover {
+        background: rgba(55, 53, 47, 0.08);
+      }
+
+      .peak-message-icon {
+        height: 14px;
+        width: auto;
+        margin-right: 12px;
+      }
+    }
+
+    &.editor {
+      display: flex;
+      flex-grow: 1;
+      align-items: flex-start;
+      padding-top: 24px;
+    }
+
+    &.tag-section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    &.footer {
+      //margin: -$drawer-padding-amount;
+      //border-top: 1px solid #f0f0f0;
+      width: 100% !important;
+      color: $placeholder-text-color;
+      padding-top: 48px;
+      padding-bottom: 48px;
+      font-size: 18px;
+      height: 126px!important;
+      background-color: white!important;
+
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

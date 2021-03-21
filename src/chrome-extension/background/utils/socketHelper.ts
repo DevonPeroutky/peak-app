@@ -2,6 +2,10 @@ import {establishSocketConnection, subscribeToTopic} from "../../../utils/socket
 import {JOURNAL_CHANNEL_ID} from "../../../common/rich-text-editor/editors/journal/constants";
 import {Channel} from "phoenix";
 
+/**
+ * @param channel
+ * @param userId
+ */
 export function establishSocketChannelConnection(channel: Channel, userId: string): Promise<Channel> {
     if (!channel) {
         console.log(`Establish a new socket connection`)

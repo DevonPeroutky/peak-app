@@ -55,25 +55,41 @@
                 flex-direction: column;
                 flex-grow: 1;
                 margin-bottom: 0px;
+                width: 100%;
 
                 a {
                   color: $text-color;
                   width: 100%;
 
                   .item-title {
+                    margin-bottom: 10px;
                     color: rgba(22,30,46,var(--text-opacity));
                     display: inline-block;
                     line-height: 32px;
                     font-size: 24px;
                     width: 100%;
-                    text-overflow: ellipsis!important;
-                    white-space: nowrap!important;
-                    overflow: hidden!important;
+                    //text-overflow: ellipsis!important;
+                    //white-space: nowrap!important;
+                    //overflow: hidden!important;
+                    white-space: normal;
+                    word-break: normal!important;
+                    overflow-wrap: break-word!important;
                   }
+
 
                   &:hover {
                     color: $primary-blue;
                   }
+                }
+
+                .peak-note-tag-section {
+                  margin-top: 15px;
+                  display: flex;
+                  align-items: center;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  margin-right: 25px;
+
                 }
 
                 .subtitle-container {
@@ -103,13 +119,6 @@
                 display: flex;
                 align-items: center;
 
-                .peak-note-tag-section {
-                  display: flex;
-                  align-items: center;
-                  overflow: hidden;
-                  white-space: nowrap;
-                  margin-right: 25px;
-                }
               }
             }
 

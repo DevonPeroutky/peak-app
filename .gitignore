@@ -94,6 +94,7 @@ out/
 build/
 dist/
 extension-dist/
+extension-dist 2/
 set-build-secrets.sh
 extension-dist.zip
 

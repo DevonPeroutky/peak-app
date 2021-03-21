@@ -1,7 +1,10 @@
 import {
+    DeletePageMessage,
     MessageType,
     MessageUserMessage,
-    SavePageMessage, SubmitNoteMessage
+    SavePageMessage,
+    SubmitNoteMessage,
+    SuccessfullyCreatedNoteMessage
 } from "../../constants/models";
 import Tab = chrome.tabs.Tab;
 import {ANT_MESSAGE_THEME} from "../../constants/constants";
@@ -9,7 +12,7 @@ import {PeakTag} from "../../../types";
 
 export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, tags: PeakTag[]) => {
     const message: SavePageMessage = {
-        "message_type": MessageType.SaveToPeak,
+        "message_type": MessageType.SaveToPeakHotkeyPressed,
         "user_id": userId,
         "tags": tags,
         "tab": activeTab
@@ -17,20 +20,32 @@ export const sendOpenSavePageDrawerMessage = (activeTab: Tab, userId: string, ta
     chrome.tabs.sendMessage(activeTab.id, message);
 };
 
-export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage) => {
-    const message: SubmitNoteMessage = {
+export const sendSuccessfulSyncMessage = (ogMessage: SubmitNoteMessage, noteId: string) => {
+    const message: SuccessfullyCreatedNoteMessage = {
         ...ogMessage,
+        noteId: noteId,
         "message_type": MessageType.SuccessfullySavedNote
     };
-    chrome.tabs.sendMessage(ogMessage.tabId, message);
+    console.log(`----> SENDING SAVED MESSAGE: `, message)
+    chrome.tabs.sendMessage(message.tabId, message);
 };
 
-export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageBody: string) => {
+export const sendSuccessfulDeleteMessage = (successfulDeleteMessage: DeletePageMessage) => {
+    const message: DeletePageMessage = {
+        ...successfulDeleteMessage,
+        "message_type": MessageType.SuccessfullyRemovedNote
+    };
+    chrome.tabs.sendMessage(successfulDeleteMessage.tabId, message);
+};
+
+export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string, duration?: number) => {
     const message: MessageUserMessage = {
         message_type: MessageType.Message_User,
         message_theme: messageTheme,
         tabId: tabId,
-        message: messageBody
+        duration: duration,
+        messageTitle: messageTitle,
+        messageContext: messageContext
     }
     chrome.tabs.sendMessage(tabId, message);
 }

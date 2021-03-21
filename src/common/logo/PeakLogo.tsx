@@ -10,7 +10,7 @@ export const PeakLogo = (props: { className?: string }) => {
     if (isChromeExtension) {
         const baseUrl = chrome.runtime.getURL("../../assets/logos/grayscale-with-sun.svg")
         return (
-            <img className={cn("chrome-peak-logo-img", specifiedClassName)} src={baseUrl} alt={"Peak"}/>
+            <img className={cn("chrome-peak-logo-img animate__animated animate__fadeIn", specifiedClassName)} src={baseUrl} alt={"Peak"}/>
         )
     } else {
         return (

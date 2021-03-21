@@ -1,37 +1,33 @@
 /*global chrome*/
 import React from 'react';
-import ReactDOM from 'react-dom';
 import "./content.scss";
+import "../../index.scss";
+import "../../constants/utilities.scss";
 import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
-import {SaveNoteDrawer, SaveNoteDrawerProps} from "./components/save-note-modal/SaveNoteDrawer";
 import {
-    ChromeExtMessage,
+    ChromeExtMessage, DeletePageMessage,
     MessageType,
     MessageUserMessage,
     SavePageMessage,
-    SubmitNoteMessage
+    SuccessfullyCreatedNoteMessage
 } from "../constants/models";
 import {Node} from "slate";
-import {message} from "antd";
+import {message, notification} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
-import {openDrawer, removeDrawer, removeDrawerWithSavedMessage, rerenderDrawer} from "./utils/drawerUtils";
-import {ACTIVE_TAB_KEY} from "../constants/constants";
+import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE, TAGS_KEY} from "../constants/constants";
 import moment from "moment";
-
-// ---------------------------------------------------
-// Mount Drawer to DOM
-// - This does not show the modal.
-// ---------------------------------------------------
-chrome.storage.sync.get(function (data) {
-    console.log(`----------> MOUNTING THE MODALLLL`)
-    console.log(`THE DATA`, data)
-    const app = document.createElement('div');
-    app.id = "my-extension-root";
-    document.body.appendChild(app);
-    ReactDOM.render(<SaveNoteDrawer {...data as SaveNoteDrawerProps} />, app)
-});
+import {getItem} from "../utils/storageUtils";
+import {
+    closeMessage,
+    openMessage,
+    openSavePageMessage,
+    SavedPageProps,
+    updateSavePageMessage
+} from "./components/save-page-message/SavePageMessage";
+import {PeakTag} from "../../types";
+import {sleep} from "../utils/generalUtil";
 
 // ---------------------------------------------------
 // Debugging state changes
@@ -39,11 +35,7 @@ chrome.storage.sync.get(function (data) {
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (const key in changes) {
         const storageChange = changes[key];
-        console.log('Storage key "%s" in namespace "%s" changed. ' + 'Old value was "%s", new value is: ".',
-            key,
-            namespace,
-            storageChange.oldValue,
-            storageChange.newValue);
+        console.log(`Storage key ${key} changed. Old value was ${JSON.stringify(storageChange.oldValue)}, new value is: ${JSON.stringify(storageChange.newValue)}`);
     }
 });
 
@@ -52,36 +44,39 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 // ---------------------------------------------------
 chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender, sendResponse) {
     switch (request.message_type) {
-        case MessageType.SaveToPeak:
+        case MessageType.SaveToPeakHotkeyPressed:
             const openDrawerMessage: SavePageMessage = request as SavePageMessage;
-            console.log(`[CONTENT]`, openDrawerMessage)
-            openDrawer(openDrawerMessage.tab, openDrawerMessage.user_id, openDrawerMessage.tags)
+            console.log(`OPEN DRAWER MESSAGE `, openDrawerMessage)
+            openSavePageMessage(
+                openDrawerMessage.tab,
+                openDrawerMessage.user_id,
+                openDrawerMessage.tags
+            )
             break;
         case MessageType.SuccessfullySavedNote:
-            const saveAndCloseDrawerMessage: SubmitNoteMessage = request as SubmitNoteMessage;
-            removeDrawerWithSavedMessage(saveAndCloseDrawerMessage)
+            const m: SuccessfullyCreatedNoteMessage = request as SuccessfullyCreatedNoteMessage;
+            updateSavePageMessage(m)
+            break;
+        case MessageType.SuccessfullyRemovedNote:
+            const d = request as DeletePageMessage;
+            closeMessage(d.tabId)
             break;
         case MessageType.Ping:
+            // This is the healthcheck the background script uses to figure out if the content script is already injected
             sendResponse({ message_type: MessageType.Pong })
-            // chrome.runtime.sendMessage({ message_type: MessageType.Pong });
             break;
         case MessageType.Message_User:
             const messageUser: MessageUserMessage = request as MessageUserMessage;
-            switch (messageUser.message_theme) {
-                case "error":
-                    message.error(messageUser.message)
-                    removeDrawer(messageUser.tabId.toString())
-                    break;
-                case "info":
-                    message.info(messageUser.message)
-                    break;
-                case "success":
-                    message.success(messageUser.message)
-                    break;
-                case "warning":
-                    message.warning(messageUser.message)
-                    break;
-            }
+            closeMessage(messageUser.tabId)
+            sleep(100).then(() => {
+                notification[messageUser.message_theme]({
+                    message: messageUser.messageTitle,
+                    description: messageUser.messageContext,
+                    duration: messageUser.duration || 2,
+                    className: "peak-custom-user-notification",
+                    key: "one-off-message",
+                })
+            })
     }
 });
 
@@ -96,9 +91,11 @@ document.addEventListener('mouseup', (event) => {
         const node_id: number = moment().valueOf()
         const nodes: Node[] = addSelectionAsBlockQuote(text, node_id)
 
-        chrome.storage.sync.get(ACTIVE_TAB_KEY, data => {
-            const activeTabId: string = data[ACTIVE_TAB_KEY].toString()
-            rerenderDrawer(activeTabId, nodes)
+        getItem(ACTIVE_TAB_KEY, data => {
+            const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
+            if (activeTab.editingState === EDITING_STATE.Editing) {
+                appendNodesAsBlockquote(nodes)
+            }
         })
 
     } else {
@@ -106,3 +103,12 @@ document.addEventListener('mouseup', (event) => {
     }
 });
 
+const appendNodesAsBlockquote = (nodes: Node[]) => {
+    getItem([ACTIVE_TAB_KEY, TAGS_KEY], data => {
+        const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY]
+        const tags: PeakTag[] = data[TAGS_KEY]
+
+        const existingPage: SavedPageProps = {...activeTab, tags: tags, saving: SUBMISSION_STATE.Saved, shouldSubmit: false, editingState: activeTab.editingState}
+        openMessage({...existingPage, nodesToAppend: nodes})
+    })
+}

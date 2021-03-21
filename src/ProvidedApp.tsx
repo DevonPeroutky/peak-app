@@ -25,8 +25,8 @@ const ProvidedApp = (props: {}) => {
 
     return (
         <div className={cn("App", (isQuickSwitcherOpen) ? "no-scroll" : "")}>
-            <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
             <Router>
+                <KeybindingHandlerWrapper currentUserId={user.id} userAccounts={userAccounts}/>
                 <QuickSwitcher isOpen={isQuickSwitcherOpen}/>
                 <Switch>
                     <Route path="/timeline">

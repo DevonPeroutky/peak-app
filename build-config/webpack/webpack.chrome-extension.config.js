@@ -3,6 +3,16 @@ const webpack = require("webpack");
 const path = require("path");
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
+/**
+ * Fixes the
+ * ```
+ * Unchecked runtime.lastError: Could not load file 'content.js' for content script.
+ * It isn't UTF-8 encoded.
+ * ```
+ *
+ * error in the production bundle
+ */
+const TerserPlugin = require('terser-webpack-plugin');
 
 const chrome_extension_rules = [
     ...rules,
@@ -20,6 +30,7 @@ const config = {
     entry: {
         content: path.join(__dirname, "../../src/chrome-extension/content-script/content.tsx"),
         background: path.join(__dirname, "../../src/chrome-extension/background/background.ts"),
+        popup: path.join(__dirname, "../../src/chrome-extension/pop-up/index.tsx"),
     },
     module: {
         rules: chrome_extension_rules
@@ -44,6 +55,14 @@ const config = {
             'process.env.REACT_APP_APP_SERVER_ADDRESS': JSON.stringify(process.env.REACT_APP_APP_SERVER_ADDRESS),
         })
     ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: { output: { ascii_only: true } }
+            })
+        ],
+    }
 };
 
 module.exports = config;

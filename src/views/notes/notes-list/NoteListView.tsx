@@ -2,7 +2,7 @@ import React from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {useNotes} from "../../../client/notes";
 import {List, message, Popconfirm} from "antd";
-import {BookOutlined, DeleteOutlined, QuestionCircleOutlined, ReadFilled} from "@ant-design/icons/lib";
+import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveHostname} from "../../../utils/urls";
@@ -53,10 +53,13 @@ const NoteListItem = (props: { item: PeakNote }) => {
                         <div className={"title-container"}>
                             <Link to={buildNoteUrl(item.id)}>
                                 <div className={"peak-note-list-item-header"}>
-                                    <span className={"item-title"}>{capitalize(item.title)}</span>
+                                    <p className={"item-title"}>{capitalize(item.title)}</p>
                                     <NoteSubTitle item={item}/>
                                 </div>
                             </Link>
+                            <div className="peak-note-tag-section">
+                                {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+                            </div>
                         </div>
                         <NoteIconSection item={item}/>
                     </div>
@@ -105,9 +108,6 @@ const NoteIconSection = (props: { item: PeakNote }) => {
     }
     return (
         <div className={"icon-section"}>
-            <div className="peak-note-tag-section">
-                {item.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-            </div>
             <Popconfirm title="Are you sure？" icon={<DeleteOutlined style={{ color: 'red' }}/>} onConfirm={mockOut}>
                 <DeleteOutlined />
             </Popconfirm>

@@ -1,11 +1,16 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {ReactEditor, Slate} from "slate-react";
-import {EditablePlugins, pipe} from "@udecode/slate-plugins";
+import {EditablePlugins, pipe, SlateDocumentFragment} from "@udecode/slate-plugins";
 import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
-import {useDebouncePeakNoteSaver, useDebouncePeakStubCreator, useSpecificNote} from "../../../../client/notes";
+import {
+    useCurrentNote,
+    useDebouncePeakNoteSaver,
+    useDebouncePeakStubCreator,
+    useSpecificNote
+} from "../../../../client/notes";
 import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
@@ -19,19 +24,21 @@ import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
-import {equals} from "ramda";
+import {drop, equals, sort} from "ramda";
 import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/types";
 import {useDispatch} from "react-redux";
+import {journalOrdering} from "../../../../redux/slices/wikiPageSlice";
+import {convertJournalEntryToSlateNodes} from "../../../../common/rich-text-editor/editors/journal/utils";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
     const currentNote: PeakNote | undefined = useSpecificNote(note_id)
     const dispatch = useDispatch()
     const editorState = useActiveEditorState()
-    const journal = useJournal()
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
     const createStub = useDebouncePeakStubCreator()
+    const noteInRedux = useCurrentNote()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
     const [readyToStub, setReadyToStub] = useState(false)
@@ -64,6 +71,19 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         // }
         onChangeMention(editor);
     }
+
+
+    useEffect(() => {
+        const noteBodyInRedux: Node[] = noteInRedux.body
+
+        if (equals(noteBodyInRedux, bodyContent)) {
+            console.log(`No outside updates were made to Redux`)
+        } else {
+            setNoteContent(noteBodyInRedux)
+            const newNoteContent = [{ children: noteBodyInRedux }]
+            setNoteContent(newNoteContent)
+        }
+    }, [noteInRedux.body])
 
     // Why the fuck is this needed
     useEffect(() => {

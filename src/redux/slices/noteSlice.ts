@@ -40,8 +40,7 @@ export const noteSlice = createSlice({
             return state.map(n => n.id === updatedNote.id ? updatedNote : n);
         },
         deleteNote(state, action: PayloadAction<string>) {
-            const filteredBooks: PeakNote[] = state.filter(t => t.id !== action.payload)
-            return filteredBooks
+            return state.filter(t => t.id !== action.payload)
         }
     }
 });

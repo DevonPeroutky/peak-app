@@ -14,9 +14,12 @@ export enum MessageType {
     Message_User,
     Ping,
     Pong,
-    SaveToPeak,
+    SaveToPeakHotkeyPressed,
     SuccessfullySavedNote,
+    SuccessfullyRemovedNote,
     PostFromBackgroundScript,
+    DeleteFromBackgroundScript,
+    SuccessfullySavedNoteMetadata,
     AddToReadingList
 }
 
@@ -24,8 +27,16 @@ export interface ChromeExtMessage {
     message_type: MessageType
 }
 
+export interface DeletePageMessage extends ChromeExtMessage {
+    userId: string,
+    tabId: number,
+    noteId: string,
+}
+
 export interface MessageUserMessage extends ChromeExtMessage {
-    message: string
+    messageTitle: string
+    messageContext: string
+    duration?: number
     tabId: number
     message_theme: ANT_MESSAGE_THEME
 }
@@ -46,3 +57,6 @@ export interface SubmitNoteMessage extends ChromeExtMessage {
     tabId: number
 }
 
+export interface SuccessfullyCreatedNoteMessage extends SubmitNoteMessage {
+    noteId: string
+}
