@@ -68,7 +68,7 @@ function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFoc
 }
 
 export const openMessage = (props: SavedPageProps) => {
-    const { saving, editingState, tabId, focusState, userId, noteId } = props
+    const { saving, editingState, tabId, focusState, userId, noteId, tags } = props
     const duration = deriveDuration(saving, editingState, focusState)
     const deletePage = buildDeletePageCalback(tabId, userId, noteId)
     const goBack = () => updateMessageInPlace(tabId, { editingState: EDITING_STATE.NotEditing } )
@@ -77,8 +77,8 @@ export const openMessage = (props: SavedPageProps) => {
         message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage} goBack={goBack}/>,
         className: cn('peak-saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
         key: NOTIFICATION_KEY,
-        duration: 0,
-        description: <SavePageContent editingState={editingState} {...props}/>,
+        duration: duration,
+        description: <SavePageContent editingState={editingState} tags={tags || []} {...props}/>,
         closeIcon: <NullButton/>,
         onClick: () => console.log(`CLICKED`),
         onClose: () => closeMessage(tabId)

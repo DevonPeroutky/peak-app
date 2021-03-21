@@ -33,4 +33,8 @@
 
 .peak-custom-user-notification {
   margin-top: 24px!important;
+
+  &.login {
+    width: 275px;
+  }
 }

@@ -13,13 +13,11 @@ import { addUserAccount } from '../../../../redux/slices/userAccountsSlice';
 import {Peaker} from "../../../../types";
 const loginLogo = require('../../../../assets/icons/google-login.svg');
 
-const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boolean }) => {
-    const { isDesktopLogin, addAccountFlow } = props
+const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boolean, isExtensionLogin: boolean }) => {
+    const { isDesktopLogin, addAccountFlow, isExtensionLogin } = props
     const oneTimeCode = uuidv4()
     const dispatch = useDispatch();
     const history = useHistory();
-
-    console.log(`Add account flow: ${addAccountFlow}`)
 
     const linkedUserId: string | null = useLinkedUserId()
 
@@ -49,6 +47,8 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boo
                     window.location.replace(desktopDeepLinkUrl);
                     history.push(`/logged-in?one-time-code=${oneTimeCode}`);
                 }
+            } else if (isExtensionLogin) {
+                history.push(`/extension-logged-in`);
             } else {
                 history.push(`/home/journal`);
             }

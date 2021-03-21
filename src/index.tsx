@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
+import './constants/utilities.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {isElectron} from "./utils/environment";
@@ -81,6 +82,12 @@ if (isElectron) {
     window.addEventListener('offline', updateOnlineStatus)
 
     updateOnlineStatus()
+
+    // Catch all uncaught error and reset to Journal
+    window.onerror = function(error, url, line) {
+        console.log(`JUST CAUGHT AN ERROR `, error)
+        ipcRenderer.send('uncaughtException', error)
+    };
 } else {
     // If you want your app to work offline and load faster, you can change
     // unregister() to register() below. Note this comes with some pitfalls.

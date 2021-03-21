@@ -1,8 +1,8 @@
-import React, { ReactNode, useEffect } from "react";
+import React, {ReactNode} from "react";
 import QuickSwitcher from "./common/quick-switcher/QuickSwitcher";
-import { HashRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import {HashRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import PeakLayout from "./views/layout/PeakLayout";
-import { NoMatch } from "./views/not-found/NoMatch";
+import {NoMatch} from "./views/not-found/NoMatch";
 import {isAuthenticated} from "./redux/slices/user/userSlice";
 import {useCurrentUser} from "./utils/hooks";
 import {PeakWelcome} from "./views/welcome/Welcome";
@@ -17,6 +17,7 @@ import {TempDesktopLogin} from "./views/temp-desktop-login/TempDesktopLogin";
 import {useSelector} from "react-redux";
 import {AppState} from "./redux";
 import cn from "classnames"
+import {LOGIN_FLOW} from "./constants/types";
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()
@@ -38,8 +39,11 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/welcome">
                         <PeakWelcome/>
                     </Route>
+                    <Route path="/extension-logged-in">
+                        <LoggedIn loginFlow={LOGIN_FLOW.Extension}/>
+                    </Route>
                     <Route path="/logged-in">
-                        <LoggedIn/>
+                        <LoggedIn loginFlow={LOGIN_FLOW.Desktop}/>
                     </Route>
                     <Route path="/temp-desktop-login">
                         <TempDesktopLogin/>

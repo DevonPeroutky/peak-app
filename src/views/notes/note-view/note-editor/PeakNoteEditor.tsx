@@ -29,6 +29,7 @@ import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/
 import {useDispatch} from "react-redux";
 import {journalOrdering} from "../../../../redux/slices/wikiPageSlice";
 import {convertJournalEntryToSlateNodes} from "../../../../common/rich-text-editor/editors/journal/utils";
+import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -37,7 +38,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const editorState = useActiveEditorState()
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
-    const createStub = useDebouncePeakStubCreator()
     const noteInRedux = useCurrentNote()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
@@ -72,16 +72,13 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         onChangeMention(editor);
     }
 
-
     useEffect(() => {
-        const noteBodyInRedux: Node[] = noteInRedux.body
+        const noteBodyInRedux: Node[] = [{ children: noteInRedux.body }]
 
-        if (equals(noteBodyInRedux, bodyContent)) {
+        if (equals(noteBodyInRedux, noteContent)) {
             console.log(`No outside updates were made to Redux`)
         } else {
             setNoteContent(noteBodyInRedux)
-            const newNoteContent = [{ children: noteBodyInRedux }]
-            setNoteContent(newNoteContent)
         }
     }, [noteInRedux.body])
 

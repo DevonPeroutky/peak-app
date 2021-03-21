@@ -1,6 +1,6 @@
 import {MessageType} from "../../constants/models";
 import {loadTagsFromBackend} from "./tagUtil";
-import {sendMessageToUser, sendOpenSavePageDrawerMessage} from "./messageUtil";
+import {sendMessageToUser, sendOpenSavePageDrawerMessage, sendUnauthedMessageToUser} from "./messageUtil";
 import {Peaker, PeakTag} from "../../../types";
 import {logUserIn} from "./authUtil";
 import {INJECT_CONTENT_SCRIPT_STATE, TAGS_KEY} from "../../constants/constants";
@@ -13,7 +13,11 @@ function fetchTagsAndOpenDrawer(userId: string, activeTab: Tab) {
         .then(tags => {
             sendOpenSavePageDrawerMessage(activeTab, userId, tags)
         }).catch(err => {
-            sendMessageToUser(activeTab.id, "error", "Failed to load your tags.", "Received an error response from the backend, tell Devon he sucks at programming")
+            if (err.response.status === 401) {
+                sendUnauthedMessageToUser(activeTab.id)
+            } else {
+                sendMessageToUser(activeTab.id, "error", "Failed to load your tags.", "Received an error response from the backend, tell Devon he sucks at programming")
+            }
             getItem(TAGS_KEY, (data) => {
                 const tags = data[TAGS_KEY] || []
                 sendOpenSavePageDrawerMessage(activeTab, userId, tags)

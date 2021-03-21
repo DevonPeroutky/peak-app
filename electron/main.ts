@@ -89,6 +89,14 @@ const createWindow = (): void => {
         log.error(err.toString())
       });
   })
+
+  mainWindow.on('unresponsive', function() {
+      log.error(`Window is unresponsive???`)
+  });
+
+  mainWindow.webContents.on('unresponsive', function() {
+    log.error(`Window's Webcontents is unresponsive???`)
+  });
 };
 
 // --------------------------------------------------------
@@ -180,4 +188,14 @@ deeplink.on('received', (link: string) => {
 
   // TODO: Verify returned_code
   mainWindow && mainWindow.webContents.send(channel, returned_code)
+});
+
+ipcMain.on('uncaughtException', function(event, data){
+  log.error("Uncaught Exception in the renderer process ", data)
+  if (mainWindow) {
+    log.error("Reloading the renderer window.")
+    mainWindow.reload()
+  } else {
+    log.error("Trying to reload the renderer window but there's no BrowserWindow?!?!?!?")
+  }
 });

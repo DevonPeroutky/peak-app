@@ -1,7 +1,7 @@
 import {
     DeletePageMessage,
     MessageType,
-    MessageUserMessage,
+    MessageUserMessage, MessageUserToLoginMessage,
     SavePageMessage,
     SubmitNoteMessage,
     SuccessfullyCreatedNoteMessage
@@ -38,7 +38,7 @@ export const sendSuccessfulDeleteMessage = (successfulDeleteMessage: DeletePageM
     chrome.tabs.sendMessage(successfulDeleteMessage.tabId, message);
 };
 
-export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string, duration?: number) => {
+export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME, messageTitle: string, messageContext: string, duration: number = 2) => {
     const message: MessageUserMessage = {
         message_type: MessageType.Message_User,
         message_theme: messageTheme,
@@ -46,6 +46,14 @@ export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME
         duration: duration,
         messageTitle: messageTitle,
         messageContext: messageContext
+    }
+    chrome.tabs.sendMessage(tabId, message);
+}
+
+export const sendUnauthedMessageToUser = (tabId) => {
+    const message: MessageUserToLoginMessage = {
+        message_type: MessageType.Message_User_To_Login,
+        tabId: tabId,
     }
     chrome.tabs.sendMessage(tabId, message);
 }

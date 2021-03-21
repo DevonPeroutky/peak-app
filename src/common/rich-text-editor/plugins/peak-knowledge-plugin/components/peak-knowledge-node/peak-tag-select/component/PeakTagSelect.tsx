@@ -2,7 +2,7 @@ import {useDispatch} from "react-redux";
 import {ReactEditor, useEditor} from "slate-react";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
 import {useCurrentUser} from "../../../../../../../../utils/hooks";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import {Editor, Node, Transforms} from "slate";
@@ -29,15 +29,18 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const currentUser = useCurrentUser()
     const mainRef = useRef(null);
-    const [open, setDropdownState] = useState(false);
     const editorState = useActiveEditorState()
+    const [open, setDropdownState] = useState(editorState.focusMap[nodeId] || false);
     const [displaySelectedTags, setSelectedTags] = useState<PeakTag[]>(selected_tags)
     const [currentSearch, setCurrentSearch] = useState<string>("")
 
     const shouldFocus: boolean = editorState.focusMap[nodeId] || false
-    if (shouldFocus) {
-        mainRef.current.focus()
-    }
+    useEffect(() => {
+        if (shouldFocus) {
+            mainRef.current.focus()
+        }
+    }, [shouldFocus])
+
     const onSelect = (displayLabel: LabeledValue) => {
         const existingTag = tags.find(t => t.title === (displayLabel.value))
         if (existingTag) {
@@ -136,7 +139,8 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         <div className={"peak-learning-select-container"} data-slate-editor>
             { (hideIcon) ? null : <TagOutlined className={"peak-tag-icon"}/> }
             <Select
-                onClick={() => {
+                onClick={(e) => {
+                    e.preventDefault()
                     setDropdownState(true)
                     lockFocus(true)
                 }}
@@ -144,7 +148,8 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
                 onBlur={saveAndLeave}
                 disabled={disabled || false}
                 open={open}
-                onFocus={() => {
+                onFocus={(e) => {
+                    e.preventDefault()
                     setDropdownState(true)
                 }}
                 onInputKeyDown={handleInputKeyDown}

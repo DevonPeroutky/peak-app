@@ -1,20 +1,20 @@
 /*global chrome*/
 import React from 'react';
 import "./content.scss";
-import "../../index.scss";
 import "../../constants/utilities.scss";
-import 'antd/lib/button/style/index.css';
 import 'antd/lib/message/style/index.css';
 import 'antd/lib/notification/style/index.css';
 import {
-    ChromeExtMessage, DeletePageMessage,
+    ChromeExtMessage,
+    DeletePageMessage,
     MessageType,
     MessageUserMessage,
+    MessageUserToLoginMessage,
     SavePageMessage,
     SuccessfullyCreatedNoteMessage
 } from "../constants/models";
 import {Node} from "slate";
-import {message, notification} from "antd";
+import {Button, message, notification} from "antd";
 import {addSelectionAsBlockQuote} from "./utils/editorUtils";
 import {ACTIVE_TAB_KEY, ActiveTabState, EDITING_STATE, SUBMISSION_STATE, TAGS_KEY} from "../constants/constants";
 import moment from "moment";
@@ -28,6 +28,8 @@ import {
 } from "./components/save-page-message/SavePageMessage";
 import {PeakTag} from "../../types";
 import {sleep} from "../utils/generalUtil";
+import {CloseOutlined} from "@ant-design/icons/lib";
+import {PeakExtensionLoginBody, PeakExtensionLoginHeader} from "./components/login-user-message/LoginUserMessage";
 
 // ---------------------------------------------------
 // Debugging state changes
@@ -50,7 +52,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             openSavePageMessage(
                 openDrawerMessage.tab,
                 openDrawerMessage.user_id,
-                openDrawerMessage.tags
+                openDrawerMessage.tags || []
             )
             break;
         case MessageType.SuccessfullySavedNote:
@@ -72,9 +74,23 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 notification[messageUser.message_theme]({
                     message: messageUser.messageTitle,
                     description: messageUser.messageContext,
-                    duration: messageUser.duration || 2,
+                    duration: messageUser.duration,
                     className: "peak-custom-user-notification",
                     key: "one-off-message",
+                })
+            })
+            break;
+        case MessageType.Message_User_To_Login:
+            const messageUserToLogin: MessageUserToLoginMessage = request as MessageUserToLoginMessage;
+            closeMessage(messageUserToLogin.tabId)
+            sleep(100).then(() => {
+                notification.open({
+                    message: <PeakExtensionLoginHeader/>,
+                    description: <PeakExtensionLoginBody/>,
+                    duration: 4,
+                    className: "peak-custom-user-notification login",
+                    key: "one-off-message",
+                    closeIcon: <CloseOutlined />
                 })
             })
     }

@@ -11,7 +11,7 @@ import {AxiosResponse} from "axios";
 export function submitNote (userId: string, selectedTags: PeakTag[], pageTitle: string, favIconUrl: string, body: Node[], pageUrl: string): Promise<AxiosResponse<{book: any}>> {
     return futureCreatePeakTags(userId, selectedTags)
         .then(res => {
-            const tags = selectedTags.filter(t => t.id != STUB_TAG_ID).concat(res.tags)
+            const tags = (selectedTags || []).filter(t => t.id != STUB_TAG_ID).concat(res.tags)
             const newWebNote = { "title": pageTitle, "url": pageUrl, favIconUrl, body}
             return createWebNoteRequest(userId, newWebNote, tags)
         })
