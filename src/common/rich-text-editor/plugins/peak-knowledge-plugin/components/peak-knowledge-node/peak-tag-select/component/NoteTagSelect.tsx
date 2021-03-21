@@ -87,7 +87,6 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
         }
     }
 
-    // @ts-ignore
     return (
         <div className={"peak-learning-select-container note"} data-slate-editor>
             <Select
@@ -121,7 +120,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
                 notFoundContent={<Empty description={"No more tags. Press 'Escape' to exit with arrow keys"}/>}
                 tagRender={tagRender}
                 style={{ width: '100%' }}>
-                {renderedTagList.slice(0, 5).map(tag => (
+                {renderedTagList.map(tag => (
                     <Option key={tag.id} value={tag.title as string}>
                         <div className={"peak-learning-select-option"}>
                             <span>{capitalize_and_truncate(tag.label || tag.title, 50)}</span>
