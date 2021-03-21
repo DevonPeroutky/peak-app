@@ -10,7 +10,3 @@ cp ./scripts/chrome-extension/base_manifest.json public/manifest.json
 
 echo "Building the production chrome-extension..."
 webpack --config build-config/webpack/webpack.chrome-extension.config.js --mode=production
-
-echo "Done. Zipping up the generated build"
-zip -r extension-dist.zip ./extension-dist
-echo "extension-dist.zip is now really to be uploaded!"
