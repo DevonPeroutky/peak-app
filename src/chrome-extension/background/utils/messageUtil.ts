@@ -50,3 +50,12 @@ export const sendMessageToUser = (tabId: number, messageTheme: ANT_MESSAGE_THEME
     chrome.tabs.sendMessage(tabId, message);
 }
 
+export const sendUnauthedMessageToUser = (tabId) => {
+    sendMessageToUser(
+        tabId,
+        "info",
+        "Looks like you haven't logged in yet",
+        "Click on the Peak logo in your chrome extension bar"
+    )
+}
+

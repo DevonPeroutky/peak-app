@@ -1,6 +1,11 @@
 import {ChromeExtMessage, DeletePageMessage, MessageType, SubmitNoteMessage} from "../constants/models";
 import {submitNote} from "./utils/noteUtil";
-import {sendMessageToUser, sendSuccessfulDeleteMessage, sendSuccessfulSyncMessage} from "./utils/messageUtil";
+import {
+    sendMessageToUser,
+    sendSuccessfulDeleteMessage,
+    sendSuccessfulSyncMessage,
+    sendUnauthedMessageToUser
+} from "./utils/messageUtil";
 import {openDrawer} from "./utils/contentUtils";
 import {deleteItem} from "../utils/storageUtils";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
@@ -60,14 +65,20 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 console.log(res)
                 sleep(1000).then(() => sendSuccessfulSyncMessage(submitNodeMessage, createdNote.id))
             }).catch(err => {
+                console.log(`The error `, err)
                 sleep(500)
-                    .then(() =>
-                        sendMessageToUser(
-                            submitNodeMessage.tabId,
-                            "error",
-                            "Failed to save your bookmark",
-                            "Server timed out. Tell Devon."
-                        ))
+                    .then(() => {
+                        if (err.response.status === 401) {
+                            sendUnauthedMessageToUser(submitNodeMessage.tabId)
+                        } else {
+                            sendMessageToUser(
+                                submitNodeMessage.tabId,
+                                "error",
+                                "Failed to save your bookmark",
+                                "Server timed out. Tell Devon."
+                            )
+                        }
+                    })
             })
             break
         case MessageType.DeleteFromBackgroundScript:
