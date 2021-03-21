@@ -30,7 +30,6 @@ import {PeakTag} from "../../types";
 import {sleep} from "../utils/generalUtil";
 import {CloseOutlined} from "@ant-design/icons/lib";
 import {PeakExtensionLoginBody, PeakExtensionLoginHeader} from "./components/login-user-message/LoginUserMessage";
-import {PeakLogo} from "../../common/logo/PeakLogo";
 
 // ---------------------------------------------------
 // Debugging state changes
@@ -53,7 +52,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             openSavePageMessage(
                 openDrawerMessage.tab,
                 openDrawerMessage.user_id,
-                openDrawerMessage.tags
+                openDrawerMessage.tags || []
             )
             break;
         case MessageType.SuccessfullySavedNote:
@@ -88,7 +87,7 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
                 notification.open({
                     message: <PeakExtensionLoginHeader/>,
                     description: <PeakExtensionLoginBody/>,
-                    duration: 5,
+                    duration: 4,
                     className: "peak-custom-user-notification login",
                     key: "one-off-message",
                     closeIcon: <CloseOutlined />

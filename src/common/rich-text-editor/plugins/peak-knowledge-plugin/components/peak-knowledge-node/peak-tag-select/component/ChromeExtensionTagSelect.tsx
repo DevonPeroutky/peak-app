@@ -21,7 +21,7 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
     const { tabId, selected_tags, setSelectedTags, existing_tags, forceClose } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
-    const [tags, setTags] = useState<PeakTag[]>(existing_tags)
+    const [tags, setTags] = useState<PeakTag[]>(existing_tags || [])
     const [currentSearch, setCurrentSearch] = useState<string>("")
     const [show, setShow] = useState(false)
 
