@@ -91,6 +91,7 @@ const TopicWiki = (props: {topic_id: string}) => {
             onChangeMention(editor);
         }
     }
+
     return (
         <Slate
             editor={editor}

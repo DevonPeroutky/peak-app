@@ -15,6 +15,7 @@ import { scratchpadNormalizers, scratchpadPlugins } from "../../common/rich-text
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
 import {sleep} from "../../chrome-extension/utils/generalUtil";
+import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -77,7 +78,7 @@ export const PeakScratchpad = (props: {}) => {
                 onChange={updatePageContent}>
                 <div className="peak-scratchpad-container">
                     <MemoizedLinkMenu
-                        key={`${reduxScratchpad.id}-LinkMenu`}
+                        key={`${SCRATCHPAD_ID}-LinkMenu`}
                         linkState={editorState.currentLinkState}
                         showLinkMenu={editorState.showLinkMenu}
                         />
@@ -85,7 +86,7 @@ export const PeakScratchpad = (props: {}) => {
                          <EditablePlugins
                              onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
                              onKeyDownDeps={[index, search, target, openLibraryResults]}
-                             key={`${reduxScratchpad.id}-${editorState.isEditing}`}
+                             key={`${SCRATCHPAD_ID}-${editorState.isEditing}`}
                              plugins={scratchpadPlugins}
                              placeholder="What's on your mind..."
                              spellCheck={true}

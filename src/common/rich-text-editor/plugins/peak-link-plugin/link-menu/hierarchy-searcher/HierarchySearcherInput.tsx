@@ -30,8 +30,6 @@ const HierarchySearcherInput = (props: HierarchySearcherInputProps) => {
     useEffect(() => {
         if (hierarchy) {
             console.log(`rebuilding the SEARCHERINPUT hierarchy`)
-            console.log(`Hierarchy `, hierarchy)
-            console.log(`Notes `, notes)
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)

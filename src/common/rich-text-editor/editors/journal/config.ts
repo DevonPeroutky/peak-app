@@ -9,7 +9,6 @@ import {
 import {withEditableJournalEntry} from "../../plugins/journal-entry-plugin/withEditableJournalEntry";
 import {PEAK_VOID_TYPES} from "../../types";
 import {JournalEntryPlugin} from "../../plugins/journal-entry-plugin/JournalEntryPlugin";
-import {PeakNoteStubPlugin} from "../../plugins/peak-note-stub-plugin/PeakNoteStubPlugin";
 
 // Because we have JournalEntry --> Node[] per JournalEntry, the editor 'depth' is 2 deep instead of the default of 1.
 export const JOURNAL_NODE_LEVEL: number = 2
