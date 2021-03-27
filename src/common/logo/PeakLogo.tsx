@@ -15,7 +15,7 @@ export const PeakLogo = (props: { className?: string }) => {
     } else {
         return (
             <Link
-                to={"/home/journal"}
+                to={"/home"}
                 className={cn("peak-logo-wrapper", )}
                 children={<img className={cn("peak-logo-img", specifiedClassName)} src={peak} alt={"Peak"}/>}/>
         )

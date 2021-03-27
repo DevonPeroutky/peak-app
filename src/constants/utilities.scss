@@ -9,3 +9,11 @@
     horiz-align: center;
     text-align: center;
 }
+
+.peak-page-title {
+    font-size: $title-font-size;
+    font-weight: $title-font-weight;
+    line-height: $title-line-height;
+    color: rgb(22, 30, 46)!important;
+    width: fit-content;
+}

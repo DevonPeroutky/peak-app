@@ -19,11 +19,10 @@ import {buildNoteUrl} from "../../../utils/notes";
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
     const { page_header, note_type } = props
     const notes: PeakNote[] = useNotes().filter(n => n.note_type === note_type)
-    console.log(`THE NOTEs `, notes )
 
     return (
         <div className={"notes-container"}>
-            <h1>{capitalize(page_header)}</h1>
+            <h1 className={"peak-page-title"}>{capitalize(page_header)}</h1>
             <List
                 className={"peak-notes-list"}
                 itemLayout={"vertical"}

@@ -50,7 +50,7 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boo
             } else if (isExtensionLogin) {
                 history.push(`/extension-logged-in`);
             } else {
-                history.push(`/home/journal`);
+                history.push(`/home`);
             }
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");

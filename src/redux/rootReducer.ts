@@ -10,7 +10,7 @@ import tags from "./slices/tags/tagSlice";
 import notes, {PeakNote} from "./slices/noteSlice";
 import userAccounts, {DisplayPeaker} from "./slices/userAccountsSlice";
 import activeEditorState from "./slices/activeEditor/activeEditorSlice"
-import {PeakWikiState} from "../constants/wiki-types";
+import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
 
 export interface UserSpecificAppState {
@@ -20,6 +20,15 @@ export interface UserSpecificAppState {
     topics: PeakTopic[]
     peakWikiState: PeakWikiState
     notes: PeakNote[]
+}
+
+export interface UserSpecificAppStateResponse {
+    currentUser: Peaker
+    tags: PeakTag[]
+    topics: PeakTopic[]
+    notes: PeakNote[]
+    pages: PeakWikiPage[]
+    scratchpad: PeakWikiPage
 }
 
 export const switch_user_accounts = createAction<DisplayPeaker>("switch_user_accounts")

@@ -26,10 +26,9 @@ const PeakSidebar = (props: { }) => {
             </div>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
-                <Menu.Item key="home/journal">
-                    {/*<Link to={`${match.url}/journal`}>*/}
-                    <Link to="/home/journal">
-                        <MenuOutlined/>Journal
+                <Menu.Item key="home/scratchpad">
+                    <Link to="/home/scratchpad">
+                        <MenuOutlined/>Scratchpad
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="home/notes">

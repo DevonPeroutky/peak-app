@@ -3,16 +3,22 @@ import {Node} from "slate";
 import {differenceWith, omit, uniqBy} from "ramda";
 import {CHROME_EXTENSION} from "../../common/rich-text-editor/editors/chrome-extension/constants";
 import {
-    INITIAL_CHROME_EXT_STATE, INITIAL_EDITING_STATE,
+    INITIAL_CHROME_EXT_STATE,
     INITIAL_JOURNAL_STATE,
     INITIAL_PAGE_STATE,
 } from "../../constants/editor";
 import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types";
 import {JOURNAL_PAGE_ID} from "../../common/rich-text-editor/editors/journal/constants";
 import { PeakWikiPage, PeakWikiState} from "../../constants/wiki-types";
+import {SCRATCHPAD_ID, SCRATCHPAD_TITLE} from "../../common/rich-text-editor/editors/scratchpad/constants";
+import {INITIAL_SCRATCHPAD_STATE} from "../../common/rich-text-editor/editors/scratchpad/config";
 const R = require('ramda');
 
-export const INITIAL_WIKI_STATE: PeakWikiState = { [JOURNAL_PAGE_ID]: INITIAL_JOURNAL_STATE, [CHROME_EXTENSION]: INITIAL_CHROME_EXT_STATE } ;
+export const INITIAL_WIKI_STATE: PeakWikiState = {
+    [JOURNAL_PAGE_ID]: INITIAL_JOURNAL_STATE,
+    [SCRATCHPAD_ID]: INITIAL_SCRATCHPAD_STATE,
+    [CHROME_EXTENSION]: INITIAL_CHROME_EXT_STATE
+};
 export const journalOrdering = (a: JournalEntry, b: JournalEntry) => {
     return (a.entry_date <= b.entry_date) ? 1 : -1
 };
@@ -73,8 +79,9 @@ export const wikiPageSlice = createSlice({
             const newJournalState = {...state[JOURNAL_PAGE_ID], body: newJournalBody}
             return {...state, [JOURNAL_PAGE_ID]: newJournalState};
         },
-        syncToDos(state, action: PayloadAction<string>) {
-
+        updateScratchpad(state, action: PayloadAction<{body: Node[]}>) {
+            const newScratchpadState = {...state[SCRATCHPAD_ID], title: SCRATCHPAD_TITLE, body: action.payload.body};
+            return { ...state, [SCRATCHPAD_ID]: newScratchpadState }
         }
     }
 });
@@ -86,6 +93,7 @@ export const {
     updatePageTitle,
     setJournalEntries,
     updateJournalEntry,
-    updateJournalEntries
+    updateJournalEntries,
+    updateScratchpad
 } = wikiPageSlice.actions;
 export default wikiPageSlice.reducer;

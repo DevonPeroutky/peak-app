@@ -2,15 +2,7 @@
 
 .title-container {
   position: relative;
-  font-size: $title-font-size;
-  font-weight: $title-font-weight;
-  line-height: $title-line-height;
   margin-bottom: 30px;
-
-  .peak-title {
-    color: rgb(22, 30, 46)!important;
-    font-weight: inherit;
-  }
 
   .empty-title::after {
     position: absolute;

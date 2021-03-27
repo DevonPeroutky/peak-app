@@ -28,6 +28,7 @@ import {
 } from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
+import {PeakScratchpad} from "../scratchpad/Scratchpad";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -77,6 +78,7 @@ const PeakLayout = (props: {}) => {
                         <div className="peak-content-holder">
                             <Switch>
                                 <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                                <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
                                 <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {
                                     if (props.match.params && props.match.params.id) {
