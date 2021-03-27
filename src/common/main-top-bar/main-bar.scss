@@ -6,8 +6,9 @@
   height: $main-bar-height;
   display: flex;
   align-items: center;
-  padding-left: $horizontal-padding;
-  padding-right: 25px;
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
 
   .ant-input-affix-wrapper {
     padding-left: 0px;
@@ -30,7 +31,9 @@
   }
 
   .minimal-input {
-    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    max-width: $max-content-width!important;
 
     .ant-input {
       border: 0!important;

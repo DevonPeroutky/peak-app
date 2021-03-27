@@ -28,7 +28,7 @@
 
       .peak-content-holder {
         width: 85%;
-        max-width: 850px;
+        max-width: $max-content-width;
         padding-top: $vertical-padding;
       }
     }
