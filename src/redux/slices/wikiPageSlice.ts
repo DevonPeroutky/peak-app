@@ -11,7 +11,7 @@ import {JournalEntry} from "../../common/rich-text-editor/editors/journal/types"
 import {JOURNAL_PAGE_ID} from "../../common/rich-text-editor/editors/journal/constants";
 import { PeakWikiPage, PeakWikiState} from "../../constants/wiki-types";
 import {SCRATCHPAD_ID, SCRATCHPAD_TITLE} from "../../common/rich-text-editor/editors/scratchpad/constants";
-import {INITIAL_SCRATCHPAD_STATE} from "../../common/rich-text-editor/editors/scratchpad/config";
+import {INITIAL_SCRATCHPAD_STATE} from "../../common/rich-text-editor/editors/scratchpad/constants";
 const R = require('ramda');
 
 export const INITIAL_WIKI_STATE: PeakWikiState = {

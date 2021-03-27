@@ -13,7 +13,9 @@ $margin-top: 24px;//Also seet in the component via notification.config
   padding: $og-padding 0px 0px!important;
   background-color: white!important;
   font-family: "Inter"!important;
-  color: $text-color;
+  color: $text-color!important;
+  letter-spacing: normal!important;
+  font-weight: 400!important;
 
 
   .ant-notification-notice-content {
