@@ -17,7 +17,7 @@ import {PeakNote} from "../../../../redux/slices/noteSlice";
 import {PeakTag} from "../../../../types";
 import { addTags } from "src/redux/slices/tags/tagSlice";
 
-export const useJournalSubscription = () => {
+export const useWebNoteSubscription = () => {
     function appendWebNoteToJournal(webNoteNodes: Node[], journal: PeakWikiPage, note_id: string): JournalEntry {
         const today: JournalEntry = journal.body[0] as JournalEntry
         return {...today, body: [...today.body, ...webNoteNodes] }

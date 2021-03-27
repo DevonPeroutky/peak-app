@@ -17,7 +17,6 @@ import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {useJournalSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
 import {establishSocketConnection} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
@@ -29,6 +28,7 @@ import {
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
+import {useWebNoteSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -41,7 +41,7 @@ const PeakLayout = (props: {}) => {
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
 
-    useJournalSubscription()
+    useWebNoteSubscription()
 
     useEffect(() => {
         if (!isOnline) {
