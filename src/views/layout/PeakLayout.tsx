@@ -17,7 +17,6 @@ import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {useJournalSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
 import {establishSocketConnection} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
@@ -28,6 +27,8 @@ import {
 } from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
+import {PeakScratchpad} from "../scratchpad/Scratchpad";
+import {useWebNoteSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -40,7 +41,7 @@ const PeakLayout = (props: {}) => {
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
 
-    useJournalSubscription()
+    useWebNoteSubscription()
 
     useEffect(() => {
         if (!isOnline) {
@@ -77,6 +78,7 @@ const PeakLayout = (props: {}) => {
                         <div className="peak-content-holder">
                             <Switch>
                                 <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                                <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
                                 <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {
                                     if (props.match.params && props.match.params.id) {
@@ -97,7 +99,7 @@ const PeakLayout = (props: {}) => {
                                         return <Redirect to={"/"} />
                                     }
                                 }}/>
-                                <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
+                                <Route path={`${match.path}/`} render={(props) => <PeakScratchpad/>} />
                                 <Route path="*">
                                     <h1>NOT FOUND</h1>
                                 </Route>

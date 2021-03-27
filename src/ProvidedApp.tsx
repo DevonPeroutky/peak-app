@@ -53,7 +53,7 @@ const ProvidedApp = (props: {}) => {
                             <Route path={"/home"} component={PeakLayout}/>
                             <Route path={"/topic/:topic_id"} component={PeakLayout}/>
                             <Route path={"/"} component={PeakLayout}>
-                                <Redirect to="/home/journal" />
+                                <Redirect to="/home/scratchpad" />
                             </Route>
                         </Switch>
                     </AuthedRoute>

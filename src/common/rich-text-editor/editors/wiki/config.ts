@@ -5,9 +5,7 @@ import {
     withNormalizeTypes
 } from "@udecode/slate-plugins";
 import {PEAK_VOID_TYPES, TITLE} from "../../types";
-import {
-    setEditorNormalizers, setEditorPlugins,
-} from "../../base_config";
+import { setEditorNormalizers, setEditorPlugins } from "../../base_config";
 
 const wikiSpecificPlugins: SlatePlugin[] = [
     PeakTitlePlugin(),

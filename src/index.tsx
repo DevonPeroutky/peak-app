@@ -27,6 +27,7 @@ if (isElectron) {
     const { ipcRenderer } = window.require('electron');
 
     const journalHash = `#/home/journal`
+    const scratchpadHash = `#/home/scratchpad`
     const welcomeHash = `#/welcome`
     const offlineHash = `#/offline`
     const tempDesktopLoginHash = `#/temp-desktop-login`
@@ -37,10 +38,10 @@ if (isElectron) {
             const authedUser = res.data as Peaker
             console.log(authedUser)
             store.dispatch(setUser(authedUser));
-            window.location.hash = journalHash
+            window.location.hash = scratchpadHash
         }).catch(() => {
             message.error("Error logging you into Peak. Please let Devon know");
-            window.location.hash = journalHash
+            window.location.hash = scratchpadHash
         })
     })
 
@@ -56,7 +57,7 @@ if (isElectron) {
 
     ipcRenderer.on('go-to-journal', (event, arg) => {
         console.log(`GOING TO THE JOURNAL`)
-        window.location.hash = journalHash
+        window.location.hash = scratchpadHash
         store.dispatch(journalHotkeyPressed())
     })
 

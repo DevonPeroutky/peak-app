@@ -32,7 +32,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         };
 
         if (isCollapsed) {
-            Transforms.insertNodes(editor, link, {at: theSelection});
+            Transforms.insertNodes(editor, link, {at: theSelection });
         } else {
             Transforms.wrapNodes(editor, link, { split: true, at: theSelection });
             Transforms.collapse(editor, { edge: 'end' });

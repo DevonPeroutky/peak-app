@@ -25,11 +25,11 @@ import {useHistory} from "react-router-dom";
 import {buildNoteUrl} from "../../../../utils/notes";
 
 interface PeakNodeSelectMenuOptions extends UseMentionOptions {
-    editorLevel: number
+    editorLevel?: number
 }
 
 export const useNodeContentSelect = (
-    { maxSuggestions = 10, trigger = '/', editorLevel, ...options }: PeakNodeSelectMenuOptions
+    { maxSuggestions = 10, trigger = '/', editorLevel = 1, ...options }: PeakNodeSelectMenuOptions
 ) => {
 
     let history = useHistory();

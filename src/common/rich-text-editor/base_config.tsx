@@ -232,7 +232,7 @@ export const setEditorPlugins = (baseNodeLevel: number = 1, additionalPlugins: S
 const levelDependentNormalizers = (level: number) => [
     withTrailingNode({ type: ELEMENT_PARAGRAPH, level: level })
 ]
-export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers?: SlateNormalizer[], draggable: boolean = true) => {
+export const setEditorNormalizers = (baseNodeLevel: number = 1, additionalNormalizers: SlateNormalizer[] = [], draggable: boolean = true) => {
     const options = deriveLevelAwareOptions(baseNodeLevel, draggable)
     const plugins: SlatePlugin[] = basePlugins.map(plugin => plugin(options))
     return [...baseNormalizers, withList(options), withDeserializeHTML({ plugins }), ...additionalNormalizers, ...levelDependentNormalizers(baseNodeLevel)]

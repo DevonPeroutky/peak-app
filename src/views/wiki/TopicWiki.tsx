@@ -81,16 +81,17 @@ const TopicWiki = (props: {topic_id: string}) => {
 
             // If PageTitle changed. Update it in Redux immediately due to Sidebar showing the Title's
             const children: Node[] = newValue[0].children as Node[]
-            const titleNode = Node.string(children[0])
-            if (titleNode !== pageTitle) {
-                setPageTitle(titleNode)
-                updatePageEverywhere(currentWikiPage.id, titleNode)
+            const currentTitle = Node.string(children[0])
+            if (currentTitle !== pageTitle) {
+                setPageTitle(currentTitle)
+                updatePageEverywhere(currentWikiPage.id, currentTitle)
             }
 
-            savePageToDB(newValue, titleNode, currentWikiPage.id);
+            savePageToDB(newValue, currentTitle, currentWikiPage.id);
             onChangeMention(editor);
         }
     }
+
     return (
         <Slate
             editor={editor}
@@ -101,7 +102,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                     key={`${currentPageId}-LinkMenu`}
                     linkState={editorState.currentLinkState}
                     showLinkMenu={editorState.showLinkMenu}
-                    pageId={currentPageId}/>
+                    />
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins

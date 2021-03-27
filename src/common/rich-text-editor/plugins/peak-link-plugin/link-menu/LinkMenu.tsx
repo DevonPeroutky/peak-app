@@ -14,11 +14,10 @@ import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 
 interface LinkMenuProps {
     showLinkMenu: boolean
-    pageId: string
     linkState: PeakHyperlinkState
 }
 const LinkMenu = (props: LinkMenuProps) => {
-    const { showLinkMenu, linkState, pageId } = props
+    const { showLinkMenu, linkState } = props
     const dispatch = useDispatch()
     const searchInputEl = useRef(null);
     const textInputEl = useRef(null);
@@ -246,3 +245,5 @@ const LinkMenu = (props: LinkMenuProps) => {
 // })
 
 export default LinkMenu
+
+// export default React.memo(LinkMenu)

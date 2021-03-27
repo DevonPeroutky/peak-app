@@ -25,6 +25,7 @@ const QuickSwitcher = (props: { isOpen: boolean }) => {
 
     useEffect(() => {
         if (hierarchy) {
+            console.log(`rebuilding the QUICKSWITCHER hierarchy`)
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)

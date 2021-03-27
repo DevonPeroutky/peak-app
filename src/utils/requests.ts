@@ -4,12 +4,13 @@ import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {DisplayPeaker, setUserAccounts} from "../redux/slices/userAccountsSlice";
-import {UserSpecificAppState} from "../redux/rootReducer";
+import {UserSpecificAppState, UserSpecificAppStateResponse} from "../redux/rootReducer";
 import {clone, omit} from "ramda";
 import peakAxiosClient from "../client/axiosConfig";
 import {INITIAL_WIKI_STATE} from "../redux/slices/wikiPageSlice";
 import {INITIAL_PAGE_STATE} from "../constants/editor";
 import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
+import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
 
 // Page
 interface PeakPageParams {
@@ -42,18 +43,20 @@ export function useUserAccounts() {
 
 // Load UserSpecificAppState
 export function fetchUserSpecificAppState(userId: string): Promise<UserSpecificAppState> {
-    return peakAxiosClient.get(`/api/v1/users/${userId}/load-entire-state`).then(res => {
+    return peakAxiosClient.get<UserSpecificAppStateResponse>(`/api/v1/users/${userId}/load-entire-state`).then(res => {
         const fatUser  = res.data
         const emptyWikiState: PeakWikiState = clone(INITIAL_WIKI_STATE)
 
         // 1. Merge with existing: electron, userAccounts, quickSwitch
         // 2. Convert list of pages to peakWikiState
-        const pages: PeakWikiPage[] = fatUser.pages
+        const scratchpad: PeakWikiPage = fatUser.scratchpad
+        const pages: PeakWikiPage[] = [...fatUser.pages, scratchpad]
         const peakWiki: PeakWikiState = pages.reduce(function(map, obj) {
             map[obj.id] = {...INITIAL_PAGE_STATE, ...obj};
             return map;
         }, emptyWikiState);
+        const peakWikiWithScratchpad: PeakWikiState = {...peakWiki, [SCRATCHPAD_ID]: scratchpad}
 
-        return omit(['pages'], {...fatUser, peakWikiState: peakWiki}) as UserSpecificAppState
+        return omit(['pages', 'scratchpad'], {...fatUser, peakWikiState: peakWikiWithScratchpad}) as UserSpecificAppState
     })
 }

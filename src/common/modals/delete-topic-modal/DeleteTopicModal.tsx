@@ -28,7 +28,7 @@ export const DeleteTopicModal = (props: {topicId: string, hovered: boolean}) => 
             dispatch(setUserHierarchy(newHierarchy));
             dispatch(deleteTopic(topic.id))
             message.success("Deleted the topic")
-            history.push('/home/journal')
+            history.push('/home')
         }).catch(() => {
             message.error("Failed to delete the topic")
         })

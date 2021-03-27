@@ -27,7 +27,7 @@ const DesktopLoginDisplay = (props) => {
                 <PeakLogo className={"logged-in-logo"}/>
                 <span>Redirecting to your Peak app...</span>
                 <a href={desktopDeepLinkUrl} target="_blank">If you weren't redirected, click here.</a>
-                <a onClick={() => history.push(`/home/journal`)}>Or, continue in your browser</a>
+                <a onClick={() => history.push(`/home`)}>Or, continue in your browser</a>
             </div>
         </div>
     )

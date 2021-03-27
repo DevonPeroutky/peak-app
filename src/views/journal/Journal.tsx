@@ -287,8 +287,7 @@ const Journal = (props: InternalJournalProps) => {
             <MemoizedLinkMenu
                 key={`${currentPageId}-LinkMenu`}
                 linkState={editorState.currentLinkState}
-                showLinkMenu={editorState.showLinkMenu}
-                pageId={currentPageId}/>
+                showLinkMenu={editorState.showLinkMenu}/>
             <EditablePlugins
                 onKeyDown={[(e, editor) => keyBindingHandler(e, editor)]}
                 onKeyDownDeps={[index, search, target, openLibraryBooks]}

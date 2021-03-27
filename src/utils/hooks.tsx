@@ -31,6 +31,7 @@ import {PeakTopicNode} from "../redux/slices/user/types";
 import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/activeEditor/activeEditorSlice";
 import {useNotes} from "../client/notes";
 import {PeakNote} from "../redux/slices/noteSlice";
+import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -42,6 +43,10 @@ export function useOnlineStatus() {
 
 export function useJournal() {
     return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
+}
+
+export function useScratchpad() {
+    return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[SCRATCHPAD_ID]);
 }
 
 export function useChromeExtEditorState() {
@@ -126,15 +131,6 @@ export function useCurrentPage() {
     }
 }
 
-export function useCurrentPageContent() {
-    const notes = useNotes()
-    const peakWikiState: PeakWikiState = useSelector<AppState, PeakWikiState>(state => state.peakWikiState);
-
-    return (pageId: string) => {
-
-    }
-}
-
 // --------------------------------------------------
 // General Purpose
 // --------------------------------------------------
@@ -181,7 +177,7 @@ export const useDetermineNextLink = () => {
         const pageIndex = allPages.findIndex(p => p.id === pageId);
 
         if (pageIndex < 1) {
-            return `/home/journal`
+            return `/home`
         } else {
             const newPage: PeakPage = allPages[pageIndex - 1];
             const topic = topics.find(t => t.pages.find(p => p.id === newPage.id) !== undefined)!;
