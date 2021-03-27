@@ -247,3 +247,5 @@ const LinkMenu = (props: LinkMenuProps) => {
 // })
 
 export default LinkMenu
+
+// export default React.memo(LinkMenu)

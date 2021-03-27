@@ -177,7 +177,7 @@ export const useDetermineNextLink = () => {
         const pageIndex = allPages.findIndex(p => p.id === pageId);
 
         if (pageIndex < 1) {
-            return `/home/journal`
+            return `/home`
         } else {
             const newPage: PeakPage = allPages[pageIndex - 1];
             const topic = topics.find(t => t.pages.find(p => p.id === newPage.id) !== undefined)!;

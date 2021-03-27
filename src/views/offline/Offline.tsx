@@ -11,7 +11,7 @@ export const PeakOffline = (props: {}) => {
     useEffect(() => {
         if (isOnline) {
             console.log(`GOING BACK TO THE JOURNAL`)
-            history.push("/home/journal");
+            history.push("/home");
         }
     })
 

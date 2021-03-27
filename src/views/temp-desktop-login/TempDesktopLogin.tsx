@@ -13,7 +13,7 @@ export const TempDesktopLogin = (props: { }) => {
     const loadEverything: () => Promise<void> = () => loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
 
     if (isLoading) {
-        history.push(`/home/journal`)
+        history.push(`/home`)
     }
 
     return (

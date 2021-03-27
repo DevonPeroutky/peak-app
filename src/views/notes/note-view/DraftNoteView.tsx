@@ -25,7 +25,7 @@ export const PeakDraftNoteView = (props) => {
 
     if (!titleParam && !authorParam) {
         message.error("Something went wrong! Tell Devon")
-        history.push(`/home/journal`)
+        history.push(`/home`)
     }
 
     const author = (authorParam === "undefined") ? "" : authorParam

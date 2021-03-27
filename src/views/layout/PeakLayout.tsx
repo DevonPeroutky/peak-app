@@ -99,7 +99,7 @@ const PeakLayout = (props: {}) => {
                                         return <Redirect to={"/"} />
                                     }
                                 }}/>
-                                <Route path={`${match.path}/`} render={(props) => <PeakJournal/>} />
+                                <Route path={`${match.path}/`} render={(props) => <PeakScratchpad/>} />
                                 <Route path="*">
                                     <h1>NOT FOUND</h1>
                                 </Route>
