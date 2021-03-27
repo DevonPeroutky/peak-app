@@ -14,11 +14,10 @@ import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 
 interface LinkMenuProps {
     showLinkMenu: boolean
-    pageId: string
     linkState: PeakHyperlinkState
 }
 const LinkMenu = (props: LinkMenuProps) => {
-    const { showLinkMenu, linkState, pageId } = props
+    const { showLinkMenu, linkState } = props
     const dispatch = useDispatch()
     const searchInputEl = useRef(null);
     const textInputEl = useRef(null);
@@ -199,6 +198,7 @@ const LinkMenu = (props: LinkMenuProps) => {
     };
 
     const linkMenuContent = (linkId: string) => {
+        console.log(`Re-RENDERING The link menu content?!?!??!`)
         return (isEditing) ?
             <div className="link-editing-input-container">
                 <div className="link-input-container bordered">
@@ -234,6 +234,7 @@ const LinkMenu = (props: LinkMenuProps) => {
             </div> : <DisplayLinkMenu clearLink={clearLink} url={url} setEditing={setEditing}/>
     }
 
+    console.log(`RE=RENDERING LINK MENU `, props)
     return (
         <div ref={ref} className={"link-menu-popover"} onKeyDown={closeOnEscapeHandler}>
             {linkMenuContent(linkState.currentHyperLinkId)}

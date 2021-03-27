@@ -25,11 +25,7 @@ import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
 import {drop, equals, sort} from "ramda";
-import {JournalEntry} from "../../../../common/rich-text-editor/editors/journal/types";
 import {useDispatch} from "react-redux";
-import {journalOrdering} from "../../../../redux/slices/wikiPageSlice";
-import {convertJournalEntryToSlateNodes} from "../../../../common/rich-text-editor/editors/journal/utils";
-import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -121,7 +117,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
                     key={`${currentPageId}-LinkMenu`}
                     linkState={editorState.currentLinkState}
                     showLinkMenu={editorState.showLinkMenu}
-                    pageId={currentPageId}/>
+                    />
                 <div className={"rich-text-editor-container"}>
                     <EditablePlugins
                         onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}

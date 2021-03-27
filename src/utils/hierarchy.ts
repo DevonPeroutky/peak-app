@@ -91,11 +91,10 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 // Exported Functions
 // --------------------------------------------
 export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], notes: PeakNote[]): PeakDisplayNode[] {
-    console.log(`REBUILDING THE HIERARCHY`)
     const journalNode: PeakDisplayNode = {
-        title: "Journal",
-        url: "/home/journal",
-        header_type: "journal"
+        title: "Scratchpad",
+        url: "/home/scratchpad",
+        header_type: "scratchpad"
     }
     const noteNodes: PeakDisplayNode[] = notes.map(n => ({
         title: n.title,

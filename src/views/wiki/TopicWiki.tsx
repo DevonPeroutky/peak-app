@@ -101,7 +101,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                     key={`${currentPageId}-LinkMenu`}
                     linkState={editorState.currentLinkState}
                     showLinkMenu={editorState.showLinkMenu}
-                    pageId={currentPageId}/>
+                    />
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
                     <EditablePlugins

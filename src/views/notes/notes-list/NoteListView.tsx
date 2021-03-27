@@ -6,10 +6,7 @@ import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
 import {Link} from "react-router-dom";
 import {deriveHostname} from "../../../utils/urls";
-import {
-    ELEMENT_PEAK_BOOK,
-    ELEMENT_WEB_NOTE
-} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import { ELEMENT_PEAK_BOOK, ELEMENT_WEB_NOTE } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";

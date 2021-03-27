@@ -1,8 +1,8 @@
-import React, {useCallback, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import "./scratchpad.scss"
 import { useDispatch } from "react-redux";
 import { Slate, ReactEditor } from "slate-react";
-import { createEditor, Node } from "slate";
+import {createEditor, Editor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useCurrentUser, useScratchpad} from '../../utils/hooks';
 import { equals } from "ramda";
@@ -14,6 +14,7 @@ import { beginSavingPage, useActiveEditorState } from "../../redux/slices/active
 import { scratchpadNormalizers, scratchpadPlugins } from "../../common/rich-text-editor/editors/scratchpad/config";
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
+import {sleep} from "../../chrome-extension/utils/generalUtil";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -23,6 +24,14 @@ export const PeakScratchpad = (props: {}) => {
     const reduxScratchpad = useScratchpad();
 
     const [scratchPadContent, setScratchpadContent] = useState<Node[]>(reduxScratchpad.body as Node[])
+
+    // Why the fuck is this needed
+    useEffect(() => {
+        sleep(100).then(() => {
+            Transforms.select(editor, Editor.end(editor, []));
+            ReactEditor.focus(editor)
+        })
+    }, [])
 
     // PeakInlineSelect nonsense
     const {
@@ -58,6 +67,7 @@ export const PeakScratchpad = (props: {}) => {
             onChangeMention(editor);
         }
     }
+
     return (
         <div className={"scratchpad-container"}>
             <h1 className={"peak-page-title"}>Scratchpad</h1>
@@ -70,7 +80,7 @@ export const PeakScratchpad = (props: {}) => {
                         key={`${reduxScratchpad.id}-LinkMenu`}
                         linkState={editorState.currentLinkState}
                         showLinkMenu={editorState.showLinkMenu}
-                        pageId={reduxScratchpad.id}/>
+                        />
                     <div className={"rich-text-editor-container"}>
                          <EditablePlugins
                              onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
