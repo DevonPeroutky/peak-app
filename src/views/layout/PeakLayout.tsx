@@ -17,7 +17,7 @@ import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {establishSocketConnection} from "../../utils/socketUtil";
+import {establishSocketConnection, socket} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
 import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
@@ -28,7 +28,7 @@ import {
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
-import {useWebNoteSubscription} from "../../common/rich-text-editor/editors/journal/hooks";
+import {setupUserSocketChannels} from "../../common/rich-text-editor/editors/journal/hooks";
 const { Content } = Layout;
 
 const PeakLayout = (props: {}) => {
@@ -40,7 +40,10 @@ const PeakLayout = (props: {}) => {
     const history = useHistory()
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
-    const _ = useWebNoteSubscription()
+
+    useEffect(() => {
+        setupUserSocketChannels(currentUser.id)
+    }, [currentUser])
 
     useEffect(() => {
         if (!isOnline) {

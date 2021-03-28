@@ -48,10 +48,6 @@ export function subscribeToTopic(socket: Socket, topicName: string): Channel {
     return channel
 }
 
-export function useSocket() {
-    return socket
-}
-
 export function useUserChannel() {
     return (userId: string) => socket.channel(`journal:${userId}`)
 }
