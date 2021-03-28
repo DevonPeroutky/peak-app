@@ -7,6 +7,10 @@ import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
 import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
 import { useHistory } from "react-router-dom";
+import {useUserChannel, useSocket} from "./socketUtil";
+import {Channel, Socket} from "phoenix";
+import {useCurrentUser} from "./hooks";
+import {Peaker} from "../types";
 
 export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
     return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
@@ -35,14 +39,30 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
 export const useAccountSwitcher = () => {
     const dispatch = useDispatch()
     const history = useHistory()
+    const socket: Socket = useSocket()
+    const getUserChannel = useUserChannel()
+
+    // TODO: Close current socket connection!
+    // Switch the current User
+    // 1. Put current userState in localstorage
+    // 2. Load the "destined" user state into redux
+    // 3. Close the current Socket
+    // 4. Open a new socket for the "destined" user state.
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
+        const userChannel = getUserChannel(currentAccountId)
+
+        console.log(`CURRENT SOCKET for ${currentAccountId}: `, socket )
+        console.log(`Leaving the socket!`)
+        userChannel.leave()
+        console.log(`Socket `, socket)
+
         if (selectedAccount.id !== currentAccountId) {
             // @ts-ignore
             document.activeElement.blur()
             await syncCurrentStateToLocalStorage(currentAccountId)
             await dispatch(switch_user_accounts(selectedAccount))
-            // window.history.pushState({}, null, "#/home/journal")
-            history.push("/")
+            window.history.pushState({}, null, "#/home/scratchpad")
+            // history.push("/")
         }
     }
 }

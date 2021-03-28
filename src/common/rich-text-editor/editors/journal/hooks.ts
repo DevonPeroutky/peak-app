@@ -3,10 +3,6 @@ import {JournalEntry} from "./types";
 import {useCurrentUser} from "../../../../utils/hooks";
 import {batch, useDispatch} from "react-redux";
 import {useEffect} from "react";
-import {AppState} from "../../../../redux";
-import {store} from "../../../../redux/store";
-import {JOURNAL} from "../../types";
-import {updateJournalEntry} from "../../../../redux/slices/wikiPageSlice";
 import {deleteNote, upsertNote} from "../../../../redux/slices/noteSlice";
 import {
     socket,
@@ -26,6 +22,7 @@ export const useWebNoteSubscription = () => {
     const user = useCurrentUser()
     const dispatch = useDispatch()
     const currentUserAccountId = user.id
+    console.log(`CURRENT USER: `, user)
 
     useEffect(() => {
         console.log(`Subscribing to journal for ${currentUserAccountId}`, socket)
@@ -43,6 +40,8 @@ export const useWebNoteSubscription = () => {
 
             channel.on("web_note_created", res => {
                 console.log(`Received nodes of web_note from backend broadcast`, res)
+                console.log(`Subscribing Current Active user (${currentUserAccountId}): `, user)
+
                 const newlyCreatedNote: PeakNote = res.note
                 const tags: PeakTag[] = res.tags
                 // const appState: AppState = store.getState()
@@ -53,8 +52,13 @@ export const useWebNoteSubscription = () => {
                     dispatch(addTags(tags))
                 })
             })
+
+            channel.onClose(res => {
+                console.log(`CHANNEL IS BEING CLOSED ${currentUserAccountId}!!!!`, res)
+            })
         } else {
             console.error(`NO SOCKET?!?!??!?!`)
         }
     }, [currentUserAccountId, socket]);
 }
+

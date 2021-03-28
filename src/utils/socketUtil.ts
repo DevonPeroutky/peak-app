@@ -41,7 +41,17 @@ export function subscribeToTopic(socket: Socket, topicName: string): Channel {
     channel.join()
         .receive("error", err => console.log("ERROR TRYING TO JOINNNNN", err))
         .receive("timeout", () => console.log("Timeout error"))
-    channel.onClose(() => console.log("Closed for Business"))
+    channel.onClose((payload, ref, joinRef) => {
+        console.log("Closed for Business, ", payload)
+    })
     channel.on("end_session", payload => channel.leave())
     return channel
+}
+
+export function useSocket() {
+    return socket
+}
+
+export function useUserChannel() {
+    return (userId: string) => socket.channel(`journal:${userId}`)
 }

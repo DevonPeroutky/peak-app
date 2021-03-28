@@ -19,7 +19,7 @@
     "extension:publish": "./scripts/chrome-extension/publish.sh",
     "start": "PORT=3001 REACT_APP_DIST=webapp REACT_APP_ENV=dev react-scripts start",
     "build": "REACT_APP_DIST=webapp REACT_APP_ENV=prod react-scripts build",
-    "electron:dev": "concurrently \"BROWSER=none REACT_APP_DIST=electron REACT_APP_ENV=dev react-scripts start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "electron:dev": "concurrently \"BROWSER=none REACT_APP_DIST=electron REACT_APP_ENV=dev react-scripts start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && BROWSER=none REACT_APP_DIST=electron REACT_APP_ENV=dev electron .\"",
     "dev": "concurrently \"yarn start\" \"yarn electron:dev\"",
     "electron:build": "REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com REACT_APP_DIST=electron REACT_APP_ENV=prod react-scripts build && tsc -p electron && electron-builder",
     "electron:publish": "REACT_APP_BACKEND_SERVER_ADDRESS=peak-backend.onrender.com REACT_APP_APP_SERVER_ADDRESS=peak-app-server.onrender.com REACT_APP_DIST=electron REACT_APP_ENV=prod react-scripts build && tsc -p electron && electron-builder --publish=always",

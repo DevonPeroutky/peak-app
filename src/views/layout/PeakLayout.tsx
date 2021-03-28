@@ -40,8 +40,7 @@ const PeakLayout = (props: {}) => {
     const history = useHistory()
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
-
-    useWebNoteSubscription()
+    const _ = useWebNoteSubscription()
 
     useEffect(() => {
         if (!isOnline) {

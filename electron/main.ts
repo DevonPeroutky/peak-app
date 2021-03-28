@@ -10,7 +10,7 @@ const protocol = config.electron_protocol;
 // on macOS: ~/Library/Logs/{app name}/{process type}.log
 const log = require('electron-log');
 
-console.log(`Is Dev? ${isDev}`)
+console.log(`Configuration :`, config)
 console.log(`Dist ${process.env.REACT_APP_DIST}`)
 
 let mainWindow: BrowserWindow | null = null;
