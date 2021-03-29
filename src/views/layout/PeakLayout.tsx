@@ -10,7 +10,7 @@ import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentPage, useOnlineStatus, useCurrentPageId, useIsFullscreen} from "../../utils/hooks";
+import {useCurrentUser, useCurrentPage, useOnlineStatus, useIsFullscreen} from "../../utils/hooks";
 import animationData from '../../assets/animations/mountain-with-sun.json';
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";

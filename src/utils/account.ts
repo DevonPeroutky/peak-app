@@ -9,8 +9,9 @@ export const useAccountSwitcher = () => {
     const history = useHistory()
 
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
-        console.log(`useAccountSwitcher() has been called!!!!`)
-        return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push("/"))
+        // console.log(`useAccountSwitcher() has been called!!!!`)
+        // return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push("/"))
+        history.push(`/switch-accounts?curr-user-id=${currentAccountId}&dest-user-id=${selectedAccount.id}`)
     }
 }
 

@@ -11,7 +11,8 @@ export const InterLoadingAnimation = (props) => {
     const history = useHistory()
     const loadingAction: string | null = query.get("action")
 
-    return <Loading callback={navigateCallback} thePromised={} animationData={}/>
+    // return <Loading callback={navigateCallback} thePromised={} animationData={}/>
+    return <div>Loading</div>
 }
 
 const deriveProps = (action: string, history) => {

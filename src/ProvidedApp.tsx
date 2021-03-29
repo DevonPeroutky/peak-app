@@ -18,8 +18,7 @@ import {useSelector} from "react-redux";
 import {AppState} from "./redux";
 import cn from "classnames"
 import {LOGIN_FLOW} from "./constants/types";
-import {InterLoadingAnimation} from "./views/intermediate-loading-animation/InterLoadingAnimation";
-import {Loading} from "./views/loading/Loading";
+import {SwitchAccountsAction} from "./views/intermediate-loading-animation/switch-accounts/SwitchAccountsAction";
 
 const ProvidedApp = (props: {}) => {
     const userAccounts: DisplayPeaker[] = useUserAccounts()
@@ -50,7 +49,8 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/temp-desktop-login">
                         <TempDesktopLogin/>
                     </Route>
-                    <Route path="/switching-accounts">
+                    <Route path="/switch-accounts">
+                        <SwitchAccountsAction/>
                     </Route>
                     <AuthedRoute>
                         <Switch>
