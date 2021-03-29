@@ -3,7 +3,12 @@ import animationData from '../../assets/animations/mountain-with-sun.json';
 import {Lottie} from "@crello/react-lottie";
 import "./loading.scss"
 
-export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void, thePromised: () => Promise<any>}) => {
+export interface LoadingAnimationProps {
+    isLoadingCallback: (isLoading: boolean) => void
+    thePromised: () => Promise<any>
+}
+
+export const Loading = (props: LoadingAnimationProps) => {
     const [loaded, setLoaded] = useState(true);
     const { thePromised, isLoadingCallback } = props;
 
