@@ -11,13 +11,14 @@ import { updateMessageInPlace } from "../../../../../../../../chrome-extension/c
 import {FOCUS_STATE} from "../../../../../../../../chrome-extension/constants/constants";
 const { Option } = Select;
 
-/**
- * - Show Tag Icon or not?
- * - optional event handlers inputs
- * @param props
- * @constructor
- */
-export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], existing_tags: PeakTag[], setSelectedTags: (tags: PeakTag[]) => void, forceClose?: boolean }) => {
+export interface ChromeExtensionTagSelectProps {
+    tabId: number,
+    selected_tags: PeakTag[],
+    existing_tags: PeakTag[],
+    setSelectedTags: (tags: PeakTag[]) => void,
+    forceClose?: boolean
+}
+export const TagSelect = (props: ChromeExtensionTagSelectProps) => {
     const { tabId, selected_tags, setSelectedTags, existing_tags, forceClose } = props
     const mainRef = useRef(null);
     const [open, setDropdownState] = useState(false);
@@ -121,7 +122,7 @@ export const TagSelect = (props: { tabId: number, selected_tags: PeakTag[], exis
                         onSelect={onSelect}
                         dropdownClassName={cn("peak-tag-select-dropdown", (open) ? "" : "closed")}
                         onDeselect={onDeselect}
-                        notFoundContent={<span>No more tags.</span>}
+                        notFoundContent={<span>No tags.</span>}
                         tagRender={tagRender}
                         style={{ width: '100%' }}>
                         {renderedTagList.map(tag => (

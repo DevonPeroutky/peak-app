@@ -19,3 +19,9 @@ export interface Peaker {
     hierarchy: PeakTopicNode[]
 }
 
+export enum RELOAD_REASON {
+    recover,
+    switch_accounts,
+    default
+}
+

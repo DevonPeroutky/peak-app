@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {PeakNote} from "../../../redux/slices/noteSlice";
-import {useNotes} from "../../../client/notes";
+import {loadPeakNotes, useNotes} from "../../../client/notes";
 import {List, message, Popconfirm} from "antd";
 import {BookOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
 import "./note-list-view.scss"
@@ -12,10 +12,16 @@ import { capitalize } from 'lodash';
 import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 import {buildNoteUrl} from "../../../utils/notes";
+import {useCurrentUser} from "../../../utils/hooks";
 
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
     const { page_header, note_type } = props
+    const currentUser = useCurrentUser()
     const notes: PeakNote[] = useNotes().filter(n => n.note_type === note_type)
+
+    useEffect(() => {
+        loadPeakNotes(currentUser.id)
+    }, [])
 
     return (
         <div className={"notes-container"}>

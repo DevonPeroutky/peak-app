@@ -1,12 +1,12 @@
 import {fetchUserSpecificAppState, loadAllUserAccounts} from "./requests";
 import {useDispatch} from "react-redux";
 import {DisplayPeaker} from "../redux/slices/userAccountsSlice";
-import {syncCurrentStateToLocalStorage, writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
+import { writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
 import {store} from "../redux/store";
 import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
-import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
-import { useHistory } from "react-router-dom";
+import {load_active_user} from "../redux/rootReducer";
+import {useAccountSwitcher} from "./account";
 
 export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
     return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
@@ -30,21 +30,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
         console.log(`DID NOT successfully load the accounts for user: ${ogUserId}`)
         console.log(err)
     })
-}
-
-export const useAccountSwitcher = () => {
-    const dispatch = useDispatch()
-    const history = useHistory()
-    return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
-        if (selectedAccount.id !== currentAccountId) {
-            // @ts-ignore
-            document.activeElement.blur()
-            await syncCurrentStateToLocalStorage(currentAccountId)
-            await dispatch(switch_user_accounts(selectedAccount))
-            // window.history.pushState({}, null, "#/home/journal")
-            history.push("/")
-        }
-    }
 }
 
 export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAccounts: DisplayPeaker[]}) => {

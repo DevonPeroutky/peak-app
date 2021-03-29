@@ -10,7 +10,7 @@ const protocol = config.electron_protocol;
 // on macOS: ~/Library/Logs/{app name}/{process type}.log
 const log = require('electron-log');
 
-console.log(`Is Dev? ${isDev}`)
+console.log(`Configuration :`, config)
 console.log(`Dist ${process.env.REACT_APP_DIST}`)
 
 let mainWindow: BrowserWindow | null = null;
@@ -135,7 +135,7 @@ app.whenReady().then(() => {
       createWindow();
     }
 
-    mainWindow && mainWindow.webContents.send('go-to-journal')
+    mainWindow && mainWindow.webContents.send('go-to-scratchpad')
     // mainWindow && mainWindow.focus()
     // mainWindow && mainWindow.webContents.focus()
     mainWindow && mainWindow.show()
@@ -194,7 +194,12 @@ ipcMain.on('uncaughtException', function(event, data){
   log.error("Uncaught Exception in the renderer process ", data)
   if (mainWindow) {
     log.error("Reloading the renderer window.")
-    mainWindow.reload()
+
+    mainWindow.webContents.send('recover', false)
+    new Promise(resolve =>
+        setTimeout(resolve, 200))
+        .then(_ => mainWindow && mainWindow.reload()
+    );
   } else {
     log.error("Trying to reload the renderer window but there's no BrowserWindow?!?!?!?")
   }

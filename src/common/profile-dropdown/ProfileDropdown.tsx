@@ -9,8 +9,8 @@ import {EXISTING_PEAK_USER_ID} from "../../constants/constants";
 import {useUserAccounts} from "../../utils/requests";
 import {DisplayPeaker} from "../../redux/slices/userAccountsSlice";
 import { capitalize } from "lodash";
-import {useAccountSwitcher} from "../../utils/loading-util";
 import {isElectron} from "../../utils/environment";
+import {useAccountSwitcher} from "../../utils/account";
 
 export const ProfileDropdown = (props: {}) => {
     const user = useCurrentUser()

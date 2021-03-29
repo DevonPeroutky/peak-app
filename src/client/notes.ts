@@ -20,6 +20,7 @@ import {
 } from "../common/rich-text-editor/plugins/peak-note-stub-plugin/types";
 import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
 import {deleteNoteRequest} from "./webNotes";
+import {AxiosResponse} from "axios";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -53,6 +54,9 @@ function updateNoteRequest(userId: string, noteId: string, book: UpdateNotePaylo
 function fetchNotesRequest(userId: string) {
     return peakAxiosClient.get(`/api/v1/users/${userId}/books`)
 }
+export function fetchNewestNote(user: Peaker): Promise<PeakNote> {
+    return peakAxiosClient.get<{book: PeakNote}>(`/api/v1/users/${user.id}/fetch-latest-note?peak_user_id=${user.peak_user_id}`).then(res => res.data.book)
+}
 
 export function deletePeakNote(userId: string, noteId: string): Promise<string> {
     return deleteNoteRequest(userId, noteId).then(res => {
@@ -68,7 +72,7 @@ export function deletePeakNote(userId: string, noteId: string): Promise<string> 
 // Requests + Reduxs
 export function loadPeakNotes(userId: string) {
     return fetchNotesRequest(userId).then(res => {
-        const books = res.data.book as PeakNote[]
+        const books = res.data.books as PeakNote[]
         store.dispatch(setNotes(books))
     }).catch(err => {
         console.log(`DID NOT successfully load the books for user: ${userId}`)

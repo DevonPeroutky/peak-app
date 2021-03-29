@@ -17,16 +17,20 @@ import {
     setOffline,
     setOnline
 } from "./redux/slices/electronSlice";
-import {buildNoteUrl, fetchNewestNote} from "./utils/notes";
+import {buildNoteUrl, newestNodeAcrossAllAcounts, waitForNoteToBeAdded} from "./utils/notes";
+import {currentUserInRedux, getUserAccount} from "./redux/utils";
+import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
+import {switchAccountsOutsideOfRouter} from "./utils/account";
+import {RELOAD_REASON} from "./types";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
 if (isElectron) {
     serviceWorker.register();
-    console.log(`Electron context. Attaching listeners onto the renderer.tsx!`)
     const { ipcRenderer } = window.require('electron');
 
     const journalHash = `#/home/journal`
+    const recoverHash = `#/home/scratchpad?reload-reason=${RELOAD_REASON.recover}`
     const scratchpadHash = `#/home/scratchpad`
     const welcomeHash = `#/welcome`
     const offlineHash = `#/offline`
@@ -55,15 +59,42 @@ if (isElectron) {
         return (arg) ? store.dispatch(enterFullscreen()) : store.dispatch(leaveFullscreen())
     })
 
-    ipcRenderer.on('go-to-journal', (event, arg) => {
-        console.log(`GOING TO THE JOURNAL`)
+    ipcRenderer.on('go-to-scratchpad', (event, arg) => {
+        console.log(`GOING TO Home`)
         window.location.hash = scratchpadHash
         store.dispatch(journalHotkeyPressed())
     })
 
     ipcRenderer.on('open-note', (event, arg) => {
-        const note = fetchNewestNote()
-        window.location.hash = `#${buildNoteUrl(note.id)}`
+        newestNodeAcrossAllAcounts().then(note => {
+            const currentUser: Peaker = currentUserInRedux()
+            console.log(`NAVIGATE TO NOTE `, note)
+            store.getState()
+            if (!note) {
+                console.warn(`Did not find any notes?`)
+                return
+            }
+
+            if (note.user_id === currentUser.id) {
+                window.location.hash = `#${buildNoteUrl(note.id)}`
+            } else  {
+                const desiredPeakAccount: DisplayPeaker = getUserAccount(note.user_id)
+                if (desiredPeakAccount) {
+                    switchAccountsOutsideOfRouter(currentUser.id, desiredPeakAccount, () => {
+                        waitForNoteToBeAdded(note).then(_ => {
+                            window.location.hash = `#${buildNoteUrl(note.id)}`
+                        })
+                    })
+                } else {
+                    console.error(`Failed to find a Peak Account w/id: ${note.user_id}`)
+                }
+            }
+        })
+    })
+
+    ipcRenderer.on(`recover`, (event, arg) => {
+        console.log(`RECOVERING`)
+        window.location.hash = recoverHash
     })
 
     // -----------------------------

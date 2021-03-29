@@ -67,8 +67,16 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
             }).catch(err => {
                 sleep(500)
                     .then(() => {
-                        if (err.response.status === 401) {
+                        if (err.response && err.response.status === 401) {
                             sendUnauthedMessageToUser(submitNodeMessage.tabId)
+                        } else if (err.response && err.response.status === 409) {
+                            sendMessageToUser(
+                                submitNodeMessage.tabId,
+                                "error",
+                                "Failed to save your bookmark",
+                                "Creating your tags threw an exception. Tell Devon",
+                                3
+                            )
                         } else {
                             sendMessageToUser(
                                 submitNodeMessage.tabId,

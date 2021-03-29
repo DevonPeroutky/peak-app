@@ -13,6 +13,7 @@ export interface PeakNote {
     tag_ids: string[]
     body: Node[]
     url: string
+    user_id: string
     author?: string
     inserted_at?: string
     updated_at?: string

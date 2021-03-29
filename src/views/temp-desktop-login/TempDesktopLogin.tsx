@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import {Loading} from "../loading/Loading";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 import {useCurrentUser} from "../../utils/hooks";
+import animationData from "../../assets/animations/mountain-with-sun.json";
 import "./temp-desktop-login.scss"
 
 export const TempDesktopLogin = (props: { }) => {
@@ -17,6 +18,6 @@ export const TempDesktopLogin = (props: { }) => {
     }
 
     return (
-        <Loading isLoadingCallback={setLoading} thePromised={loadEverything}/>
+        <Loading callback={() => setLoading(false)} thePromised={loadEverything} animationData={animationData}/>
     )
 };

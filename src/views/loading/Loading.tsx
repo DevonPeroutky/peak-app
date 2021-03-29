@@ -1,13 +1,24 @@
-import React, {useEffect, useState} from "react";
-import animationData from '../../assets/animations/mountain-with-sun.json';
-import {Lottie} from "@crello/react-lottie";
+import React, {useCallback, useEffect, useState} from "react";
+import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
+import cn from "classnames"
 import "./loading.scss"
 
-export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void, thePromised: () => Promise<any>}) => {
-    const [loaded, setLoaded] = useState(true);
-    const { thePromised, isLoadingCallback } = props;
+export interface AnimationConfig {
+    animationData: any
+    speed?: number
+    className?: string
+}
 
-    const defaultConfig = {
+export interface LoadingAnimationProps extends AnimationConfig {
+    callback: () => void
+    thePromised: () => Promise<any>
+}
+
+export const Loading = (props: LoadingAnimationProps) => {
+    const [loaded, setLoaded] = useState(true);
+    const { thePromised, callback, animationData, className, speed } = props;
+
+    const defaultConfig: ReactLottieConfig = {
         autoplay: true,
         loop: true,
         animationData: animationData,
@@ -18,17 +29,17 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
 
     useEffect(() => {
         thePromised().then(res => {
-            setLoaded(true);
+            setLoaded(true)
         })
     }, []);
 
-    const isLoading = () => {
+    const isLoading = useCallback(() => {
         return loaded
-    };
+    }, [loaded]);
 
     return (
-        <div className={"peak-loader"}>
-            <Lottie config={defaultConfig} height="400px" width="400px" speed={2.5} lottieEventListeners={[
+        <div className={cn("peak-loader", className ? className : "")}>
+            <Lottie config={defaultConfig} height="400px" width="400px" speed={speed | 2.5} lottieEventListeners={[
                 {
                     name: 'complete',
                     callback: () => {
@@ -38,8 +49,10 @@ export const Loading = (props: { isLoadingCallback: (isLoading: boolean) => void
                 {
                     name: 'loopComplete',
                     callback: () => {
+                        console.log(`Loop has completed!`)
                         if (isLoading()) {
-                            isLoadingCallback(false);
+                            console.log(`Loop has completed and we are done!`)
+                            callback();
                         }
                     }
                 },
