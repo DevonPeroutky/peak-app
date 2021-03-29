@@ -90,6 +90,10 @@ if (isElectron) {
         })
     })
 
+    ipcRenderer.on(`recover`, (event, arg) => {
+
+    })
+
     // -----------------------------
     // Update Online/Offline Status
     // -----------------------------

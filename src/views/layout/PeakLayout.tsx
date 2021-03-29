@@ -7,7 +7,7 @@ import {Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-do
 import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
-import {Loading} from "../loading/Loading";
+import {AnimationConfig, Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentPage, useIsFullscreen, useOnlineStatus} from "../../utils/hooks";
@@ -37,18 +37,18 @@ import {useQuery} from "../../utils/urls";
 
 const { Content } = Layout;
 
-const determineAnimationData = (reason: RELOAD_REASON) => {
+function determineAnimationData (reason: RELOAD_REASON): AnimationConfig {
     // @ts-ignore
     const fuck = RELOAD_REASON[reason] as RELOAD_REASON
     switch (fuck) {
         case RELOAD_REASON.default:
-            return defaultMountainAnimation
+            return { animationData: defaultMountainAnimation }
         case RELOAD_REASON.recover:
-            return recoverAnimation
+            return { animationData: recoverAnimation }
         case RELOAD_REASON.switch_accounts:
-            return switchAccountAnimation
+            return { animationData: switchAccountAnimation, speed: 3 }
         default:
-            return defaultMountainAnimation
+            return { animationData: defaultMountainAnimation }
     }
 }
 
@@ -60,7 +60,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
     const query = useQuery();
     const [isLoading, setLoading] = useState(true);
     const [reloadType, setReloadType] = useState(RELOAD_REASON.default)
-    const [animationData, setAnimationData] = useState<any>(defaultMountainAnimation)
+    const [animationData, setAnimationData] = useState<AnimationConfig>({ animationData: defaultMountainAnimation })
     const reloadReasonParam: RELOAD_REASON | null = RELOAD_REASON[query.get("reload-reason")]
 
     const currentWikiPage = useCurrentPage();
@@ -114,7 +114,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
     if (isLoading) return <Loading callback={() => {
         setLoading(false)
         history.push(`/home`)
-    }} thePromised={loadEverything} animationData={animationData}/>
+    }} thePromised={loadEverything} animationData={animationData.animationData} speed={animationData.speed}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

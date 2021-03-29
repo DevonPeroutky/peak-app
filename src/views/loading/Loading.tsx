@@ -3,7 +3,7 @@ import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
 import cn from "classnames"
 import "./loading.scss"
 
-interface AnimationConfig {
+export interface AnimationConfig {
     animationData: any
     speed?: number
     className?: string
