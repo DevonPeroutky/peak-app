@@ -17,10 +17,11 @@ import {
     setOffline,
     setOnline
 } from "./redux/slices/electronSlice";
-import {buildNoteUrl, newestNodeAcrossAllAcounts} from "./utils/notes";
+import {buildNoteUrl, newestNodeAcrossAllAcounts, waitForNoteToBeAdded} from "./utils/notes";
 import {currentUserInRedux, getUserAccount} from "./redux/utils";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {switchAccountsOutsideOfRouter} from "./utils/account";
+import { upsertNote } from './redux/slices/noteSlice';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -80,7 +81,9 @@ if (isElectron) {
                 const desiredPeakAccount: DisplayPeaker = getUserAccount(note.user_id)
                 if (desiredPeakAccount) {
                     switchAccountsOutsideOfRouter(currentUser.id, desiredPeakAccount, () => {
-                        window.location.hash = `#${buildNoteUrl(note.id)}`
+                        waitForNoteToBeAdded(note).then(_ => {
+                            window.location.hash = `#${buildNoteUrl(note.id)}`
+                        })
                     })
                 } else {
                     console.error(`Failed to find a Peak Account w/id: ${note.user_id}`)
