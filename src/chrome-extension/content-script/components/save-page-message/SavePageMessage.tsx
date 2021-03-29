@@ -72,7 +72,6 @@ export const openMessage = (props: SavedPageProps) => {
     const duration = deriveDuration(saving, editingState, focusState)
     const deletePage = buildDeletePageCalback(tabId, userId, noteId)
     const goBack = () => updateMessageInPlace(tabId, { editingState: EDITING_STATE.NotEditing } )
-    console.log(`ReRendering Message: `, props)
     notification.open({
         message: <SavePageHeaderContent saving={saving} editing={editingState} sendDeletePageMessage={deletePage} goBack={goBack}/>,
         className: cn('peak-saved-page-message', (editingState === EDITING_STATE.Editing) ? "drawer-mode" : ""),
@@ -145,6 +144,7 @@ export function updateSavePageMessage(createdNoteMessage: SuccessfullyCreatedNot
     getItem(null, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
         const tags: PeakTag[] = data[TAGS_KEY] as PeakTag[]
+        console.log(`Tags at this point in Time: `, tags)
 
         const editingState = (activeTab && activeTab.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
@@ -183,7 +183,6 @@ export const closeMessage = (tabId: number) => {
 }
 
 function buildDeletePageCalback(tabId: number, userId: string, noteId: string): () => void {
-    console.log(`Rebuilding Page Callback with nId `, noteId)
     return () => {
         updateMessageInPlace(tabId, { editingState: EDITING_STATE.Deleting })
         sendDeletePageMessage(tabId, userId, noteId)

@@ -34,12 +34,12 @@ import {PeakExtensionLoginBody, PeakExtensionLoginHeader} from "./components/log
 // ---------------------------------------------------
 // Debugging state changes
 // ---------------------------------------------------
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-    for (const key in changes) {
-        const storageChange = changes[key];
-        console.log(`Storage key ${key} changed. Old value was ${JSON.stringify(storageChange.oldValue)}, new value is: ${JSON.stringify(storageChange.newValue)}`);
-    }
-});
+// chrome.storage.onChanged.addListener(function(changes, namespace) {
+//     for (const key in changes) {
+//         const storageChange = changes[key];
+//         console.log(`Storage key ${key} changed. Old value was ${JSON.stringify(storageChange.oldValue)}, new value is: ${JSON.stringify(storageChange.newValue)}`);
+//     }
+// });
 
 // ---------------------------------------------------
 // Listen for Messages

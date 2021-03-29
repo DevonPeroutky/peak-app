@@ -7,11 +7,9 @@ import {createTagsRequest, deleteTagRequest} from "./tags-base";
 import {STUB_TAG_ID} from "../redux/slices/tags/types";
 
 export function createPeakTags(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
-    console.log(`ACTUAlLY CREATING THE TAGS`)
     const tagsToBeCreated: PeakTag[] = tags.filter(t => t.id === STUB_TAG_ID)
     if (tagsToBeCreated.length > 0) {
-        return createTagsRequest(userId, tagsToBeCreated).then(res => {
-            const created_tags: PeakTag[] = res.data.tags as PeakTag[]
+        return createTagsRequest(userId, tagsToBeCreated).then(created_tags => {
             store.dispatch(addTags(created_tags))
             return created_tags
         }).catch(err => {
