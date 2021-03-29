@@ -11,6 +11,7 @@ import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentUser, useCurrentPage, useOnlineStatus, useCurrentPageId, useIsFullscreen} from "../../utils/hooks";
+import animationData from '../../assets/animations/mountain-with-sun.json';
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
@@ -57,7 +58,6 @@ const PeakLayout = (props: { currentUser: Peaker}) => {
     }, [])
 
     useEffect(() => {
-        console.log(`FIRING THIS BAD BOY`)
         const hash = history.location.hash
         if (hash && document.getElementById(hash.substr(1))) {
             // Check if there is a hash and if an element with that id exists
@@ -70,7 +70,7 @@ const PeakLayout = (props: { currentUser: Peaker}) => {
 
     const loadEverything: () => Promise<void> = () => loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
 
-    if (isLoading) return <Loading isLoadingCallback={setLoading} thePromised={loadEverything}/>
+    if (isLoading) return <Loading callback={() => setLoading(false)} thePromised={loadEverything} animationData={animationData}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

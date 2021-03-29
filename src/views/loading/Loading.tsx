@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from "react";
-import animationData from '../../assets/animations/mountain-with-sun.json';
-import {Lottie} from "@crello/react-lottie";
+import React, {useCallback, useEffect, useState} from "react";
+import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
+import cn from "classnames"
 import "./loading.scss"
 
 export interface LoadingAnimationProps {
-    isLoadingCallback: (isLoading: boolean) => void
+    callback: () => void
     thePromised: () => Promise<any>
+    animationData: any
+    speed?: number
+    className?: string
 }
 
 export const Loading = (props: LoadingAnimationProps) => {
     const [loaded, setLoaded] = useState(true);
-    const { thePromised, isLoadingCallback } = props;
+    const { thePromised, callback, animationData, className, speed } = props;
 
-    const defaultConfig = {
+    const defaultConfig: ReactLottieConfig = {
         autoplay: true,
         loop: true,
         animationData: animationData,
@@ -22,18 +25,22 @@ export const Loading = (props: LoadingAnimationProps) => {
     };
 
     useEffect(() => {
+        console.log(`Promise has Started!!!`)
         thePromised().then(res => {
-            setLoaded(true);
+            console.log(`Promise has completed!!!!!`)
+            setLoaded(true)
         })
     }, []);
 
-    const isLoading = () => {
+    const isLoading = useCallback(() => {
+        console.log(`ARE WE LOADING NOW: ${loaded}`)
         return loaded
-    };
+    }, [loaded]);
+
 
     return (
-        <div className={"peak-loader"}>
-            <Lottie config={defaultConfig} height="400px" width="400px" speed={2.5} lottieEventListeners={[
+        <div className={cn("peak-loader", className ? className : "")}>
+            <Lottie config={defaultConfig} height="400px" width="400px" speed={speed | 2.5} lottieEventListeners={[
                 {
                     name: 'complete',
                     callback: () => {
@@ -43,8 +50,10 @@ export const Loading = (props: LoadingAnimationProps) => {
                 {
                     name: 'loopComplete',
                     callback: () => {
+                        console.log(`Loop has completed!`)
                         if (isLoading()) {
-                            isLoadingCallback(false);
+                            console.log(`Loop has completed and we are done!`)
+                            callback();
                         }
                     }
                 },

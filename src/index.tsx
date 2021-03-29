@@ -26,7 +26,6 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 if (isElectron) {
     serviceWorker.register();
-    console.log(`Electron context. Attaching listeners onto the renderer.tsx!`)
     const { ipcRenderer } = window.require('electron');
 
     const journalHash = `#/home/journal`

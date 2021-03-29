@@ -28,8 +28,6 @@ function subscribeToTopic(socket: Socket, topicName: string): Channel {
         console.log(`Channel ${topicName} already exists`)
         return existingChannel
     } else {
-        console.log(`Creating a new channel: ${topicName}`)
-
         const channel: Channel = socket.channel(topicName, {});
         channel.join()
             .receive("error", err => console.log("ERROR TRYING TO JOINNNNN", err))
@@ -66,7 +64,6 @@ export function establishSocketConnection(userId: string): Promise<Socket> {
             params: socketAccessToken,
         })
         socketConn.onOpen( ev => {
-            console.log(`Connected to socket`)
             socket = socketConn
         })
         socketConn.onError( ev => console.log("ERROR: ", ev) )
@@ -83,7 +80,6 @@ export const closeUserNoteChannel = (userId: string) => {
 
 export const subscribeToUserNoteChannel = (userId: string) => {
     if (socket) {
-        console.log(`Subscribing to journal for ${userId}`, socket)
         const channel = subscribeToTopic(socket, JOURNAL_CHANNEL_ID(userId))
 
         channel.on("delete_bookmark", res => {
