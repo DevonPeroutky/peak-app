@@ -50,7 +50,7 @@ export function fetchUserSpecificAppState(userId: string): Promise<UserSpecificA
         // 1. Merge with existing: electron, userAccounts, quickSwitch
         // 2. Convert list of pages to peakWikiState
         const scratchpad: PeakWikiPage = fatUser.scratchpad
-        const pages: PeakWikiPage[] = [...fatUser.pages, scratchpad]
+        const pages: PeakWikiPage[] = fatUser.pages
         const peakWiki: PeakWikiState = pages.reduce(function(map, obj) {
             map[obj.id] = {...INITIAL_PAGE_STATE, ...obj};
             return map;
