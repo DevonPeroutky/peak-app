@@ -17,7 +17,7 @@ import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {establishSocketConnection, socket} from "../../utils/socketUtil";
+import {channels, establishSocketConnection, socket, subscribeToUserNoteChannel} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
 import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
@@ -28,22 +28,24 @@ import {
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
-import {setupUserSocketChannels} from "../../common/rich-text-editor/editors/journal/hooks";
+import {Peaker} from "../../types";
 const { Content } = Layout;
 
-const PeakLayout = (props: {}) => {
+const PeakLayout = (props: { currentUser: Peaker}) => {
+    const { currentUser } = props
+
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
     const [isLoading, setLoading] = useState(true);
     const currentWikiPage = useCurrentPage();
-    const currentUser = useCurrentUser();
     const history = useHistory()
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
 
     useEffect(() => {
         console.log(`CURRENT USER HAS CHANGED AND IS NOW (${currentUser.id}): ${currentUser.email}`)
-        setupUserSocketChannels(currentUser.id)
+        console.log(`Current Channels: `, channels)
+        subscribeToUserNoteChannel(currentUser.id)
     }, [currentUser])
 
     useEffect(() => {

@@ -13,7 +13,6 @@ import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 import {buildNoteUrl} from "../../../utils/notes";
 import {useCurrentUser} from "../../../utils/hooks";
-import {sleep} from "../../../chrome-extension/utils/generalUtil";
 
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
     const { page_header, note_type } = props
@@ -21,7 +20,7 @@ export const PeakNoteListView = (props: { page_header: string, note_type: PeakKn
     const notes: PeakNote[] = useNotes().filter(n => n.note_type === note_type)
 
     useEffect(() => {
-        sleep(3000).then(() => loadPeakNotes(currentUser.id))
+        loadPeakNotes(currentUser.id)
     }, [])
 
     return (

@@ -2,7 +2,7 @@ import {useHistory} from "react-router-dom";
 import {DisplayPeaker} from "../redux/slices/userAccountsSlice";
 import {syncCurrentStateToLocalStorage} from "../redux/localStoreSync";
 import {switch_user_accounts} from "../redux/rootReducer";
-import {getUserNoteChannel} from "./socketUtil";
+import { closeUserNoteChannel } from "./socketUtil";
 import {store} from "../redux/store";
 
 export const useAccountSwitcher = () => {
@@ -25,8 +25,7 @@ export const switchAccountsOutsideOfRouter = async (currentAccountId: string, se
     console.log(`CLOSING Socket for : ${currentAccountId}`)
 
     // 1. Close the current Socket
-    const userChannel = getUserNoteChannel(currentAccountId)
-    userChannel.leave()
+    closeUserNoteChannel(currentAccountId)
 
     if (selectedAccount.id !== currentAccountId) {
         // @ts-ignore

@@ -50,8 +50,8 @@ const ProvidedApp = (props: {}) => {
                     </Route>
                     <AuthedRoute>
                         <Switch>
-                            <Route path={"/home"} component={PeakLayout}/>
-                            <Route path={"/topic/:topic_id"} component={PeakLayout}/>
+                            <Route path={"/home"} render={(props) => <PeakLayout currentUser={user}/>} />
+                            <Route path={"/topic/:topic_id"} render={(props) => <PeakLayout currentUser={user}/>}/>
                             <Route path={"/"} component={PeakLayout}>
                                 <Redirect to="/home/scratchpad" />
                             </Route>
