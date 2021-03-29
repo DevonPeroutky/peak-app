@@ -21,7 +21,7 @@ import {buildNoteUrl, newestNodeAcrossAllAcounts, waitForNoteToBeAdded} from "./
 import {currentUserInRedux, getUserAccount} from "./redux/utils";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {switchAccountsOutsideOfRouter} from "./utils/account";
-import {RELOAD_REASON} from "./views/intermediate-loading-animation/types";
+import {RELOAD_REASON} from "./types";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

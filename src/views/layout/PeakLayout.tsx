@@ -29,7 +29,7 @@ import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
-import {RELOAD_REASON} from "../intermediate-loading-animation/types";
+import {RELOAD_REASON} from "../../types";
 import defaultMountainAnimation from '../../assets/animations/mountain-with-sun.json';
 import switchAccountAnimation from '../../assets/animations/loading.json';
 import recoverAnimation from '../../assets/animations/recover.json';
