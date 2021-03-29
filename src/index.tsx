@@ -21,7 +21,6 @@ import {buildNoteUrl, newestNodeAcrossAllAcounts, waitForNoteToBeAdded} from "./
 import {currentUserInRedux, getUserAccount} from "./redux/utils";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {switchAccountsOutsideOfRouter} from "./utils/account";
-import { upsertNote } from './redux/slices/noteSlice';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
