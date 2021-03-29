@@ -9,7 +9,7 @@ export function loadTagsRequests(userId: string) {
 export function deleteTagRequest(userId: string, tagId: string) {
     return peakAxiosClient.delete(`/api/v1/users/${userId}/tags/${tagId}`)
 }
-export function createTagsRequest(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
+function createTagsRequest(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
     return peakAxiosClient.post<{tags: PeakTag[]}>(`/api/v1/users/${userId}/tags`, {
         "tags": tags
     }).then(res => res.data.tags)

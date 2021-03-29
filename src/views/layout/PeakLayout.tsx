@@ -46,7 +46,7 @@ const PeakLayout = (props: { currentUser: Peaker}) => {
         console.log(`CURRENT USER HAS CHANGED AND IS NOW (${currentUser.id}): ${currentUser.email}`)
         console.log(`Current Channels: `, channels)
         subscribeToUserNoteChannel(currentUser.id)
-    }, [currentUser])
+    }, [currentUser, socket])
 
     useEffect(() => {
         if (!isOnline) {

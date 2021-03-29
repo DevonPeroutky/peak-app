@@ -16,6 +16,7 @@ import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
 import {PageSavingAnimation} from "../page-saving-animation/PageSavingAnimation";
+import {STUB_TAG_ID} from "../../../../../../redux/slices/tags/types";
 
 interface SavePageContentProps extends SavedPageProps { };
 interface SavePageContentBodyProps extends SavedPageProps { body: Node[], updateThatBody: (n: Node[]) => void, editor: ReactEditor };
@@ -53,7 +54,18 @@ export const SavePageContent = (props: SavePageContentProps) => {
 
     useEffect(() => {
         if (shouldSubmit) {
-            sendSubmitNoteMessage(tabId, userId, selectedTags, editedPageTitle, pageUrl, favIconUrl, body)
+            selectedTags.find(tag => tag.id === STUB_TAG_ID && tags)
+
+            // For tags that were just created, we need to swap out their stubs with the corresponding created PeakTag
+            // to avoid duplicate creation
+            const tagsToAttach: PeakTag[] = selectedTags.map(t => {
+                if (t.id !== STUB_TAG_ID) { return t }
+                else {
+                    const newlyCreated: PeakTag | undefined = tags.find(tag => tag.title === t.title)
+                    return newlyCreated || t
+                }
+            })
+            sendSubmitNoteMessage(tabId, userId, tagsToAttach, editedPageTitle, pageUrl, favIconUrl, body)
         }
     }, [shouldSubmit])
 

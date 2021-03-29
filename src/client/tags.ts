@@ -3,24 +3,20 @@ import {store} from "../redux/store";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {PeakTag} from "../types";
-import {createTagsRequest, deleteTagRequest} from "./tags-base";
+import {deleteTagRequest, futureCreatePeakTags} from "./tags-base";
 import {STUB_TAG_ID} from "../redux/slices/tags/types";
 
 export function createPeakTags(userId: string, tags: PeakTag[]): Promise<PeakTag[]> {
-    const tagsToBeCreated: PeakTag[] = tags.filter(t => t.id === STUB_TAG_ID)
-    if (tagsToBeCreated.length > 0) {
-        return createTagsRequest(userId, tagsToBeCreated).then(created_tags => {
+    return futureCreatePeakTags(userId, tags).then(created_tags => {
+        if (created_tags.length > 0) {
             store.dispatch(addTags(created_tags))
-            return created_tags
-        }).catch(err => {
-            console.log(`DID NOT successfully create the tags`)
-            console.log(err)
-            return []
-        })
-    }
-    return new Promise(function(resolve, reject) {
-        resolve([]);
-    });
+        }
+        return created_tags
+    }).catch(err => {
+        console.log(`DID NOT successfully create the tags`)
+        console.log(err)
+        return []
+    })
 }
 export function deletePeakTag(userId: string, tagId: string): Promise<string> {
     if (tagId === STUB_TAG_ID) {

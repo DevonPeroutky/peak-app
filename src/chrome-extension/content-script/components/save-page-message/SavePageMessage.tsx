@@ -144,7 +144,6 @@ export function updateSavePageMessage(createdNoteMessage: SuccessfullyCreatedNot
     getItem(null, (data) => {
         const activeTab: ActiveTabState = data[ACTIVE_TAB_KEY] as ActiveTabState
         const tags: PeakTag[] = data[TAGS_KEY] as PeakTag[]
-        console.log(`Tags at this point in Time: `, tags)
 
         const editingState = (activeTab && activeTab.editingState === EDITING_STATE.Editing) ? EDITING_STATE.Editing : EDITING_STATE.NotEditing
         const saving = (editingState === EDITING_STATE.Editing) ? SUBMISSION_STATE.MetadataSaved : SUBMISSION_STATE.Saved
