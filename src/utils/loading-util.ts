@@ -62,8 +62,8 @@ export const useAccountSwitcher = () => {
             await dispatch(switch_user_accounts(selectedAccount))
 
             // QuickSwitch or do we do a loading animation?
-            window.history.pushState({}, null, "#/home/scratchpad")
-            // history.push("/")
+            // window.history.pushState({}, null, "#/home/scratchpad")
+            history.push("/")
         }
     }
 }

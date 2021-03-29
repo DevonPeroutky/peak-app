@@ -17,7 +17,7 @@ import {
     setOffline,
     setOnline
 } from "./redux/slices/electronSlice";
-import {buildNoteUrl, fetchNewestNote} from "./utils/notes";
+import {buildNoteUrl, newestNodeAcrossAllAcounts} from "./utils/notes";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -55,15 +55,21 @@ if (isElectron) {
         return (arg) ? store.dispatch(enterFullscreen()) : store.dispatch(leaveFullscreen())
     })
 
-    ipcRenderer.on('go-to-journal', (event, arg) => {
-        console.log(`GOING TO THE JOURNAL`)
+    ipcRenderer.on('go-to-scratchpad', (event, arg) => {
+        console.log(`GOING TO Home`)
         window.location.hash = scratchpadHash
         store.dispatch(journalHotkeyPressed())
     })
 
     ipcRenderer.on('open-note', (event, arg) => {
-        const note = fetchNewestNote()
-        window.location.hash = `#${buildNoteUrl(note.id)}`
+        newestNodeAcrossAllAcounts().then(note => {
+            console.log(`NAVIGATE TO NOTE `, note)
+            if (note) {
+                window.location.hash = `#${buildNoteUrl(note.id)}`
+            } else {
+                console.warn(`Did not find any notes?`)
+            }
+        })
     })
 
     // -----------------------------

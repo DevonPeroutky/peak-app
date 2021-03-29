@@ -135,7 +135,7 @@ app.whenReady().then(() => {
       createWindow();
     }
 
-    mainWindow && mainWindow.webContents.send('go-to-journal')
+    mainWindow && mainWindow.webContents.send('go-to-scratchpad')
     // mainWindow && mainWindow.focus()
     // mainWindow && mainWindow.webContents.focus()
     mainWindow && mainWindow.show()
