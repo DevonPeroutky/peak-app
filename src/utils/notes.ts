@@ -1,14 +1,10 @@
 import {PeakNote} from "../redux/slices/noteSlice";
-import {store} from "../redux/store";
-import {AppState} from "../redux";
 import {fetchNewestNote} from "../client/notes";
 import {Peaker} from "../types";
-
-
-
+import {currentUserInRedux} from "../redux/utils";
 
 export function newestNodeAcrossAllAcounts(): Promise<PeakNote | null> {
-    const currentUser: Peaker = (store.getState() as AppState).currentUser
+    const currentUser: Peaker = currentUserInRedux()
     return fetchNewestNote(currentUser)
 
     // const notes: PeakNote[] = (store.getState() as AppState).notes

@@ -18,6 +18,9 @@ import {
     setOnline
 } from "./redux/slices/electronSlice";
 import {buildNoteUrl, newestNodeAcrossAllAcounts} from "./utils/notes";
+import {currentUserInRedux, getUserAccount} from "./redux/utils";
+import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
+import {switchAccountsOutsideOfRouter} from "./utils/account";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -63,11 +66,25 @@ if (isElectron) {
 
     ipcRenderer.on('open-note', (event, arg) => {
         newestNodeAcrossAllAcounts().then(note => {
+            const currentUser: Peaker = currentUserInRedux()
             console.log(`NAVIGATE TO NOTE `, note)
-            if (note) {
-                window.location.hash = `#${buildNoteUrl(note.id)}`
-            } else {
+            store.getState()
+            if (!note) {
                 console.warn(`Did not find any notes?`)
+                return
+            }
+
+            if (note.user_id === currentUser.id) {
+                window.location.hash = `#${buildNoteUrl(note.id)}`
+            } else  {
+                const desiredPeakAccount: DisplayPeaker = getUserAccount(note.user_id)
+                if (desiredPeakAccount) {
+                    switchAccountsOutsideOfRouter(currentUser.id, desiredPeakAccount, () => {
+                        window.location.hash = `#${buildNoteUrl(note.id)}`
+                    })
+                } else {
+                    console.error(`Failed to find a Peak Account w/id: ${note.user_id}`)
+                }
             }
         })
     })

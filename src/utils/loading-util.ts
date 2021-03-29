@@ -1,13 +1,12 @@
 import {fetchUserSpecificAppState, loadAllUserAccounts} from "./requests";
 import {useDispatch} from "react-redux";
 import {DisplayPeaker} from "../redux/slices/userAccountsSlice";
-import {syncCurrentStateToLocalStorage, writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
+import { writeUserAppStateToLocalStorage} from "../redux/localStoreSync";
 import {store} from "../redux/store";
 import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
-import {load_active_user, switch_user_accounts} from "../redux/rootReducer";
-import { useHistory } from "react-router-dom";
-import {socket, useUserChannel} from "./socketUtil";
+import {load_active_user} from "../redux/rootReducer";
+import {useAccountSwitcher} from "./account";
 
 export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
     return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
@@ -31,41 +30,6 @@ export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: stri
         console.log(`DID NOT successfully load the accounts for user: ${ogUserId}`)
         console.log(err)
     })
-}
-
-export const useAccountSwitcher = () => {
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const getUserChannel = useUserChannel()
-
-    // TODO: Close current socket connection!
-    // Switch the current User
-    // 1. Close the current Socket
-    // 2. De-focus current active element to avoid Slate focus bugs
-    // 3. Put current userState in localstorage
-    // 4. Load the "destined" user state into redux
-    // 5. Open a new socket for the "destined" user state. (Handled in <PeakLayout/>
-    return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
-        // 1. Close the current Socket
-        const userChannel = getUserChannel(currentAccountId)
-        userChannel.leave()
-
-        if (selectedAccount.id !== currentAccountId) {
-            // @ts-ignore
-            // 2. De-focus current active element to avoid Slate focus bugs
-            document.activeElement.blur()
-
-            // 3. Put current userState in localstorage
-            await syncCurrentStateToLocalStorage(currentAccountId)
-
-            // 4. Load the "destined" user state into redux
-            await dispatch(switch_user_accounts(selectedAccount))
-
-            // QuickSwitch or do we do a loading animation?
-            // window.history.pushState({}, null, "#/home/scratchpad")
-            history.push("/")
-        }
-    }
 }
 
 export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAccounts: DisplayPeaker[]}) => {
