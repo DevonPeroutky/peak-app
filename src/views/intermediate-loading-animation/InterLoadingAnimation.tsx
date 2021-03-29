@@ -1,11 +1,7 @@
 import React, {ReactNode} from "react";
-import {Loading} from "../loading/Loading";
 import {useHistory, useLocation} from "react-router-dom";
-import {switchAccountsOutsideOfRouter} from "../../utils/account";
+import {useQuery} from "../../utils/urls";
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
 export const InterLoadingAnimation = (props) => {
     const query = useQuery();
     const history = useHistory()

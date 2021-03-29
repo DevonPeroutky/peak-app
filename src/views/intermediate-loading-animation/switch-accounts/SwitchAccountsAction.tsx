@@ -5,10 +5,8 @@ import {switchAccountsOutsideOfRouter} from "../../../utils/account";
 import {getUserAccount} from "../../../redux/utils";
 import loader from '../../../assets/animations/loading.json';
 import {Loading} from "../../loading/Loading";
+import {useQuery} from "../../../utils/urls";
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
 export const SwitchAccountsAction = (props) => {
     const query = useQuery();
     const history = useHistory();

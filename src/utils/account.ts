@@ -4,14 +4,15 @@ import {syncCurrentStateToLocalStorage} from "../redux/localStoreSync";
 import {switch_user_accounts} from "../redux/rootReducer";
 import { closeUserNoteChannel } from "./socketUtil";
 import {store} from "../redux/store";
+import {RELOAD_REASON} from "../views/intermediate-loading-animation/types";
 
 export const useAccountSwitcher = () => {
     const history = useHistory()
 
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
-        // console.log(`useAccountSwitcher() has been called!!!!`)
-        // return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push("/"))
-        history.push(`/switch-accounts?curr-user-id=${currentAccountId}&dest-user-id=${selectedAccount.id}`)
+        console.log(`useAccountSwitcher() has been called!!!!`)
+        return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push(`/home/scratchpad?reload-reason=${RELOAD_REASON.switch_accounts}`))
+        // history.push(`/switch-accounts?curr-user-id=${currentAccountId}&dest-user-id=${selectedAccount.id}`)
     }
 }
 

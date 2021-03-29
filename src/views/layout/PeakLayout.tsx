@@ -1,24 +1,23 @@
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import PeakSidebar from "../../common/sidebar/PeakSidebar";
 import {Layout} from 'antd';
 import 'antd/dist/antd.css';
 import "./peak-layout.scss"
-import {Route, Switch, useParams, useRouteMatch, Redirect} from "react-router-dom";
+import {Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-dom";
 import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
 import {Loading} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
-import {useCurrentUser, useCurrentPage, useOnlineStatus, useIsFullscreen} from "../../utils/hooks";
-import animationData from '../../assets/animations/mountain-with-sun.json';
+import {useCurrentPage, useIsFullscreen, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
 import {EditorContextBar} from "../../common/editor-context-bar/EditorContextBar";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {channels, establishSocketConnection, socket, subscribeToUserNoteChannel} from "../../utils/socketUtil";
+import {establishSocketConnection, socket, subscribeToUserNoteChannel} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
 import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
@@ -30,33 +29,63 @@ import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
+import {RELOAD_REASON} from "../intermediate-loading-animation/types";
+import defaultMountainAnimation from '../../assets/animations/mountain-with-sun.json';
+import switchAccountAnimation from '../../assets/animations/loading.json';
+import recoverAnimation from '../../assets/animations/recover.json';
+import {useQuery} from "../../utils/urls";
+
 const { Content } = Layout;
 
-const PeakLayout = (props: { currentUser: Peaker}) => {
-    const { currentUser } = props
+const determineAnimationData = (reason: RELOAD_REASON) => {
+    // @ts-ignore
+    const fuck = RELOAD_REASON[reason] as RELOAD_REASON
+    switch (fuck) {
+        case RELOAD_REASON.default:
+            return defaultMountainAnimation
+        case RELOAD_REASON.recover:
+            return recoverAnimation
+        case RELOAD_REASON.switch_accounts:
+            return switchAccountAnimation
+        default:
+            return defaultMountainAnimation
+    }
+}
 
+const PeakLayout = (props: { currentUser: Peaker }) => {
+    const { currentUser } = props
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
+
+    const query = useQuery();
     const [isLoading, setLoading] = useState(true);
+    const [reloadType, setReloadType] = useState(RELOAD_REASON.default)
+    const [animationData, setAnimationData] = useState<any>(defaultMountainAnimation)
+    const reloadReasonParam: RELOAD_REASON | null = RELOAD_REASON[query.get("reload-reason")]
+
     const currentWikiPage = useCurrentPage();
     const history = useHistory()
     const isOnline = useOnlineStatus()
     const isFullscreen = useIsFullscreen()
 
+    // Subscribe to user channel if we switch users.
     useEffect(() => {
         subscribeToUserNoteChannel(currentUser.id)
     }, [currentUser, socket])
 
+    // Redirect if offline
     useEffect(() => {
         if (!isOnline) {
             history.push("/offline");
         }
     })
 
+    // Establish Socket Connection on first (and only first) render
     useEffect(() => {
         establishSocketConnection(currentUser.id)
     }, [])
 
+    // Fires every time hash changes
     useEffect(() => {
         const hash = history.location.hash
         if (hash && document.getElementById(hash.substr(1))) {
@@ -66,11 +95,26 @@ const PeakLayout = (props: { currentUser: Peaker}) => {
         } else {
             window.scrollTo(0, 0)
         }
-    }, [history.location.hash]) // Fires every time hash changes
+    }, [history.location.hash])
 
-    const loadEverything: () => Promise<void> = () => loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
+    useEffect(() => {
+        console.log(`ReloadParam is now ${reloadReasonParam} <--> ${reloadType}`)
+        if (reloadReasonParam && reloadReasonParam !== reloadType) {
+            setLoading(true)
+            setReloadType(reloadReasonParam)
+            setAnimationData(determineAnimationData(reloadReasonParam))
+        }
+    }, [reloadReasonParam])
 
-    if (isLoading) return <Loading callback={() => setLoading(false)} thePromised={loadEverything} animationData={animationData}/>
+    const loadEverything = useCallback(() => {
+        setReloadType(null)
+        return loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
+    }, [currentUser])
+
+    if (isLoading) return <Loading callback={() => {
+        setLoading(false)
+        history.push(`/home`)
+    }} thePromised={loadEverything} animationData={animationData}/>
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

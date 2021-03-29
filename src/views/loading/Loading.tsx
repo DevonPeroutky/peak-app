@@ -3,12 +3,15 @@ import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
 import cn from "classnames"
 import "./loading.scss"
 
-export interface LoadingAnimationProps {
-    callback: () => void
-    thePromised: () => Promise<any>
+interface AnimationConfig {
     animationData: any
     speed?: number
     className?: string
+}
+
+export interface LoadingAnimationProps extends AnimationConfig {
+    callback: () => void
+    thePromised: () => Promise<any>
 }
 
 export const Loading = (props: LoadingAnimationProps) => {
@@ -25,18 +28,14 @@ export const Loading = (props: LoadingAnimationProps) => {
     };
 
     useEffect(() => {
-        console.log(`Promise has Started!!!`)
         thePromised().then(res => {
-            console.log(`Promise has completed!!!!!`)
             setLoaded(true)
         })
     }, []);
 
     const isLoading = useCallback(() => {
-        console.log(`ARE WE LOADING NOW: ${loaded}`)
         return loaded
     }, [loaded]);
-
 
     return (
         <div className={cn("peak-loader", className ? className : "")}>
