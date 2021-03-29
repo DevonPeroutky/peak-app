@@ -7,11 +7,13 @@ import {TAGS_KEY} from "../../constants/constants";
 export function loadTagsFromBackend(userId: string): Promise<PeakTag[]> {
     return loadTagsRequests(userId).then(res => {
         const tagsToAdd: PeakTag[] = res.data.tags
-        addTagsToState(tagsToAdd, () => console.log(`Successfully added tags to State`))
+        // addTagsToState(tagsToAdd, () => console.log(`Successfully added tags to State`))
+        setItem(TAGS_KEY, tagsToAdd, () => console.log(`Successfully added tags to State`))
         return tagsToAdd
     })
 }
 
+// IF we get a successful response from the backend, always use it.
 const addTagsToState = (tags: PeakTag[], callbackFunc: () => void) => {
     getItem(TAGS_KEY, (data) => {
         const existing_tags: PeakTag[] = data[TAGS_KEY] || []
@@ -19,4 +21,3 @@ const addTagsToState = (tags: PeakTag[], callbackFunc: () => void) => {
         setItem(TAGS_KEY, new_tags, callbackFunc)
     })
 }
-
