@@ -72,7 +72,7 @@ export function deletePeakNote(userId: string, noteId: string): Promise<string> 
 // Requests + Reduxs
 export function loadPeakNotes(userId: string) {
     return fetchNotesRequest(userId).then(res => {
-        const books = res.data.book as PeakNote[]
+        const books = res.data.books as PeakNote[]
         store.dispatch(setNotes(books))
     }).catch(err => {
         console.log(`DID NOT successfully load the books for user: ${userId}`)

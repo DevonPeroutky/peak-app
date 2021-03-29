@@ -42,6 +42,7 @@ const PeakLayout = (props: {}) => {
     const isFullscreen = useIsFullscreen()
 
     useEffect(() => {
+        console.log(`CURRENT USER HAS CHANGED AND IS NOW (${currentUser.id}): ${currentUser.email}`)
         setupUserSocketChannels(currentUser.id)
     }, [currentUser])
 

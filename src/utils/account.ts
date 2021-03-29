@@ -9,6 +9,7 @@ export const useAccountSwitcher = () => {
     const history = useHistory()
 
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
+        console.log(`useAccountSwitcher() has been called!!!!`)
         return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push("/"))
     }
 }
@@ -20,7 +21,8 @@ export const useAccountSwitcher = () => {
 // 4. Load the "destined" user state into redux
 // 5. Open a new socket for the "destined" user state. (Handled in <PeakLayout/>
 export const switchAccountsOutsideOfRouter = async (currentAccountId: string, selectedAccount: DisplayPeaker, actuallySwitchFunc: () => void) => {
-    console.log(`Switching active account to: ${selectedAccount.email}`)
+    console.log(`Switching active account to (${selectedAccount.id}) : ${selectedAccount.email}`)
+    console.log(`CLOSING Socket for : ${currentAccountId}`)
 
     // 1. Close the current Socket
     const userChannel = getUserNoteChannel(currentAccountId)

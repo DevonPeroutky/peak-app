@@ -44,7 +44,10 @@ export function subscribeToTopic(socket: Socket, topicName: string): Channel {
     channel.onClose((payload, ref, joinRef) => {
         console.log("Closed for Business, ", payload)
     })
-    channel.on("end_session", payload => channel.leave())
+    channel.on("end_session", payload => {
+        console.log(`end_session happened???? `, payload)
+        channel.leave()
+    })
     return channel
 }
 
