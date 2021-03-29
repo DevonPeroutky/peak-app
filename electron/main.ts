@@ -194,7 +194,12 @@ ipcMain.on('uncaughtException', function(event, data){
   log.error("Uncaught Exception in the renderer process ", data)
   if (mainWindow) {
     log.error("Reloading the renderer window.")
-    mainWindow.reload()
+
+    mainWindow.webContents.send('recover', false)
+    new Promise(resolve =>
+        setTimeout(resolve, 200))
+        .then(_ => mainWindow && mainWindow.reload()
+    );
   } else {
     log.error("Trying to reload the renderer window but there's no BrowserWindow?!?!?!?")
   }

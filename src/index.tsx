@@ -21,6 +21,7 @@ import {buildNoteUrl, newestNodeAcrossAllAcounts, waitForNoteToBeAdded} from "./
 import {currentUserInRedux, getUserAccount} from "./redux/utils";
 import {DisplayPeaker} from "./redux/slices/userAccountsSlice";
 import {switchAccountsOutsideOfRouter} from "./utils/account";
+import {RELOAD_REASON} from "./views/intermediate-loading-animation/types";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -29,6 +30,7 @@ if (isElectron) {
     const { ipcRenderer } = window.require('electron');
 
     const journalHash = `#/home/journal`
+    const recoverHash = `#/home/scratchpad?reload-reason=${RELOAD_REASON.recover}`
     const scratchpadHash = `#/home/scratchpad`
     const welcomeHash = `#/welcome`
     const offlineHash = `#/offline`
@@ -91,7 +93,8 @@ if (isElectron) {
     })
 
     ipcRenderer.on(`recover`, (event, arg) => {
-
+        console.log(`RECOVERING`)
+        window.location.hash = recoverHash
     })
 
     // -----------------------------

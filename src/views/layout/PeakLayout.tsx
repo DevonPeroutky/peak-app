@@ -44,7 +44,7 @@ function determineAnimationData (reason: RELOAD_REASON): AnimationConfig {
         case RELOAD_REASON.default:
             return { animationData: defaultMountainAnimation }
         case RELOAD_REASON.recover:
-            return { animationData: recoverAnimation }
+            return { animationData: recoverAnimation, speed: 2 }
         case RELOAD_REASON.switch_accounts:
             return { animationData: switchAccountAnimation, speed: 3 }
         default:
