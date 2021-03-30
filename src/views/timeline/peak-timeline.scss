@@ -5,24 +5,117 @@
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: 82px;
+
+  &.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .peak-page-title {
+      padding-bottom: 20px;
+    }
+
+  }
 
   .peak-timeline-header {
     line-height: $title-line-height;
     font-size: $title-font-size;
   }
+
+  .peak-note-timeline {
+    padding-top: 20px;
+
+    h1 {
+      font-size: 2.5rem!important;
+    }
+
+    $height: 30px;
+    .timeline-icon {
+      color: lightgray!important;
+      width: auto;
+      height: $height;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .peak-timeline-date-item {
+      position: relative;
+      text-align: left;
+
+      &.first {
+        top: initial!important;
+
+        .ant-timeline-item-head {
+          top: calc((50% - #{$height}) + 7px)!important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .ant-timeline-item-tail {
+          position: absolute;
+          height: 100%!important;
+          //top: -10px;
+        }
+      }
+
+      &.normal {
+        .v-bar-icon {
+          height: 100%;
+          left: 4px;
+          border-left: 2px solid #f0f0f0;
+        }
+
+        .ant-timeline-item-head {
+          min-height: 10px!important;
+          height: 15px!important;
+          padding-bottom: 0;
+          padding-top: 0;
+        }
+
+        .ant-timeline-item-tail {
+          position: absolute;
+          height: 100%!important;
+          //top: -10px;
+        }
+      }
+    }
+
+    .peak-timeline-item {
+      display: flex;
+      align-items: center;
+      padding-bottom: 40px;
+
+      .ant-timeline-item-content {
+        margin-left: 30px;
+        text-align: left!important;
+        text-transform: capitalize;
+
+        .peak-timeline-item-body {
+          display: flex;
+          flex-direction: column;
+
+          .title {
+            font-size: 1.25rem;
+            color: $text-color;
+
+            &:hover {
+              color: $primary-blue;
+            }
+          }
+
+          .subtitle {
+            text-transform: uppercase;
+            color: $text-accent-color;
+            font-size: .69rem;
+          }
+        }
+      }
+    }
+
+    .final-timeline-item {
+      text-align: left!important;
+    }
+  }
 }
 
-fieldset {
-  border: 1px solid #000;
-  width: 100%;
-}
-
-legend {
-  text-align:left;
-  margin-left: 25px;
-  background-color: white;
-  color: blue;
-  padding: 5px 10px;
-  width: fit-content;
-}
