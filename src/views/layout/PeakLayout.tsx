@@ -134,10 +134,11 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                                         return <Redirect to={"/"} />
                                     }
                                 }} />
-                                <Route path={`${match.path}/notes`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
+                                <Route path={`${match.path}/notes`} render={(props) => <PeakTimeline/>} />
                                 <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
                                 <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                                 <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
+                                <Route path={`${match.path}/old`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
                                 <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
                                 <Route path={`${match.path}/wiki/:id`} render={(props) => {
                                     if (currentWikiPage) {

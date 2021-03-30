@@ -8,6 +8,10 @@ export function formatDate(date: Moment) {
     return date.format("YYYY-MM-DD")
 }
 
+export function formatStringAsDate(dateStr: string) {
+    return moment(dateStr).format("YYYY-MM-DD")
+}
+
 export function isCurrentDay(date: string) {
     return getCurrentFormattedDate() == date
 }

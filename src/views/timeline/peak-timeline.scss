@@ -5,24 +5,55 @@
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: 82px;
 
   .peak-timeline-header {
     line-height: $title-line-height;
     font-size: $title-font-size;
   }
+
+  .peak-note-timeline {
+    .peak-timeline-item {
+      display: flex;
+      align-items: center;
+      padding-bottom: 40px;
+
+      .ant-timeline-item-content {
+        margin-left: 30px;
+        text-align: left!important;
+        text-transform: capitalize;
+
+        .peak-timeline-item-body {
+          display: flex;
+          flex-direction: column;
+
+          .title {
+            font-size: 1.25rem;
+            color: $text-color;
+
+            &:hover {
+              color: $primary-blue;
+            }
+          }
+
+          .subtitle {
+            text-transform: uppercase;
+            color: $text-accent-color;
+            font-size: .69rem;
+          }
+        }
+      }
+
+      .ant-timeline-item-head {
+        top: initial!important;
+
+        .timeline-icon {
+          width: auto;
+          height: 20px;
+        }
+
+      }
+
+    }
+  }
 }
 
-fieldset {
-  border: 1px solid #000;
-  width: 100%;
-}
-
-legend {
-  text-align:left;
-  margin-left: 25px;
-  background-color: white;
-  color: blue;
-  padding: 5px 10px;
-  width: fit-content;
-}
