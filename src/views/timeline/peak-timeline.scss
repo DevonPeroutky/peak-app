@@ -11,7 +11,38 @@
     font-size: $title-font-size;
   }
 
+  .v-bar-icon {
+    height: 100%;
+    left: 4px;
+    border-left: 2px solid #f0f0f0;
+  }
+
+  .vertical-bar {
+    top: 10px;
+    left: 4px;
+    height: calc(100% - 10px);
+    border-left: 2px solid #f0f0f0;
+  }
+
   .peak-note-timeline {
+    .peak-timeline-date-item {
+      position: relative;
+      text-align: left;
+
+      .ant-timeline-item-head {
+        min-height: 10px!important;
+        height: 15px!important;
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+
+      .ant-timeline-item-tail {
+        position: absolute;
+        height: 100%!important;
+        //top: -10px;
+      }
+    }
+
     .peak-timeline-item {
       display: flex;
       align-items: center;
@@ -48,7 +79,9 @@
 
         .timeline-icon {
           width: auto;
-          height: 20px;
+          height: 30px;
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
 
       }

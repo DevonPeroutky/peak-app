@@ -40,49 +40,52 @@ export const PeakTimeline = (props: { }) => {
     return (
         <div className={"peak-timeline-container"}>
             <h1 className={"peak-page-title"}>Bookmarks</h1>
-            <Timeline className={"peak-note-timeline"}>
-                {
-                    Object.entries(groupedByDates).map(([date, notes]) => {
-                        console.log(`Date: `, date)
-                        console.log(`Notes: `, notes)
-                        return (
-                            <>
-                                <Timeline.Item key={date} dot={<div />} className={"peak-timeline-item"}>
-                                    {<h1>{date}</h1>}
-                                </Timeline.Item>
-                                {
-                                    notes.map(n =>
-                                        <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
-                                            <div className={"peak-timeline-item-body"}>
-                                                <span className={"subtitle"}>{deriveHostname(n.url)}</span>
-                                                <Link to={buildNoteUrl(n.id)}>
-                                                    <span className={"title"}>{ n.title }</span>
-                                                </Link>
-                                                <div className="peak-note-tag-section">
-                                                    {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+            <div className="timeline-container">
+                <div className="vertical-bar"/>
+                <Timeline className={"peak-note-timeline"}>
+                    {
+                        Object.entries(groupedByDates).map(([date, notes]) => {
+                            console.log(`Date: `, date)
+                            console.log(`Notes: `, notes)
+                            return (
+                                <>
+                                    <Timeline.Item key={date} dot={<div className={"v-bar-icon"}/>} className={"peak-timeline-date-item"}>
+                                        {<h1>{date}</h1>}
+                                    </Timeline.Item>
+                                    {
+                                        notes.map(n =>
+                                            <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
+                                                <div className={"peak-timeline-item-body"}>
+                                                    <span className={"subtitle"}>{deriveHostname(n.url)}</span>
+                                                    <Link to={buildNoteUrl(n.id)}>
+                                                        <span className={"title"}>{ n.title }</span>
+                                                    </Link>
+                                                    <div className="peak-note-tag-section">
+                                                        {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Timeline.Item>
-                                    )
-                                }
-                            </>
-                        )
-                    })
-                }
-                { notes.map(n =>
-                    <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
-                        <div className={"peak-timeline-item-body"}>
-                            <span className={"subtitle"}>{deriveHostname(n.url)}</span>
-                            <Link to={buildNoteUrl(n.id)}>
-                                <span className={"title"}>{ n.title }</span>
-                            </Link>
-                            <div className="peak-note-tag-section">
-                                {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+                                            </Timeline.Item>
+                                        )
+                                    }
+                                </>
+                            )
+                        })
+                    }
+                    { notes.map(n =>
+                        <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
+                            <div className={"peak-timeline-item-body"}>
+                                <span className={"subtitle"}>{deriveHostname(n.url)}</span>
+                                <Link to={buildNoteUrl(n.id)}>
+                                    <span className={"title"}>{ n.title }</span>
+                                </Link>
+                                <div className="peak-note-tag-section">
+                                    {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+                                </div>
                             </div>
-                        </div>
-                    </Timeline.Item>
-                )}
-            </Timeline>
+                        </Timeline.Item>
+                    )}
+                </Timeline>
+            </div>
         </div>
     )
 }
