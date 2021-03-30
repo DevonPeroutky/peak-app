@@ -7,12 +7,19 @@ import { ELEMENT_WEB_NOTE } from "../../common/rich-text-editor/plugins/peak-kno
 import {Link} from "react-router-dom";
 import {buildNoteUrl} from "../../utils/notes";
 import {PeakTagDisplay} from "../../common/peak-tag-display/PeakTagDisplay";
-import {CalendarOutlined, DeleteOutlined, ReadFilled} from "@ant-design/icons/lib";
+import {
+    CaretDownOutlined,
+    DeleteOutlined,
+    DownCircleOutlined,
+    ReadFilled,
+    UpCircleOutlined
+} from "@ant-design/icons/lib";
 import {ImageLoader} from "../../common/image-loader/ImageLoader";
 import {deriveHostname} from "../../utils/urls";
 import "./peak-timeline.scss"
 import {formatStringAsDate} from "../../utils/time";
-import { groupBy } from "ramda";
+import { groupBy, head } from "ramda";
+import cn from "classnames";
 
 const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
@@ -35,7 +42,9 @@ export const PeakTimeline = (props: { }) => {
         loadPeakNotes(currentUser.id)
     }, [])
 
-    const groupedByDates = groupByRandomDate(notes)
+    const groupedByDates = groupByDate(notes)
+    const first_date = head(Object.keys(groupedByDates))
+    const FINAL = "final"
 
     return (
         <div className={"peak-timeline-container"}>
@@ -44,12 +53,18 @@ export const PeakTimeline = (props: { }) => {
                 <div className="vertical-bar"/>
                 <Timeline className={"peak-note-timeline"}>
                     {
-                        Object.entries(groupedByDates).map(([date, notes]) => {
-                            console.log(`Date: `, date)
-                            console.log(`Notes: `, notes)
+                        Object.entries({...groupedByDates, [FINAL]: []}).map(([date, notes]) => {
+                            const isFirst = first_date === date
+
+                            if ( date === FINAL ) {
+                                return (
+                                    <Timeline.Item className={"final-timeline-item"} dot={<UpCircleOutlined className={"timeline-icon"}/>}>
+                                    </Timeline.Item>
+                                )
+                            }
                             return (
                                 <>
-                                    <Timeline.Item key={date} dot={<div className={"v-bar-icon"}/>} className={"peak-timeline-date-item"}>
+                                    <Timeline.Item key={date} dot={dateTimelineIcon(isFirst)} className={cn("peak-timeline-date-item", (isFirst) ? "first" : "normal")}>
                                         {<h1>{date}</h1>}
                                     </Timeline.Item>
                                     {
@@ -71,19 +86,6 @@ export const PeakTimeline = (props: { }) => {
                             )
                         })
                     }
-                    { notes.map(n =>
-                        <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
-                            <div className={"peak-timeline-item-body"}>
-                                <span className={"subtitle"}>{deriveHostname(n.url)}</span>
-                                <Link to={buildNoteUrl(n.id)}>
-                                    <span className={"title"}>{ n.title }</span>
-                                </Link>
-                                <div className="peak-note-tag-section">
-                                    {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-                                </div>
-                            </div>
-                        </Timeline.Item>
-                    )}
                 </Timeline>
             </div>
         </div>
@@ -121,4 +123,8 @@ const NoteIconSection = (props: { item: PeakNote }) => {
             </Popconfirm>
         </div>
     )
+}
+
+const dateTimelineIcon = (isFirst: boolean) => {
+    return (isFirst) ? <DownCircleOutlined className={"timeline-icon"} color={"#f0f0f0"}/> : <div className={"v-bar-icon"}/>
 }
