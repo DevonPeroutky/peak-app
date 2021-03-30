@@ -12,12 +12,19 @@
   }
 
   .peak-note-timeline {
+    padding-top: 20px;
+
     h1 {
       font-size: 2.5rem!important;
     }
 
+    $height: 30px;
     .timeline-icon {
       color: lightgray!important;
+      width: auto;
+      height: $height;
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
 
     .peak-timeline-date-item {
@@ -26,6 +33,13 @@
 
       &.first {
         top: initial!important;
+
+        .ant-timeline-item-head {
+          top: calc((50% - #{$height}) + 7px)!important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
         .ant-timeline-item-tail {
           position: absolute;
@@ -90,19 +104,6 @@
 
     .final-timeline-item {
       text-align: left!important;
-    }
-
-    .ant-timeline-item-head {
-      $height: 30px;
-      top: calc(50% - #{$height})!important;
-
-      .timeline-icon {
-        width: auto;
-        height: $height;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-
     }
   }
 }

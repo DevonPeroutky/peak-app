@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {buildNoteUrl} from "../../utils/notes";
 import {PeakTagDisplay} from "../../common/peak-tag-display/PeakTagDisplay";
 import {
+    CalendarOutlined,
     CaretDownOutlined,
     DeleteOutlined,
     DownCircleOutlined,
@@ -126,5 +127,5 @@ const NoteIconSection = (props: { item: PeakNote }) => {
 }
 
 const dateTimelineIcon = (isFirst: boolean) => {
-    return (isFirst) ? <DownCircleOutlined className={"timeline-icon"} color={"#f0f0f0"}/> : <div className={"v-bar-icon"}/>
+    return (isFirst) ? <CalendarOutlined className={"timeline-icon"} color={"#f0f0f0"}/> : <div className={"v-bar-icon"}/>
 }
