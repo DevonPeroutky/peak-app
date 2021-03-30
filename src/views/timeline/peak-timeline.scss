@@ -27,10 +27,6 @@
       &.first {
         top: initial!important;
 
-        .ant-timeline-item-head {
-          top: 1rem;
-        }
-
         .ant-timeline-item-tail {
           position: absolute;
           height: 100%!important;
@@ -90,23 +86,22 @@
           }
         }
       }
-
-      .ant-timeline-item-head {
-        top: initial!important;
-
-        .timeline-icon {
-          width: auto;
-          height: 30px;
-          padding-top: 5px;
-          padding-bottom: 5px;
-        }
-
-      }
-
     }
 
     .final-timeline-item {
       text-align: left!important;
+    }
+
+    .ant-timeline-item-head {
+      $height: 30px;
+      top: calc(50% - #{$height})!important;
+
+      .timeline-icon {
+        width: auto;
+        height: $height;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
 
     }
   }
