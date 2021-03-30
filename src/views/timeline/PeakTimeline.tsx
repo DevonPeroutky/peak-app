@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useCurrentUser} from "../../utils/hooks";
 import {PeakNote} from "../../redux/slices/noteSlice";
 import {loadPeakNotes, useNotes} from "../../client/notes";
-import { message, Popconfirm, Timeline } from "antd";
+import {Empty, message, Popconfirm, Timeline} from "antd";
 import { ELEMENT_WEB_NOTE } from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {Link} from "react-router-dom";
 import {buildNoteUrl} from "../../utils/notes";
@@ -47,6 +47,14 @@ export const PeakTimeline = (props: { }) => {
     const first_date = head(Object.keys(groupedByDates))
     const FINAL = "final"
 
+    if (notes.length == 0) {
+        return (
+            <div className={"peak-timeline-container empty"}>
+                <h1 className={"peak-page-title"}>No Bookmarks Yet</h1>
+                <Empty description={"Download the chrome extension to get started!"}/>
+            </div>
+        )
+    }
     return (
         <div className={"peak-timeline-container"}>
             <h1 className={"peak-page-title"}>Bookmarks</h1>
