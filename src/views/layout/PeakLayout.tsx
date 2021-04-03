@@ -111,10 +111,18 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
         return loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
     }, [currentUser])
 
-    if (isLoading) return <Loading callback={() => {
-        setLoading(false)
-        history.push(`/home`)
-    }} thePromised={loadEverything} animationData={animationData.animationData} speed={animationData.speed}/>
+    if (isLoading) {
+        return (
+            <Loading
+                callback={() => {
+                    setLoading(false)
+                    history.push(`/home`)
+                }}
+                thePromised={loadEverything}
+                animationData={animationData.animationData}
+                speed={animationData.speed}/>
+        )
+    }
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">

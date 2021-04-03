@@ -30,7 +30,7 @@ if (isElectron) {
     const { ipcRenderer } = window.require('electron');
 
     const journalHash = `#/home/journal`
-    const recoverHash = `#/home/scratchpad?reload-reason=${RELOAD_REASON.recover}`
+    const recoverHash = `#/home?reload-reason=${RELOAD_REASON.recover}`
     const scratchpadHash = `#/home/scratchpad`
     const welcomeHash = `#/welcome`
     const offlineHash = `#/offline`
