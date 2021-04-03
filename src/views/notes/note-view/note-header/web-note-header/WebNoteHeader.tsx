@@ -8,7 +8,6 @@ import { YoutubeVideoContainer } from "../../../../../common/media-embeds/youtub
 import {NoteTagSelect} from "../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import React from "react";
 import TextArea from "antd/es/input/TextArea";
-import TweetEmbed from "react-tweet-embed/dist/tweet-embed";
 import "./web-note-header.scss"
 import {TweetContainer} from "../../../../../common/media-embeds/twitter-container/TwitterContainer";
 
@@ -25,7 +24,12 @@ export const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTi
                 </a>
             </div>
             <div className={"note-header-row"}>
-                <TextArea className={"web-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
+                <TextArea
+                    className={"web-title-input"}
+                    bordered={false}
+                    onChange={onTitleChange}
+                    autoSize={{minRows: 1, maxRows: 8}}
+                    value={title}/>
                 {renderEmbeddeds(note)}
                 <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
             </div>

@@ -2,19 +2,15 @@ import React, {useState} from 'react'
 import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../client/notes";
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {Link, useHistory} from "react-router-dom";
-import {CaretLeftFilled, CaretRightFilled, ReadOutlined} from "@ant-design/icons/lib";
 import "./note-view.scss"
 import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
 import {Divider, Input} from "antd";
-import {ImageLoader} from "../../../common/image-loader/ImageLoader";
 import {useCurrentUser} from "../../../utils/hooks";
-import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
 import {WebNoteHeaderSection} from "./note-header/web-note-header/WebNoteHeader";
-import {BookHeaderSection} from "./note-header/BookHeader";
-const { TextArea } = Input;
+import {BookHeaderSection} from "./note-header/book-header/BookHeader";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()

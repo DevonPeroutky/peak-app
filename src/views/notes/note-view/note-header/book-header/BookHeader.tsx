@@ -1,9 +1,9 @@
-import {PeakTag} from "../../../../types";
+import {PeakTag} from "../../../../../types";
 import {Link} from "react-router-dom";
 import {CaretLeftFilled, ReadOutlined} from "@ant-design/icons/lib";
-import {ImageLoader} from "../../../../common/image-loader/ImageLoader";
+import {ImageLoader} from "../../../../../common/image-loader/ImageLoader";
 import {Input} from "antd";
-import {NoteTagSelect} from "../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
+import {NoteTagSelect} from "../../../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import React from "react";
 import TextArea from "antd/es/input/TextArea";
 
