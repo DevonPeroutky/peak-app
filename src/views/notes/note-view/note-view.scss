@@ -24,6 +24,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        text-transform: uppercase;
+        font-size: .75rem;
 
         .note-web-icon {
           height: 18px;
@@ -32,13 +34,17 @@
         }
 
         .note-url {
-          color: $text-accent-color;
           text-decoration: none!important;
           text-shadow: none!important;
           background: none!important;
-          font-weight: 700;
-          text-transform: uppercase;
           letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: $text-accent-color;
+          font-size: .69rem;
+
+          &:hover {
+            color: $darker-text-accent-color;
+          }
         }
       }
     }
