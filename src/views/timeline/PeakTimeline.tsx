@@ -16,27 +16,55 @@ import {
 import {ImageLoader} from "../../common/image-loader/ImageLoader";
 import {deriveHostname} from "../../utils/urls";
 import "./peak-timeline.scss"
-import {formatStringAsDate} from "../../utils/time";
+import { formatStringAsDate} from "../../utils/time";
 import { groupBy, head } from "ramda";
 import cn from "classnames";
-import { sort } from 'ramda';
+import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 
 const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
 })
 
-const noteOrdering = (a: PeakNote, b: PeakNote) => {
-    return (a.inserted_at <= b.inserted_at) ? 1 : -1
-};
 
 export const PeakTimeline = (props: { }) => {
     const currentUser = useCurrentUser()
-    const notes: PeakNote[] = sort(noteOrdering, useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE))
+    const notesFromRedux: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE)
+    const [notes, setNotes] = useState<PeakNote[]>(notesFromRedux)
+    const [cursor, setCursor] = useState<string | null>(null)
+    const [atBeginning, setAtBeginning] = useState<boolean>(false)
+    const [loadingMore, setLoadingMore] = useState<boolean>(false)
 
+    const loadPageOfPeakNotes = useCallback(() => {
+        return loadPeakNotes(currentUser.id, cursor).then(res => {
+            const pagination_metadata = res.data.pagination_metadata
+            if (pagination_metadata.cursor) {
+                setCursor(pagination_metadata.cursor)
+            } else {
+                setAtBeginning(true)
+            }
+            return res
+        })
+    }, [cursor, currentUser.id])
 
+    // Initial Load of Notes
     useEffect(() => {
-        loadPeakNotes(currentUser.id)
+        loadPageOfPeakNotes()
     }, [])
+
+    // // If we have a note pushed to redux via socket
+    useEffect(() => {
+        setNotes(notesFromRedux)
+    }, [JSON.stringify(notesFromRedux)])
+
+    useBottomScrollListener(async () => {
+        console.log(`Hit the bottom!!!! ${atBeginning}`)
+        if (atBeginning) {
+            return
+        }
+        // await new Promise(r => setTimeout(r, 2000));
+        setLoadingMore(true)
+        loadPageOfPeakNotes().then(res => setLoadingMore(false))
+    });
 
     const groupedByDates = groupByDate(notes)
     const first_date = head(Object.keys(groupedByDates))
