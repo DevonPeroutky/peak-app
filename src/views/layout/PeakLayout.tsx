@@ -7,7 +7,7 @@ import {Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-do
 import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
-import {AnimationConfig, Loading, useAppLoadingAnimation} from "../loading/Loading";
+import {useAppLoadingAnimation} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentPage, useIsFullscreen, useOnlineStatus} from "../../utils/hooks";
@@ -85,7 +85,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
     }, [currentUser])
 
     if (isLoading) {
-        return renderLoadingAnimation(loadEverything)
+        return renderLoadingAnimation()(loadEverything)
     }
     return (
         <DndProvider backend={HTML5Backend}>

@@ -2,21 +2,11 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
 import cn from "classnames"
 import "./react-lottie-container.scss"
+import {ReactLottieContainerProps} from "../types";
 
-export interface AnimationConfig {
-    animationData: any
-    speed?: number
-    className?: string
-}
-
-export interface LoadingAnimationProps extends AnimationConfig {
-    callback: () => void
-    thePromised: () => Promise<any>
-}
-
-export const ReactLottieContainer = (props: LoadingAnimationProps) => {
+export const ReactLottieContainer = (props: ReactLottieContainerProps) => {
     const [loaded, setLoaded] = useState(true);
-    const { thePromised, callback, animationData, className, speed } = props;
+    const { promise, callback, animationData, className, speed } = props;
 
     const defaultConfig: ReactLottieConfig = {
         autoplay: true,
@@ -28,7 +18,7 @@ export const ReactLottieContainer = (props: LoadingAnimationProps) => {
     };
 
     useEffect(() => {
-        thePromised().then(res => {
+        promise().then(res => {
             setLoaded(true)
         })
     }, []);

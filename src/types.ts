@@ -20,8 +20,8 @@ export interface Peaker {
 }
 
 export enum RELOAD_REASON {
-    recover,
-    switch_accounts,
-    default
+    recover= "recover",
+    switch_accounts = "switch_accounts",
+    default = "default"
 }
 

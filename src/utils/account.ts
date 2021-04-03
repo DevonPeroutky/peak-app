@@ -11,7 +11,7 @@ export const useAccountSwitcher = () => {
 
     return async (selectedAccount: DisplayPeaker, currentAccountId: string) => {
         console.log(`useAccountSwitcher() has been called!!!!`)
-        return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push(`/home/scratchpad?reload-reason=${RELOAD_REASON.switch_accounts}`))
+        return switchAccountsOutsideOfRouter(currentAccountId, selectedAccount, () => history.push(`/home?reload-reason=${RELOAD_REASON.switch_accounts}`))
     }
 }
 
@@ -23,12 +23,13 @@ export const useAccountSwitcher = () => {
 // 5. Open a new socket for the "destined" user state. (Handled in <PeakLayout/>
 export const switchAccountsOutsideOfRouter = async (currentAccountId: string, selectedAccount: DisplayPeaker, actuallySwitchFunc: () => void) => {
     console.log(`Switching active account to (${selectedAccount.id}) : ${selectedAccount.email}`)
-    console.log(`CLOSING Socket for : ${currentAccountId}`)
-
-    // 1. Close the current Socket
-    closeUserNoteChannel(currentAccountId)
 
     if (selectedAccount.id !== currentAccountId) {
+        console.log(`CLOSING Socket for : ${currentAccountId}`)
+
+        // 1. Close the current Socket
+        closeUserNoteChannel(currentAccountId)
+
         // @ts-ignore
         // 2. De-focus current active element to avoid Slate focus bugs
         document.activeElement.blur()

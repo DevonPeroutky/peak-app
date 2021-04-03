@@ -190,6 +190,7 @@ deeplink.on('received', (link: string) => {
   mainWindow && mainWindow.webContents.send(channel, returned_code)
 });
 
+// REPLACE SLEEP WITH MESSAGE HANDLER
 ipcMain.on('uncaughtException', function(event, data){
   log.error("Uncaught Exception in the renderer process ", data)
   if (mainWindow) {

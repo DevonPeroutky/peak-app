@@ -1,49 +1,32 @@
-import React, { useEffect, useState, ReactNode} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import "./loading.scss"
 import {useQuery} from "../../utils/urls";
 import {RELOAD_REASON} from "../../types";
-import defaultMountainAnimation from "../../assets/animations/mountain-with-sun.json";
-import recoverAnimation from "../../assets/animations/recover.json";
-import switchAccountAnimation from "../../assets/animations/loading.json";
-import {LoadingAnimationProps, ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
+import {ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
 import { useHistory } from "react-router-dom";
-
-export interface AnimationConfig {
-    animationData: any
-    speed?: number
-    className?: string
-}
-
-export interface PeakLoadingAnimationProps extends LoadingAnimationProps {
-    containerClassName?: string
-    component?: ReactNode
-}
-
-function determineAnimationData (reason: RELOAD_REASON): AnimationConfig {
-    // @ts-ignore
-    const fuck = RELOAD_REASON[reason] as RELOAD_REASON
-    switch (fuck) {
-        case RELOAD_REASON.default:
-            return { animationData: defaultMountainAnimation }
-        case RELOAD_REASON.recover:
-            return { animationData: recoverAnimation, speed: 2 }
-        case RELOAD_REASON.switch_accounts:
-            return { animationData: switchAccountAnimation, speed: 3 }
-        default:
-            return { animationData: defaultMountainAnimation }
-    }
-}
+import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
+import {useCurrentUser} from "../../utils/hooks";
+import {PeakLoadingAnimationProps, PeakLoadingContainerProps} from "./types";
+import {determineAnimationData, LOAD_ENTIRE_WORLD_FOR_USER} from "./constants";
 
 export const useAppLoadingAnimation = () => {
     // All for the loading state!
     const query = useQuery();
     const history = useHistory();
+    const currentUser = useCurrentUser()
     const [isLoading, setLoading] = useState(true);
-    const [reloadType, setReloadType] = useState(RELOAD_REASON.default)
-    const [animationData, setAnimationData] = useState<AnimationConfig>({ animationData: defaultMountainAnimation })
-    const reloadReasonParam: RELOAD_REASON | null = RELOAD_REASON[query.get("reload-reason")]
+    const reloadReasonParam: RELOAD_REASON | undefined = query.get("reload-reason") as RELOAD_REASON
+    console.log(`RELOAD REASON PARAM `, reloadReasonParam)
+    const initialAnimationData = determineAnimationData(reloadReasonParam)
+    const [animation, setAnimation] = useState<PeakLoadingAnimationProps | undefined>(initialAnimationData)
 
-    const renderLoadingAnimation = (promise: () => Promise<any>, callback?: () => any) => {
+    // LoadEverything callback
+    const loadEverything = useCallback(() => {
+        return loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
+    }, [currentUser])
+
+    const renderLoadingAnimation = useCallback(() => (promise: () => Promise<any>, callback?: () => any) => {
+        const loadingAnimation: PeakLoadingAnimationProps = determineAnimationData(reloadReasonParam)
         return (
             <Loading
                 callback={() => {
@@ -53,22 +36,19 @@ export const useAppLoadingAnimation = () => {
                         setLoading(false)
                         history.push(`/home`)
                     }
-                    // reset ResetType
-                    setReloadType(RELOAD_REASON.default)
                 }}
-                thePromised={promise}
-                animationData={animationData.animationData}
-                speed={animationData.speed}/>
+                promise={promise}
+                animationData={animation.animationData}
+                speed={animation.speed}/>
         )
-    }
+    }, [animation])
 
     // Forced Reloading animation handler
     useEffect(() => {
-        console.log(`ReloadParam is now ${reloadReasonParam} <--> ${reloadType}`)
-        if (reloadReasonParam && reloadReasonParam !== reloadType) {
+        console.log(`ReloadParam is now ${reloadReasonParam}`)
+        if (reloadReasonParam) {
             setLoading(true)
-            setReloadType(reloadReasonParam)
-            setAnimationData(determineAnimationData(reloadReasonParam))
+            setAnimation(determineAnimationData(reloadReasonParam))
         }
     }, [reloadReasonParam])
 
@@ -78,7 +58,7 @@ export const useAppLoadingAnimation = () => {
     }
 }
 
-export const Loading = (props: PeakLoadingAnimationProps) => {
+export const Loading = (props: PeakLoadingContainerProps) => {
     const { containerClassName, component } = props;
 
     return (
