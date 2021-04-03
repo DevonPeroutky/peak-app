@@ -1,8 +1,8 @@
 import React from "react";
-import "./youtube-container.scss"
+import cn from "classnames";
 
-export const YoutubeNoteHeaderSection = (props: { url: string }) => {
-    const { url } = props
+export const YoutubeVideoContainer = (props: { url: string, className?: string }) => {
+    const { url, className } = props
     // og: https://www.youtube.com/watch?v=oVgn5s13H6Y
     // dest: https://www.youtube.com/embed/oVgn5s13H6Y
     const og_url = new URL(url)
@@ -10,6 +10,6 @@ export const YoutubeNoteHeaderSection = (props: { url: string }) => {
     const embeddedUrl: string = `https://www.youtube.com/embed/${videoId}`
 
     return (
-        <iframe src={embeddedUrl} className={"youtube-video"}/>
+        <iframe src={embeddedUrl} className={cn("youtube-container", className)}/>
     )
 }
