@@ -8,7 +8,6 @@ import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
 import {
     useCurrentNote,
     useDebouncePeakNoteSaver,
-    useDebouncePeakStubCreator,
     useSpecificNote
 } from "../../../../client/notes";
 import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
@@ -37,17 +36,8 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const noteInRedux = useCurrentNote()
     const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
-    const [readyToStub, setReadyToStub] = useState(false)
-    const [stubCreated, setStubCreated] = useState(false)
 
     const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
-
-    useEffect(() => {
-        // We have a race condition between the default Journal updater with is debounced at 1000 and we want to be after
-        sleep(1500).then(() => {
-            setReadyToStub(true)
-        })
-    }, [])
 
     // @ts-ignore
     const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
@@ -60,11 +50,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
             setNoteContent(newBody)
             noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
         }
-
-        // if (readyToStub && !stubCreated) {
-        //     createStub(currentUser, currentNote, journal.body as JournalEntry[], "added_notes")
-        //     setStubCreated(true)
-        // }
         onChangeMention(editor);
     }
 
