@@ -1,13 +1,11 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
-import cn from "classnames"
+import React, { useEffect, useState, ReactNode} from "react";
 import "./loading.scss"
 import {useQuery} from "../../utils/urls";
 import {RELOAD_REASON} from "../../types";
 import defaultMountainAnimation from "../../assets/animations/mountain-with-sun.json";
 import recoverAnimation from "../../assets/animations/recover.json";
 import switchAccountAnimation from "../../assets/animations/loading.json";
-import {ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
+import {LoadingAnimationProps, ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
 import { useHistory } from "react-router-dom";
 
 export interface AnimationConfig {
@@ -16,9 +14,9 @@ export interface AnimationConfig {
     className?: string
 }
 
-export interface LoadingAnimationProps extends AnimationConfig {
-    callback: () => void
-    thePromised: () => Promise<any>
+export interface PeakLoadingAnimationProps extends LoadingAnimationProps {
+    containerClassName?: string
+    component?: ReactNode
 }
 
 function determineAnimationData (reason: RELOAD_REASON): AnimationConfig {
@@ -80,30 +78,13 @@ export const useAppLoadingAnimation = () => {
     }
 }
 
-export const Loading = (props: LoadingAnimationProps) => {
-    const [loaded, setLoaded] = useState(true);
-    const { thePromised, callback, animationData, className, speed } = props;
-
-    // const defaultConfig: ReactLottieConfig = {
-    //     autoplay: true,
-    //     loop: true,
-    //     animationData: animationData,
-    //     rendererSettings: {
-    //         preserveAspectRatio: 'xMidYMid slice'
-    //     }
-    // };
-
-    useEffect(() => {
-        thePromised().then(res => {
-            setLoaded(true)
-        })
-    }, []);
-
-    const isLoading = useCallback(() => {
-        return loaded
-    }, [loaded]);
+export const Loading = (props: PeakLoadingAnimationProps) => {
+    const { containerClassName, component } = props;
 
     return (
-        <ReactLottieContainer animationData={animationData} callback={callback} thePromised={thePromised}/>
+        <div className={containerClassName}>
+            <ReactLottieContainer {...props}/>
+            { component }
+        </div>
     )
 };

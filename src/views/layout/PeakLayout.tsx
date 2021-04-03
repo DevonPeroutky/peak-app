@@ -42,12 +42,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
 
-    // All for the loading state!
-    // const query = useQuery();
-    // const [isLoading, setLoading] = useState(true);
-    // const [reloadType, setReloadType] = useState(RELOAD_REASON.default)
-    // const [animationData, setAnimationData] = useState<AnimationConfig>({ animationData: defaultMountainAnimation })
-    // const reloadReasonParam: RELOAD_REASON | null = RELOAD_REASON[query.get("reload-reason")]
+    // Loading state and animation!
     const { isLoading, renderLoadingAnimation } = useAppLoadingAnimation()
 
     const currentWikiPage = useCurrentPage();
@@ -83,16 +78,6 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
             window.scrollTo(0, 0)
         }
     }, [history.location.hash])
-
-    // Forced Reloading animation handler
-    // useEffect(() => {
-    //     console.log(`ReloadParam is now ${reloadReasonParam} <--> ${reloadType}`)
-    //     if (reloadReasonParam && reloadReasonParam !== reloadType) {
-    //         setLoading(true)
-    //         setReloadType(reloadReasonParam)
-    //         setAnimationData(determineAnimationData(reloadReasonParam))
-    //     }
-    // }, [reloadReasonParam])
 
     // LoadEverything callback
     const loadEverything = useCallback(() => {
