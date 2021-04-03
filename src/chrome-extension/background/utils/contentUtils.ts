@@ -35,6 +35,7 @@ function tellDrawerToSubmit(userId: string, activeTab: Tab) {
 }
 
 export function openDrawer() {
+    console.log(`Opening Drawer!`)
     function injectContentScriptAndLoadDrawer(user: Peaker) {
         idempotentlyInjectContentScript().then(result => {
             switch (result.res) {

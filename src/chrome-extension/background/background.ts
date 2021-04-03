@@ -16,6 +16,8 @@ import {deleteNoteRequest} from "../../client/webNotes";
 // Do we want to do this????
 chrome.storage.sync.clear()
 
+console.log(`WHAT THE FUCK!!!!`)
+
 // -------------------------------------
 // Log user in and Fetch User Auth Token
 // -------------------------------------
@@ -36,6 +38,7 @@ chrome.runtime.onInstalled.addListener(function() {
 // Listen for HotKey commands
 // --------------------------------
 chrome.commands.onCommand.addListener(function(command) {
+    console.log(`Command was pressed! `, command)
     switch (command) {
         case "save-page":
             openDrawer()
@@ -104,3 +107,6 @@ chrome.runtime.onMessage.addListener(function(request: ChromeExtMessage, sender,
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
     deleteItem([ACTIVE_TAB_KEY, tabId.toString()] )
 });
+
+
+chrome.commands.getAll(commands => console.log(commands))

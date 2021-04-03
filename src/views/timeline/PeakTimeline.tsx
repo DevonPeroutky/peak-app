@@ -19,22 +19,19 @@ import "./peak-timeline.scss"
 import {formatStringAsDate} from "../../utils/time";
 import { groupBy, head } from "ramda";
 import cn from "classnames";
+import { sort } from 'ramda';
 
 const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
 })
 
-const groupByRandomDate = groupBy(function (note: PeakNote) {
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    return `2020-03-${getRandomInt(28)}`
-})
+const noteOrdering = (a: PeakNote, b: PeakNote) => {
+    return (a.inserted_at <= b.inserted_at) ? 1 : -1
+};
 
 export const PeakTimeline = (props: { }) => {
     const currentUser = useCurrentUser()
-    const notes: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE)
+    const notes: PeakNote[] = sort(noteOrdering, useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE))
 
 
     useEffect(() => {
@@ -65,7 +62,7 @@ export const PeakTimeline = (props: { }) => {
 
                             if ( date === FINAL ) {
                                 return (
-                                    <Timeline.Item className={"final-timeline-item"} dot={<UpCircleOutlined className={"timeline-icon"}/>}>
+                                    <Timeline.Item key={"first-item"} className={"final-timeline-item"} dot={<UpCircleOutlined className={"timeline-icon"}/>}>
                                     </Timeline.Item>
                                 )
                             }
@@ -78,7 +75,7 @@ export const PeakTimeline = (props: { }) => {
                                         notes.map(n =>
                                             <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
                                                 <div className={"peak-timeline-item-body"}>
-                                                    <span className={"subtitle"}>{deriveHostname(n.url)}</span>
+                                                    <a target="_blank" href={n.url} className={"subtitle"}>{deriveHostname(n.url)}</a>
                                                     <Link to={buildNoteUrl(n.id)}>
                                                         <span className={"title"}>{ n.title }</span>
                                                     </Link>
