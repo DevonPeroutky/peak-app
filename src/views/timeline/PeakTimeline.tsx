@@ -9,9 +9,7 @@ import {buildNoteUrl} from "../../utils/notes";
 import {PeakTagDisplay} from "../../common/peak-tag-display/PeakTagDisplay";
 import {
     CalendarOutlined,
-    CaretDownOutlined,
     DeleteOutlined,
-    DownCircleOutlined,
     ReadFilled,
     UpCircleOutlined
 } from "@ant-design/icons/lib";
