@@ -29,7 +29,7 @@ const groupByDate = groupBy(function (note: PeakNote) {
 export const PeakTimeline = (props: { }) => {
     const currentUser = useCurrentUser()
     const notesFromRedux: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE)
-    const [notes, setNotes] = useState<PeakNote[]>(notesFromRedux)
+    const [notes, setNotes] = useState<PeakNote[]>([])
     const [cursor, setCursor] = useState<string | null>(null)
     const [atBeginning, setAtBeginning] = useState<boolean>(false)
     const [loadingMore, setLoadingMore] = useState<boolean>(false)
