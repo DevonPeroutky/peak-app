@@ -5,7 +5,6 @@ import {Link, useHistory} from "react-router-dom";
 import {CaretLeftFilled, CaretRightFilled, ReadOutlined} from "@ant-design/icons/lib";
 import "./note-view.scss"
 import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {capitalize_and_truncate} from "../../../utils/strings";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
 import {Divider, Input} from "antd";
 import {ImageLoader} from "../../../common/image-loader/ImageLoader";
@@ -13,8 +12,8 @@ import {useCurrentUser} from "../../../utils/hooks";
 import {NoteTagSelect} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
-import {deriveHostname} from "../../../utils/urls";
-import {YoutubeNoteHeaderSection} from "./note-header/YoutubeContainer";
+import {WebNoteHeaderSection} from "./note-header/WebNoteHeader";
+import {BookHeaderSection} from "./note-header/BookHeader";
 const { TextArea } = Input;
 
 export const PeakNoteView = (props) => {
@@ -50,48 +49,6 @@ export const PeakNoteView = (props) => {
     )
 }
 
-const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTitleChange: (e) => void, selected_tags: PeakTag[]}) => {
-    const { note, selected_tags, onTitleChange, title } = props
-
-    return (
-        <div className={"note-header-section web_note"}>
-            <div className={"note-subheader-section"}>
-                <Link to={`/home/notes`} className={"note-link-container"}><CaretLeftFilled/> Back to notes</Link>
-                <a href={note.url} target={"_blank"} className={"note-link-container"}>
-                    <img className={"note-web-icon"} src={note.icon_url}/>
-                    <span className={"note-url"}>{`${capitalize_and_truncate(deriveHostname(note.url))}`} <CaretRightFilled/></span>
-                </a>
-            </div>
-            <div className={"note-header-row"}>
-                <TextArea className={"web-title-input"} bordered={false} onChange={onTitleChange} value={title}/>
-                { (note.url && deriveHostname(note.url) === "youtube.com") ? <YoutubeNoteHeaderSection url={note.url}/> : null }
-                <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
-            </div>
-        </div>
-    )
-}
-const BookHeaderSection = (props: {note_id: string, icon_url: string, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
-    const { note_id, icon_url, title, author, onAuthorChange, onTitleChange, selected_tags } = props
-    return (
-        <div className={"note-header-section peak_book"}>
-            <div className={"note-subheader-section"}>
-                <Link to={`/home/books`}><CaretLeftFilled/> Back to Books</Link>
-            </div>
-            <div className={"book-note-header-row"}>
-                <div className={"image-section"}>
-                    <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
-                </div>
-                <div className={"note-header-section"}>
-                    <div className={"note-header"}>
-                        <TextArea autoSize={true} className={"book-title-input"} bordered={false} onChange={onTitleChange} value={title} placeholder="Add a book title"/>
-                        <Input className={"author-subtitle"} bordered={false} onChange={onAuthorChange} value={author} placeholder="Add an Author"/>
-                        <NoteTagSelect selected_tags={selected_tags} note_id={note_id}/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
 
 interface NoteHeaderProps {
     currentNote: PeakNote,
