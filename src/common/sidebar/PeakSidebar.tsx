@@ -26,7 +26,7 @@ const PeakSidebar = (props: { }) => {
             </div>
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
-                <Menu.Item key="home/scratchpad">
+                <Menu.Item key="home/scratchpad" className={(currentPageId === "home") ? "ant-menu-item-selected" : ""}>
                     <Link to="/home/scratchpad">
                         <MenuOutlined/>Scratchpad
                     </Link>
