@@ -42,7 +42,9 @@ export const ReactLottieContainer = (props: ReactLottieContainerProps) => {
                         console.log(`Loop has completed!`)
                         if (isLoading()) {
                             console.log(`Loop has completed and we are done!`)
-                            callback();
+                            if (callback) {
+                                callback();
+                            }
                         }
                     }
                 },

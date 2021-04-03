@@ -4,29 +4,19 @@ import {useQuery} from "../../utils/urls";
 import {RELOAD_REASON} from "../../types";
 import {ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
 import { useHistory } from "react-router-dom";
-import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
-import {useCurrentUser} from "../../utils/hooks";
-import {PeakLoadingAnimationProps, PeakLoadingContainerProps} from "./types";
-import {determineAnimationData, LOAD_ENTIRE_WORLD_FOR_USER} from "./constants";
+import {PeakLoadingContainerProps} from "./types";
+import {useAnimationData} from "./constants";
 
 export const useAppLoadingAnimation = () => {
-    // All for the loading state!
     const query = useQuery();
     const history = useHistory();
-    const currentUser = useCurrentUser()
     const [isLoading, setLoading] = useState(true);
     const reloadReasonParam: RELOAD_REASON | undefined = query.get("reload-reason") as RELOAD_REASON
     console.log(`RELOAD REASON PARAM `, reloadReasonParam)
-    const initialAnimationData = determineAnimationData(reloadReasonParam)
-    const [animation, setAnimation] = useState<PeakLoadingAnimationProps | undefined>(initialAnimationData)
+    const determineAnimationData = useAnimationData()
+    const [animation, setAnimation] = useState<PeakLoadingContainerProps | undefined>(determineAnimationData(reloadReasonParam))
 
-    // LoadEverything callback
-    const loadEverything = useCallback(() => {
-        return loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
-    }, [currentUser])
-
-    const renderLoadingAnimation = useCallback(() => (promise: () => Promise<any>, callback?: () => any) => {
-        const loadingAnimation: PeakLoadingAnimationProps = determineAnimationData(reloadReasonParam)
+    const renderLoadingAnimation = useCallback((promise: () => Promise<any>, callback?: () => any) => {
         return (
             <Loading
                 callback={() => {

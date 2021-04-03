@@ -8,7 +8,7 @@ interface AnimationConfig {
 
 export interface ReactLottieContainerProps extends AnimationConfig {
     promise: () => Promise<any>
-    callback: () => void
+    callback?: () => void
 }
 
 

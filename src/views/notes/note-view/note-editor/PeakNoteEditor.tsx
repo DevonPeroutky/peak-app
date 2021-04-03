@@ -95,7 +95,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     return (
         <Slate
             editor={editor}
-            value={null}
+            value={noteContent}
             onChange={updateNoteContent}>
             <div className="peak-note-editor-container">
                 <MemoizedLinkMenu
