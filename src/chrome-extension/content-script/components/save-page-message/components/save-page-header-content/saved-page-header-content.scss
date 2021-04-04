@@ -7,7 +7,6 @@
 
   // Necessary for Youtube
   background-color: white!important;
-  box-shadow: none!important;
 
   .peak-header-group {
     display: flex;
@@ -15,7 +14,6 @@
 
     // Necessary for Youtube
     background-color: white!important;
-    box-shadow: none!important;
 
     .peak-message-header {
       font-size: 20px!important;
@@ -27,7 +25,6 @@
 
       // Necessary for Youtube
       background-color: white!important;
-      box-shadow: none!important;
 
       &.instruction {
         font-size: 16px!important;
@@ -41,8 +38,7 @@
       width: auto;
 
       // Necessary for Youtube
-      background-color: inherit!important;
-      box-shadow: inherit!important;
+      background-color: white!important;
     }
   }
 
