@@ -12,7 +12,7 @@
   },
   "homepage": ".",
   "main": "build/electron/main.js",
-  "version": "0.0.6-beta",
+  "version": "1.0.0-beta",
   "scripts": {
     "extension:dev": "./scripts/chrome-extension/development.sh",
     "extension:build": "./scripts/chrome-extension/production.sh",
