@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {store} from "../redux/store";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID} from "../redux/slices/noteSlice";
+import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID, appendNotes} from "../redux/slices/noteSlice";
 import {useHistory, useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
@@ -21,6 +21,7 @@ import {
 import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
 import {deleteNoteRequest} from "./webNotes";
 import {AxiosResponse} from "axios";
+import {PaginationResponse} from "./types";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -28,11 +29,13 @@ interface UpdateNotePayload {
     author?: string,
     tag_ids?: string[]
 }
-
 interface CreateNotePayload {
     title: string,
     author: string,
     iconUrl: string
+}
+interface NoteListResponse extends PaginationResponse {
+    books: PeakNote[]
 }
 
 // Requests
@@ -51,8 +54,9 @@ function updateNoteRequest(userId: string, noteId: string, book: UpdateNotePaylo
         "book": book
     })
 }
-function fetchNotesRequest(userId: string) {
-    return peakAxiosClient.get(`/api/v1/users/${userId}/books`)
+function fetchNotesRequest(userId: string, cursor?: string): Promise<AxiosResponse<NoteListResponse>> {
+    const cursorQueryParam = (cursor) ? `?cursor=${cursor}` : ``
+    return peakAxiosClient.get<NoteListResponse>(`/api/v1/users/${userId}/books${cursorQueryParam}`)
 }
 export function fetchNewestNote(user: Peaker): Promise<PeakNote> {
     return peakAxiosClient.get<{book: PeakNote}>(`/api/v1/users/${user.id}/fetch-latest-note?peak_user_id=${user.peak_user_id}`).then(res => res.data.book)
@@ -70,13 +74,15 @@ export function deletePeakNote(userId: string, noteId: string): Promise<string> 
 }
 
 // Requests + Reduxs
-export function loadPeakNotes(userId: string) {
-    return fetchNotesRequest(userId).then(res => {
+export function loadPeakNotes(userId: string, cursor?: string): Promise<AxiosResponse<NoteListResponse>> {
+    return fetchNotesRequest(userId, cursor).then(res => {
         const books = res.data.books as PeakNote[]
-        store.dispatch(setNotes(books))
+        store.dispatch(appendNotes(books))
+        return res
     }).catch(err => {
         console.log(`DID NOT successfully load the books for user: ${userId}`)
         console.log(err)
+        return Promise.reject()
     })
 }
 export function createNewPeakBook(userId: string, book: CreateNotePayload): Promise<PeakNote> {

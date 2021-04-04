@@ -9,39 +9,62 @@ import {buildNoteUrl} from "../../utils/notes";
 import {PeakTagDisplay} from "../../common/peak-tag-display/PeakTagDisplay";
 import {
     CalendarOutlined,
-    CaretDownOutlined,
     DeleteOutlined,
-    DownCircleOutlined,
     ReadFilled,
     UpCircleOutlined
 } from "@ant-design/icons/lib";
 import {ImageLoader} from "../../common/image-loader/ImageLoader";
 import {deriveHostname} from "../../utils/urls";
 import "./peak-timeline.scss"
-import {formatStringAsDate} from "../../utils/time";
+import { formatStringAsDate} from "../../utils/time";
 import { groupBy, head } from "ramda";
 import cn from "classnames";
+import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 
 const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
 })
 
-const groupByRandomDate = groupBy(function (note: PeakNote) {
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    return `2020-03-${getRandomInt(28)}`
-})
 
 export const PeakTimeline = (props: { }) => {
     const currentUser = useCurrentUser()
-    const notes: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE)
+    const notesFromRedux: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE)
+    const [notes, setNotes] = useState<PeakNote[]>([])
+    const [cursor, setCursor] = useState<string | null>(null)
+    const [atBeginning, setAtBeginning] = useState<boolean>(false)
+    const [loadingMore, setLoadingMore] = useState<boolean>(false)
 
+    const loadPageOfPeakNotes = useCallback(() => {
+        return loadPeakNotes(currentUser.id, cursor).then(res => {
+            const pagination_metadata = res.data.pagination_metadata
+            if (pagination_metadata.cursor) {
+                setCursor(pagination_metadata.cursor)
+            } else {
+                setAtBeginning(true)
+            }
+            return res
+        })
+    }, [cursor, currentUser.id])
 
+    // Initial Load of Notes
     useEffect(() => {
-        loadPeakNotes(currentUser.id)
+        loadPageOfPeakNotes()
     }, [])
+
+    // // If we have a note pushed to redux via socket
+    useEffect(() => {
+        setNotes(notesFromRedux)
+    }, [JSON.stringify(notesFromRedux)])
+
+    useBottomScrollListener(async () => {
+        console.log(`Hit the bottom!!!! ${atBeginning}`)
+        if (atBeginning) {
+            return
+        }
+        // await new Promise(r => setTimeout(r, 2000));
+        setLoadingMore(true)
+        loadPageOfPeakNotes().then(res => setLoadingMore(false))
+    });
 
     const groupedByDates = groupByDate(notes)
     const first_date = head(Object.keys(groupedByDates))
@@ -67,7 +90,7 @@ export const PeakTimeline = (props: { }) => {
 
                             if ( date === FINAL ) {
                                 return (
-                                    <Timeline.Item className={"final-timeline-item"} dot={<UpCircleOutlined className={"timeline-icon"}/>}>
+                                    <Timeline.Item key={"first-item"} className={"final-timeline-item"} dot={<UpCircleOutlined className={"timeline-icon"}/>}>
                                     </Timeline.Item>
                                 )
                             }
@@ -80,7 +103,7 @@ export const PeakTimeline = (props: { }) => {
                                         notes.map(n =>
                                             <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
                                                 <div className={"peak-timeline-item-body"}>
-                                                    <span className={"subtitle"}>{deriveHostname(n.url)}</span>
+                                                    <a target="_blank" href={n.url} className={"subtitle"}>{deriveHostname(n.url)}</a>
                                                     <Link to={buildNoteUrl(n.id)}>
                                                         <span className={"title"}>{ n.title }</span>
                                                     </Link>

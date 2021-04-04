@@ -14,6 +14,11 @@ import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/p
 import {buildNoteUrl} from "../../../utils/notes";
 import {useCurrentUser} from "../../../utils/hooks";
 
+/**
+ * Currently used exclusively for Books
+ * @param props
+ * @constructor
+ */
 export const PeakNoteListView = (props: { page_header: string, note_type: PeakKnowledgeKeyOption }) => {
     const { page_header, note_type } = props
     const currentUser = useCurrentUser()

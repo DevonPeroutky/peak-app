@@ -11,11 +11,16 @@ import { useNodeContentSelect } from "../../common/rich-text-editor/utils/node-c
 import { baseKeyBindingHandler } from "../../common/rich-text-editor/utils/keyboard-handler";
 import { NodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import { beginSavingPage, useActiveEditorState } from "../../redux/slices/activeEditor/activeEditorSlice";
-import { scratchpadNormalizers, scratchpadPlugins } from "../../common/rich-text-editor/editors/scratchpad/config";
+import {
+    SCRATCHPAD_NODE_LEVEL,
+    scratchpadNormalizers,
+    scratchpadPlugins
+} from "../../common/rich-text-editor/editors/scratchpad/config";
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
 import {sleep} from "../../chrome-extension/utils/generalUtil";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
+import {WIKI_NODE_LEVEL} from "../../common/rich-text-editor/editors/wiki/config";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -46,6 +51,8 @@ export const PeakScratchpad = (props: {}) => {
         target,
         nodeContentSelectMode
     } = useNodeContentSelect({
+        editorLevel: SCRATCHPAD_NODE_LEVEL,
+        maxSuggestions: 10,
         trigger: '/',
     });
 

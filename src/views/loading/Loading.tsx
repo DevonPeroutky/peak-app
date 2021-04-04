@@ -1,62 +1,58 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {Lottie, ReactLottieConfig} from "@crello/react-lottie";
-import cn from "classnames"
+import React, {useEffect, useState, useCallback} from "react";
+import {useQuery} from "../../utils/urls";
+import {RELOAD_REASON} from "../../types";
+import {ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
+import { useHistory } from "react-router-dom";
+import {PeakLoadingContainerProps} from "./types";
+import {useAnimationData} from "./constants";
 import "./loading.scss"
 
-export interface AnimationConfig {
-    animationData: any
-    speed?: number
-    className?: string
-}
+export const useAppLoadingAnimation = () => {
+    const query = useQuery();
+    const history = useHistory();
+    const [isLoading, setLoading] = useState(true);
+    const reloadReasonParam: RELOAD_REASON | undefined = query.get("reload-reason") as RELOAD_REASON
+    const determineAnimationData = useAnimationData()
+    const [animation, setAnimation] = useState<PeakLoadingContainerProps | undefined>(determineAnimationData(reloadReasonParam))
 
-export interface LoadingAnimationProps extends AnimationConfig {
-    callback: () => void
-    thePromised: () => Promise<any>
-}
+    const renderLoadingAnimation = useCallback((promise: () => Promise<any>, callback?: () => any) => {
+        return (
+            <Loading
+                callback={() => {
+                    if (callback) {
+                        callback()
+                    } else {
+                        setLoading(false)
+                        history.push(`/home`)
+                    }
+                }}
+                promise={promise}
+                {...animation}
+                />
+        )
+    }, [animation])
 
-export const Loading = (props: LoadingAnimationProps) => {
-    const [loaded, setLoaded] = useState(true);
-    const { thePromised, callback, animationData, className, speed } = props;
-
-    const defaultConfig: ReactLottieConfig = {
-        autoplay: true,
-        loop: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-        }
-    };
-
+    // Forced Reloading animation handler
     useEffect(() => {
-        thePromised().then(res => {
-            setLoaded(true)
-        })
-    }, []);
+        if (reloadReasonParam) {
+            setLoading(true)
+            setAnimation(determineAnimationData(reloadReasonParam))
+        }
+    }, [reloadReasonParam])
 
-    const isLoading = useCallback(() => {
-        return loaded
-    }, [loaded]);
+    return {
+        isLoading,
+        renderLoadingAnimation
+    }
+}
+
+export const Loading = (props: PeakLoadingContainerProps) => {
+    const { containerClassName, component } = props;
 
     return (
-        <div className={cn("peak-loader", className ? className : "")}>
-            <Lottie config={defaultConfig} height="400px" width="400px" speed={speed | 2.5} lottieEventListeners={[
-                {
-                    name: 'complete',
-                    callback: () => {
-                        console.log('The animation completed:');
-                    }
-                },
-                {
-                    name: 'loopComplete',
-                    callback: () => {
-                        console.log(`Loop has completed!`)
-                        if (isLoading()) {
-                            console.log(`Loop has completed and we are done!`)
-                            callback();
-                        }
-                    }
-                },
-            ]}/>
+        <div className={containerClassName}>
+            <ReactLottieContainer {...props}/>
+            { component }
         </div>
     )
 };

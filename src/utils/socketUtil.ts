@@ -96,10 +96,12 @@ export const subscribeToUserNoteChannel = (userId: string) => {
             console.log(`Current Active user (${userId}) `)
 
             const newlyCreatedNote: PeakNote = res.note
-            const tags: PeakTag[] = res.tags
+            const newlyCreatedTag: PeakTag[] = res.tags
             batch(() => {
                 store.dispatch(upsertNote(newlyCreatedNote))
-                store.dispatch(addTags(tags))
+                if (newlyCreatedTag.length > 0) {
+                    store.dispatch(addTags(newlyCreatedTag))
+                }
             })
         })
 

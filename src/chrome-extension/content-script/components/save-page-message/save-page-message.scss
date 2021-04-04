@@ -11,12 +11,13 @@ $margin-top: 24px;//Also seet in the component via notification.config
   margin-top: $margin-top!important;
   min-height: 150px;
   padding: $og-padding 0px 0px!important;
-  background-color: white!important;
   font-family: "Inter"!important;
   color: $text-color!important;
   letter-spacing: normal!important;
   font-weight: 400!important;
 
+  // Necessary for Youtube
+  background-color: white!important;
 
   .ant-notification-notice-content {
     height: 100% !important;

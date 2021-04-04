@@ -18,6 +18,6 @@ export const TempDesktopLogin = (props: { }) => {
     }
 
     return (
-        <Loading callback={() => setLoading(false)} thePromised={loadEverything} animationData={animationData}/>
+        <Loading callback={() => setLoading(false)} promise={loadEverything} animationData={animationData}/>
     )
 };

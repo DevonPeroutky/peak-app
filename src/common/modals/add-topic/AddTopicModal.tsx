@@ -28,8 +28,8 @@ const AddTopicModal = (props: {}) => {
             return
         }
 
-        if (topicName.length > 50) {
-            message.warning("Topic name can not be more than 50 characters");
+        if (topicName.length > 250) {
+            message.warning("Topic name can not be more than 250 characters");
             return
         }
 

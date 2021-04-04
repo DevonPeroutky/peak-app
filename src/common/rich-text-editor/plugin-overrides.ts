@@ -50,3 +50,11 @@ export const PEAK_BLOCKQUOTE_OVERRIDES = {
         }
     }
 }
+
+export const PEAK_CODE_BLOCK_OVERRIDES = {
+    [ELEMENT_CODE_BLOCK]: {
+        rootProps: {
+            className: 'slate-code-block peak-code-block',
+        }
+    }
+}

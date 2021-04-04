@@ -7,7 +7,7 @@ import {Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-do
 import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
-import {AnimationConfig, Loading} from "../loading/Loading";
+import {useAppLoadingAnimation} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
 import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentPage, useIsFullscreen, useOnlineStatus} from "../../utils/hooks";
@@ -29,39 +29,16 @@ import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
-import {RELOAD_REASON} from "../../types";
-import defaultMountainAnimation from '../../assets/animations/mountain-with-sun.json';
-import switchAccountAnimation from '../../assets/animations/loading.json';
-import recoverAnimation from '../../assets/animations/recover.json';
-import {useQuery} from "../../utils/urls";
 
 const { Content } = Layout;
-
-function determineAnimationData (reason: RELOAD_REASON): AnimationConfig {
-    // @ts-ignore
-    const fuck = RELOAD_REASON[reason] as RELOAD_REASON
-    switch (fuck) {
-        case RELOAD_REASON.default:
-            return { animationData: defaultMountainAnimation }
-        case RELOAD_REASON.recover:
-            return { animationData: recoverAnimation, speed: 2 }
-        case RELOAD_REASON.switch_accounts:
-            return { animationData: switchAccountAnimation, speed: 3 }
-        default:
-            return { animationData: defaultMountainAnimation }
-    }
-}
 
 const PeakLayout = (props: { currentUser: Peaker }) => {
     const { currentUser } = props
     let match = useRouteMatch();
     const { topic_id } = useParams<{topic_id: string}>();
 
-    const query = useQuery();
-    const [isLoading, setLoading] = useState(true);
-    const [reloadType, setReloadType] = useState(RELOAD_REASON.default)
-    const [animationData, setAnimationData] = useState<AnimationConfig>({ animationData: defaultMountainAnimation })
-    const reloadReasonParam: RELOAD_REASON | null = RELOAD_REASON[query.get("reload-reason")]
+    // Loading state and animation!
+    const { isLoading, renderLoadingAnimation } = useAppLoadingAnimation()
 
     const currentWikiPage = useCurrentPage();
     const history = useHistory()
@@ -97,24 +74,14 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
         }
     }, [history.location.hash])
 
-    useEffect(() => {
-        console.log(`ReloadParam is now ${reloadReasonParam} <--> ${reloadType}`)
-        if (reloadReasonParam && reloadReasonParam !== reloadType) {
-            setLoading(true)
-            setReloadType(reloadReasonParam)
-            setAnimationData(determineAnimationData(reloadReasonParam))
-        }
-    }, [reloadReasonParam])
-
+    // LoadEverything callback
     const loadEverything = useCallback(() => {
-        setReloadType(null)
         return loadEntireWorldForAllAccounts(currentUser.id, currentUser.peak_user_id)
     }, [currentUser])
 
-    if (isLoading) return <Loading callback={() => {
-        setLoading(false)
-        history.push(`/home`)
-    }} thePromised={loadEverything} animationData={animationData.animationData} speed={animationData.speed}/>
+    if (isLoading) {
+        return renderLoadingAnimation(loadEverything)
+    }
     return (
         <DndProvider backend={HTML5Backend}>
             <Layout className="peak-parent-layout">
