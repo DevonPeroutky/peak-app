@@ -11,9 +11,13 @@ $drawer-title-height: 45px;
   flex-grow: 1;
   width: 100%;
 
+  // Necessary for Youtube
+  background-color: white!important;
+
   .peak-extension-divider {
     margin-top: 0px;
     margin-bottom: 0px;
+    background-color: white!important;
   }
 
   .peak-extension-row-container {
@@ -23,6 +27,7 @@ $drawer-title-height: 45px;
     min-height: 50px;
     height: 50px;
     box-sizing: border-box;
+    background-color: white!important;
 
     &.title {
       display: flex;
@@ -30,6 +35,7 @@ $drawer-title-height: 45px;
       width: 100%;
       position: relative;
       min-height: $drawer-title-height!important;
+      background-color: white!important;
 
       .page-peak-favicon {
         height: 14px;
@@ -52,6 +58,7 @@ $drawer-title-height: 45px;
         background-color: white!important;
         min-height: 50px!important;
         margin: 0!important;
+        background-color: white!important;
 
 
         &:hover {
