@@ -6,11 +6,11 @@ import {ReactLottieContainerProps} from "../types";
 
 export const ReactLottieContainer = (props: ReactLottieContainerProps) => {
     const [loaded, setLoaded] = useState(true);
-    const { promise, callback, animationData, className, speed } = props;
+    const { promise, callback, animationData, animationClassName, speed, loop } = props;
 
     const defaultConfig: ReactLottieConfig = {
         autoplay: true,
-        loop: true,
+        loop: (loop !== undefined) ? loop : true,
         animationData: animationData,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
@@ -28,7 +28,7 @@ export const ReactLottieContainer = (props: ReactLottieContainerProps) => {
     }, [loaded]);
 
     return (
-        <div className={cn("peak-react-lottie-container", className ? className : "")}>
+        <div className={cn("peak-react-lottie-container", animationClassName ? animationClassName : "")}>
             <Lottie config={defaultConfig} height="400px" width="400px" speed={speed | 2.5} lottieEventListeners={[
                 {
                     name: 'complete',

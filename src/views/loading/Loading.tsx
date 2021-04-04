@@ -1,11 +1,11 @@
 import React, {useEffect, useState, useCallback} from "react";
-import "./loading.scss"
 import {useQuery} from "../../utils/urls";
 import {RELOAD_REASON} from "../../types";
 import {ReactLottieContainer} from "./react-lottie-container/ReactLottieContainer";
 import { useHistory } from "react-router-dom";
 import {PeakLoadingContainerProps} from "./types";
 import {useAnimationData} from "./constants";
+import "./loading.scss"
 
 export const useAppLoadingAnimation = () => {
     const query = useQuery();
@@ -28,8 +28,8 @@ export const useAppLoadingAnimation = () => {
                     }
                 }}
                 promise={promise}
-                animationData={animation.animationData}
-                speed={animation.speed}/>
+                {...animation}
+                />
         )
     }, [animation])
 

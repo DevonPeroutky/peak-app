@@ -3,7 +3,8 @@ import {ReactNode} from "react";
 interface AnimationConfig {
     animationData: any
     speed?: number
-    className?: string
+    animationClassName?: string
+    loop?: boolean
 }
 
 export interface ReactLottieContainerProps extends AnimationConfig {
