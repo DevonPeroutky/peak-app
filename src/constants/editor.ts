@@ -22,7 +22,9 @@ export const INITIAL_PAGE_STATE: PeakWikiPage = {
     id: "-1",
     body: [
         {
-            children: [EMPTY_PARAGRAPH_NODE()],
+            children: [
+                EMPTY_PARAGRAPH_NODE()
+            ],
         }
     ],
     title: ''

@@ -1,6 +1,7 @@
 import {Node} from "slate";
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Range} from "slate/dist/interfaces/range";
+import {SlateDocument} from "@udecode/slate-plugins";
 
 interface CodeEditorFocusState {
     [key: string]: boolean
@@ -22,11 +23,18 @@ export interface PeakEditorState {
 export interface PeakWikiPage {
     id: string,
     inserted_at?: Date,
-    body: Node[] | JournalEntry[],
+    body: Node[] | JournalEntry[], // Should probably be Node[] or better yet --> SlateDocument
+    title: string,
+}
+
+export interface ScratchPad {
+    id: string,
+    inserted_at?: Date,
+    body: Node[],
     title: string,
 }
 
 export interface PeakWikiState {
-    [key: string]: PeakWikiPage;
+    [key: string]: PeakWikiPage | ScratchPad;
 }
 

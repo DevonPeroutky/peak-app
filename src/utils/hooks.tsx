@@ -28,7 +28,7 @@ import {updatePage} from "./requests";
 import {useQuery} from "./urls";
 import {FutureRead} from "../redux/slices/readingListSlice";
 import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
-import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
+import {PeakWikiPage, PeakWikiState, ScratchPad} from "../constants/wiki-types";
 import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
@@ -37,7 +37,6 @@ import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/a
 import {useNotes} from "../client/notes";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
-import {sort} from "ramda";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -52,7 +51,7 @@ export function useJournal() {
 }
 
 export function useScratchpad() {
-    return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[SCRATCHPAD_ID]);
+    return useSelector<AppState, ScratchPad>(state => state.peakWikiState[SCRATCHPAD_ID] as ScratchPad);
 }
 
 export function useChromeExtEditorState() {
