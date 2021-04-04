@@ -6,7 +6,7 @@ import {
     sendSuccessfulSyncMessage,
     sendUnauthedMessageToUser
 } from "./utils/messageUtil";
-import {idempotentlyInjectContentScript, openDrawer} from "./utils/contentUtils";
+import {openDrawer} from "./utils/contentUtils";
 import {deleteItem} from "../utils/storageUtils";
 import {ACTIVE_TAB_KEY} from "../constants/constants";
 import {sleep} from "../utils/generalUtil";

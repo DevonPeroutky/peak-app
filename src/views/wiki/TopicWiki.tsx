@@ -92,6 +92,8 @@ const TopicWiki = (props: {topic_id: string}) => {
         }
     }
 
+    console.log(`Wikipage Content: `, wikiPageContent)
+
     return (
         <Slate
             editor={editor}

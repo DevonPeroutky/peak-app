@@ -15,7 +15,7 @@ export interface PeakTopic {
 }
 const emptyTopicList: PeakTopic[] = [];
 
-const topicOrdering = (a: PeakTopic, b: PeakTopic) => {
+export const topicOrdering = (a: PeakTopic, b: PeakTopic) => {
     return (a.inserted_at <= b.inserted_at) ? -1 : 1
 };
 
@@ -45,7 +45,7 @@ export const topicsSlice = createSlice({
             return R.sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
         },
         addTopic(state, action: PayloadAction<PeakTopic>) {
-            return [...state, action.payload]
+            return R.sort(topicOrdering, [...state, action.payload])
         },
         updateTopic(state, action: PayloadAction<PeakTopic>) {
             const newTopic = action.payload

@@ -16,7 +16,7 @@ import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
-import {PeakPage, PeakTopic, updatePageTitleInSidebar} from "../redux/slices/topicSlice";
+import {PeakPage, PeakTopic, topicOrdering, updatePageTitleInSidebar} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
@@ -32,6 +32,7 @@ import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/a
 import {useNotes} from "../client/notes";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
+import {sort} from "ramda";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -74,7 +75,7 @@ export function useLinkedUserId() {
 }
 
 export function useTopics() {
-    return useSelector<AppState, PeakTopic[]>(state => state.topics);
+    return sort(topicOrdering, useSelector<AppState, PeakTopic[]>(state => state.topics));
 }
 
 export function useCurrentTopic(topicId: string) {
