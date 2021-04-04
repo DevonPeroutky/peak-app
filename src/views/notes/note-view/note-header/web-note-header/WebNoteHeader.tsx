@@ -42,8 +42,9 @@ const renderEmbeddeds = (note: PeakNote) => {
         return null
     }
     const og_url = new URL(note.url)
+    const videoId = og_url.searchParams.get("v")
 
-    if (og_url.hostname === "www.youtube.com") {
+    if (og_url.hostname === "www.youtube.com" && videoId) {
         return <YoutubeVideoContainer url={note.url} className={"youtube-container media-container"}/>
     }
 

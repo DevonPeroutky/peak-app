@@ -12,7 +12,6 @@ export const useAppLoadingAnimation = () => {
     const history = useHistory();
     const [isLoading, setLoading] = useState(true);
     const reloadReasonParam: RELOAD_REASON | undefined = query.get("reload-reason") as RELOAD_REASON
-    console.log(`RELOAD REASON PARAM `, reloadReasonParam)
     const determineAnimationData = useAnimationData()
     const [animation, setAnimation] = useState<PeakLoadingContainerProps | undefined>(determineAnimationData(reloadReasonParam))
 
@@ -35,7 +34,6 @@ export const useAppLoadingAnimation = () => {
 
     // Forced Reloading animation handler
     useEffect(() => {
-        console.log(`ReloadParam is now ${reloadReasonParam}`)
         if (reloadReasonParam) {
             setLoading(true)
             setAnimation(determineAnimationData(reloadReasonParam))
