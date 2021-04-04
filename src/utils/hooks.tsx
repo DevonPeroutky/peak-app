@@ -16,7 +16,12 @@ import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
-import {PeakPage, PeakTopic, topicOrdering, updatePageTitleInSidebar} from "../redux/slices/topicSlice";
+import {
+    PeakPage,
+    PeakTopic,
+    sortTopicsAndTheirPages,
+    updatePageTitleInSidebar
+} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
@@ -75,7 +80,7 @@ export function useLinkedUserId() {
 }
 
 export function useTopics() {
-    return sort(topicOrdering, useSelector<AppState, PeakTopic[]>(state => state.topics));
+    return sortTopicsAndTheirPages(useSelector<AppState, PeakTopic[]>(state => state.topics));
 }
 
 export function useCurrentTopic(topicId: string) {

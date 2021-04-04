@@ -21,6 +21,7 @@ export interface PeakEditorState {
 };
 export interface PeakWikiPage {
     id: string,
+    inserted_at?: Date,
     body: Node[] | JournalEntry[],
     title: string,
 }
