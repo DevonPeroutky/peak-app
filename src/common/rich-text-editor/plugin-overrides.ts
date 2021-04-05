@@ -1,7 +1,9 @@
 import {
-    DEFAULTS_PARAGRAPH, ELEMENT_CODE_BLOCK,
+    DEFAULTS_PARAGRAPH,
+    ELEMENT_CODE_BLOCK,
     ELEMENT_LI,
     ELEMENT_OL,
+    ELEMENT_PARAGRAPH,
     ELEMENT_UL,
     ListKeyOption,
     ListPluginOptionsValues,
@@ -52,9 +54,17 @@ export const PEAK_BLOCKQUOTE_OVERRIDES = {
 }
 
 export const PEAK_CODE_BLOCK_OVERRIDES = {
-    [ELEMENT_CODE_BLOCK]: {
+    code_block: {
         rootProps: {
             className: 'slate-code-block peak-code-block',
+        }
+    }
+}
+
+export const PEAK_PARAGRAPH_OVERRIDES = {
+    p: {
+        rootProps: {
+            className: 'slate-p peak-paragraph',
         }
     }
 }

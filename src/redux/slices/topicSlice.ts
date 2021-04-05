@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-const R = require('ramda');
+import {sort} from "ramda";
 
 export interface PeakPage {
     id: string
     title: string
+    inserted_at: Date
 }
 
 export interface PeakTopic {
@@ -15,9 +16,19 @@ export interface PeakTopic {
 }
 const emptyTopicList: PeakTopic[] = [];
 
+const pageOrdering = (a: PeakPage, b: PeakPage) => {
+    return (a.inserted_at <= b.inserted_at) ? -1 : 1
+};
 const topicOrdering = (a: PeakTopic, b: PeakTopic) => {
     return (a.inserted_at <= b.inserted_at) ? -1 : 1
 };
+
+export function sortTopicsAndTheirPages(topics: PeakTopic[]): PeakTopic[] {
+    const topicsWithSortedPages = topics.map(t => {
+        return {...t, pages: sort(pageOrdering, t.pages)}
+    })
+    return sort(topicOrdering, topicsWithSortedPages)
+}
 
 export const topicsSlice = createSlice({
     name: 'topics',
@@ -28,7 +39,7 @@ export const topicsSlice = createSlice({
             const newPages = [...topic.pages, action.payload.page];
             const newTopic = {...topic, pages: newPages};
 
-            return R.sort(topicOrdering, [...state.filter(t => t.id !== topic.id), newTopic]);
+            return sort(topicOrdering, [...state.filter(t => t.id !== topic.id), newTopic]);
         },
         updatePageTitleInSidebar(state, action: PayloadAction<{pageId: string, newTitle: string}>) {
             const topic = state.find(topic => topic.pages.find(p => p.id == action.payload.pageId) != undefined)!;
@@ -37,21 +48,21 @@ export const topicsSlice = createSlice({
             const newPages = [...topic.pages.filter(p => p.id !== action.payload.pageId), newPage];
             const newTopic = {...topic, pages: newPages};
 
-            return R.sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
+            return sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
         },
         removePageFromTopic(state, action: PayloadAction<{pageId: string}>) {
             const topic = state.find(topic => topic.pages.find(p => p.id == action.payload.pageId) != undefined)!; const newPages = topic.pages.filter(p => p.id !== action.payload.pageId);
             const newTopic = {...topic, pages: newPages};
-            return R.sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
+            return sort(topicOrdering,[...state.filter(t => t.id !== topic.id), newTopic]);
         },
         addTopic(state, action: PayloadAction<PeakTopic>) {
-            return [...state, action.payload]
+            return sort(topicOrdering, [...state, action.payload])
         },
         updateTopic(state, action: PayloadAction<PeakTopic>) {
             const newTopic = action.payload
             const ogTopic = state.find(t => t.id === newTopic.id)!
             const newTopicWithPages = {...newTopic, pages: ogTopic.pages}
-            return R.sort(topicOrdering,[...state.filter(t => t.id !== newTopic.id), newTopicWithPages]);
+            return sort(topicOrdering,[...state.filter(t => t.id !== newTopic.id), newTopicWithPages]);
         },
         movePage(state, action: PayloadAction<{page: PeakPage, sourceTopicId: string, destTopicId: string}>) {
             const { page, sourceTopicId, destTopicId } = action.payload;
@@ -61,14 +72,14 @@ export const topicsSlice = createSlice({
             const destPages = [...destTopic.pages, page]
             const newSourceTopic = { ...sourceTopic, pages: sourcePages}
             const newDestTopic = { ...destTopic, pages: destPages}
-            return R.sort(topicOrdering,[...state.filter(t => !([sourceTopic.id, destTopic.id].includes(t.id))), newDestTopic, newSourceTopic]);
+            return sort(topicOrdering,[...state.filter(t => !([sourceTopic.id, destTopic.id].includes(t.id))), newDestTopic, newSourceTopic]);
         },
         setTopics(state, action: PayloadAction<PeakTopic[]>) {
-            return R.sort(topicOrdering, action.payload);
+            return sort(topicOrdering, action.payload);
         },
         deleteTopic(state, action: PayloadAction<string>) {
             const filteredTopics: PeakTopic[] = state.filter(t => t.id !== action.payload)
-            return R.sort(topicOrdering, filteredTopics);
+            return sort(topicOrdering, filteredTopics);
         }
     }
 });

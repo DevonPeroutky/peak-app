@@ -30,6 +30,9 @@ code {
 h1, h2, h3, h4, h5 {
   color: $heading-color!important;
   font-variant: normal!important;
+  letter-spacing: -.025rem!important;
+  margin-top: 1.5em!important;
+  margin-bottom: 24px!important;
 }
 
 h1 {
@@ -38,22 +41,23 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5rem!important;
+  font-size: 1.65rem!important; // 1.5?
   font-weight: 700!important;
+  line-height: 1.3333;
 }
 
 h3 {
-  font-size: 1.25em!important;
+  font-size: 1.35em!important; // 1.25?
   font-weight: 600!important;
 }
 
 h4 {
-  font-size: 1.0rem!important;
+  font-size: 1.1rem!important;
   font-weight: 600!important;
 }
 
 h5 {
-  font-size: .875rem!important;
+  font-size: .1rem!important;
   font-weight: 600!important;
 }
 

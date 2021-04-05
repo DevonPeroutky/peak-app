@@ -20,7 +20,6 @@ import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
 import {sleep} from "../../chrome-extension/utils/generalUtil";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
-import {WIKI_NODE_LEVEL} from "../../common/rich-text-editor/editors/wiki/config";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -75,6 +74,8 @@ export const PeakScratchpad = (props: {}) => {
             onChangeMention(editor);
         }
     }
+
+    console.log(`Scratchpad Content: `, scratchPadContent)
 
     return (
         <div className={"scratchpad-container"}>

@@ -92,6 +92,8 @@ const TopicWiki = (props: {topic_id: string}) => {
         }
     }
 
+    console.log(`Wikipage Content: `, wikiPageContent)
+
     return (
         <Slate
             editor={editor}
@@ -117,7 +119,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                         style={{
                             textAlign: "left",
                             flex: "1 1 auto",
-                            minHeight: "100%"
+                            minHeight: "100%",
                         }}
                     />
                     <NodeContentSelect

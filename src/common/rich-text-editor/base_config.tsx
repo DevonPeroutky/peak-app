@@ -21,7 +21,6 @@ import {
     UnderlinePlugin,
     withAutoformat,
     withDeserializeHTML,
-    withDeserializeMd,
     withImageUpload,
     withLink,
     withList,

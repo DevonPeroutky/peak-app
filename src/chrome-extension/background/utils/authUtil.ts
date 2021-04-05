@@ -29,6 +29,7 @@ export function logUserIn(callback: (user: Peaker) => void, retryCounter: number
                     setItem("user", user)
                     callback(user)
                 }).catch(err => {
+                    // TODO: This just means they need to login via webapp first!!
                     console.log(`Failed to load user from Backend: ${err.toString()}`)
                     sendErrorMessageToUser("Failed to log you into Peak", "Received an error response from the backend. Tell Devon.")
             })

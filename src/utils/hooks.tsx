@@ -16,14 +16,19 @@ import {EXISTING_PEAK_USER_ID} from "../constants/constants";
 import peakAxiosClient from "../client/axiosConfig"
 import { debounce } from "lodash";
 import {useCallback, useEffect, useState} from 'react';
-import {PeakPage, PeakTopic, updatePageTitleInSidebar} from "../redux/slices/topicSlice";
+import {
+    PeakPage,
+    PeakTopic,
+    sortTopicsAndTheirPages,
+    updatePageTitleInSidebar
+} from "../redux/slices/topicSlice";
 import {useUpdatePageInHierarchy} from "./hierarchy";
 import {getCurrentFormattedDate} from "./time";
 import {updatePage} from "./requests";
 import {useQuery} from "./urls";
 import {FutureRead} from "../redux/slices/readingListSlice";
 import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
-import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
+import {PeakWikiPage, PeakWikiState, ScratchPad} from "../constants/wiki-types";
 import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
@@ -46,7 +51,7 @@ export function useJournal() {
 }
 
 export function useScratchpad() {
-    return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[SCRATCHPAD_ID]);
+    return useSelector<AppState, ScratchPad>(state => state.peakWikiState[SCRATCHPAD_ID] as ScratchPad);
 }
 
 export function useChromeExtEditorState() {
@@ -74,7 +79,7 @@ export function useLinkedUserId() {
 }
 
 export function useTopics() {
-    return useSelector<AppState, PeakTopic[]>(state => state.topics);
+    return sortTopicsAndTheirPages(useSelector<AppState, PeakTopic[]>(state => state.topics));
 }
 
 export function useCurrentTopic(topicId: string) {

@@ -20,8 +20,8 @@ export const PeakHeading = (props: PeakHeadingProps) => {
 
     // @ts-ignore
     const renderSpecificHeading = () => {
-        if (header_type === ELEMENT_H1) return <h1 className={"peak-divider"} {...attributes}>{props.children}</h1>;
-        if (header_type === ELEMENT_H2) return <h2 {...attributes}>{props.children}</h2>;
+        if (header_type === ELEMENT_H1) return <h1 {...attributes}>{props.children}</h1>;
+        if (header_type === ELEMENT_H2) return <h2 className={"peak-divider"} {...attributes}>{props.children}</h2>;
         if (header_type === ELEMENT_H3) return <h3 {...attributes}>{props.children}</h3>;
         if (header_type === ELEMENT_H4) return <h4 {...attributes}>{props.children}</h4>;
         if (header_type === ELEMENT_H5) return <h5 {...attributes}>{props.children}</h5>;

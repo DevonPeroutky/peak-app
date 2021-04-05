@@ -200,6 +200,7 @@ export const useNodeContentSelect = (
 
                 // If we are searching through NodeTypes (The default menu)
                 if (nodeContentSelectMode) {
+                    // Change this to open up by default once they trigger
                     const { range, match: beforeMatch } = isWordAfterTrigger(editor, {
                         at: cursor,
                         trigger,

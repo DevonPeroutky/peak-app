@@ -268,7 +268,7 @@ const HEADER_THREE: PeakEditorControlDisplay = {
     markup: ['###'],
     hotkeyInstructionArray: ['⌘', '⇧', '3'],
     markupLabel: ["###", "Space"],
-    description: "Use this for sub sections and group headings",
+    description: "Use this for sub sections",
     className: "h3",
 };
 const HEADER_FOUR: PeakEditorControlDisplay = {
