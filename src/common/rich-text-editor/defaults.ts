@@ -9,7 +9,7 @@ import {
 import {
     PEAK_BLOCKQUOTE_OVERRIDES,
     PEAK_CODE_BLOCK_OVERRIDES,
-    PEAK_LIST_SPECIFIC_STYLE,
+    PEAK_LIST_SPECIFIC_STYLE, PEAK_PARAGRAPH_OVERRIDES,
     PEAK_STRIKETHROUGH_OVERRIDES
 } from "./plugin-overrides";
 import {DEFAULTS_PEAK_HEADING} from "./plugins/peak-heading-plugin/defaults";
@@ -19,7 +19,6 @@ import {DEFAULTS_PEAK_KNOWLEDGE} from "./plugins/peak-knowledge-plugin/defaults"
 import {DEFAULTS_PEAK_NOTE_STUB} from "./plugins/peak-note-stub-plugin/defaults";
 
 export const defaultOptions = {
-    ...setDefaults(DEFAULTS_PARAGRAPH, {}),
     ...setDefaults(DEFAULTS_MENTION, {}),
     ...setDefaults(PEAK_BLOCKQUOTE_OVERRIDES, DEFAULTS_BLOCKQUOTE),
     ...setDefaults(DEFAULTS_IMAGE, {}),
@@ -38,4 +37,5 @@ export const defaultOptions = {
     ...setDefaults(DEFAULTS_CALLOUT, {}),
     ...setDefaults(DEFAULTS_PEAK_KNOWLEDGE, {}),
     ...setDefaults(DEFAULTS_PEAK_NOTE_STUB, {}),
+    ...setDefaults(PEAK_PARAGRAPH_OVERRIDES, DEFAULTS_PARAGRAPH),
 };

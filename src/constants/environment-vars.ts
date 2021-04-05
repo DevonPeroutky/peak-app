@@ -31,6 +31,7 @@ const prod: PeakAppConfig = {
 }
 
 console.log(`REACT_APP_ENV: `, process.env.REACT_APP_ENV)
+console.log(`REACT_APP_DIST: `, process.env.REACT_APP_DIST)
 const config = process.env.REACT_APP_ENV === 'dev' ? dev : prod
 
 export default {

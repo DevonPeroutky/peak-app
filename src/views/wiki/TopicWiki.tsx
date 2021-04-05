@@ -119,7 +119,7 @@ const TopicWiki = (props: {topic_id: string}) => {
                         style={{
                             textAlign: "left",
                             flex: "1 1 auto",
-                            minHeight: "100%"
+                            minHeight: "100%",
                         }}
                     />
                     <NodeContentSelect
