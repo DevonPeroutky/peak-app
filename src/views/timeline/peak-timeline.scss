@@ -5,6 +5,9 @@
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
+  text-overflow: ellipsis!important;
+  white-space: nowrap!important;
+  overflow: hidden!important;
 
   &.empty {
     display: flex;
@@ -100,6 +103,9 @@
           .title {
             font-size: 1.25rem;
             color: $text-color;
+            white-space: normal;
+            word-break: normal!important;
+            overflow-wrap: break-word!important;
 
             &:hover {
               color: $primary-blue;

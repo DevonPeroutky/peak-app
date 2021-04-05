@@ -16,8 +16,6 @@ import {deleteNoteRequest} from "../../client/webNotes";
 // Do we want to do this????
 chrome.storage.sync.clear()
 
-console.log(`WHAT THE FUCK!!!!`)
-
 // -------------------------------------
 // Log user in and Fetch User Auth Token
 // -------------------------------------
