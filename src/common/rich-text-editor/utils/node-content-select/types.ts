@@ -6,7 +6,7 @@ export interface PeakNodeSelectListItem {
     label: string
     noteId?: string
     author?: string
-    iconUrl?: string
+    coverImageUrl?: string
     coverId?: number
     elementType: string
     knowledgeNodeId?: string

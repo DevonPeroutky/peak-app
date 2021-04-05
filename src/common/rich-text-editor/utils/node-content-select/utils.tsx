@@ -33,7 +33,7 @@ export function convertPeakBookToNodeSelectListItem(book: PeakNote): PeakNodeSel
         elementType: ELEMENT_PEAK_BOOK,
         customFormat: insertBookElementCallback(book),
         icon: <ImageLoader
-            url={book.icon_url}
+            url={book.cover_image_url}
             className={"peak-node-select-book-cover"}
             fallbackElement={<ReadOutlined className={"inline-select-item-icon"}/>}
         />
@@ -48,7 +48,7 @@ export function convertOpenLibraryBookToNodeSelectListItem(book: OpenLibraryBook
         description: author,
         coverId: book.cover_i,
         author: author,
-        iconUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
+        coverImageUrl: (book.cover_i) ? getCoverImageUrl(book.cover_i, "M") : undefined,
         knowledgeNodeId: "-69",
         elementType: ELEMENT_PEAK_BOOK,
         customFormat: (editor => insertCustomBlockElementCallback(ELEMENT_PEAK_BOOK,{knowledgeNodeId: "-1", title: book.title})(editor)),

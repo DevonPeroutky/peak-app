@@ -10,6 +10,8 @@ export interface PeakNote {
     title: string
     note_type: PeakKnowledgeKeyOption,
     icon_url: string
+    cover_image_url?: string
+    description?: string
     tag_ids: string[]
     body: Node[]
     url: string
@@ -18,6 +20,7 @@ export interface PeakNote {
     inserted_at?: string
     updated_at?: string
 }
+
 const emptyBookList: PeakNote[] = []
 
 const noteOrderingByDate = (a: PeakNote, b: PeakNote) => {

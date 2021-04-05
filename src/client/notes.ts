@@ -32,18 +32,18 @@ interface UpdateNotePayload {
 interface CreateNotePayload {
     title: string,
     author: string,
-    iconUrl: string
+    coverImageUrl: string
 }
 interface NoteListResponse extends PaginationResponse {
     books: PeakNote[]
 }
 
 // Requests
-function createNoteRequest(userId: string, book: {title: string, iconUrl: string, author: string}) {
+function createNoteRequest(userId: string, book: {title: string, coverImageUrl: string, author: string}) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
         "book": {
             title: book.title,
-            iconUrl: book.iconUrl,
+            cover_image_url: book.coverImageUrl,
             author: book.author,
             note_type: ELEMENT_PEAK_BOOK
         }

@@ -69,6 +69,6 @@ const renderHeader = (props: NoteHeaderProps) => {
             author={author}
             onAuthorChange={onAuthorChange}
             note_id={currentNote.id}
-            icon_url={currentNote.icon_url}
+            cover_image_url={currentNote.cover_image_url}
             selected_tags={selected_tags}/>
 }

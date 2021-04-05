@@ -79,13 +79,13 @@ const NoteListItem = (props: { item: PeakNote }) => {
 const NoteAvatar = (props: { item: PeakNote }) => {
     const { item } = props
 
-    if (!item.icon_url) {
+    if (!item.cover_image_url) {
         return (<ReadFilled className="default-note-icon"/>)
     } else {
         return (
             <ImageLoader
                 className="note-icon"
-                url={item.icon_url}
+                url={item.cover_image_url}
                 fallbackElement={
                     <ReadFilled className="default-note-icon"/>
                 }

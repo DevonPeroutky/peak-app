@@ -21,7 +21,7 @@ const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {
                 // TODO: Once we are downloading and caching imaging, we can update this.
                 return <img src={bookmark} className={"quick-switch-item-icon"}/>
                 // return <EditOutlined className="quick-switch-item-icon"/>
-                // return <ImageLoader className={"quick-switch-item-icon"} url={node.icon_url} fallbackElement={<EditOutlined className="quick-switch-item-icon"/>}/>
+                // return <ImageLoader className={"quick-switch-item-icon"} url={node.cover_image_url} fallbackElement={<EditOutlined className="quick-switch-item-icon"/>}/>
             case TITLE:
                 return <FileOutlined className="quick-switch-item-icon"/>
             case JOURNAL:
