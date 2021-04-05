@@ -21,7 +21,6 @@ export const PeakDraftNoteView = (props) => {
     const titleParam: string | null = query.get("title")
     const coverIdParam: string | null = query.get("cover-id")
     const authorParam: string | null = query.get("author")
-    const bookIconUrl: string = getCoverImageUrl(parseInt(coverIdParam), "L")
 
     if (!titleParam && !authorParam) {
         message.error("Something went wrong! Tell Devon")
@@ -37,7 +36,8 @@ export const PeakDraftNoteView = (props) => {
             // setCurrentNote(existingBook)
             history.push(buildNoteUrl(existingBook.id))
         } else {
-            noteCreator(currentUser, {title: titleParam, iconUrl: bookIconUrl, author: author}).then((note) => {
+            const bookIconUrl: string | undefined = (coverIdParam != undefined && coverIdParam != "undefined") ? getCoverImageUrl(parseInt(coverIdParam), "L") : undefined
+            noteCreator(currentUser, {title: titleParam, coverImageUrl: bookIconUrl, author: author}).then((note) => {
                 history.push(buildNoteUrl(note.id))
             })
         }

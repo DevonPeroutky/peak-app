@@ -7,8 +7,8 @@ import {NoteTagSelect} from "../../../../../common/rich-text-editor/plugins/peak
 import React from "react";
 import TextArea from "antd/es/input/TextArea";
 
-export const BookHeaderSection = (props: {note_id: string, icon_url: string, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
-    const { note_id, icon_url, title, author, onAuthorChange, onTitleChange, selected_tags } = props
+export const BookHeaderSection = (props: {note_id: string, cover_image_url: string, selected_tags: PeakTag[], title: string, author: string, onAuthorChange, onTitleChange}) => {
+    const { note_id, cover_image_url, title, author, onAuthorChange, onTitleChange, selected_tags } = props
     return (
         <div className={"note-header-section peak_book"}>
             <div className={"note-subheader-section"}>
@@ -16,7 +16,7 @@ export const BookHeaderSection = (props: {note_id: string, icon_url: string, sel
             </div>
             <div className={"book-note-header-row"}>
                 <div className={"image-section"}>
-                    <ImageLoader url={icon_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image"}/>}/>
+                    <ImageLoader url={cover_image_url} className={"book-note-cover-image"} fallbackElement={<ReadOutlined className={"book-note-cover-image fallback"}/>}/>
                 </div>
                 <div className={"note-header-section"}>
                     <div className={"note-header"}>
