@@ -10,6 +10,7 @@ import React from "react";
 import TextArea from "antd/es/input/TextArea";
 import "./web-note-header.scss"
 import {TweetContainer} from "../../../../../common/media-embeds/twitter-container/TwitterContainer";
+import {ImageLoader} from "../../../../../common/image-loader/ImageLoader";
 
 export const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTitleChange: (e) => void, selected_tags: PeakTag[]}) => {
     const { note, selected_tags, onTitleChange, title } = props
@@ -55,5 +56,26 @@ const renderEmbeddeds = (note: PeakNote) => {
         return <TweetContainer url={note.url} className={"tweet-container media-container"}/>
     }
 
-    return null
+    return (
+        <div className={"media-content-container"}>
+            {renderDescription(note)}
+            {renderCoverImage(note)}
+        </div>
+    )
+}
+
+const renderDescription = (note: PeakNote) => {
+    if (note.description) {
+        return <h2 className={"external-page-description"}>{note.description}</h2>
+    } else {
+        return null
+    }
+}
+
+const renderCoverImage = (note: PeakNote) => {
+    if (note.cover_image_url) {
+        return <ImageLoader url={note.cover_image_url} fallbackElement={null} className={"cover-image"}/>
+    } else {
+        return null
+    }
 }
