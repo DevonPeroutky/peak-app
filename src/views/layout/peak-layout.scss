@@ -34,6 +34,13 @@
         max-width: $max-content-width;
         padding-top: $vertical-padding;
         padding-bottom: $vertical-padding;
+
+        .slate-Selectable {
+          button {
+            display: flex;
+            overflow: auto!important;
+          }
+        }
       }
     }
   }
