@@ -1,12 +1,13 @@
 import "./save-note-editor.scss"
 import React from "react";
 import {Slate, ReactEditor} from "slate-react";
-import {EditablePlugins, pipe} from "@udecode/slate-plugins";
-import {createEditor, Node} from "slate";
+import {SlatePlugins} from "@udecode/slate-plugins";
+import {Node} from "slate";
 import {equals} from "ramda";
-import {baseKeyBindingHandler} from "../../../../../../../common/rich-text-editor/utils/keyboard-handler";
-import { chromeExtensionPlugins } from "../../../../../../../common/rich-text-editor/editors/chrome-extension/config";
-import {CHROME_EXTENSION} from "../../../../../../../common/rich-text-editor/editors/chrome-extension/constants";
+import {defaultComponents} from "../../../../../../../common/rich-text-editor/utils/components";
+import {defaultOptions} from "../../../../../../../common/rich-text-editor/options";
+import {defaultEditableProps} from "../../../../../../../common/rich-text-editor/editorFactory";
+import {extensionPlugins} from "../../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 
 export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void, editor: ReactEditor }) => {
     const { content, setContent, editor } = props
@@ -18,25 +19,17 @@ export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: 
     }
 
     return (
-        <Slate
-            editor={editor}
-            value={content}
-            onChange={updatePageContent}>
-            <div className="peak-save-note-editor-container">
-                <EditablePlugins
-                    autoFocus
-                    className={"peak-note-editor"}
-                    onKeyDown={[baseKeyBindingHandler]}
-                    key={CHROME_EXTENSION}
-                    plugins={chromeExtensionPlugins}
-                    placeholder="Drop some knowledge..."
-                    spellCheck={true}
-                    style={{
-                        textAlign: "left",
-                        flex: "1 1 auto",
-                    }}
-                />
-            </div>
-        </Slate>
+        <SlatePlugins
+            id={"extensionNoteEditor"}
+            plugins={extensionPlugins}
+            components={defaultComponents}
+            onChange={updatePageContent}
+            options={defaultOptions}
+            editableProps={defaultEditableProps}
+            initialValue={content}
+        >
+            {/*<div className="peak-save-note-editor-container">*/}
+            {/*</div>*/}
+        </SlatePlugins>
     )
 }

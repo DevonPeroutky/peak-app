@@ -1,10 +1,11 @@
-import {Editor, Point, Range, Transforms} from 'slate';
+import {Editor, Point, Range} from 'slate';
 import {
     AutoformatRule, ELEMENT_CODE_BLOCK,
     MARK_BOLD,
     MARK_CODE,
     MARK_ITALIC,
     MARK_STRIKETHROUGH,
+    SPEditor,
     unwrapList,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../peak-toolbar/toolbar-controls";
@@ -19,7 +20,7 @@ const MARKDOWN_LINK_REGEX = /\[([^\[]+)\](\(.*\))/gm
 // const myMatch = string.match(regex)
 
 
-export const withAutoReplace = <T extends Editor>(editor: T) => {
+export const withAutoReplace = <T extends SPEditor>(editor: T) => {
     const { insertText } = editor;
 
     editor.insertText = text => {
@@ -61,7 +62,7 @@ const convertToAutoFormatRule = (editorControl: PeakEditorControl) => {
     return {
         type: editorControl.elementType,
         trigger: editorControl.trigger,
-        preFormat: (editor: Editor) => unwrapList(editor),
+        preFormat: (editor: SPEditor) => unwrapList(editor),
         markup: editorControl.markup,
         format: editorControl.customFormat
     } as AutoformatRule

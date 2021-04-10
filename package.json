@@ -156,7 +156,7 @@
     "slate": "^0.59.0",
     "slate-history": "^0.59.0",
     "slate-hyperscript": "^0.59.0",
-    "slate-react": "^0.59.0",
+    "slate-react": "^0.60.11",
     "styled-components": "^5.1.1",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"

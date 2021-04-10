@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {ReactEditor, Slate} from "slate-react";
-import {EditablePlugins, pipe, SlateDocumentFragment} from "@udecode/slate-plugins";
+import {EditablePlugins, pipe, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
 import {createEditor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
@@ -13,11 +13,6 @@ import {
 import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {baseKeyBindingHandler} from "../../../../common/rich-text-editor/utils/keyboard-handler";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import {
-    NOTE_NODE_LEVEL,
-    noteNormalizers,
-    notePlugins
-} from "../../../../common/rich-text-editor/editors/note-editor/config";
 import "./peak-note-editor.scss"
 import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
@@ -25,6 +20,14 @@ import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
+import {wikiPlugins} from "../../../../common/rich-text-editor/editors/wiki/config";
+import {defaultComponents} from "../../../../common/rich-text-editor/utils/components";
+import {defaultOptions} from "../../../../common/rich-text-editor/options";
+import {defaultEditableProps} from "../../../../common/rich-text-editor/editorFactory";
+import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
+import {scratchPadPlugins} from "../../../../common/rich-text-editor/editors/scratchpad/config";
+import {noteEditorPlugins} from "../../../../common/rich-text-editor/editors/note-editor/config";
+import {UghEditorType} from "../../../../common/rich-text-editor/types";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -39,8 +42,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
 
     const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
 
-    // @ts-ignore
-    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...noteNormalizers), []);
+    const editor: UghEditorType = useTSlateStatic()
 
     const updateNoteContent = (newBody: Node[]) => {
         if (!equals(newBody, noteContent)) {
@@ -63,6 +65,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         }
     }, [noteInRedux.body])
 
+    // TODO
     // Why the fuck is this needed
     useEffect(() => {
         sleep(100).then(() => {
@@ -83,7 +86,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         target,
         nodeContentSelectMode
     } = useNodeContentSelect({
-        editorLevel: NOTE_NODE_LEVEL,
         maxSuggestions: 10,
         trigger: '/',
     });
@@ -93,32 +95,22 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     }, [])
 
     return (
-        <Slate
-            editor={editor}
-            value={noteContent}
-            onChange={updateNoteContent}>
+        <SlatePlugins
+            id={"noteEditor"}
+            plugins={noteEditorPlugins}
+            components={defaultComponents}
+            options={defaultOptions}
+            editableProps={defaultEditableProps}
+            onChange={updateNoteContent}
+            initialValue={noteContent}
+        >
             <div className="peak-note-editor-container">
                 <MemoizedLinkMenu
                     key={`${currentPageId}-LinkMenu`}
                     linkState={editorState.currentLinkState}
                     showLinkMenu={editorState.showLinkMenu}
-                    />
+                />
                 <div className={"rich-text-editor-container"}>
-                    <EditablePlugins
-                        onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
-                        onKeyDownDeps={[index, search, target, openLibraryResults]}
-                        key={`${currentPageId}-${editorState.isEditing}`}
-                        plugins={notePlugins}
-                        placeholder="Drop some knowledge..."
-                        spellCheck={true}
-                        autoFocus={true}
-                        readOnly={!editorState.isEditing}
-                        style={{
-                            textAlign: "left",
-                            flex: "1 1 auto",
-                            minHeight: "100%"
-                        }}
-                    />
                     <NodeContentSelect
                         at={target}
                         openLibraryBooks={openLibraryResults}
@@ -129,6 +121,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
                     />
                 </div>
             </div>
-        </Slate>
+        </SlatePlugins>
     )
 }

@@ -1,10 +1,9 @@
 import React, {useEffect} from "react";
-import {CodeBlockElementProps} from "@udecode/slate-plugins";
 import Prism from "prismjs";
 import cn from "classnames";
 import "./prism-code-block.scss";
 
-export const PrismCodeBlock = (props: CodeBlockElementProps) => {
+export const PrismCodeBlock = (props) => {
     const { attributes, htmlAttributes, children, className, element} = props
 
     useEffect(() => {

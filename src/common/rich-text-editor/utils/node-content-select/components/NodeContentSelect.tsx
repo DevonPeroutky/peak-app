@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import {classNamesFunction, IStyleFunctionOrObject, styled} from '@uifabric/utilities';
-import { ReactEditor, useSlate } from 'slate-react';
+import { ReactEditor} from 'slate-react';
 import {
     getMentionSelectStyles,
     getPreventDefaultHandler,
-    MentionSelectStyleProps,
-    MentionSelectStyles,
-    PortalBody
+    PortalBody,
+    useTSlateStatic,
+    MentionElementStyleProps,
+    MentionElementProps,
+    RootStyleSet,
+    getRootClassNames
 } from "@udecode/slate-plugins";
 import {Range} from "slate";
 import {Empty, Tag} from "antd";
@@ -17,6 +20,7 @@ import "./node-content-select.scss"
 import {capitalize_and_truncate} from "../../../../../utils/strings";
 import {OpenLibraryBook} from "../../../../../client/openLibrary";
 import {convertOpenLibraryBookToNodeSelectListItem} from "../utils";
+import {UghEditorType} from "../../../types";
 
 export interface NodeContentSelectProps {
     /**
@@ -26,7 +30,7 @@ export interface NodeContentSelectProps {
     /**
      * Call to provide customized styling that will layer on top of the variant rules.
      */
-    styles?: IStyleFunctionOrObject<MentionSelectStyleProps, MentionSelectStyles>;
+    styles?: IStyleFunctionOrObject<MentionElementStyleProps, RootStyleSet>;
     /**
      * Range from the mention trigger to the cursor
      */
@@ -42,17 +46,18 @@ export interface NodeContentSelectProps {
     /**
      * Callback called when clicking on a mention option
      */
-    onClickMention?: (editor: ReactEditor, option: PeakNodeSelectListItem) => void;
+    onClickMention?: (editor: UghEditorType, option: PeakNodeSelectListItem) => void;
     /** True if the menu is currently on the default menu of node types*/
     nodeContentSelectMode: boolean;
 
     openLibraryBooks: OpenLibraryBook[]
 }
 
-const getClassNames = classNamesFunction<
-    MentionSelectStyleProps,
-    MentionSelectStyles
-    >();
+// const getClassNames = classNamesFunction();
+const getClassNames = getRootClassNames<
+    MentionElementStyleProps,
+    RootStyleSet
+>();
 
 const NodeContentSelectBase = ({
                                       className,
@@ -69,7 +74,7 @@ const NodeContentSelectBase = ({
     });
 
     const ref: any = useRef();
-    const editor = useSlate();
+    const editor = useTSlateStatic();
 
     useEffect(() => {
         if (at) {

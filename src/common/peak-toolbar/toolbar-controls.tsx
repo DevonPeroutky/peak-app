@@ -46,7 +46,6 @@ import headingH3 from '@iconify/icons-gridicons/heading-h3';
 import headingH4 from '@iconify/icons-gridicons/heading-h4';
 import headingH5 from '@iconify/icons-gridicons/heading-h5';
 import {message} from "antd";
-import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/utils";
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
@@ -117,6 +116,7 @@ const ORDERED_LIST: PeakEditorControlDisplay = {
     label: "Numbered List",
     description: "Create an ordered List",
     customFormat: (editor => {
+        // @ts-ignore
         toggleList(editor, { typeList: ELEMENT_OL })
     }),
     elementType: ELEMENT_OL,
@@ -132,11 +132,13 @@ const UNORDERED_LIST: PeakEditorControlDisplay = {
     elementType: ELEMENT_UL,
     markup: ['*', '-', '+'],
     customFormat: (editor => {
+        // @ts-ignore
         toggleList(editor, { typeList: ELEMENT_UL })
     }),
     markupLabel: ["*", "Space"],
     hotkeyInstructionArray: ['⌘', '⇧', '8'],
 };
+
 
 const PEAK_LINK: PeakEditorControlDisplay = {
     controlType: undefined,

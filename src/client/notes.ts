@@ -14,10 +14,6 @@ import {Peaker} from "../types";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
 import {EMPTY_PARAGRAPH_NODE} from "../common/rich-text-editor/editors/constants";
 import {getTodayEntry} from "../utils/journal";
-import {
-    PEAK_NOTE_STUB,
-    PeakStubAction,
-} from "../common/rich-text-editor/plugins/peak-note-stub-plugin/types";
 import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
 import {deleteNoteRequest} from "./webNotes";
 import {AxiosResponse} from "axios";
@@ -144,61 +140,64 @@ export function useDebouncePeakNoteSaver() {
     return useCallback(debounce(updatePeakNote, 1500), [])
 }
 
-export function useDebouncePeakStubCreator() {
-    const createStub = useCreateNoteStubInJournal()
-    return useCallback(debounce(createStub, 1500), [])
-}
-
 export function usePeakNoteCreator() {
     return (user: Peaker, book: CreateNotePayload) => {
         return createNewPeakBook(user.id, book)
     }
 }
 
-function useAppendToJournal() {
-    const saver = useBulkJournalEntrySaver()
-    return (note: PeakNote, journalEntry: JournalEntry, user: Peaker, action: PeakStubAction) => {
-        const nodeId = Date.now()
-        const nodesToAppend = [
-            {
-                id: nodeId,
-                type: PEAK_NOTE_STUB,
-                action: action,
-                note_type: note.note_type,
-                note_id:  note.id,
-                children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
-                title: note.title,
-                author: note.author,
-            },
-            EMPTY_PARAGRAPH_NODE()
-        ];
+// ----------------------------------------------------
+// DEPRECATED
+// ----------------------------------------------------
+// export function useDebouncePeakStubCreator() {
+//     const createStub = useCreateNoteStubInJournal()
+//     return useCallback(debounce(createStub, 1500), [])
+// }
 
-        const cleanedJournal = journalEntry.body.filter(n => !(n.type === ELEMENT_PARAGRAPH && Node.string(n).toLowerCase() === `/${note.title.toLowerCase()}`))
-        const newBody: Node [] = cleanedJournal.concat(nodesToAppend)
-        const journalEntryToWrite: JournalEntry = {...journalEntry, body: newBody}
-
-        return saver([journalEntryToWrite], user)
-    }
-}
-function useCreateNoteStubInJournal() {
-    const appendToJournal = useAppendToJournal()
-
-    return (user: Peaker, note: PeakNote, journal: JournalEntry[], action: PeakStubAction = "added_notes") => {
-        const todayJournalEntry = getTodayEntry(journal)
-        /**
-         *  1. Find today's Journal Entry
-         *  2. If a node corresponding to the current Note does NOT exist
-         *  3. Append a stub pointing to the current note
-         */
-        const stub = todayJournalEntry.body.find(n => {
-            return (n.note_id && n.note_id === note.id && n.type === PEAK_NOTE_STUB && n.note_type === note.note_type)
-        })
-        if (!stub) {
-            console.log(`Adding a stub`)
-            return appendToJournal(note, todayJournalEntry, user, action)
-        } else {
-            console.log(`Already there Boss`)
-            return new Promise(resolve => { return "hey" });
-        }
-    }
-}
+// function useAppendToJournal() {
+//     const saver = useBulkJournalEntrySaver()
+//     return (note: PeakNote, journalEntry: JournalEntry, user: Peaker, action: PeakStubAction) => {
+//         const nodeId = Date.now()
+//         const nodesToAppend = [
+//             {
+//                 id: nodeId,
+//                 type: PEAK_NOTE_STUB,
+//                 action: action,
+//                 note_type: note.note_type,
+//                 note_id:  note.id,
+//                 children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
+//                 title: note.title,
+//                 author: note.author,
+//             },
+//             EMPTY_PARAGRAPH_NODE()
+//         ];
+//
+//         const cleanedJournal = journalEntry.body.filter(n => !(n.type === ELEMENT_PARAGRAPH && Node.string(n).toLowerCase() === `/${note.title.toLowerCase()}`))
+//         const newBody: Node [] = cleanedJournal.concat(nodesToAppend)
+//         const journalEntryToWrite: JournalEntry = {...journalEntry, body: newBody}
+//
+//         return saver([journalEntryToWrite], user)
+//     }
+// }
+// function useCreateNoteStubInJournal() {
+//     const appendToJournal = useAppendToJournal()
+//
+//     return (user: Peaker, note: PeakNote, journal: JournalEntry[], action: PeakStubAction = "added_notes") => {
+//         const todayJournalEntry = getTodayEntry(journal)
+//         /**
+//          *  1. Find today's Journal Entry
+//          *  2. If a node corresponding to the current Note does NOT exist
+//          *  3. Append a stub pointing to the current note
+//          */
+//         const stub = todayJournalEntry.body.find(n => {
+//             return (n.note_id && n.note_id === note.id && n.type === PEAK_NOTE_STUB && n.note_type === note.note_type)
+//         })
+//         if (!stub) {
+//             console.log(`Adding a stub`)
+//             return appendToJournal(note, todayJournalEntry, user, action)
+//         } else {
+//             console.log(`Already there Boss`)
+//             return new Promise(resolve => { return "hey" });
+//         }
+//     }
+// }

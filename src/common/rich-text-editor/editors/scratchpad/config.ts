@@ -1,4 +1,4 @@
 import {SlatePlugin} from "@udecode/slate-plugins";
-import {buildListOfPlugins} from "../../editorFactory";
+import {usePeakPlugins} from "../../editorFactory";
 
-export const scratchPadPlugins: SlatePlugin[] = buildListOfPlugins()
+export const scratchPadPlugins: SlatePlugin[] = usePeakPlugins()

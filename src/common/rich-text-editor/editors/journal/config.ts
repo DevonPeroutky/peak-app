@@ -1,11 +1,5 @@
-import {
-    SlatePlugin,
-    withInlineVoid,
-} from "@udecode/slate-plugins";
-import {withEditableJournalEntry} from "../../plugins/journal-entry-plugin/withEditableJournalEntry";
-import {PEAK_VOID_TYPES} from "../../types";
-import {JournalEntryPlugin} from "../../plugins/journal-entry-plugin/JournalEntryPlugin";
-import {buildListOfPlugins} from "../../editorFactory";
+import { SlatePlugin } from "@udecode/slate-plugins";
+import {usePeakPlugins} from "../../editorFactory";
 
 /** DEPRECATED **/
 
@@ -17,4 +11,4 @@ import {buildListOfPlugins} from "../../editorFactory";
 //     withInlineVoid({ plugins: journalPlugins, voidTypes: PEAK_VOID_TYPES })
 // ], true)
 // Unused
-export const journalPlugins: SlatePlugin[] = buildListOfPlugins()
+export const journalPlugins: SlatePlugin[] = usePeakPlugins()

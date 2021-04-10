@@ -41,7 +41,6 @@ import {PEAK_AUTOFORMAT_OPTIONS} from "./plugins/withAutoReplace";
 import {defaultOptions, PEAK_EXIT_BREAK_OPTIONS, PEAK_RESET_BLOCK_OPTIONS, PEAK_SOFT_BREAK_OPTIONS} from "./options";
 import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
-import {PeakKnowledgePlugin} from "./plugins/peak-knowledge-plugin/PeakKnowledgePlugin";
 
 /**
  // THE OG PLUGINS
@@ -110,6 +109,7 @@ export const basePlugins: SlatePlugin[] = [
     // TODO: Remove this
     createLinkPlugin(),
     // PeakLinkPlugin(),
+
     // Custom Peak Plugins
     // PeakCodePlugin,
     // PeakCalloutPlugin(),

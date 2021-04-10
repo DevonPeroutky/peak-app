@@ -2,7 +2,7 @@ import React from "react";
 import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {PeakNodeSelectListItem} from "./types";
 import {Editor, Location, Point, Range, Transforms} from "slate";
-import {escapeRegExp, getRangeFromBlockStart, getText, unwrapList} from "@udecode/slate-plugins";
+import {escapeRegExp, getRangeFromBlockStart, getText, SPEditor, unwrapList} from "@udecode/slate-plugins";
 import {insertCustomBlockElement, insertCustomBlockElementCallback} from "../base-utils";
 import {ReadOutlined} from "@ant-design/icons/lib";
 import {ELEMENT_PEAK_BOOK} from "../../plugins/peak-knowledge-plugin/constants";
@@ -101,7 +101,7 @@ export const isTextAfterTrigger = (
 };
 
 export const insertNodeContent = async (
-    editor: Editor,
+    editor: SPEditor,
     selectedOption: PeakNodeSelectListItem,
     targetRange: Range
 ) => {

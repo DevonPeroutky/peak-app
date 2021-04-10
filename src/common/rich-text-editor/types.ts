@@ -6,11 +6,13 @@ import {
     ELEMENT_H5,
     ELEMENT_H6,
     SlatePluginKey,
+    SPEditor,
 } from "@udecode/slate-plugins";
 import {Editor} from "slate";
-import {PEAK_NOTE_STUB} from "./plugins/peak-note-stub-plugin/types";
 import {PeakKnowledgeKeyOption} from "./plugins/peak-knowledge-plugin/types";
 import {PeakCalloutKeyOption} from "./plugins/peak-callout-plugin/defaults";
+import {ReactEditor} from "slate-react";
+import {HistoryEditor} from "slate-history";
 
 export const DIVIDER = "divider";
 export const JOURNAL_ENTRY = "journal_entry";
@@ -30,7 +32,7 @@ export interface StyledNodeConfig {
 }
 
 // export const PEAK_VOID_TYPES = [ELEMENT_CODE_BLOCK, JOURNAL_ENTRY_HEADER, PEAK_NOTE_STUB]
-export const PEAK_VOID_TYPES = [JOURNAL_ENTRY_HEADER, PEAK_NOTE_STUB]
-
 
 export declare type PeakSlatePluginKey = SlatePluginKey | PeakKnowledgeKeyOption | PeakCalloutKeyOption
+
+export type UghEditorType = ReactEditor & HistoryEditor & SPEditor

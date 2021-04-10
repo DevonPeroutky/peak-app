@@ -1,5 +1,5 @@
 import {useDispatch} from "react-redux";
-import {ReactEditor, useEditor} from "slate-react";
+import {ReactEditor} from "slate-react";
 import {createPeakTags, deletePeakTag, useTags} from "../../../../../../../../client/tags";
 import {useCurrentUser} from "../../../../../../../../utils/hooks";
 import React, {useEffect, useRef, useState} from "react";
@@ -7,7 +7,7 @@ import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import {Editor, Node, Transforms} from "slate";
 import {forceFocusToNode, reEnterDown} from "../../../../../../utils/external-editor-utils";
-import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, useTSlate} from "@udecode/slate-plugins";
 import {
     setEditorFocusToNode,
     useActiveEditorState
@@ -24,7 +24,7 @@ const { Option } = Select;
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[], disabled?: boolean, hideIcon?: boolean }) => {
     const { nodeId, nodePath, selected_tags, disabled, hideIcon } = props
     const dispatch = useDispatch()
-    const editor = useEditor()
+    const editor = useTSlate()
     const existingTags = useTags()
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const currentUser = useCurrentUser()

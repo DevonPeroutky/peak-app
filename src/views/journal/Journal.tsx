@@ -28,7 +28,6 @@ import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-pl
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
 import moment from "moment";
 import {Empty, message, Skeleton} from "antd";
-import { useSelectFirstJournalEntry } from "../../common/rich-text-editor/plugins/journal-entry-plugin/utils";
 import {drop, equals} from "ramda";
 import cn from "classnames";
 import {PeakNodeSelectListItem} from "../../common/rich-text-editor/utils/node-content-select/types";

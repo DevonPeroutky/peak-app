@@ -9,15 +9,20 @@ export const defaultEditableProps = {
     autoFocus: true,
 };
 
-export const buildListOfPlugins = (additionalPlugins?: SlatePlugin[], additionalNormalizers?: WithNormalizeTypes): SlatePlugin[] => useMemo(() => {
-    const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
-    const editorSpecificRules = (additionalNormalizers) ? [...additionalNormalizers.rules] : []
-    createNormalizeTypesPlugin({
-        rules: [
-            { path: [0, 0], strictType: defaultOptions[ELEMENT_H1].type },
-            ...editorSpecificRules
-        ],
-    }),
-    plugins.push(createDeserializeHTMLPlugin({ plugins }));
-    return plugins
-}, [defaultOptions]);
+
+
+export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNormalizers?: WithNormalizeTypes): SlatePlugin[] => {
+    return useMemo(() => {
+        const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
+        const editorSpecificRules = (additionalNormalizers) ? [...additionalNormalizers.rules] : []
+
+        plugins.push(createNormalizeTypesPlugin({
+            rules: [
+                { path: [0, 0], strictType: defaultOptions[ELEMENT_H1].type },
+                ...editorSpecificRules
+            ],
+        }))
+        plugins.push(createDeserializeHTMLPlugin({ plugins }));
+        return plugins
+    }, [defaultOptions]);
+}

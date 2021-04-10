@@ -2,19 +2,19 @@ import {ReactEditor} from "slate-react";
 import {Editor, Node, Transforms} from "slate";
 import {store} from "../../../redux/store";
 import {setEditorFocusToNode} from "../../../redux/slices/activeEditor/activeEditorSlice";
-import {getCurrentPageId} from "../../../utils/links";
 import {
     isAtLastLineOfPeakKnowledgeNode,
     isPeakKnowledgeNoteType
 } from "../plugins/peak-knowledge-plugin/utils";
 import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
+import {UghEditorType} from "../types";
 
 export function isNodeTypeExternalEditor(n: Node) {
     return [ELEMENT_CODE_BLOCK].includes(n.type as string)
 }
 
 // TODO: This shouldn't require last line of learning knowledge
-export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => boolean) {
+export function reEnterDown(editor: UghEditorType, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
     if (!match) { return }
 
@@ -49,7 +49,7 @@ export function reEnterDown(editor: ReactEditor, matchFunc: (node: Node) => bool
     }
 
 }
-export function reEnterUp(editor: ReactEditor, matchFunc: (node: Node) => boolean) {
+export function reEnterUp(editor: UghEditorType, matchFunc: (node: Node) => boolean) {
     const [match] = Editor.nodes(editor, { match: matchFunc, at:[] });
     if (!match) { return }
 

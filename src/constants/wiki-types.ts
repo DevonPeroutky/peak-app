@@ -1,7 +1,6 @@
 import {Node} from "slate";
 import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Range} from "slate/dist/interfaces/range";
-import {SlateDocument} from "@udecode/slate-plugins";
 
 interface CodeEditorFocusState {
     [key: string]: boolean

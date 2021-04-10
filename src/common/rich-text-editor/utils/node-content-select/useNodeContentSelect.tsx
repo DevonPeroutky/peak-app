@@ -6,8 +6,7 @@ import {
     getPreviousIndex,
     isCollapsed,
     isPointAtWordEnd,
-    isWordAfterTrigger,
-    UseMentionOptions
+    isWordAfterTrigger, SPEditor,
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
@@ -24,12 +23,8 @@ import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../clien
 import {useHistory} from "react-router-dom";
 import {buildNoteUrl} from "../../../../utils/notes";
 
-interface PeakNodeSelectMenuOptions extends UseMentionOptions {
-    editorLevel?: number
-}
-
 export const useNodeContentSelect = (
-    { maxSuggestions = 10, trigger = '/', editorLevel = 1, ...options }: PeakNodeSelectMenuOptions
+    { maxSuggestions = 10, trigger = '/', editorLevel = 1, ...options }
 ) => {
 
     let history = useHistory();
@@ -77,7 +72,7 @@ export const useNodeContentSelect = (
     }
 
     const onAddNodeContent = useCallback(
-        (editor: Editor, data: PeakNodeSelectListItem) => {
+        (editor: SPEditor, data: PeakNodeSelectListItem) => {
             console.log(`THE DATA: `, data)
             if (targetRange !== null) {
                 if (data.elementType === PEAK_BOOK_SELECT_ITEM) {
@@ -119,7 +114,7 @@ export const useNodeContentSelect = (
         [options, targetRange]
     );
 
-    const onKeyDownSelect = useCallback((e, editor: Editor) => {
+    const onKeyDownSelect = useCallback((e, editor: SPEditor) => {
             const totalMax: number = Math.max(values.length, 1) + library.length - 1
             if (targetRange) {
                 if (e.key === 'ArrowDown') {
