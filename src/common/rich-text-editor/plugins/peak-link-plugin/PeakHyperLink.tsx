@@ -2,7 +2,7 @@ import {RenderElementProps, useSlate} from "slate-react";
 import {useDispatch} from "react-redux";
 import {openEditLinkMenu, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import React from "react";
-import {ELEMENT_LINK, LinkPluginOptions} from "@udecode/slate-plugins";
+import {ELEMENT_LINK} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 import "./peak-hyperlink.scss"
@@ -57,7 +57,7 @@ const PeakHyperLink = (props: RenderElementProps) => {
 }
 
 // @ts-ignore
-export const renderElementLink = ({ }: LinkPluginOptions = {}) => (props: RenderElementProps) => {
+export const renderElementLink = (pluginKeys: string | string[]) => (props: RenderElementProps) => {
     if (props.element.type == ELEMENT_LINK) {
         return <PeakHyperLink {...props}/>
     }

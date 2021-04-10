@@ -1,21 +1,19 @@
 import {Editor} from "slate";
 import {
-    deserializeHeading,
     ELEMENT_H1,
     ELEMENT_H2,
     ELEMENT_H3,
     ELEMENT_H4,
     ELEMENT_H5,
     HeadingPluginOptions,
-    renderElementHeading,
     SlatePlugin,
 } from "@udecode/slate-plugins";
 import {resetHeader, toggleHeader} from "./header-utils";
 
 export const PeakHeadingPlugin = (options?: HeadingPluginOptions): SlatePlugin => ({
-    renderElement: renderElementHeading(options),
-    deserialize: deserializeHeading(options),
-    onKeyDown: peakOnKeyDownTextHeading(options),
+    // renderElement: renderElementHeading(options),
+    // deserialize: deserializeHeading(options),
+    // onKeyDown: peakOnKeyDownTextHeading(options),
 });
 
 const peakOnKeyDownTextHeading = (options?: HeadingPluginOptions) => (event: KeyboardEvent, editor: Editor) => {

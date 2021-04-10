@@ -5,17 +5,14 @@ import {
     ELEMENT_H4,
     ELEMENT_H5,
     ELEMENT_H6,
-    HeadingKeyOption,
-    HeadingLevelsOption,
-    HeadingPluginOptionsValues,
+    SlatePluginOptions,
 } from "@udecode/slate-plugins";
 import {PeakHeading} from "./component/renderElementHeading";
+import {PeakSlatePluginKey} from "../../types";
 
-export const DEFAULTS_PEAK_HEADING: Record<
-    HeadingKeyOption,
-    HeadingPluginOptionsValues
-    > &
-    Required<HeadingLevelsOption> = {
+// Partial<Record<PeakSlatePluginKey, Partial<SlatePluginOptions>>>
+export const DEFAULTS_PEAK_HEADING:
+    Partial<Record<PeakSlatePluginKey, Partial<SlatePluginOptions>>> = {
     h1: {
         component: PeakHeading,
         type: ELEMENT_H1,
@@ -64,5 +61,4 @@ export const DEFAULTS_PEAK_HEADING: Record<
             as: 'h6',
         },
     },
-    levels: 6,
 };

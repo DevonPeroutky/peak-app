@@ -107,5 +107,7 @@ const inlineAutoFormatRules: AutoformatRule[] = [
     }
 ]
 
-export const autoformatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules]
+export const PEAK_AUTOFORMAT_OPTIONS = {
+    rules: [...blockAutoFormatRules, ...inlineAutoFormatRules]
+}
 export const chromeExtFormatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules].filter(r => r.type !== ELEMENT_CODE_BLOCK)
