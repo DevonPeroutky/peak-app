@@ -18,7 +18,7 @@ import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/co
 import {defaultComponents} from "../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {Plugins} from "./Playground";
+import {Plugins} from "./playground/Playground";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();

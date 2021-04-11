@@ -55,28 +55,15 @@ import { Search } from '@styled-icons/material/Search'
 import {
     initialValueHighlight,
     optionsExitBreakPlugin,
-    optionsMentionPlugin, optionsResetBlockTypePlugin, optionsSoftBreakPlugin,
-    renderMentionLabel,
-    withStyledDraggables,
-    withStyledPlaceHolders
+    optionsMentionPlugin,
+    optionsResetBlockTypePlugin,
+    optionsSoftBreakPlugin,
 } from "./playground-utils";
-import {defaultEditableProps} from "../../common/rich-text-editor/editorFactory";
+import {defaultEditableProps} from "../../../common/rich-text-editor/editorFactory";
 import {optionsAutoformat} from "./playground-autoformat-rules";
+import {components, options} from "./defaultOptions";
 
 const id = 'Examples/Playground'
-
-let components = createSlatePluginsComponents({
-    [ELEMENT_MENTION]: withProps(MentionElement, {
-        renderLabel: renderMentionLabel,
-    }),
-    // customize your components by plugin key
-})
-components = withStyledPlaceHolders(components)
-components = withStyledDraggables(components)
-
-const options = createSlatePluginsOptions({
-    // customize your options by plugin key
-})
 
 export const Plugins = () => {
     const { setSearch, plugin: searchHighlightPlugin } = useFindReplacePlugin()
@@ -133,21 +120,17 @@ export const Plugins = () => {
     console.log(`PLUGINS `, plugins)
 
     return (
-        <DndProvider backend={HTML5Backend}>
-            <SlatePlugins
-                id={id}
-                plugins={plugins}
-                components={components}
-                options={options}
-                editableProps={defaultEditableProps}
-                initialValue={initialValueHighlight}
-            >
-                <ToolbarSearchHighlight icon={Search} setSearch={setSearch} />
-                <MentionSelect
-                    {...getMentionSelectProps()}
-                    renderLabel={renderMentionLabel}
-                />
-            </SlatePlugins>
-        </DndProvider>
+<DndProvider backend={HTML5Backend}>
+    <SlatePlugins
+        id={id}
+        plugins={plugins}
+        components={components}
+        options={options}
+        editableProps={defaultEditableProps}
+        initialValue={initialValueHighlight}
+    >
+        <ToolbarSearchHighlight icon={Search} setSearch={setSearch} />
+    </SlatePlugins>
+</DndProvider>
     )
 }
