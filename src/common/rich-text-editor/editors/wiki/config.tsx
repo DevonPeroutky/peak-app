@@ -4,9 +4,8 @@ import {
     WithNormalizeTypes,
 } from "@udecode/slate-plugins";
 import {TITLE} from "../../types";
-import {usePeakPlugins} from "../../editorFactory";
 
-export const wikiSpecificPlugins: SlatePlugin[] = [ PeakTitlePlugin()]
+export const wikiSpecificPlugins: SlatePlugin[] = [ PeakTitlePlugin() ]
 export const wikiNormalizers: WithNormalizeTypes = {
     rules: [{ path: [0, 0], strictType: TITLE }],
 }

@@ -1,18 +1,13 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useState} from 'react'
 import "./scratchpad.scss"
 import { useDispatch } from "react-redux";
-import { Slate, ReactEditor } from "slate-react";
 import {createEditor, Editor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useCurrentUser, useScratchpad} from '../../utils/hooks';
 import { equals } from "ramda";
 import {pipe, SlatePlugin, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
 import { useNodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import { baseKeyBindingHandler } from "../../common/rich-text-editor/utils/keyboard-handler";
-import {
-    NodeContentSelect,
-    NodeContentSelectProps
-} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
+import { NodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import { beginSavingPage, useActiveEditorState } from "../../redux/slices/activeEditor/activeEditorSlice";
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
@@ -20,8 +15,7 @@ import {sleep} from "../../chrome-extension/utils/generalUtil";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
 import {defaultComponents} from "../../common/rich-text-editor/components";
 import {defaultOptions} from "../../common/rich-text-editor/options";
-import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {Plugins} from "./playground/Playground";
+import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -41,24 +35,10 @@ export const PeakScratchpad = (props: {}) => {
     //     })
     // }, [])
 
-    // PeakInlineSelect nonsense
-    const {
-        plugin: nodeSelectPlugin,
-        search: search,
-        getNodeContentSelectProps,
-    } = useNodeContentSelect({
+    const { plugin: nodeSelectPlugin, getNodeContentSelectProps } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
-
-    // TODO
-    // const defaultKeyBindingHandler = useCallback((event: any) => {
-    //     baseKeyBindingHandler(event, editor)
-    // }, [])
-
-    const scratchPadSpecificPlugins: SlatePlugin[] = [
-        nodeSelectPlugin
-    ]
 
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, scratchPadContent)) {
@@ -71,32 +51,16 @@ export const PeakScratchpad = (props: {}) => {
         }
     }
 
-    console.log(scratchPadContent)
     return (
         <div className={"scratchpad-container"}>
             <h1 className={"peak-page-title"}>Scratchpad</h1>
-            <SlatePlugins
-                id={"scratchpad"}
-                plugins={usePeakPlugins(scratchPadSpecificPlugins)}
-                components={defaultComponents}
-                options={defaultOptions}
-                editableProps={defaultEditableProps}
+            <PeakEditor
+                additionalPlugins={[nodeSelectPlugin]}
                 onChange={updatePageContent}
+                getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={scratchPadContent}
-            >
-                <div className="peak-scratchpad-container">
-                    <MemoizedLinkMenu
-                        key={`${SCRATCHPAD_ID}-LinkMenu`}
-                        linkState={editorState.currentLinkState}
-                        showLinkMenu={editorState.showLinkMenu}
-                    />
-                    <div className={"rich-text-editor-container"}>
-                        <NodeContentSelect
-                            {...getNodeContentSelectProps()}
-                        />
-                    </div>
-                </div>
-            </SlatePlugins>
+                currentPageId={SCRATCHPAD_ID}
+            />
         </div>
     )
 };
