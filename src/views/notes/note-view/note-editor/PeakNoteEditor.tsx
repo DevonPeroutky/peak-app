@@ -58,6 +58,8 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         trigger: '/',
     });
 
+    console.log(noteContent)
+
     return (
         <PeakEditor
             additionalPlugins={[nodeSelectPlugin]}

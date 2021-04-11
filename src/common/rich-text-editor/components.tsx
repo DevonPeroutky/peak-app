@@ -63,6 +63,11 @@ const withStyledPlaceHolders = (components: any) =>
             placeholder: 'Heading 6',
             hideOnBlur: false,
         },
+        {
+            key: ELEMENT_CODE_BLOCK,
+            placeholder: 'Type some code',
+            hideOnBlur: false,
+        },
     ]);
 
 const withStyledDraggables = (components: any) => {

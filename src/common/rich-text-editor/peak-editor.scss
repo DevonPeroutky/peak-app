@@ -13,4 +13,11 @@
   .p {
     line-height: 1.75!important;
   }
+
+  .slate-Draggable {
+    button {
+      display: flex;
+      overflow: auto!important;
+    }
+  }
 }

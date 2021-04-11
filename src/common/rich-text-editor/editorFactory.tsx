@@ -53,7 +53,6 @@ export interface PeakEditorProps {
     initialValue: any
     currentPageId: string
 }
-
 export const PeakEditor = ({ additionalPlugins, currentPageId, additionalNormalizers, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
     const editorState = useActiveEditorState()
 

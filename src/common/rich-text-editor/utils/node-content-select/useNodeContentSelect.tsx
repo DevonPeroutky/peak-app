@@ -201,7 +201,6 @@ export const useNodeContentSelect = (
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
                 const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
-                console.log(`CURR NODE: ${atTopLevel}`, currNode.type)
 
                 if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
                 // if (atEnd && beforeMatch) {
