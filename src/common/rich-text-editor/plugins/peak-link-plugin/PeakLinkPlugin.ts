@@ -2,31 +2,20 @@ import {
     ELEMENT_LINK,
     getLinkDeserialize,
     getRenderElement,
-    getSlatePluginTypes,
+    getSlatePluginTypes, OnKeyDown,
     SlatePlugin,
-    withLink
+    withLink,
+    WithLinkOptions
 } from "@udecode/slate-plugins";
 import {Editor, Node, Range} from "slate";
 import {closeLinkMenu, openEditLinkMenu, openEmptyLinkMenu} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {store} from "../../../../redux/store";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
+import {UghEditorType} from "../../types";
 
-export const PeakLinkPlugin = (options?: any): SlatePlugin => {
-    return {
-        pluginKeys: ELEMENT_LINK,
-        renderElement: getRenderElement(ELEMENT_LINK), // TODO <-- This need to be overridden
-        deserialize: getLinkDeserialize(),
-        inlineTypes: getSlatePluginTypes(ELEMENT_LINK),
-        withOverrides: withLink(options),
-    }
 
-    // return {
-    //     renderElement: renderElementLink(options),
-    //     onKeyDown: peakLinkOnKeyDownHandler,
-    //     inlineTypes: [link.type]
-    // }
-};
-export const peakLinkOnKeyDownHandler = (event: any, editor: Editor) => {
+
+const peakLinkOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
     if (event.metaKey && event.key == 'l') {
         event.preventDefault();
         const [...match] = Editor.nodes(editor, { match: n => n.type === "a" });
@@ -58,3 +47,11 @@ export const peakLinkOnKeyDownHandler = (event: any, editor: Editor) => {
         store.dispatch(closeLinkMenu());
     }
 }
+export const createPeakLinkPlugin = (options?: WithLinkOptions): SlatePlugin => ({
+    pluginKeys: ELEMENT_LINK,
+    renderElement: getRenderElement(ELEMENT_LINK),
+    deserialize: getLinkDeserialize(),
+    inlineTypes: getSlatePluginTypes(ELEMENT_LINK),
+    withOverrides: withLink(options),
+    onKeyDown: peakLinkOnKeyDownHandler,
+});

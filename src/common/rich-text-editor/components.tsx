@@ -7,7 +7,7 @@ import {
     ELEMENT_H4,
     ELEMENT_H5,
     ELEMENT_H6,
-    ELEMENT_IMAGE, ELEMENT_LI, ELEMENT_MEDIA_EMBED,
+    ELEMENT_IMAGE, ELEMENT_LI, ELEMENT_LINK, ELEMENT_MEDIA_EMBED,
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
     ELEMENT_TABLE,
@@ -31,6 +31,7 @@ import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {PeakCalloutElement} from "./plugins/peak-callout-plugin/component/PeakCallout";
 import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {PeakLearningElement} from "./plugins/peak-knowledge-plugin/components/peak-learning-node/PeakLearningNode";
+import {PeakInlineLinkElement} from "./plugins/peak-link-plugin/inline-link/PeakHyperLink";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
@@ -84,10 +85,7 @@ const withStyledPlaceHolders = (components: any) =>
 const withStyledDraggables = (components: any) => {
     return withDraggables(components, [
         {
-            keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
             level: 0,
-        },
-        {
             keys: [
                 ELEMENT_PARAGRAPH,
                 ELEMENT_BLOCKQUOTE,
@@ -208,7 +206,8 @@ export let defaultComponents = createSlatePluginsComponents({
     [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
     [TITLE]: PeakTitleElement,
     [PEAK_CALLOUT]: PeakCalloutElement,
-    [PEAK_LEARNING]: PeakLearningElement
+    [PEAK_LEARNING]: PeakLearningElement,
+    [ELEMENT_LINK]: PeakInlineLinkElement
 })
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)

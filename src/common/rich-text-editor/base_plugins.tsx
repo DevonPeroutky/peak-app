@@ -41,6 +41,7 @@ import {
 } from "../../views/scratchpad/playground/playground-utils";
 import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
 import { createPeakLearningPlugin } from './plugins/peak-knowledge-plugin/PeakKnowledgePlugin';
+import {createPeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 
 /**
  // THE OG PLUGINS
@@ -106,8 +107,8 @@ export const basePlugins: SlatePlugin[] = [
 
 
     // TODO: Remove this
-    createLinkPlugin(),
-    // PeakLinkPlugin(),
+    // createLinkPlugin(),
+    createPeakLinkPlugin(),
 
     // Custom Peak Plugins
     // PeakCodePlugin,

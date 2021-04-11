@@ -30,7 +30,6 @@ export const defaultEditableProps = {
 
 export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
     return useMemo(() => {
-        console.log(`ADDY PLUGINS `, additionalPlugins)
         const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
 
