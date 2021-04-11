@@ -7,7 +7,7 @@ import { SlatePluginOptions } from '@udecode/slate-plugins-core';
 import { ELEMENT_PARAGRAPH } from '@udecode/slate-plugins-paragraph';
 import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
-import {JOURNAL_ENTRY, PeakPluginOption, TITLE} from "./types";
+import {JOURNAL_ENTRY, TITLE} from "./types";
 import {
     createSlatePluginsOptions, ELEMENT_TD, ELEMENT_TODO_LI, ExitBreakPluginOptions,
     isBlockAboveEmpty,

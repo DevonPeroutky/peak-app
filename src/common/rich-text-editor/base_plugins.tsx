@@ -39,6 +39,7 @@ import {
     optionsResetBlockTypePlugin,
     optionsSoftBreakPlugin
 } from "../../views/scratchpad/playground/playground-utils";
+import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
 
 /**
  // THE OG PLUGINS
@@ -98,7 +99,6 @@ export const basePlugins: SlatePlugin[] = [
     createExitBreakPlugin(PEAK_EXIT_BREAK_OPTIONS),
     createTrailingBlockPlugin({
         type: defaultOptions[ELEMENT_PARAGRAPH].type,
-        level: 1,
     }),
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
@@ -110,6 +110,6 @@ export const basePlugins: SlatePlugin[] = [
 
     // Custom Peak Plugins
     // PeakCodePlugin,
-    // PeakCalloutPlugin(),
+    createPeakCalloutPlugin(),
     // PeakKnowledgePlugin()
 ];
