@@ -158,6 +158,7 @@
     "slate-hyperscript": "^0.59.0",
     "slate-react": "^0.60.11",
     "styled-components": "^5.1.1",
+    "styled-icons": "^10.33.0",
     "uuid": "^8.3.0",
     "webpack-manifest-plugin": "^2.2.0"
   }

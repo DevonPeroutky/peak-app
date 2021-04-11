@@ -18,6 +18,7 @@ import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/co
 import {defaultComponents} from "../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
+import {Plugins} from "./Playground";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -73,36 +74,37 @@ export const PeakScratchpad = (props: {}) => {
         }
     }
 
-    return (
-        <div className={"scratchpad-container"}>
-            <h1 className={"peak-page-title"}>Scratchpad</h1>
-            <SlatePlugins
-                id={"scratchpad"}
-                plugins={usePeakPlugins(scratchPadSpecificPlugins)}
-                components={defaultComponents}
-                options={defaultOptions}
-                editableProps={defaultEditableProps}
-                onChange={updatePageContent}
-                initialValue={scratchPadContent}
-            >
-                <div className="peak-scratchpad-container">
-                    <MemoizedLinkMenu
-                        key={`${SCRATCHPAD_ID}-LinkMenu`}
-                        linkState={editorState.currentLinkState}
-                        showLinkMenu={editorState.showLinkMenu}
-                    />
-                    <div className={"rich-text-editor-container"}>
-                        <NodeContentSelect
-                            at={target}
-                            openLibraryBooks={openLibraryResults}
-                            valueIndex={index}
-                            options={values}
-                            onClickMention={onAddNodeContent}
-                            nodeContentSelectMode={nodeContentSelectMode}
-                        />
-                    </div>
-                </div>
-            </SlatePlugins>
-        </div>
-    )
+    return <Plugins/>
+    // return (
+    //     <div className={"scratchpad-container"}>
+    //         <h1 className={"peak-page-title"}>Scratchpad</h1>
+    //         <SlatePlugins
+    //             id={"scratchpad"}
+    //             plugins={usePeakPlugins(scratchPadSpecificPlugins)}
+    //             components={defaultComponents}
+    //             options={defaultOptions}
+    //             editableProps={defaultEditableProps}
+    //             onChange={updatePageContent}
+    //             initialValue={scratchPadContent}
+    //         >
+    //             <div className="peak-scratchpad-container">
+    //                 <MemoizedLinkMenu
+    //                     key={`${SCRATCHPAD_ID}-LinkMenu`}
+    //                     linkState={editorState.currentLinkState}
+    //                     showLinkMenu={editorState.showLinkMenu}
+    //                 />
+    //                 <div className={"rich-text-editor-container"}>
+    //                     <NodeContentSelect
+    //                         at={target}
+    //                         openLibraryBooks={openLibraryResults}
+    //                         valueIndex={index}
+    //                         options={values}
+    //                         onClickMention={onAddNodeContent}
+    //                         nodeContentSelectMode={nodeContentSelectMode}
+    //                     />
+    //                 </div>
+    //             </div>
+    //         </SlatePlugins>
+    //     </div>
+    // )
 };
