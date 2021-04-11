@@ -28,31 +28,25 @@ export const defaultEditableProps = {
     style: editorStyle,
 };
 
-export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNormalizers?: WithNormalizeTypes) => {
+export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
     return useMemo(() => {
+        console.log(`ADDY PLUGINS `, additionalPlugins)
         const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
-        const editorSpecificRules = (additionalNormalizers) ? [...additionalNormalizers.rules] : []
-        plugins.push(createNormalizeTypesPlugin({
-            rules: [
-                ...editorSpecificRules
-            ],
-        }))
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
 
         return plugins
-    }, [additionalPlugins, defaultOptions, additionalNormalizers])
+    }, [additionalPlugins, defaultOptions])
 }
 
 export interface PeakEditorProps {
     additionalPlugins?: SlatePlugin[],
-    additionalNormalizers?: WithNormalizeTypes
     onChange: (value: TNode[]) => void
     getNodeContentSelectProps?: () => NodeContentSelectProps
     className?: string
     initialValue: any
     currentPageId: string
 }
-export const PeakEditor = ({ additionalPlugins, currentPageId, additionalNormalizers, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
+export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
     const editorState = useActiveEditorState()
 
     // TODO
@@ -70,7 +64,7 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, additionalNormali
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
             <SlatePlugins
                 id={currentPageId}
-                plugins={usePeakPlugins(additionalPlugins, additionalNormalizers)}
+                plugins={usePeakPlugins(additionalPlugins)}
                 components={defaultComponents}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}

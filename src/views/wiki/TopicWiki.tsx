@@ -8,7 +8,7 @@ import { equals } from "ramda";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {wikiNormalizers, wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
+import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
 import { createPeakTitlePlugin } from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 
 const TopicWiki = (props: {topic_id: string}) => {
@@ -54,7 +54,6 @@ const TopicWiki = (props: {topic_id: string}) => {
             {/*<PageContextBar topicId={topic_id}/>*/}
             <PeakEditor
                 additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
-                // additionalNormalizers={wikiNormalizers}
                 onChange={updatePageContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={wikiPageContent}

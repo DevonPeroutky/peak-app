@@ -44,7 +44,7 @@ const deriveStructureForTopic = (pageBody: Node[], topicHierarchy: PeakTopicNode
 const derivePageStructure = (pageBody: Node[], topicId: string, pageId: string) => {
 
     let currentParent: PeakStructureNode | null = null
-    const nodes: Node[] = pageBody[0].children as Node[]
+    const nodes: Node[] = pageBody//[0].children as Node[]
     const headers: Node[] = nodes.filter(n => KEYS_HEADING.includes(n.type as string) || n.type === TITLE )
     const titleNode = covertNodeToPeakNode(headers.shift() as Node, topicId, pageId)
 
