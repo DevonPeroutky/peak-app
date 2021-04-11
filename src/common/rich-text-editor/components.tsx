@@ -25,9 +25,16 @@ import {
     PEAK_UL_STYLE,
     PeakBlockquoteElement, PeakCodeBlockElement
 } from "./plugins/slateComponentWrappers";
+import {TITLE} from "./types";
+import {PeakTitleElement} from "./plugins/peak-title-plugin/peak-title/PeakTitle";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
+        {
+            key: TITLE,
+            placeholder: 'Page Title',
+            hideOnBlur: false,
+        },
         {
             key: ELEMENT_PARAGRAPH,
             placeholder: 'Type \'/\' for commands',
@@ -184,7 +191,8 @@ export let defaultComponents = createSlatePluginsComponents({
     [ELEMENT_LI]: PEAK_LI_STYLE,
     [ELEMENT_UL]: PEAK_UL_STYLE,
     [ELEMENT_OL]: PEAK_OL_STYLE,
-    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement
+    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
+    [TITLE]: PeakTitleElement
 })
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)

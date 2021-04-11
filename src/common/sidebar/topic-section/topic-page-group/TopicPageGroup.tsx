@@ -126,11 +126,6 @@ const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number}) =
     //     },
     // })
 
-    // TODO THIS@!!!
-    interface DraggablePeakPage {
-        pageId: string
-        topicId: string
-    }
     const specArg = {
         type: DragItemTypes.TOPIC_PAGE_ITEM,
         item: {

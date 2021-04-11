@@ -34,14 +34,13 @@ export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNorm
         const editorSpecificRules = (additionalNormalizers) ? [...additionalNormalizers.rules] : []
         plugins.push(createNormalizeTypesPlugin({
             rules: [
-                { path: [0, 0], strictType: defaultOptions[ELEMENT_H1].type },
                 ...editorSpecificRules
             ],
         }))
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
 
         return plugins
-    }, [additionalPlugins, defaultOptions])
+    }, [additionalPlugins, defaultOptions, additionalNormalizers])
 }
 
 export interface PeakEditorProps {

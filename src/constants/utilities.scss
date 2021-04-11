@@ -13,7 +13,8 @@
 .peak-page-title {
     font-size: $title-font-size;
     font-weight: $title-font-weight;
-    line-height: $title-line-height;
+    line-height: $title-line-height!important;
+    min-height: $title-line-height!important;
     color: rgb(22, 30, 46)!important;
     width: fit-content;
     border-bottom: 0!important;

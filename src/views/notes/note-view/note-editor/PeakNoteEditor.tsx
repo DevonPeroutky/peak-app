@@ -1,7 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {EditablePlugins, pipe, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
 import {createEditor, Node, Transforms} from "slate";
-import MemoizedLinkMenu from "../../../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {PeakNote, STUB_BOOK_ID} from "../../../../redux/slices/noteSlice";
 import {
     useCurrentNote,
@@ -15,10 +13,7 @@ import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
-import {defaultComponents} from "../../../../common/rich-text-editor/components";
-import {defaultOptions} from "../../../../common/rich-text-editor/options";
 import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
-import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props

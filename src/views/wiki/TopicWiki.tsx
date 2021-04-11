@@ -3,19 +3,13 @@ import "./topic-wiki.scss"
 import {useDispatch} from "react-redux";
 import 'antd/dist/antd.css';
 import {Node} from "slate";
-import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
-import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import { usePagePublisher, useDebounceWikiSaver, useCurrentPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
 import { equals } from "ramda";
-import { SlatePlugins } from "@udecode/slate-plugins";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
-import {defaultComponents} from "../../common/rich-text-editor/components";
 import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {defaultOptions} from "../../common/rich-text-editor/options";
-import {wikiNormalizers, wikiSpecificPlugins} from "../../common/rich-text-editor/editors/wiki/config";
-import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
-import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
+import {wikiNormalizers} from "../../common/rich-text-editor/editors/wiki/config";
+import { createPeakTitlePlugin } from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -36,6 +30,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     });
 
     const updatePageContent = (newValue: Node[]) => {
+        console.log(`THE NEW VALUE: `, newValue)
         if (!equals(newValue, wikiPageContent)) {
             if (!editorState.isSaving) {
                 dispatch(beginSavingPage());
@@ -54,12 +49,13 @@ const TopicWiki = (props: {topic_id: string}) => {
             savePageToDB(newValue, currentTitle, currentWikiPage.id);
         }
     }
+    console.log(`WIKI `, wikiPageContent)
 
     return (
         <div className={"wiki-container"}>
             {/*<PageContextBar topicId={topic_id}/>*/}
             <PeakEditor
-                additionalPlugins={[nodeSelectPlugin, ...wikiSpecificPlugins]}
+                additionalPlugins={[nodeSelectPlugin, createPeakTitlePlugin()]}
                 additionalNormalizers={wikiNormalizers}
                 onChange={updatePageContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}

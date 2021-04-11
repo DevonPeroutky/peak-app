@@ -6,8 +6,8 @@ import { AppState} from "../redux";
 import { cloneDeep} from "lodash";
 import { TreeNodeNormal} from "antd/es/tree/Tree";
 import { capitalize } from "lodash";
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6 } from "@udecode/slate-plugins";
-import {HEADER_TYPES, TITLE} from "../common/rich-text-editor/types";
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6, KEYS_HEADING } from "@udecode/slate-plugins";
+import {TITLE} from "../common/rich-text-editor/types";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {buildNoteUrl} from "./notes";
 import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
@@ -45,7 +45,7 @@ const derivePageStructure = (pageBody: Node[], topicId: string, pageId: string) 
 
     let currentParent: PeakStructureNode | null = null
     const nodes: Node[] = pageBody[0].children as Node[]
-    const headers: Node[] = nodes.filter(n => HEADER_TYPES.includes(n.type as string) || n.type === TITLE )
+    const headers: Node[] = nodes.filter(n => KEYS_HEADING.includes(n.type as string) || n.type === TITLE )
     const titleNode = covertNodeToPeakNode(headers.shift() as Node, topicId, pageId)
 
     headers.forEach(currNode => {
@@ -117,7 +117,7 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], not
         }
     }
     function addNodes(node: PeakStructureNode, path: string, theList: PeakDisplayNode[]): void {
-        if (!(HEADER_TYPES.includes(node.header_type) && !node.header_id)) {
+        if (!(KEYS_HEADING.includes(node.header_type) && !node.header_id)) {
             theList.push(convertToDisplayNode(node, path))
         }
         node.children.map((peakNode) => {
