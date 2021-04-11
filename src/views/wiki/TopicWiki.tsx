@@ -8,7 +8,7 @@ import { equals } from "ramda";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {wikiNormalizers} from "../../common/rich-text-editor/editors/wiki/config";
+import {wikiNormalizers, wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
 import { createPeakTitlePlugin } from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 
 const TopicWiki = (props: {topic_id: string}) => {
@@ -30,7 +30,6 @@ const TopicWiki = (props: {topic_id: string}) => {
     });
 
     const updatePageContent = (newValue: Node[]) => {
-        console.log(`THE NEW VALUE: `, newValue)
         if (!equals(newValue, wikiPageContent)) {
             if (!editorState.isSaving) {
                 dispatch(beginSavingPage());
@@ -49,14 +48,13 @@ const TopicWiki = (props: {topic_id: string}) => {
             savePageToDB(newValue, currentTitle, currentWikiPage.id);
         }
     }
-    console.log(`WIKI `, wikiPageContent)
 
     return (
         <div className={"wiki-container"}>
             {/*<PageContextBar topicId={topic_id}/>*/}
             <PeakEditor
-                additionalPlugins={[nodeSelectPlugin, createPeakTitlePlugin()]}
-                additionalNormalizers={wikiNormalizers}
+                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
+                // additionalNormalizers={wikiNormalizers}
                 onChange={updatePageContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={wikiPageContent}

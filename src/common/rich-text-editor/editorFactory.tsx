@@ -64,6 +64,8 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, additionalNormali
     //     })
     // }, [])
 
+    console.log(`CURRENT VALUE: `, initialValue)
+
     return (
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
             <SlatePlugins
