@@ -17,8 +17,7 @@ import {sleep} from "../../chrome-extension/utils/generalUtil";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
 import {defaultComponents} from "../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../common/rich-text-editor/options";
-import {defaultEditableProps} from "../../common/rich-text-editor/editorFactory";
-import {scratchPadPlugins} from "../../common/rich-text-editor/editors/scratchpad/config";
+import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 import {UghEditorType} from "../../common/rich-text-editor/types";
 
 export const PeakScratchpad = (props: {}) => {
@@ -79,7 +78,7 @@ export const PeakScratchpad = (props: {}) => {
             <h1 className={"peak-page-title"}>Scratchpad</h1>
             <SlatePlugins
                 id={"scratchpad"}
-                plugins={scratchPadPlugins}
+                plugins={usePeakPlugins()}
                 components={defaultComponents}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}

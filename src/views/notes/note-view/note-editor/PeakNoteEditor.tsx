@@ -20,13 +20,9 @@ import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
-import {wikiPlugins} from "../../../../common/rich-text-editor/editors/wiki/config";
 import {defaultComponents} from "../../../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../../../common/rich-text-editor/options";
-import {defaultEditableProps} from "../../../../common/rich-text-editor/editorFactory";
-import PageContextBar from "../../../../common/page-context-bar/PageContextBar";
-import {scratchPadPlugins} from "../../../../common/rich-text-editor/editors/scratchpad/config";
-import {noteEditorPlugins} from "../../../../common/rich-text-editor/editors/note-editor/config";
+import {defaultEditableProps, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
 import {UghEditorType} from "../../../../common/rich-text-editor/types";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
@@ -97,7 +93,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     return (
         <SlatePlugins
             id={"noteEditor"}
-            plugins={noteEditorPlugins}
+            plugins={usePeakPlugins()}
             components={defaultComponents}
             options={defaultOptions}
             editableProps={defaultEditableProps}

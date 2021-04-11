@@ -11,4 +11,4 @@ import {usePeakPlugins} from "../../editorFactory";
 //     withInlineVoid({ plugins: journalPlugins, voidTypes: PEAK_VOID_TYPES })
 // ], true)
 // Unused
-export const journalPlugins: SlatePlugin[] = usePeakPlugins()
+// export const journalPlugins: SlatePlugin[] = usePeakPlugins()

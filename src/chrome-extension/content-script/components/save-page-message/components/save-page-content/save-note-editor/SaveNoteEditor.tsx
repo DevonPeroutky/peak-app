@@ -6,8 +6,7 @@ import {Node} from "slate";
 import {equals} from "ramda";
 import {defaultComponents} from "../../../../../../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../../../../../../common/rich-text-editor/options";
-import {defaultEditableProps} from "../../../../../../../common/rich-text-editor/editorFactory";
-import {extensionPlugins} from "../../../../../../../common/rich-text-editor/editors/chrome-extension/config";
+import {defaultEditableProps, usePeakPlugins} from "../../../../../../../common/rich-text-editor/editorFactory";
 
 export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void, editor: ReactEditor }) => {
     const { content, setContent, editor } = props
@@ -21,7 +20,7 @@ export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: 
     return (
         <SlatePlugins
             id={"extensionNoteEditor"}
-            plugins={extensionPlugins}
+            plugins={usePeakPlugins()}
             components={defaultComponents}
             onChange={updatePageContent}
             options={defaultOptions}

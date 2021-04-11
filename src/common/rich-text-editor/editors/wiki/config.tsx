@@ -6,9 +6,10 @@ import {
 import {TITLE} from "../../types";
 import {usePeakPlugins} from "../../editorFactory";
 
-const wikiSpecificPlugins: SlatePlugin[] = [ PeakTitlePlugin()]
-const wikiNormalizers: WithNormalizeTypes = {
+export const wikiSpecificPlugins: SlatePlugin[] = [ PeakTitlePlugin()]
+export const wikiNormalizers: WithNormalizeTypes = {
     rules: [{ path: [0, 0], strictType: TITLE }],
 }
 
-export const wikiPlugins: SlatePlugin[] = usePeakPlugins(wikiSpecificPlugins, wikiNormalizers)
+// export const wikiPlugins: SlatePlugin[] = usePeakPlugins(wikiSpecificPlugins, wikiNormalizers)
+// export const wikiPluginsMemo: SlatePlugin[] = usePeakPlugins()

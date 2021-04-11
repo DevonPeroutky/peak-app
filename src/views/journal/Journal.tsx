@@ -18,9 +18,6 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {
-    journalPlugins
-} from "../../common/rich-text-editor/editors/journal/config";
-import {
     convertJournalEntryToSlateNodes,
     convertSlateNodeToJournalEntry
 } from "../../common/rich-text-editor/editors/journal/utils";

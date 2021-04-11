@@ -1,7 +1,13 @@
 import React, {useMemo} from "react";
 import {basePlugins} from "./base_plugins";
 import {defaultOptions} from "./options";
-import {createDeserializeHTMLPlugin, createNormalizeTypesPlugin, ELEMENT_H1, SlatePlugin, WithNormalizeTypes} from "@udecode/slate-plugins";
+import {
+    createDeserializeHTMLPlugin,
+    createNormalizeTypesPlugin,
+    ELEMENT_H1,
+    SlatePlugin,
+    WithNormalizeTypes
+} from "@udecode/slate-plugins";
 
 export const defaultEditableProps = {
     // placeholder: 'Enter some rich text…',
@@ -9,13 +15,10 @@ export const defaultEditableProps = {
     autoFocus: true,
 };
 
-
-
-export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNormalizers?: WithNormalizeTypes): SlatePlugin[] => {
+export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNormalizers?: WithNormalizeTypes) => {
     return useMemo(() => {
         const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
         const editorSpecificRules = (additionalNormalizers) ? [...additionalNormalizers.rules] : []
-
         plugins.push(createNormalizeTypesPlugin({
             rules: [
                 { path: [0, 0], strictType: defaultOptions[ELEMENT_H1].type },
@@ -24,5 +27,5 @@ export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNorm
         }))
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
         return plugins
-    }, [defaultOptions]);
+    }, [defaultOptions])
 }
