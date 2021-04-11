@@ -4,3 +4,4 @@ import {TITLE} from "../../types";
 export const wikiTitleEnforcer = createNormalizeTypesPlugin({
     rules: [{ path: [0], strictType: TITLE }],
 })
+

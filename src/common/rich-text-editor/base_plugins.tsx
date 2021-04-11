@@ -105,13 +105,7 @@ export const basePlugins: SlatePlugin[] = [
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
 
-
-    // TODO: Remove this
-    // createLinkPlugin(),
     createPeakLinkPlugin(),
-
-    // Custom Peak Plugins
-    // PeakCodePlugin,
     createPeakCalloutPlugin(),
     createPeakLearningPlugin()
 ];

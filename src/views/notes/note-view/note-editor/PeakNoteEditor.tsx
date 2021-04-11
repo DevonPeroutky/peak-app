@@ -13,7 +13,7 @@ import {useCurrentUser, useJournal} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
-import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
+import {PeakEditor} from "../../../../common/rich-text-editor/editorFactory";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
     const { note_id } = props
@@ -23,7 +23,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
     const noteInRedux = useCurrentNote()
-    const bodyContent: Node[] = (currentNote) ? [{ children: currentNote.body }] : [{ children: [EMPTY_PARAGRAPH_NODE()] }]
+    const bodyContent: Node[] = (currentNote) ? currentNote.body : [EMPTY_PARAGRAPH_NODE()]
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
 
     const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
@@ -34,12 +34,12 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
                 dispatch(beginSavingPage());
             }
             setNoteContent(newBody)
-            noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
+            noteSaver(currentUser, currentNote.id, { body: newBody as Node[] })
         }
     }
 
     useEffect(() => {
-        const noteBodyInRedux: Node[] = [{ children: noteInRedux.body }]
+        const noteBodyInRedux: Node[] = noteInRedux.body
 
         if (equals(noteBodyInRedux, noteContent)) {
             console.log(`No outside updates were made to Redux`)

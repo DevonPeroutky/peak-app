@@ -78,15 +78,6 @@ export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
     return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
 }
 
-// TODO: Replace w/findNode in slate-plugins
-export function findNode(editor: Editor, match: (n: Node) => boolean) {
-    const [res] = Editor.nodes(editor, {
-        at: [],
-        match
-    })
-    return res
-}
-
 export function isNodeTypeIn(editor: Editor, format: string): boolean {
     return someNode(editor, { match: { type: format } })
 }

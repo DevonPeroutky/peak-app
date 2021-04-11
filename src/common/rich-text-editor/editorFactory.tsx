@@ -15,6 +15,7 @@ import {TNode} from "@udecode/slate-plugins-core/dist/types/TNode";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import cn from "classnames"
 import "./peak-editor.scss"
+import {TITLE} from "./types";
 
 const editorStyle: React.CSSProperties = {
     minHeight: "100%",
@@ -56,8 +57,6 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChan
     //         ReactEditor.focus(editor)
     //     })
     // }, [])
-
-    console.log(`CURRENT VALUE: `, initialValue)
 
     return (
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>

@@ -13,8 +13,6 @@ import {store} from "../../../../redux/store";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 import {UghEditorType} from "../../types";
 
-
-
 const peakLinkOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
     if (event.metaKey && event.key == 'l') {
         event.preventDefault();
