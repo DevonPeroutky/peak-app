@@ -40,6 +40,7 @@ import {
     optionsSoftBreakPlugin
 } from "../../views/scratchpad/playground/playground-utils";
 import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
+import { createPeakLearningPlugin } from './plugins/peak-knowledge-plugin/PeakKnowledgePlugin';
 
 /**
  // THE OG PLUGINS
@@ -111,5 +112,5 @@ export const basePlugins: SlatePlugin[] = [
     // Custom Peak Plugins
     // PeakCodePlugin,
     createPeakCalloutPlugin(),
-    // PeakKnowledgePlugin()
+    createPeakLearningPlugin()
 ];

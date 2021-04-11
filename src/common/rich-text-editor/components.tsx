@@ -29,6 +29,8 @@ import {TITLE} from "./types";
 import {PeakTitleElement} from "./plugins/peak-title-plugin/peak-title/PeakTitle";
 import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {PeakCalloutElement} from "./plugins/peak-callout-plugin/component/PeakCallout";
+import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
+import {PeakLearningElement} from "./plugins/peak-knowledge-plugin/components/peak-learning-node/PeakLearningNode";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
@@ -102,7 +104,8 @@ const withStyledDraggables = (components: any) => {
                 ELEMENT_TABLE,
                 ELEMENT_MEDIA_EMBED,
                 ELEMENT_CODE_BLOCK,
-                PEAK_CALLOUT
+                PEAK_CALLOUT,
+                PEAK_LEARNING
             ],
             dragIcon: (
                 <DragIndicator
@@ -204,7 +207,8 @@ export let defaultComponents = createSlatePluginsComponents({
     [ELEMENT_OL]: PEAK_OL_STYLE,
     [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
     [TITLE]: PeakTitleElement,
-    [PEAK_CALLOUT]: PeakCalloutElement
+    [PEAK_CALLOUT]: PeakCalloutElement,
+    [PEAK_LEARNING]: PeakLearningElement
 })
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)
