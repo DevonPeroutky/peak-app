@@ -219,11 +219,6 @@ export const useNodeContentSelect = (
             // [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, library]
     ) as OnChange;
 
-
-    /**
-     onChange: onChangeMention,
-     onKeyDown: onKeyDownMention,
-     */
     return {
         plugin: useMemo(() => ({
             onChange: onChangeMention,

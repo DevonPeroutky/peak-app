@@ -1,8 +1,9 @@
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Editor, Node, Point, Range, Transforms} from "slate";
 import { previous } from "../../utils/base-utils";
 import { ReactEditor } from "slate-react";
 import { forceFocusToNode } from "../../utils/external-editor-utils";
-import { ELEMENT_LI } from "@udecode/slate-plugins";
+import {ELEMENT_LI, OnKeyDown, SPEditor} from "@udecode/slate-plugins";
 import { PEAK_KNOWLEDGE_TYPES } from "./constants";
 import { ELEMENT_PARAGRAPH } from "@udecode/slate-plugins";
 import {UghEditorType} from "../../types";
@@ -23,7 +24,7 @@ export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any)
     return isPeakKnowledgeNoteType(currParent) && lastChildNode.id === currNode.id
 }
 
-export const knowledgeNodeOnKeyDownHandler = (event: any, editor: UghEditorType) => {
+export const knowledgeNodeOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
     const currentPath = editor.selection?.anchor.path
 
     // @ts-ignore
@@ -54,6 +55,38 @@ export const knowledgeNodeOnKeyDownHandler = (event: any, editor: UghEditorType)
         }
     }
 }
+
+// export const knowledgeNodeOnKeyDownHandler = (event: any, editor: UghEditorType) => {
+//     const currentPath = editor.selection?.anchor.path
+//
+//     // @ts-ignore
+//     const isCollapsed = editor.selection && Range.isCollapsed(editor.selection)
+//     const worthEvaluating: boolean = currentPath && isCollapsed && !event.metaKey
+//
+//     if (worthEvaluating && event.key == "ArrowDown") {
+//         const [currNode, currPath] = Editor.above(editor)
+//         const [currParent, currParentPath] = Editor.parent(editor, currPath)
+//
+//         if (isAtLastLineOfPeakKnowledgeNode(editor)) {
+//             console.log(`WE ARE AT END OF THE KNOWLEDGE NODE`)
+//             event.preventDefault();
+//             forceFocusToNode(currParent)
+//         }
+//     }
+//     if (worthEvaluating && event.key == "ArrowUp") {
+//         const [currNode, currPath] = Editor.above(editor)
+//         const [currParent, currParentPath] = Editor.parent(editor, currPath)
+//
+//         const previousNode: Node | undefined = previous(editor)
+//         if ((currParent && currParent.type !== ELEMENT_LI) && previousNode && isPeakKnowledgeNoteType(previousNode)) {
+//             console.log(`WE ARE DIRECTLY BELOW A KNOWLEDGE NODE`)
+//             event.preventDefault();
+//             const previousNodePath: number[] = ReactEditor.findPath(editor, previousNode)
+//             Transforms.select(editor, previousNodePath)
+//             Transforms.collapse(editor, { edge: 'end' });
+//         }
+//     }
+// }
 
 export function isPeakKnowledgeNoteType(n: Node): boolean {
     return PEAK_KNOWLEDGE_TYPES.includes(n.type as string)
