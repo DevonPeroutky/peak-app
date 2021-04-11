@@ -26,15 +26,6 @@ export const PeakScratchpad = (props: {}) => {
 
     const [scratchPadContent, setScratchpadContent] = useState<Node[]>(reduxScratchpad.body as Node[])
 
-    // TODO
-    // Why the fuck is this needed
-    // useEffect(() => {
-    //     sleep(100).then(() => {
-    //         Transforms.select(editor, Editor.end(editor, []));
-    //         ReactEditor.focus(editor)
-    //     })
-    // }, [])
-
     const { plugin: nodeSelectPlugin, getNodeContentSelectProps } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',

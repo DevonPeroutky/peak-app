@@ -57,10 +57,19 @@ export interface PeakEditorProps {
 export const PeakEditor = ({ additionalPlugins, currentPageId, additionalNormalizers, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
     const editorState = useActiveEditorState()
 
+    // TODO
+    // Why the fuck is this needed
+    // useEffect(() => {
+    //     sleep(100).then(() => {
+    //         Transforms.select(editor, Editor.end(editor, []));
+    //         ReactEditor.focus(editor)
+    //     })
+    // }, [])
+
     return (
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
             <SlatePlugins
-                id={"scratchpad"}
+                id={currentPageId}
                 plugins={usePeakPlugins(additionalPlugins, additionalNormalizers)}
                 components={defaultComponents}
                 options={defaultOptions}

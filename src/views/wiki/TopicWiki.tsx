@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react'
 import "./topic-wiki.scss"
 import {useDispatch} from "react-redux";
 import 'antd/dist/antd.css';
-import {createEditor, Node} from "slate";
+import {Node} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import PageContextBar from "../../common/page-context-bar/PageContextBar";
 import { usePagePublisher, useDebounceWikiSaver, useCurrentPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
@@ -11,10 +11,11 @@ import { SlatePlugins } from "@udecode/slate-plugins";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {defaultComponents} from "../../common/rich-text-editor/components";
-import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
+import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {wikiNormalizers, wikiSpecificPlugins} from "../../common/rich-text-editor/editors/wiki/config";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
+import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -54,29 +55,18 @@ const TopicWiki = (props: {topic_id: string}) => {
         }
     }
 
-    const wikiPlugins = usePeakPlugins([nodeSelectPlugin, ...wikiSpecificPlugins], wikiNormalizers)
     return (
-        <SlatePlugins
-            id={"topicWiki"}
-            plugins={wikiPlugins}
-            components={defaultComponents}
-            onChange={updatePageContent}
-            options={defaultOptions}
-            editableProps={defaultEditableProps}
-            initialValue={wikiPageContent}
-        >
-            <div className="peak-topic-wiki-container">
-                <MemoizedLinkMenu
-                    key={`${currentPageId}-LinkMenu`}
-                    linkState={editorState.currentLinkState}
-                    showLinkMenu={editorState.showLinkMenu}
-                />
-                <div className={"peak-rich-text-editor-container"}>
-                    <PageContextBar topicId={topic_id}/>
-                    <NodeContentSelect {...getNodeContentSelectProps()}/>
-                </div>
-            </div>
-        </SlatePlugins>
+        <div className={"wiki-container"}>
+            {/*<PageContextBar topicId={topic_id}/>*/}
+            <PeakEditor
+                additionalPlugins={[nodeSelectPlugin, ...wikiSpecificPlugins]}
+                additionalNormalizers={wikiNormalizers}
+                onChange={updatePageContent}
+                getNodeContentSelectProps={getNodeContentSelectProps}
+                initialValue={wikiPageContent}
+                currentPageId={currentPageId}
+            />
+        </div>
     )
 };
 

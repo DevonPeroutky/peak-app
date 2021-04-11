@@ -17,7 +17,7 @@ import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
 import {defaultComponents} from "../../../../common/rich-text-editor/components";
 import {defaultOptions} from "../../../../common/rich-text-editor/options";
-import {defaultEditableProps, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
+import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
 import {NodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 
 export const PeakNoteEditor = (props: { note_id: string }) => {
@@ -41,7 +41,6 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
             setNoteContent(newBody)
             noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
         }
-        // onChangeMention(editor);
     }
 
     useEffect(() => {
@@ -54,41 +53,18 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
         }
     }, [noteInRedux.body])
 
-    // TODO
-    // Why the fuck is this needed
-    // useEffect(() => {
-    //     sleep(100).then(() => {
-    //         Transforms.select(editor, Editor.end(editor, []));
-    //         ReactEditor.focus(editor)
-    //     })
-    // }, [])
-
-
     const { plugin: nodeSelectPlugin, getNodeContentSelectProps } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
 
     return (
-        <SlatePlugins
-            id={"noteEditor"}
-            plugins={usePeakPlugins([nodeSelectPlugin])}
-            components={defaultComponents}
-            options={defaultOptions}
-            editableProps={defaultEditableProps}
+        <PeakEditor
+            additionalPlugins={[nodeSelectPlugin]}
             onChange={updateNoteContent}
+            getNodeContentSelectProps={getNodeContentSelectProps}
             initialValue={noteContent}
-        >
-            <div className="peak-note-editor-container">
-                <MemoizedLinkMenu
-                    key={`${currentPageId}-LinkMenu`}
-                    linkState={editorState.currentLinkState}
-                    showLinkMenu={editorState.showLinkMenu}
-                />
-                <div className={"peak-rich-text-editor-container"}>
-                    <NodeContentSelect {...getNodeContentSelectProps()}/>
-                </div>
-            </div>
-        </SlatePlugins>
+            currentPageId={currentPageId}
+        />
     )
 }
