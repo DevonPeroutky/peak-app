@@ -27,7 +27,7 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
 
     const createPageUnderTopic = () => {
         const empty_title = { type: TITLE, children: [{ text: ''}] }
-        const dat_bodyyy: Node[] = [{ children: [empty_title, EMPTY_PARAGRAPH_NODE()]}]
+        const dat_bodyyy: Node[] = [empty_title, EMPTY_PARAGRAPH_NODE()]
 
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {

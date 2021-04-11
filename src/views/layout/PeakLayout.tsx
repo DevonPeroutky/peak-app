@@ -4,7 +4,6 @@ import {Layout} from 'antd';
 import 'antd/dist/antd.css';
 import "./peak-layout.scss"
 import {Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-dom";
-import PeakJournal from "../journal/Journal";
 import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
 import {useAppLoadingAnimation} from "../loading/Loading";
@@ -29,6 +28,7 @@ import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
+import {Plugins} from "../scratchpad/playground/Playground";
 
 const { Content } = Layout;
 
@@ -91,7 +91,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                     <Content className="peak-content-container">
                         <div className="peak-content-holder">
                             <Switch>
-                                <Route path={`${match.path}/journal`} render={(props) => <PeakJournal />} />
+                                <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
                                 <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {

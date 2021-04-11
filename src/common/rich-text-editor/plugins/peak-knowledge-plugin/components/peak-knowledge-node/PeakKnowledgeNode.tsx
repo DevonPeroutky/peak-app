@@ -1,7 +1,6 @@
 import React from "react";
-import {ReactEditor, RenderElementProps, useEditor} from "slate-react";
+import {ReactEditor, RenderElementProps} from "slate-react";
 import cn from 'classnames';
-import {isNodeEmpty} from "../../../journal-entry-plugin/journal-entry/JournalEntry";
 import {PeakTagSelect} from "./peak-tag-select/component/PeakTagSelect";
 import {capitalize_and_truncate} from "../../../../../../utils/strings";
 import "./peak-knowledge-node.scss"
@@ -10,11 +9,14 @@ import {Link} from "react-router-dom";
 import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 import {deriveHostname} from "../../../../../../utils/urls";
 import {buildNoteUrl} from "../../../../../../utils/notes";
-const bookmark = require('../../../../../../assets/icons/bookmark.svg');
+import {isNodeEmpty} from "../../utils";
+import { useTSlate } from "@udecode/slate-plugins";
 
+
+const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 export const PeakKnowledgeNode = (props: RenderElementProps) => {
     const { element } = props
-    const editor = useEditor()
+    const editor = useTSlate()
     const path = ReactEditor.findPath(editor, props.element)
     const tags = element.selected_tags as PeakTag[]
     const og_link = element.url as string

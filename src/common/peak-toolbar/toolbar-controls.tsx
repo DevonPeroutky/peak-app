@@ -6,7 +6,7 @@ import {
     ELEMENT_H3,
     ELEMENT_H4,
     ELEMENT_H5,
-    ELEMENT_IMAGE,
+    ELEMENT_IMAGE, ELEMENT_LI,
     ELEMENT_LINK,
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
@@ -15,7 +15,7 @@ import {
     MARK_CODE,
     MARK_ITALIC,
     MARK_STRIKETHROUGH,
-    MARK_UNDERLINE,
+    MARK_UNDERLINE, SPEditor,
     toggleList,
     toggleMark,
 } from "@udecode/slate-plugins";
@@ -46,7 +46,6 @@ import headingH3 from '@iconify/icons-gridicons/heading-h3';
 import headingH4 from '@iconify/icons-gridicons/heading-h4';
 import headingH5 from '@iconify/icons-gridicons/heading-h5';
 import {message} from "antd";
-import {createAndFocusCodeBlock} from "../rich-text-editor/plugins/peak-code-plugin/utils";
 import {Editor, Transforms} from "slate";
 import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
@@ -54,6 +53,7 @@ import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
 import {PEAK_LEARNING, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {defaultOptions} from "../rich-text-editor/options";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -116,27 +116,31 @@ const ORDERED_LIST: PeakEditorControlDisplay = {
     icon: <OrderedListOutlined className={"peak-editor-control-icon"}/>,
     label: "Numbered List",
     description: "Create an ordered List",
-    customFormat: (editor => {
-        toggleList(editor, { typeList: ELEMENT_OL })
-    }),
-    elementType: ELEMENT_OL,
     markup: ['1.', '1)'],
     markupLabel: ["1.", "Space"],
     hotkeyInstructionArray: ['⌘', '⇧', '9'],
+    elementType: defaultOptions[ELEMENT_LI].type,
+    customFormat: (editor) => {
+        toggleList(editor as SPEditor, { type: defaultOptions[ELEMENT_OL].type })
+    },
+
 };
 const UNORDERED_LIST: PeakEditorControlDisplay = {
     controlType: "list",
     icon: <UnorderedListOutlined className={"peak-editor-control-icon"}/>,
     label: "Bulleted List",
     description: "Create an unordered List",
-    elementType: ELEMENT_UL,
     markup: ['*', '-', '+'],
-    customFormat: (editor => {
-        toggleList(editor, { typeList: ELEMENT_UL })
-    }),
     markupLabel: ["*", "Space"],
     hotkeyInstructionArray: ['⌘', '⇧', '8'],
+
+    // Pulled from open-source
+    elementType: defaultOptions[ELEMENT_LI].type,
+    customFormat: (editor) => {
+        toggleList(editor as SPEditor, { type: defaultOptions[ELEMENT_UL].type })
+    },
 };
+
 
 const PEAK_LINK: PeakEditorControlDisplay = {
     controlType: undefined,

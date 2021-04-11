@@ -1,12 +1,13 @@
 import {RenderElementProps, useSlate} from "slate-react";
 import {useDispatch} from "react-redux";
-import {openEditLinkMenu, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
+import {openEditLinkMenu, useActiveEditorState} from "../../../../../redux/slices/activeEditor/activeEditorSlice";
 import React from "react";
-import {ELEMENT_LINK, LinkPluginOptions} from "@udecode/slate-plugins";
+import {ClassName, ELEMENT_LINK, RootStyleSet, StyledElementProps} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";
-import {PeakHyperlinkState} from "../../../../constants/wiki-types";
+import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 import "./peak-hyperlink.scss"
-import {isExternalLink} from "./link-util";
+import {isExternalLink} from "../link-util";
+import {styled} from "@uifabric/utilities";
 
 const PeakHyperLink = (props: RenderElementProps) => {
     const {
@@ -56,11 +57,11 @@ const PeakHyperLink = (props: RenderElementProps) => {
     )
 }
 
-// @ts-ignore
-export const renderElementLink = ({ }: LinkPluginOptions = {}) => (props: RenderElementProps) => {
-    if (props.element.type == ELEMENT_LINK) {
-        return <PeakHyperLink {...props}/>
-    }
-};
+export const PeakInlineLinkElement = styled<
+    StyledElementProps,
+    ClassName,
+    RootStyleSet
+    >(PeakHyperLink, {}, undefined, {
+    scope: 'PeakLink',
+});
 
-export default renderElementLink;

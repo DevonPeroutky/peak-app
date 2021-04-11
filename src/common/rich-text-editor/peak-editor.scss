@@ -1,0 +1,20 @@
+@import "../../constants/variables";
+
+.peak-rich-text-editor-container {
+
+  h1, h2, h3, h4, h5 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid $gray-accent-color;
+  }
+
+  .p {
+    line-height: 1.75!important;
+  }
+
+  .slate-Draggable {
+    button {
+      display: flex;
+      overflow: auto!important;
+    }
+  }
+}

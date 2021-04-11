@@ -1,16 +1,11 @@
 import React from 'react';
-import {RenderElementProps, useSlate} from "slate-react";
-import {SlatePlugin} from "@udecode/slate-plugins";
-import {PeakTitle} from "./peak-title/PeakTitle";
+import {
+    getRenderElement,
+    SlatePlugin
+} from "@udecode/slate-plugins";
 import {TITLE} from "../../types";
 
-export const PeakTitlePlugin = (options?: any): SlatePlugin => ({
-    renderElement: renderPeakTitle(options),
+export const createPeakTitlePlugin = (): SlatePlugin => ({
+    pluginKeys: TITLE,
+    renderElement: getRenderElement(TITLE),
 });
-
-// @ts-ignore
-export const renderPeakTitle = (options: any | undefined) => (props: RenderElementProps) => {
-    if (props.element.type === TITLE) {
-        return <PeakTitle {...props}/>
-    }
-};

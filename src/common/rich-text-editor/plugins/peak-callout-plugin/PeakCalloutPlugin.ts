@@ -1,19 +1,10 @@
 import {
-    deserializeCode,
     getRenderElement,
-    setDefaults,
     SlatePlugin,
 } from "@udecode/slate-plugins";
-import {DEFAULTS_CALLOUT} from "./defaults";
+import {PEAK_CALLOUT} from "./defaults";
 
-export const PeakCalloutPlugin = (options?: any): SlatePlugin => ({
-    renderElement: renderElementPeakCallout(options),
-    deserialize: deserializeCode(),
+export const createPeakCalloutPlugin = (): SlatePlugin => ({
+    pluginKeys: PEAK_CALLOUT,
+    renderElement: getRenderElement(PEAK_CALLOUT),
 });
-
-const renderElementPeakCallout = (
-    options?: any
-) => {
-    const { callout } = setDefaults(options, DEFAULTS_CALLOUT);
-    return getRenderElement(callout);
-};

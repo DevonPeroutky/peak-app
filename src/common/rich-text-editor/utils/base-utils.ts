@@ -1,11 +1,12 @@
 import {ReactEditor} from "slate-react";
 import {Editor, Node, Point, Range, Transforms} from "slate";
 import {isEqual} from "lodash";
-import {ELEMENT_PARAGRAPH, someNode} from "@udecode/slate-plugins";
+import {ELEMENT_PARAGRAPH, someNode, SPEditor} from "@udecode/slate-plugins";
 import {isPeakKnowledgeNoteType} from "../plugins/peak-knowledge-plugin/utils";
 import {EMPTY_PARAGRAPH_NODE} from "../editors/constants";
+import {UghEditorType} from "../types";
 
-export function previous(editor: ReactEditor): Node | undefined {
+export function previous(editor: UghEditorType): Node | undefined {
     const currentPath = editor.selection?.anchor.path
     let previousNode: Node = undefined
 
@@ -33,7 +34,7 @@ export function previous(editor: ReactEditor): Node | undefined {
     }
     return previousNode
 }
-export function next(editor: ReactEditor): Node | undefined {
+export function next(editor: UghEditorType): Node | undefined {
     const currentPath = editor.selection?.anchor.path
 
     const [lastNode] = Editor.last(editor, [])
@@ -71,19 +72,10 @@ export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {
 
 export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
     const isPointAtTopLevel= (p: Point) => {
-        return p && p.path && p.path.length === editorLevel + 2
+        return p && p.path && p.path.length === editorLevel + 1
     }
 
     return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)
-}
-
-// TODO: Replace w/findNode in slate-plugins
-export function findNode(editor: Editor, match: (n: Node) => boolean) {
-    const [res] = Editor.nodes(editor, {
-        at: [],
-        match
-    })
-    return res
 }
 
 export function isNodeTypeIn(editor: Editor, format: string): boolean {

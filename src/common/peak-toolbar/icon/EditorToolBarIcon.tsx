@@ -37,6 +37,7 @@ export const EditorToolBarIcon = (props: {
                 toggleWrapNodes(editor, editorControl.elementType);
                 break;
             case "list":
+                // @ts-ignore
                 toggleList(editor, { typeList: editorControl.elementType });
                 break;
             case "img":

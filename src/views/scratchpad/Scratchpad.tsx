@@ -1,25 +1,15 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useState} from 'react'
 import "./scratchpad.scss"
 import { useDispatch } from "react-redux";
-import { Slate, ReactEditor } from "slate-react";
 import {createEditor, Editor, Node, Transforms} from "slate";
-import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useCurrentUser, useScratchpad} from '../../utils/hooks';
 import { equals } from "ramda";
-import { EditablePlugins, pipe } from "@udecode/slate-plugins";
 import { useNodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
-import { baseKeyBindingHandler } from "../../common/rich-text-editor/utils/keyboard-handler";
-import { NodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import { beginSavingPage, useActiveEditorState } from "../../redux/slices/activeEditor/activeEditorSlice";
-import {
-    SCRATCHPAD_NODE_LEVEL,
-    scratchpadNormalizers,
-    scratchpadPlugins
-} from "../../common/rich-text-editor/editors/scratchpad/config";
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
-import {sleep} from "../../chrome-extension/utils/generalUtil";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
+import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -30,91 +20,32 @@ export const PeakScratchpad = (props: {}) => {
 
     const [scratchPadContent, setScratchpadContent] = useState<Node[]>(reduxScratchpad.body as Node[])
 
-    // Why the fuck is this needed
-    useEffect(() => {
-        sleep(100).then(() => {
-            Transforms.select(editor, Editor.end(editor, []));
-            ReactEditor.focus(editor)
-        })
-    }, [])
-
-    // PeakInlineSelect nonsense
-    const {
-        values,
-        openLibraryResults,
-        onAddNodeContent,
-        onChangeMention,
-        onKeyDownSelect,
-        search,
-        index,
-        target,
-        nodeContentSelectMode
-    } = useNodeContentSelect({
-        editorLevel: SCRATCHPAD_NODE_LEVEL,
+    const { plugin: nodeSelectPlugin, getNodeContentSelectProps } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
     });
-
-    const defaultKeyBindingHandler = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor)
-    }, [])
-
-    // @ts-ignore
-    const editor: ReactEditor = useMemo(() => pipe(createEditor(), ...scratchpadNormalizers), []);
 
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, scratchPadContent)) {
             if (!editorState.isSaving) {
                 dispatch(beginSavingPage());
             }
-            // updateComponentPageContent
             setScratchpadContent(newValue)
 
             syncScratchpad(currentUser.id, newValue, reduxScratchpad.id);
-            onChangeMention(editor);
         }
     }
 
     return (
         <div className={"scratchpad-container"}>
             <h1 className={"peak-page-title"}>Scratchpad</h1>
-            <Slate
-                editor={editor}
-                value={scratchPadContent}
-                onChange={updatePageContent}>
-                <div className="peak-scratchpad-container">
-                    <MemoizedLinkMenu
-                        key={`${SCRATCHPAD_ID}-LinkMenu`}
-                        linkState={editorState.currentLinkState}
-                        showLinkMenu={editorState.showLinkMenu}
-                        />
-                    <div className={"rich-text-editor-container"}>
-                         <EditablePlugins
-                             onKeyDown={[defaultKeyBindingHandler, (e) => onKeyDownSelect(e, editor)]}
-                             onKeyDownDeps={[index, search, target, openLibraryResults]}
-                             key={`${SCRATCHPAD_ID}-${editorState.isEditing}`}
-                             plugins={scratchpadPlugins}
-                             placeholder="What's on your mind..."
-                             spellCheck={true}
-                             autoFocus={true}
-                             readOnly={!editorState.isEditing}
-                             style={{
-                                 textAlign: "left",
-                                 flex: "1 1 auto",
-                                 minHeight: "100%"
-                             }}
-                         />
-                         <NodeContentSelect
-                             at={target}
-                             openLibraryBooks={openLibraryResults}
-                             valueIndex={index}
-                             options={values}
-                             onClickMention={onAddNodeContent}
-                             nodeContentSelectMode={nodeContentSelectMode}
-                         />
-                     </div>
-                </div>
-            </Slate>
+            <PeakEditor
+                additionalPlugins={[nodeSelectPlugin]}
+                onChange={updatePageContent}
+                getNodeContentSelectProps={getNodeContentSelectProps}
+                initialValue={scratchPadContent}
+                currentPageId={SCRATCHPAD_ID}
+            />
         </div>
     )
 };

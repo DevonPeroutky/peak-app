@@ -1,10 +1,11 @@
 @import "../../../../../constants/variables";
 
-.title-container {
+.wiki-title {
   position: relative;
   margin-bottom: 30px;
+  width: 100%;
 
-  .empty-title::after {
+  &.empty-title::after {
     position: absolute;
     color: #8993a4;
     top: 0;

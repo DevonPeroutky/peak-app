@@ -11,7 +11,6 @@ import {createEditor, Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../../../../constants/editor";
 import {ReactEditor} from "slate-react";
 import {pipe} from "@udecode/slate-plugins";
-import {chromeExtensionNormalizers} from "../../../../../../common/rich-text-editor/editors/chrome-extension/config";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
@@ -28,6 +27,7 @@ export const SavePageContent = (props: SavePageContentProps) => {
     const [body, setBody] = useState<Node[]>(INITIAL_PAGE_STATE.body as Node[])
     const [editedPageTitle, setPageTitle] = useState<string>(pageTitle)
     const [selectedTags, setSelectedTags] = useState<PeakTag[]>([])
+
 
     const isEmpty = () => {
         return JSON.stringify(body) === JSON.stringify(INITIAL_PAGE_STATE.body)

@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import {classNamesFunction, IStyleFunctionOrObject, styled} from '@uifabric/utilities';
-import { ReactEditor, useSlate } from 'slate-react';
+import { ReactEditor} from 'slate-react';
 import {
     getMentionSelectStyles,
     getPreventDefaultHandler,
-    MentionSelectStyleProps,
-    MentionSelectStyles,
-    PortalBody
+    PortalBody,
+    useTSlateStatic,
+    MentionElementStyleProps,
+    MentionElementProps,
+    RootStyleSet,
+    getRootClassNames
 } from "@udecode/slate-plugins";
 import {Range} from "slate";
 import {Empty, Tag} from "antd";
@@ -17,6 +20,7 @@ import "./node-content-select.scss"
 import {capitalize_and_truncate} from "../../../../../utils/strings";
 import {OpenLibraryBook} from "../../../../../client/openLibrary";
 import {convertOpenLibraryBookToNodeSelectListItem} from "../utils";
+import {UghEditorType} from "../../../types";
 
 export interface NodeContentSelectProps {
     /**
@@ -26,7 +30,7 @@ export interface NodeContentSelectProps {
     /**
      * Call to provide customized styling that will layer on top of the variant rules.
      */
-    styles?: IStyleFunctionOrObject<MentionSelectStyleProps, MentionSelectStyles>;
+    styles?: IStyleFunctionOrObject<MentionElementStyleProps, RootStyleSet>;
     /**
      * Range from the mention trigger to the cursor
      */
@@ -42,17 +46,18 @@ export interface NodeContentSelectProps {
     /**
      * Callback called when clicking on a mention option
      */
-    onClickMention?: (editor: ReactEditor, option: PeakNodeSelectListItem) => void;
+    onAddNodeContent?: (editor: UghEditorType, option: PeakNodeSelectListItem) => void;
     /** True if the menu is currently on the default menu of node types*/
     nodeContentSelectMode: boolean;
 
     openLibraryBooks: OpenLibraryBook[]
 }
 
-const getClassNames = classNamesFunction<
-    MentionSelectStyleProps,
-    MentionSelectStyles
-    >();
+// const getClassNames = classNamesFunction();
+const getClassNames = getRootClassNames<
+    MentionElementStyleProps,
+    RootStyleSet
+>();
 
 const NodeContentSelectBase = ({
                                       className,
@@ -60,7 +65,7 @@ const NodeContentSelectBase = ({
                                       at,
                                       options,
                                       valueIndex,
-                                      onClickMention,
+                                      onAddNodeContent,
                                       nodeContentSelectMode, openLibraryBooks,
                                       ...props
                                   }: NodeContentSelectProps) => {
@@ -69,7 +74,7 @@ const NodeContentSelectBase = ({
     });
 
     const ref: any = useRef();
-    const editor = useSlate();
+    const editor = useTSlateStatic();
 
     useEffect(() => {
         if (at) {
@@ -93,7 +98,7 @@ const NodeContentSelectBase = ({
                     options={options}
                     valueIndex={valueIndex}
                     classNames={classNames}
-                    onClickMention={onClickMention}
+                    onAddNodeContent={onAddNodeContent}
                     nodeContentSelectMode={nodeContentSelectMode}
                     editor={editor}
                     openLibraryBooks={openLibraryBooks}/>
@@ -102,7 +107,7 @@ const NodeContentSelectBase = ({
     );
 };
 
-const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onClickMention, editor, openLibraryBooks}) => {
+const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onAddNodeContent, editor, openLibraryBooks}) => {
     if (options.length === 0) {
         return (
             <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
@@ -119,7 +124,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
                             i={i}
                             valueIndex={valueIndex}
                             classNames={classNames}
-                            onClickMention={onClickMention}
+                            onAddNodeContent={onAddNodeContent}
                             editor={editor}/>)}
                 </div>
                 {
@@ -133,7 +138,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
                                     i={numInternalOptions + i}
                                     valueIndex={valueIndex}
                                     classNames={classNames}
-                                    onClickMention={onClickMention}
+                                    onAddNodeContent={onAddNodeContent}
                                     editor={editor}/>)}
                             </div>: null)
                 }
@@ -144,7 +149,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
 
 export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);
 
-const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMention, editor }) => {
+const NodeContentSelectItem = ({option, i, valueIndex, classNames, onAddNodeContent, editor }) => {
     return (
        <div
            key={`${i}${option.label}`}
@@ -154,7 +159,7 @@ const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMentio
                    : classNames.mentionItem
            }
            onMouseDown={getPreventDefaultHandler(
-               onClickMention,
+               onAddNodeContent,
                editor,
                option
            )}

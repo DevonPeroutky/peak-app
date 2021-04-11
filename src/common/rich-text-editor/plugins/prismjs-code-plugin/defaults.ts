@@ -1,15 +1,10 @@
 import {
-    CodeBlockElement,
-    CodeBlockKeyOption,
-    CodeBlockPluginOptionsValues, CodeLineElement, CodeLineKeyOption,
+    CodeLineElement,
     ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE
 } from "@udecode/slate-plugins";
 import {PrismCodeBlock} from "./component/PrismCodeBlock";
 
-export const DEFAULTS_PRISM_CODE_BLOCK: Record<
-    CodeBlockKeyOption | CodeLineKeyOption,
-    CodeBlockPluginOptionsValues
-    > = {
+export const DEFAULTS_PRISM_CODE_BLOCK = {
     code_block: {
         component: PrismCodeBlock,
         type: ELEMENT_CODE_BLOCK,
