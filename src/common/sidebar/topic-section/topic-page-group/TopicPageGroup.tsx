@@ -15,6 +15,7 @@ import {cloneDeep} from "lodash";
 import {clone} from "ramda";
 import {convertHierarchyToSearchableList} from "../../../../utils/hierarchy";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
+import {DragSourceHookSpec, FactoryOrInstance} from "react-dnd/dist/types/hooks/types";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
@@ -126,18 +127,27 @@ const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number}) =
     // })
 
     // TODO THIS@!!!
-    // const [{ isDragging }, drag] = useDrag({
-    //     item: { type: DragItemTypes.TOPIC_PAGE_ITEM, pageId: page.id, topicId: topicId.toLowerCase() },
-    //     collect: (monitor) => ({
-    //         isDragging: !!monitor.isDragging(),
-    //         draggedItem: !!monitor.getItem(),
-    //     })
-    // })
+    interface DraggablePeakPage {
+        pageId: string
+        topicId: string
+    }
+    const specArg = {
+        type: DragItemTypes.TOPIC_PAGE_ITEM,
+        item: {
+            pageId: page.id,
+            topicId: topicId.toLowerCase()
+        },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+            draggedItem: !!monitor.getItem(),
+        })
+    }
+    const [{ isDragging }, drag] = useDrag(specArg)
 
     const selected = currentPageId === page.id
     return (
-        // <div ref={drag} onClick={() => history.push(`/topic/${topicId.toLowerCase()}/wiki/${page.id}`)} className={cn("topic-page-item", (isDragging) ? "dragging" : "", (selected) ? "selected" : "")}>
+        <div ref={drag} onClick={() => history.push(`/topic/${topicId.toLowerCase()}/wiki/${page.id}`)} className={cn("topic-page-item", (isDragging) ? "dragging" : "", (selected) ? "selected" : "")}>
             <span className={"topic-page-item-link"}>{ (page.title && page.title.length > 0) ? capitalize_and_truncate(page.title) : "Untitled Page" }</span>
-        // </div>
+        </div>
     )
 }
