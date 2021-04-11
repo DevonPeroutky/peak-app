@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import { Editor, Point, Range, Transforms } from 'slate';
 import {
+    ELEMENT_LIC,
     ELEMENT_PARAGRAPH,
     getNextIndex,
     getPreviousIndex,
@@ -198,12 +199,12 @@ export const useNodeContentSelect = (
                 const [currNode, currPath] = Editor.above(editor)
 
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
-                // const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
-                const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH
+                const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
+                const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
+                console.log(`CURR NODE: ${atTopLevel}`, currNode.type)
 
-                if (atEnd && beforeMatch && currentlyInParagraphNode) {
+                if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
                 // if (atEnd && beforeMatch) {
-                    console.log(`SETTING THE RANGE TO `, range)
                     setTargetRange(range as Range);
                     const [, word] = beforeMatch;
                     setSearch(word);
@@ -213,7 +214,6 @@ export const useNodeContentSelect = (
             }
         }
 
-        console.log(`SETTING THE RANGE to NULL BECAUSE nodeContentSelectMode is `, nodeContentSelectMode)
         setTargetRange(null);
     },
         [setTargetRange, setSearch, setValueIndex, trigger, nodeContentSelectMode]

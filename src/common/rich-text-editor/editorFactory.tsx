@@ -27,8 +27,6 @@ export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNorm
         }))
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
 
-        console.log(`OPTIONS `, plugins)
-
         return plugins
     }, [additionalPlugins, defaultOptions])
 }

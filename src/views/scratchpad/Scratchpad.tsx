@@ -71,6 +71,7 @@ export const PeakScratchpad = (props: {}) => {
         }
     }
 
+    console.log(scratchPadContent)
     return (
         <div className={"scratchpad-container"}>
             <h1 className={"peak-page-title"}>Scratchpad</h1>

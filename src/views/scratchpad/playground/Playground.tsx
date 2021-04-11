@@ -111,10 +111,6 @@ export const Plugins = () => {
         return p
     }, [mentionPlugin, defaultOptions, searchHighlightPlugin])
 
-    console.log(`PLUGINS `, plugins)
-    console.log(plugins)
-    console.log(basePlugins)
-
     return (
         <DndProvider backend={HTML5Backend}>
             <SlatePlugins
