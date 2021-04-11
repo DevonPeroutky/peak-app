@@ -72,7 +72,7 @@ export function insertCustomBlockElementCallback(nodeType: string, nodeProps?: {
 
 export function isAtTopLevelOfEditor(selection: Range, editorLevel: number) {
     const isPointAtTopLevel= (p: Point) => {
-        return p && p.path && p.path.length === editorLevel + 2
+        return p && p.path && p.path.length === editorLevel + 1
     }
 
     return isPointAtTopLevel(selection.focus) && isPointAtTopLevel(selection.anchor)

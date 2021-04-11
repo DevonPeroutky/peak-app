@@ -5,9 +5,9 @@ import { ELEMENT_BLOCKQUOTE } from '@udecode/slate-plugins-block-quote';
 import { ELEMENT_CODE_BLOCK } from '@udecode/slate-plugins-code-block';
 import { SlatePluginOptions } from '@udecode/slate-plugins-core';
 import { ELEMENT_PARAGRAPH } from '@udecode/slate-plugins-paragraph';
-import {DEFAULTS_CALLOUT, PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
+import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
-import {HEADER_TYPES, JOURNAL_ENTRY, PeakPluginOption, TITLE} from "./types";
+import {JOURNAL_ENTRY, PeakPluginOption, TITLE} from "./types";
 import {
     createSlatePluginsOptions, ELEMENT_TD, ELEMENT_TODO_LI, ExitBreakPluginOptions,
     isBlockAboveEmpty,
@@ -15,8 +15,6 @@ import {
     SoftBreakPluginOptions,
 } from "@udecode/slate-plugins";
 import {options} from "../../views/scratchpad/playground/defaultOptions";
-
-
 
 const PEAK_STRIKETHROUGH_OPTIONS: Partial<SlatePluginOptions> = {
     hotkey: 'mod+shift+x',

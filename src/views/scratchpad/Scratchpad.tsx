@@ -9,7 +9,10 @@ import { equals } from "ramda";
 import {pipe, SlatePlugin, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
 import { useNodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import { baseKeyBindingHandler } from "../../common/rich-text-editor/utils/keyboard-handler";
-import { NodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
+import {
+    NodeContentSelect,
+    NodeContentSelectProps
+} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import { beginSavingPage, useActiveEditorState } from "../../redux/slices/activeEditor/activeEditorSlice";
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
@@ -40,15 +43,9 @@ export const PeakScratchpad = (props: {}) => {
 
     // PeakInlineSelect nonsense
     const {
-        values,
-        openLibraryResults,
-        onAddNodeContent,
-        onChangeMention,
-        onKeyDownSelect,
-        search,
-        index,
-        target,
-        nodeContentSelectMode
+        plugin: nodeSelectPlugin,
+        search: search,
+        getNodeContentSelectProps,
     } = useNodeContentSelect({
         maxSuggestions: 10,
         trigger: '/',
@@ -60,7 +57,7 @@ export const PeakScratchpad = (props: {}) => {
     // }, [])
 
     const scratchPadSpecificPlugins: SlatePlugin[] = [
-        { onChange: onChangeMention }
+        nodeSelectPlugin
     ]
 
     const updatePageContent = (newValue: Node[]) => {
@@ -74,13 +71,12 @@ export const PeakScratchpad = (props: {}) => {
         }
     }
 
-    // return <Plugins/>
     return (
         <div className={"scratchpad-container"}>
             <h1 className={"peak-page-title"}>Scratchpad</h1>
             <SlatePlugins
                 id={"scratchpad"}
-                plugins={usePeakPlugins()}
+                plugins={usePeakPlugins(scratchPadSpecificPlugins)}
                 components={defaultComponents}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
@@ -95,12 +91,7 @@ export const PeakScratchpad = (props: {}) => {
                     />
                     <div className={"rich-text-editor-container"}>
                         <NodeContentSelect
-                            at={target}
-                            openLibraryBooks={openLibraryResults}
-                            valueIndex={index}
-                            options={values}
-                            onClickMention={onAddNodeContent}
-                            nodeContentSelectMode={nodeContentSelectMode}
+                            {...getNodeContentSelectProps()}
                         />
                     </div>
                 </div>

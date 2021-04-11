@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import { Editor, Point, Range, Transforms } from 'slate';
 import {
     ELEMENT_PARAGRAPH,
@@ -6,7 +6,7 @@ import {
     getPreviousIndex,
     isCollapsed,
     isPointAtWordEnd,
-    isWordAfterTrigger, OnChange, SPEditor,
+    isWordAfterTrigger, OnChange, OnKeyDown, SPEditor,
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
@@ -26,7 +26,6 @@ import {buildNoteUrl} from "../../../../utils/notes";
 export const useNodeContentSelect = (
     { maxSuggestions = 10, trigger = '/', editorLevel = 1, ...options }
 ) => {
-
     let history = useHistory();
     const books = useBooks()
     const openLibrarySearcher = useDebounceOpenLibrarySearcher()
@@ -73,7 +72,6 @@ export const useNodeContentSelect = (
 
     const onAddNodeContent = useCallback(
         (editor: SPEditor, data: PeakNodeSelectListItem) => {
-            console.log(`THE DATA: `, data)
             if (targetRange !== null) {
                 if (data.elementType === PEAK_BOOK_SELECT_ITEM) {
                     setSearch('')
@@ -111,10 +109,12 @@ export const useNodeContentSelect = (
                 }
             }
         },
-        [options, targetRange]
+        [targetRange]
+        // [options, targetRange]
     );
 
-    const onKeyDownSelect = useCallback((e, editor: SPEditor) => {
+    const onKeyDownSelect: OnKeyDown = useCallback(
+        (editor: SPEditor) => (e) => {
             const totalMax: number = Math.max(values.length, 1) + library.length - 1
             if (targetRange) {
                 if (e.key === 'ArrowDown') {
@@ -139,9 +139,6 @@ export const useNodeContentSelect = (
                 if (['Tab', 'Enter'].includes(e.key)) {
                     e.preventDefault();
                     if (values.length) {
-                        console.log(`Values `, values)
-                        console.log(`Books `, books)
-                        console.log(`ValueIndex `, valueIndex)
                         const fullOptions: PeakNodeSelectListItem[] = [...values, ...library.map(convertOpenLibraryBookToNodeSelectListItem)]
                         onAddNodeContent(editor, fullOptions[valueIndex])
                         return false
@@ -154,7 +151,6 @@ export const useNodeContentSelect = (
             values,
             valueIndex,
             library,
-            setValueIndex,
             targetRange,
             onAddNodeContent,
         ]
@@ -202,10 +198,12 @@ export const useNodeContentSelect = (
                 const [currNode, currPath] = Editor.above(editor)
 
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
-                const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
+                // const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH
 
-                if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
+                if (atEnd && beforeMatch && currentlyInParagraphNode) {
+                // if (atEnd && beforeMatch) {
+                    console.log(`SETTING THE RANGE TO `, range)
                     setTargetRange(range as Range);
                     const [, word] = beforeMatch;
                     setSearch(word);
@@ -215,19 +213,35 @@ export const useNodeContentSelect = (
             }
         }
 
+        console.log(`SETTING THE RANGE to NULL BECAUSE nodeContentSelectMode is `, nodeContentSelectMode)
         setTargetRange(null);
-    }, [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, library]) as OnChange;
+    },
+        [setTargetRange, setSearch, setValueIndex, trigger, nodeContentSelectMode]
+            // [targetRange, setTargetRange, nodeContentSelectMode, setSearch, setValueIndex, trigger, search, library]
+    ) as OnChange;
 
+
+    /**
+     onChange: onChangeMention,
+     onKeyDown: onKeyDownMention,
+     */
     return {
-        search,
-        index: valueIndex,
-        target: targetRange,
-        values,
-        openLibraryResults: library,
-        onChangeMention,
-        onKeyDownSelect,
-        onAddNodeContent,
-        nodeContentSelectMode
+        plugin: useMemo(() => ({
+            onChange: onChangeMention,
+            onKeyDown: onKeyDownSelect,
+        }), [onChangeMention, onKeyDownSelect]),
+        getNodeContentSelectProps: useCallback(
+            () => ({
+                nodeContentSelectMode,
+                at: targetRange,
+                valueIndex,
+                options: values,
+                onAddNodeContent: onAddNodeContent,
+                openLibraryBooks: library,
+            }),
+            [onAddNodeContent, search, targetRange, valueIndex, values, library]
+        ),
+        search: search
     };
 };
 

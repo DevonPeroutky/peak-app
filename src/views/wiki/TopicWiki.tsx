@@ -36,19 +36,19 @@ const TopicWiki = (props: {topic_id: string}) => {
     const [pageTitle, setPageTitle] = useState(currentWikiPage.title)
 
     // PeakInlineSelect nonsense
-    const {
-        values,
-        openLibraryResults,
-        onAddNodeContent,
-        onChangeMention,
-        onKeyDownSelect,
-        search,
-        index,
-        target,
-        nodeContentSelectMode
-    } = useNodeContentSelect({
-        trigger: '/',
-    });
+    // const {
+    //     values,
+    //     openLibraryResults,
+    //     onAddNodeContent,
+    //     onChangeMention,
+    //     onKeyDownSelect,
+    //     search,
+    //     index,
+    //     target,
+    //     nodeContentSelectMode
+    // } = useNodeContentSelect({
+    //     trigger: '/',
+    // });
 
     useHotkeys('e, command+s', (event, handler) => {
         switch (handler.key) {
@@ -93,13 +93,11 @@ const TopicWiki = (props: {topic_id: string}) => {
             savePageToDB(newValue, currentTitle, currentWikiPage.id);
 
             // TODO: ADD THIS BACK IN
-            onChangeMention(editor);
+            // onChangeMention(editor);
         }
     }
 
     const wikiPlugins = usePeakPlugins(wikiSpecificPlugins, wikiNormalizers)
-
-    console.log(`PLUGINS `, wikiPlugins)
     return (
         <SlatePlugins
             id={"topicWiki"}
@@ -118,14 +116,14 @@ const TopicWiki = (props: {topic_id: string}) => {
                 />
                 <div className={"rich-text-editor-container"}>
                     <PageContextBar topicId={topic_id}/>
-                    <NodeContentSelect
-                        at={target}
-                        openLibraryBooks={openLibraryResults}
-                        valueIndex={index}
-                        options={values}
-                        onClickMention={onAddNodeContent}
-                        nodeContentSelectMode={nodeContentSelectMode}
-                    />
+                    {/*<NodeContentSelect*/}
+                    {/*    at={target}*/}
+                    {/*    openLibraryBooks={openLibraryResults}*/}
+                    {/*    valueIndex={index}*/}
+                    {/*    options={values}*/}
+                    {/*    onAddNodeContent={onAddNodeContent}*/}
+                    {/*    nodeContentSelectMode={nodeContentSelectMode}*/}
+                    {/*/>*/}
                 </div>
             </div>
         </SlatePlugins>

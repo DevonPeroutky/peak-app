@@ -30,5 +30,5 @@ export const usePeakPlugins = (additionalPlugins?: SlatePlugin[], additionalNorm
         console.log(`OPTIONS `, plugins)
 
         return plugins
-    }, [defaultOptions])
+    }, [additionalPlugins, defaultOptions])
 }

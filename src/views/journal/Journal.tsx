@@ -306,7 +306,7 @@ export const PeakJournal = () => {
 //                 openLibraryBooks={openLibraryBooks}
 //                 valueIndex={index}
 //                 options={values}
-//                 onClickMention={onAddNodeContent}
+//                 onAddNodeContent={onAddNodeContent}
 //                 nodeContentSelectMode={nodeContentSelectMode}
 //             />
 //         </Slate>

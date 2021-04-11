@@ -48,7 +48,7 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
             setNoteContent(newBody)
             noteSaver(currentUser, currentNote.id, { body: newBody[0]["children"] as Node[] })
         }
-        onChangeMention(editor);
+        // onChangeMention(editor);
     }
 
     useEffect(() => {
@@ -71,20 +71,20 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
     }, [])
 
     // PeakInlineSelect nonsense
-    const {
-        values,
-        onAddNodeContent,
-        openLibraryResults,
-        onChangeMention,
-        onKeyDownSelect,
-        search,
-        index,
-        target,
-        nodeContentSelectMode
-    } = useNodeContentSelect({
-        maxSuggestions: 10,
-        trigger: '/',
-    });
+    // const {
+    //     values,
+    //     onAddNodeContent,
+    //     openLibraryResults,
+    //     onChangeMention,
+    //     onKeyDownSelect,
+    //     search,
+    //     index,
+    //     target,
+    //     nodeContentSelectMode
+    // } = useNodeContentSelect({
+    //     maxSuggestions: 10,
+    //     trigger: '/',
+    // });
 
     const defaultKeyBindingHandler = useCallback((event: any) => {
         baseKeyBindingHandler(event, editor)
@@ -107,14 +107,14 @@ export const PeakNoteEditor = (props: { note_id: string }) => {
                     showLinkMenu={editorState.showLinkMenu}
                 />
                 <div className={"rich-text-editor-container"}>
-                    <NodeContentSelect
-                        at={target}
-                        openLibraryBooks={openLibraryResults}
-                        valueIndex={index}
-                        options={values}
-                        onClickMention={onAddNodeContent}
-                        nodeContentSelectMode={nodeContentSelectMode}
-                    />
+                    {/*<NodeContentSelect*/}
+                    {/*    at={target}*/}
+                    {/*    openLibraryBooks={openLibraryResults}*/}
+                    {/*    valueIndex={index}*/}
+                    {/*    options={values}*/}
+                    {/*    onAddNodeContent={onAddNodeContent}*/}
+                    {/*    nodeContentSelectMode={nodeContentSelectMode}*/}
+                    {/*/>*/}
                 </div>
             </div>
         </SlatePlugins>

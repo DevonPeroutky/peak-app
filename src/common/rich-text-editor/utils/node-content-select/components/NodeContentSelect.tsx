@@ -46,7 +46,7 @@ export interface NodeContentSelectProps {
     /**
      * Callback called when clicking on a mention option
      */
-    onClickMention?: (editor: UghEditorType, option: PeakNodeSelectListItem) => void;
+    onAddNodeContent?: (editor: UghEditorType, option: PeakNodeSelectListItem) => void;
     /** True if the menu is currently on the default menu of node types*/
     nodeContentSelectMode: boolean;
 
@@ -65,7 +65,7 @@ const NodeContentSelectBase = ({
                                       at,
                                       options,
                                       valueIndex,
-                                      onClickMention,
+                                      onAddNodeContent,
                                       nodeContentSelectMode, openLibraryBooks,
                                       ...props
                                   }: NodeContentSelectProps) => {
@@ -98,7 +98,7 @@ const NodeContentSelectBase = ({
                     options={options}
                     valueIndex={valueIndex}
                     classNames={classNames}
-                    onClickMention={onClickMention}
+                    onAddNodeContent={onAddNodeContent}
                     nodeContentSelectMode={nodeContentSelectMode}
                     editor={editor}
                     openLibraryBooks={openLibraryBooks}/>
@@ -107,7 +107,7 @@ const NodeContentSelectBase = ({
     );
 };
 
-const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onClickMention, editor, openLibraryBooks}) => {
+const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onAddNodeContent, editor, openLibraryBooks}) => {
     if (options.length === 0) {
         return (
             <Empty description={"No books yet! Start typing..."} className={"empty-books"}/>
@@ -124,7 +124,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
                             i={i}
                             valueIndex={valueIndex}
                             classNames={classNames}
-                            onClickMention={onClickMention}
+                            onAddNodeContent={onAddNodeContent}
                             editor={editor}/>)}
                 </div>
                 {
@@ -138,7 +138,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
                                     i={numInternalOptions + i}
                                     valueIndex={valueIndex}
                                     classNames={classNames}
-                                    onClickMention={onClickMention}
+                                    onAddNodeContent={onAddNodeContent}
                                     editor={editor}/>)}
                             </div>: null)
                 }
@@ -149,7 +149,7 @@ const OptionList = ({options, valueIndex, nodeContentSelectMode, classNames, onC
 
 export const NodeContentSelect = styled(NodeContentSelectBase, getMentionSelectStyles, undefined);
 
-const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMention, editor }) => {
+const NodeContentSelectItem = ({option, i, valueIndex, classNames, onAddNodeContent, editor }) => {
     return (
        <div
            key={`${i}${option.label}`}
@@ -159,7 +159,7 @@ const NodeContentSelectItem = ({option, i, valueIndex, classNames, onClickMentio
                    : classNames.mentionItem
            }
            onMouseDown={getPreventDefaultHandler(
-               onClickMention,
+               onAddNodeContent,
                editor,
                option
            )}
