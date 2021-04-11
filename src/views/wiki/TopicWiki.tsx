@@ -9,42 +9,6 @@ import {useHotkeys} from "react-hotkeys-hook";
 import { usePagePublisher, useDebounceWikiSaver, useCurrentPage, useDebouncePageTitleUpdater } from '../../utils/hooks';
 import { equals } from "ramda";
 import {
-    createAlignPlugin,
-    createAutoformatPlugin,
-    createBlockquotePlugin,
-    createBoldPlugin,
-    createCodeBlockPlugin,
-    createCodePlugin,
-    createExitBreakPlugin,
-    createHeadingPlugin,
-    createHighlightPlugin,
-    createHistoryPlugin,
-    createImagePlugin,
-    createItalicPlugin,
-    createKbdPlugin,
-    createLinkPlugin,
-    createListPlugin,
-    createMediaEmbedPlugin,
-    createNodeIdPlugin,
-    createParagraphPlugin,
-    createReactPlugin,
-    createResetNodePlugin,
-    createSelectOnBackspacePlugin,
-    createSlatePluginsComponents,
-    createSlatePluginsOptions,
-    createSoftBreakPlugin,
-    createStrikethroughPlugin,
-    createSubscriptPlugin,
-    createSuperscriptPlugin,
-    createTablePlugin,
-    createTodoListPlugin,
-    createTrailingBlockPlugin,
-    createUnderlinePlugin,
-    createDeserializeHTMLPlugin,
-    createNormalizeTypesPlugin,
-    ELEMENT_H1,
-    pipe,
-    SlatePlugin,
     SlatePlugins,
     useTSlateStatic
 } from "@udecode/slate-plugins";
@@ -56,7 +20,6 @@ import {defaultComponents} from "../../common/rich-text-editor/utils/components"
 import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {UghEditorType} from "../../common/rich-text-editor/types";
-import {basePlugins} from "../../common/rich-text-editor/base_plugins";
 import {wikiNormalizers, wikiSpecificPlugins} from "../../common/rich-text-editor/editors/wiki/config";
 
 const TopicWiki = (props: {topic_id: string}) => {

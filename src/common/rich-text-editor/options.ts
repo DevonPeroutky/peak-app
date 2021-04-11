@@ -14,6 +14,7 @@ import {
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
     ELEMENT_UL,
+    getListOnKeyDown,
     isBlockAboveEmpty,
     isSelectionAtBlockStart,
     MARK_STRIKETHROUGH,
@@ -21,7 +22,7 @@ import {
 } from "@udecode/slate-plugins";
 import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
-import {HEADER_TYPES, JOURNAL_ENTRY, TITLE} from "./types";
+import {HEADER_TYPES, JOURNAL_ENTRY, PeakPluginOption, TITLE} from "./types";
 
 const PEAK_STRIKETHROUGH_OPTIONS = {
     strikethrough: {
@@ -29,15 +30,7 @@ const PEAK_STRIKETHROUGH_OPTIONS = {
     }
 }
 
-const PEAK_LIST_SPECIFIC_STYLE = {
-    ul: {
-        component: StyledElement,
-        type: ELEMENT_UL,
-        rootProps: {
-            className: 'slate-ul peak-ul',
-            as: 'ul',
-        },
-    },
+const PEAK_OL_LIST_OPTIONS: PeakPluginOption = {
     ol: {
         component: StyledElement,
         type: ELEMENT_OL,
@@ -45,7 +38,23 @@ const PEAK_LIST_SPECIFIC_STYLE = {
             className: 'slate-ol peak-ol',
             as: 'ol',
         },
+        hotkey: ['mod+opt+9', 'mod+shift+9'],
     },
+}
+
+const PEAK_UL_LIST_OPTIONS: PeakPluginOption = {
+    ul: {
+        component: StyledElement,
+        type: ELEMENT_UL,
+        rootProps: {
+            className: 'slate-ul peak-ul',
+            as: 'ul',
+        },
+        hotkey: ['mod+opt+8', 'mod+shift+8'],
+    },
+}
+
+const PEAK_LIST_SPECIFIC_STYLE: PeakPluginOption = {
     li: {
         component: StyledElement,
         type: ELEMENT_LI,
@@ -54,7 +63,6 @@ const PEAK_LIST_SPECIFIC_STYLE = {
             as: 'li',
         },
     },
-    ...DEFAULTS_PARAGRAPH,
 };
 
 const PEAK_BLOCKQUOTE_OPTIONS = {
@@ -213,5 +221,8 @@ export const defaultOptions = createSlatePluginsOptions({
     [ELEMENT_H1]: PEAK_DEFAULTS_H1,
     [ELEMENT_H2]: PEAK_DEFAULTS_H2,
     [ELEMENT_H3]: PEAK_DEFAULTS_H3,
+    [ELEMENT_UL]: PEAK_UL_LIST_OPTIONS,
+    [ELEMENT_OL]: PEAK_OL_LIST_OPTIONS,
     [ELEMENT_LI]: PEAK_LIST_SPECIFIC_STYLE
 })
+

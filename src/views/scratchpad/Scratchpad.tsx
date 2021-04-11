@@ -6,7 +6,7 @@ import {createEditor, Editor, Node, Transforms} from "slate";
 import MemoizedLinkMenu from "../../common/rich-text-editor/plugins/peak-link-plugin/link-menu/LinkMenu";
 import {useCurrentUser, useScratchpad} from '../../utils/hooks';
 import { equals } from "ramda";
-import {pipe, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
+import {pipe, SlatePlugin, SlatePlugins, useTSlateStatic} from "@udecode/slate-plugins";
 import { useNodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import { baseKeyBindingHandler } from "../../common/rich-text-editor/utils/keyboard-handler";
 import { NodeContentSelect } from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
@@ -18,7 +18,6 @@ import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/co
 import {defaultComponents} from "../../common/rich-text-editor/utils/components";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
-import {UghEditorType} from "../../common/rich-text-editor/types";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -31,12 +30,12 @@ export const PeakScratchpad = (props: {}) => {
 
     // TODO
     // Why the fuck is this needed
-    useEffect(() => {
-        sleep(100).then(() => {
-            Transforms.select(editor, Editor.end(editor, []));
-            ReactEditor.focus(editor)
-        })
-    }, [])
+    // useEffect(() => {
+    //     sleep(100).then(() => {
+    //         Transforms.select(editor, Editor.end(editor, []));
+    //         ReactEditor.focus(editor)
+    //     })
+    // }, [])
 
     // PeakInlineSelect nonsense
     const {
@@ -54,22 +53,23 @@ export const PeakScratchpad = (props: {}) => {
         trigger: '/',
     });
 
-    const defaultKeyBindingHandler = useCallback((event: any) => {
-        baseKeyBindingHandler(event, editor)
-    }, [])
+    // TODO
+    // const defaultKeyBindingHandler = useCallback((event: any) => {
+    //     baseKeyBindingHandler(event, editor)
+    // }, [])
 
-    const editor: UghEditorType = useTSlateStatic()
+    const scratchPadSpecificPlugins: SlatePlugin[] = [
+        { onChange: onChangeMention }
+    ]
 
     const updatePageContent = (newValue: Node[]) => {
         if (!equals(newValue, scratchPadContent)) {
             if (!editorState.isSaving) {
                 dispatch(beginSavingPage());
             }
-            // updateComponentPageContent
             setScratchpadContent(newValue)
 
             syncScratchpad(currentUser.id, newValue, reduxScratchpad.id);
-            onChangeMention(editor);
         }
     }
 
@@ -78,7 +78,7 @@ export const PeakScratchpad = (props: {}) => {
             <h1 className={"peak-page-title"}>Scratchpad</h1>
             <SlatePlugins
                 id={"scratchpad"}
-                plugins={usePeakPlugins()}
+                plugins={usePeakPlugins(scratchPadSpecificPlugins)}
                 components={defaultComponents}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
