@@ -17,30 +17,28 @@ import {
     createListPlugin,
     createMediaEmbedPlugin,
     createNodeIdPlugin,
-    createNormalizeTypesPlugin,
     createParagraphPlugin,
     createReactPlugin,
     createResetNodePlugin,
     createSelectOnBackspacePlugin,
-    createSlatePluginsComponents,
-    createSlatePluginsOptions,
     createSoftBreakPlugin,
     createStrikethroughPlugin,
     createSubscriptPlugin,
     createSuperscriptPlugin,
-    createTablePlugin,
     createTodoListPlugin,
     createTrailingBlockPlugin,
     createUnderlinePlugin,
-    ELEMENT_H1,
     ELEMENT_IMAGE,
     ELEMENT_PARAGRAPH,
     SlatePlugin,
 } from '@udecode/slate-plugins';
 import {PEAK_AUTOFORMAT_OPTIONS} from "./plugins/withAutoReplace";
 import {defaultOptions, PEAK_EXIT_BREAK_OPTIONS, PEAK_RESET_BLOCK_OPTIONS, PEAK_SOFT_BREAK_OPTIONS} from "./options";
-import {PeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
-import {PeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
+import {
+    optionsExitBreakPlugin,
+    optionsResetBlockTypePlugin,
+    optionsSoftBreakPlugin
+} from "../../views/scratchpad/playground/playground-utils";
 
 /**
  // THE OG PLUGINS
@@ -95,9 +93,12 @@ export const basePlugins: SlatePlugin[] = [
     createKbdPlugin(),
     createNodeIdPlugin(),
     createAutoformatPlugin(PEAK_AUTOFORMAT_OPTIONS),
-    createResetNodePlugin(PEAK_RESET_BLOCK_OPTIONS),
-    createSoftBreakPlugin(PEAK_SOFT_BREAK_OPTIONS),
-    createExitBreakPlugin(PEAK_EXIT_BREAK_OPTIONS),
+    // createResetNodePlugin(PEAK_RESET_BLOCK_OPTIONS),
+    // createSoftBreakPlugin(PEAK_SOFT_BREAK_OPTIONS),
+    // createExitBreakPlugin(PEAK_EXIT_BREAK_OPTIONS),
+    createResetNodePlugin(optionsResetBlockTypePlugin),
+    createSoftBreakPlugin(optionsSoftBreakPlugin),
+    createExitBreakPlugin(optionsExitBreakPlugin),
     createTrailingBlockPlugin({
         type: defaultOptions[ELEMENT_PARAGRAPH].type,
         level: 1,

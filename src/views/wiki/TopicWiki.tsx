@@ -16,7 +16,7 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {baseKeyBindingHandler} from "../../common/rich-text-editor/utils/keyboard-handler";
 import {NodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/components/NodeContentSelect";
 import {beginSavingPage, setEditing, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
-import {defaultComponents} from "../../common/rich-text-editor/utils/components";
+import {defaultComponents} from "../../common/rich-text-editor/components";
 import {defaultEditableProps, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
 import {defaultOptions} from "../../common/rich-text-editor/options";
 import {UghEditorType} from "../../common/rich-text-editor/types";

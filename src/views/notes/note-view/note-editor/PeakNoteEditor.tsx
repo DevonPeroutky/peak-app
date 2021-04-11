@@ -20,7 +20,7 @@ import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import { Editor } from 'slate';
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";
-import {defaultComponents} from "../../../../common/rich-text-editor/utils/components";
+import {defaultComponents} from "../../../../common/rich-text-editor/components";
 import {defaultOptions} from "../../../../common/rich-text-editor/options";
 import {defaultEditableProps, usePeakPlugins} from "../../../../common/rich-text-editor/editorFactory";
 import {UghEditorType} from "../../../../common/rich-text-editor/types";

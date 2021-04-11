@@ -4,7 +4,7 @@ import {Slate, ReactEditor} from "slate-react";
 import {SlatePlugins} from "@udecode/slate-plugins";
 import {Node} from "slate";
 import {equals} from "ramda";
-import {defaultComponents} from "../../../../../../../common/rich-text-editor/utils/components";
+import {defaultComponents} from "../../../../../../../common/rich-text-editor/components";
 import {defaultOptions} from "../../../../../../../common/rich-text-editor/options";
 import {defaultEditableProps, usePeakPlugins} from "../../../../../../../common/rich-text-editor/editorFactory";
 

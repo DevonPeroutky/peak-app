@@ -14,7 +14,6 @@ import cn from "classnames";
 import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 import {PublishButton} from "../save-button/SaveButton";
 import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {toggleHeader} from "../../rich-text-editor/plugins/peak-heading-plugin/header-utils";
 import {isNodeTypeIn} from "../../rich-text-editor/utils/base-utils";
 
 const { Option } = Select;
@@ -24,7 +23,7 @@ const EditorTextTypeSelect = (props: { }) => {
     const activeTextType: PeakEditorControl | undefined = TEXT_MARKS.find(textType => isNodeTypeIn(editor, textType.elementType));
 
     const onSelect = (value: string) => {
-        toggleHeader(editor, value);
+        // toggleHeader(editor, value);
     };
 
     return (

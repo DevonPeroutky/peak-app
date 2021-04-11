@@ -28,6 +28,7 @@ import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
+import {Plugins} from "../scratchpad/playground/Playground";
 
 const { Content } = Layout;
 
@@ -90,6 +91,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                     <Content className="peak-content-container">
                         <div className="peak-content-holder">
                             <Switch>
+                                <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
                                 <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {

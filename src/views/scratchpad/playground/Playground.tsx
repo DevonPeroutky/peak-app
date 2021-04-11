@@ -1,14 +1,9 @@
 import 'tippy.js/dist/tippy.css'
-import ReactDOM from 'react-dom'
 import React, { useMemo } from 'react'
 import {
     ELEMENT_H1,
     ELEMENT_IMAGE,
     ELEMENT_PARAGRAPH,
-    createSlatePluginsComponents,
-    createSlatePluginsOptions,
-    HeadingToolbar,
-    MentionSelect,
     SlatePlugin,
     SlatePlugins,
     ToolbarSearchHighlight,
@@ -45,9 +40,6 @@ import {
     createDeserializeHTMLPlugin,
     useFindReplacePlugin,
     useMentionPlugin,
-    withProps,
-    MentionElement,
-    ELEMENT_MENTION,
 } from '@udecode/slate-plugins'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -59,9 +51,11 @@ import {
     optionsResetBlockTypePlugin,
     optionsSoftBreakPlugin,
 } from "./playground-utils";
-import {defaultEditableProps} from "../../../common/rich-text-editor/editorFactory";
+import {defaultEditableProps, usePeakPlugins} from "../../../common/rich-text-editor/editorFactory";
 import {optionsAutoformat} from "./playground-autoformat-rules";
-import {components, options} from "./defaultOptions";
+import {defaultOptions} from "../../../common/rich-text-editor/options";
+import {defaultComponents} from "../../../common/rich-text-editor/components";
+import {basePlugins} from "../../../common/rich-text-editor/base_plugins";
 
 const id = 'Examples/Playground'
 
@@ -101,13 +95,13 @@ export const Plugins = () => {
             createSoftBreakPlugin(optionsSoftBreakPlugin),
             createExitBreakPlugin(optionsExitBreakPlugin),
             createNormalizeTypesPlugin({
-                rules: [{ path: [0, 0], strictType: options[ELEMENT_H1].type }],
+                rules: [{ path: [0, 0], strictType: defaultOptions[ELEMENT_H1].type }],
             }),
             createTrailingBlockPlugin({
-                type: options[ELEMENT_PARAGRAPH].type,
+                type: defaultOptions[ELEMENT_PARAGRAPH].type,
                 level: 1,
             }),
-            createSelectOnBackspacePlugin({ allow: options[ELEMENT_IMAGE].type }),
+            createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
             mentionPlugin,
             searchHighlightPlugin,
         ]
@@ -115,22 +109,24 @@ export const Plugins = () => {
         p.push(createDeserializeHTMLPlugin({ plugins: p }))
 
         return p
-    }, [mentionPlugin, searchHighlightPlugin])
+    }, [mentionPlugin, defaultOptions, searchHighlightPlugin])
 
     console.log(`PLUGINS `, plugins)
+    console.log(plugins)
+    console.log(basePlugins)
 
     return (
-<DndProvider backend={HTML5Backend}>
-    <SlatePlugins
-        id={id}
-        plugins={plugins}
-        components={components}
-        options={options}
-        editableProps={defaultEditableProps}
-        initialValue={initialValueHighlight}
-    >
-        <ToolbarSearchHighlight icon={Search} setSearch={setSearch} />
-    </SlatePlugins>
-</DndProvider>
+        <DndProvider backend={HTML5Backend}>
+            <SlatePlugins
+                id={id}
+                plugins={usePeakPlugins()}
+                components={defaultComponents}
+                options={defaultOptions}
+                editableProps={defaultEditableProps}
+                initialValue={initialValueHighlight}
+            >
+                <ToolbarSearchHighlight icon={Search} setSearch={setSearch} />
+            </SlatePlugins>
+        </DndProvider>
     )
 }

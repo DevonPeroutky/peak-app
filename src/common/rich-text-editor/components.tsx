@@ -1,9 +1,5 @@
-import React from "react";
 import {
-    BlockquoteElementBase,
-    ClassName,
     createSlatePluginsComponents,
-    createSlatePluginsOptions,
     ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK,
     ELEMENT_H1,
     ELEMENT_H2,
@@ -11,53 +7,30 @@ import {
     ELEMENT_H4,
     ELEMENT_H5,
     ELEMENT_H6,
-    ELEMENT_IMAGE,
-    ELEMENT_MEDIA_EMBED,
-    ELEMENT_MENTION,
+    ELEMENT_IMAGE, ELEMENT_LI, ELEMENT_MEDIA_EMBED,
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
     ELEMENT_TABLE,
     ELEMENT_TODO_LI,
     ELEMENT_UL,
-    getBlockquoteElementStyles,
-    MARK_STRIKETHROUGH,
-    MentionElement,
-    MentionNodeData,
-    RootStyleSet,
-    SlatePluginOptions,
-    StyledElement,
-    StyledElementProps,
     withDraggables,
     withPlaceholders,
-    withProps
 } from "@udecode/slate-plugins";
 import {DragIndicator} from "@styled-icons/material/DragIndicator";
-import { styled } from '@uifabric/utilities';
+import React from "react";
+import {cloneDeep} from "lodash";
+import {
+    PEAK_LI_STYLE,
+    PEAK_OL_STYLE,
+    PEAK_UL_STYLE,
+    PeakBlockquoteElement, PeakCodeBlockElement
+} from "./plugins/slateComponentWrappers";
 
-const PEAK_STRIKETHROUGH_OPTIONS: Partial<SlatePluginOptions> = {
-    hotkey: 'mod+shift+x',
-}
-
-export const PEAK_TODO_LIST_OPTIONS: Partial<SlatePluginOptions> = {
-    hotkey: ['mod+opt+5', 'mod+shift+5'],
-};
-
-export const options = createSlatePluginsOptions({
-    [MARK_STRIKETHROUGH]: PEAK_STRIKETHROUGH_OPTIONS,
-    [ELEMENT_TODO_LI]: PEAK_TODO_LIST_OPTIONS
-})
-
-const renderMentionLabel = (mentionable: MentionNodeData) => {
-    const entry = [].find((m) => m.value === mentionable.value);
-    if (!entry) return 'unknown option';
-    return `${entry.name} - ${entry.email}`;
-};
-
-export const withStyledPlaceHolders = (components: any) =>
+const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
         {
             key: ELEMENT_PARAGRAPH,
-            placeholder: 'Type a paragraph',
+            placeholder: 'Type \'/\' for commands',
             hideOnBlur: true,
         },
         {
@@ -70,9 +43,29 @@ export const withStyledPlaceHolders = (components: any) =>
             placeholder: 'Heading 2',
             hideOnBlur: false,
         },
+        {
+            key: ELEMENT_H3,
+            placeholder: 'Heading 3',
+            hideOnBlur: false,
+        },
+        {
+            key: ELEMENT_H4,
+            placeholder: 'Heading 4',
+            hideOnBlur: false,
+        },
+        {
+            key: ELEMENT_H5,
+            placeholder: 'Heading 5',
+            hideOnBlur: false,
+        },
+        {
+            key: ELEMENT_H6,
+            placeholder: 'Heading 6',
+            hideOnBlur: false,
+        },
     ]);
 
-export const withStyledDraggables = (components: any) => {
+const withStyledDraggables = (components: any) => {
     return withDraggables(components, [
         {
             keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
@@ -181,19 +174,15 @@ export const withStyledDraggables = (components: any) => {
     ]);
 };
 
-export const BlockquoteElement = styled<
-    StyledElementProps,
-    ClassName,
-    RootStyleSet
-    >(BlockquoteElementBase, getBlockquoteElementStyles({ className: "peak-blockquote" }), undefined, {
-    scope: 'BlockquoteElement',
-});
-let components = createSlatePluginsComponents({
-    [ELEMENT_MENTION]: withProps(MentionElement, {
-        renderLabel: renderMentionLabel,
-    }),
-    [ELEMENT_BLOCKQUOTE]: BlockquoteElement
+export let defaultComponents = createSlatePluginsComponents({
+    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
+    [ELEMENT_LI]: PEAK_LI_STYLE,
+    [ELEMENT_UL]: PEAK_UL_STYLE,
+    [ELEMENT_OL]: PEAK_OL_STYLE,
+    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement
 })
-components = withStyledPlaceHolders(components)
-components = withStyledDraggables(components)
+defaultComponents = withStyledPlaceHolders(defaultComponents)
+defaultComponents = withStyledDraggables(defaultComponents)
+
+export const basicComponent = cloneDeep(defaultComponents)
 

@@ -7,6 +7,7 @@ import {
     MARK_STRIKETHROUGH,
     SPEditor,
     unwrapList,
+    WithAutoformatOptions,
 } from "@udecode/slate-plugins";
 import {NODE_CONTENT_TYPES, PeakEditorControl} from "../../peak-toolbar/toolbar-controls";
 
@@ -108,7 +109,7 @@ const inlineAutoFormatRules: AutoformatRule[] = [
     }
 ]
 
-export const PEAK_AUTOFORMAT_OPTIONS = {
+export const PEAK_AUTOFORMAT_OPTIONS: WithAutoformatOptions = {
     rules: [...blockAutoFormatRules, ...inlineAutoFormatRules]
 }
 export const chromeExtFormatRules: AutoformatRule[] = [...blockAutoFormatRules, ...inlineAutoFormatRules].filter(r => r.type !== ELEMENT_CODE_BLOCK)
