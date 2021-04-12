@@ -1,17 +1,21 @@
 import React, {useState} from "react";
 import cn from "classnames";
-import {ClassName, RootStyleSet, StyledElementProps} from "@udecode/slate-plugins";
+import {ClassName, RootStyleSet, StyledElementProps, useTSlateStatic} from "@udecode/slate-plugins";
 import {styled} from "@uifabric/utilities";
 import "./media-embed-stub.scss"
-import { PeakMediaEmbedControl } from "../constants";
+import { PeakMediaEmbedControl } from "../../constants";
 import {Input, message, Modal} from "antd";
-import {mapEmbeddedTypeToControlObject} from "../utils";
+import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
+import {PEAK_MEDIA_EMBED} from "../../types";
 
 const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [url, setUrl] = useState<string | null>(null)
+    const editor = useTSlateStatic();
 
-    const embedControl: PeakMediaEmbedControl = mapEmbeddedTypeToControlObject(props.element.embed_type)
+    const nodeId: number = props.element.id
+    const embedType: PEAK_MEDIA_EMBED = props.element.embed_type
+    const embedControl: PeakMediaEmbedControl = mapEmbeddedTypeToControlObject(embedType)
 
     const embedMedia = () => {
         console.log(`Submitting with `, url)
@@ -20,9 +24,9 @@ const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledEleme
 
         if (!embedUrl) {
             message.error("The url doesn't look valid")
+        } else {
+            insertMediaEmbed(editor, nodeId, embedType, embedUrl)
         }
-
-
     }
 
     const resetContent = () => {

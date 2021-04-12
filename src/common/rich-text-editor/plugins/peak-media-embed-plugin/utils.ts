@@ -1,5 +1,5 @@
-import { SPEditor } from "@udecode/slate-plugins";
-import { Transforms } from "slate";
+import {ELEMENT_LINK, SPEditor} from "@udecode/slate-plugins";
+import {Editor, Transforms} from "slate";
 import {
     ELEMENT_EMBED_STUB,
     ELEMENT_IMAGE_EMBED, ELEMENT_MEDIA_EMBED,
@@ -46,6 +46,16 @@ export const mapEmbeddedTypeToControlObject = (embed_type: PEAK_MEDIA_EMBED): Pe
     }
 }
 
-export const insertMediaEmbed = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED) => {
+export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbedType: PEAK_MEDIA_EMBED, embedded_url: string) => {
+    console.log(`Looking for node with id: ${mediaEmbedType} - ${stubNodeId}`)
+
+    const [stubNode] = Editor.nodes(editor, {
+        at: [],
+        match: n => (n.id === stubNodeId && n.embed_type === mediaEmbedType)
+    })
+
+    console.log(`Node `, stubNode[0])
+    console.log(`Path `, stubNode[1])
+
 
 }

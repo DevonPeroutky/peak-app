@@ -33,7 +33,7 @@ import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {PeakLearningElement} from "./plugins/peak-knowledge-plugin/components/peak-learning-node/PeakLearningNode";
 import {PeakInlineLinkElement} from "./plugins/peak-link-plugin/inline-link/PeakHyperLink";
 import {ELEMENT_EMBED_STUB} from "./plugins/peak-media-embed-plugin/types";
-import {PeakMediaStubElement} from "./plugins/peak-media-embed-plugin/components/MediaEmbedStub";
+import {PeakMediaStubElement} from "./plugins/peak-media-embed-plugin/components/stub/MediaEmbedStub";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
