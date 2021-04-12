@@ -25,6 +25,7 @@ export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}
             message.error("The url doesn't look valid")
         } else {
             insertMediaEmbed(editor, nodeId, embedType, embedUrl)
+            setIsModalVisible(false)
         }
     }
 

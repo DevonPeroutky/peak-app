@@ -3,13 +3,13 @@ import React from "react";
 import {PeakEditorControlDisplay} from "../../../peak-toolbar/toolbar-controls";
 import {
     ELEMENT_EMBED_STUB,
-    ELEMENT_IMAGE_EMBED,
     ELEMENT_MEDIA_EMBED,
     ELEMENT_TWITTER_EMBED,
     ELEMENT_YOUTUBE_EMBED
 } from "./types";
 import {insertMediaEmbedStub} from "./utils";
 import {isValidHttpUrl, parseTwitterId, parseYoutubeEmbedUrl} from "../../../../utils/urls";
+import { ELEMENT_IMAGE } from "@udecode/slate-plugins";
 
 export interface PeakMediaEmbedControl extends PeakEditorControlDisplay {
     inputPlaceholder: string
@@ -56,7 +56,7 @@ export const PEAK_IMAGE_EMBED_STUB: PeakMediaEmbedControl = {
     label: "Image",
     description: "Upload or embed with a link",
     elementType: ELEMENT_EMBED_STUB,
-    customFormat: (editor => insertMediaEmbedStub(editor, ELEMENT_IMAGE_EMBED)),
+    customFormat: (editor => insertMediaEmbedStub(editor, ELEMENT_IMAGE)),
     inputPlaceholder: "Paste the image link",
     contextString: "Works with any image from the web! Support for uploading images coming soon.",
     validation: (url) => (isValidHttpUrl(url)) ? url : undefined
