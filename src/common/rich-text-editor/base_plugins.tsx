@@ -34,43 +34,15 @@ import {
 } from '@udecode/slate-plugins';
 import {PEAK_AUTOFORMAT_OPTIONS} from "./plugins/withAutoReplace";
 import {defaultOptions, PEAK_EXIT_BREAK_OPTIONS, PEAK_RESET_BLOCK_OPTIONS, PEAK_SOFT_BREAK_OPTIONS} from "./options";
-import {
-    optionsExitBreakPlugin,
-    optionsResetBlockTypePlugin,
-    optionsSoftBreakPlugin
-} from "../../views/scratchpad/playground/playground-utils";
 import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
 import { createPeakLearningPlugin } from './plugins/peak-knowledge-plugin/PeakKnowledgePlugin';
 import {createPeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
+import {createPeakMediaEmbedPlugin} from "./plugins/peak-media-embed-plugin/createPeakMediaEmbedPlugin";
 
 /**
  // THE OG PLUGINS
  const basePlugins = [
-     ParagraphPlugin,
-     CodePlugin,
-     ListPlugin,
-     BlockquotePlugin,
      ImagePlugin,
-     BoldPlugin,
-     ItalicPlugin,
-     UnderlinePlugin,
-     StrikethroughPlugin,
-     CodeBlockPlugin,
-     PeakHeadingPlugin,
-     // PeakCodePlugin,
-     PeakLinkPlugin,
-     PeakCalloutPlugin,
-     PeakKnowledgePlugin
- ];
-
- const baseNormalizers = [
-     withReact,
-     withHistory,
-     withLink(),
-     withImageUpload(),
-     withAutoformat(PEAK_AUTOFORMAT_OPTIONS),
-     withNodeID(),
-     withAutoReplace,
  ];
 **/
 
@@ -102,10 +74,11 @@ export const basePlugins: SlatePlugin[] = [
     createTrailingBlockPlugin({
         type: defaultOptions[ELEMENT_PARAGRAPH].type,
     }),
-    // TODO: WTF is this
-    createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
-
     createPeakLinkPlugin(),
     createPeakCalloutPlugin(),
-    createPeakLearningPlugin()
+    createPeakLearningPlugin(),
+    createPeakMediaEmbedPlugin(),
+
+    // TODO: WTF is this
+    createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
 ];

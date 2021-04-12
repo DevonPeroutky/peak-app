@@ -1,0 +1,33 @@
+.peak-media-embed-stub {
+  cursor: pointer;
+  width: 100%;
+  transition: background 20ms ease-in 0s;
+  background-color: rgb(242, 241, 238);
+  min-height: 50px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+  margin-top: 4px;
+
+  padding: 12px 36px 12px 24px;
+  border-radius: 3px;
+  color: rgba(55, 53, 47, 0.6);
+
+  &:hover{
+    background-color: rgba(55, 53, 47, .1);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .peak-editor-control-icon {
+    margin-right: 12px;
+
+    svg {
+      height: 20px;
+      width: auto;
+    }
+  }
+}
