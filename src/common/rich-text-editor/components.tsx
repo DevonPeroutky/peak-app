@@ -114,7 +114,10 @@ const withStyledDraggables = (components: any) => {
                 ELEMENT_CODE_BLOCK,
                 PEAK_CALLOUT,
                 PEAK_LEARNING,
-                ELEMENT_EMBED_STUB
+                ELEMENT_EMBED_STUB,
+                ELEMENT_YOUTUBE_EMBED,
+                ELEMENT_TWITTER_EMBED,
+                ELEMENT_MEDIA_EMBED
             ],
             dragIcon: (
                 <DragIndicator
