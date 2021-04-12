@@ -1,3 +1,6 @@
+import React from "react";
 
 
-export const
+export const EmbeddedContent = (props) => {
+    return <span>PLACEHOLDER</span>
+}

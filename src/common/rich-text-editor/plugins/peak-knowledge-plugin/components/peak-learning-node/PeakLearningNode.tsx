@@ -7,9 +7,8 @@ import {PeakTag} from "../../../../../../types";
 import {PeakTagSelect} from "../peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 import {isNodeEmpty} from "../../utils";
 import {ClassName, RootStyleSet, StyledElementProps, useTSlate} from "@udecode/slate-plugins";
-import {styled} from "@uifabric/utilities";
 
-const PeakLearningNode = (props: RenderElementProps) => {
+export const PeakLearningElement = (props: RenderElementProps) => {
     const { element } = props
     const editor = useTSlate()
     const path = ReactEditor.findPath(editor, props.element)
@@ -29,12 +28,3 @@ const PeakLearningNode = (props: RenderElementProps) => {
         </div>
     )
 }
-
-export const PeakLearningElement = styled<
-    StyledElementProps,
-    ClassName,
-    RootStyleSet
-    >(PeakLearningNode, {}, undefined, {
-    scope: 'PeakLearning',
-});
-

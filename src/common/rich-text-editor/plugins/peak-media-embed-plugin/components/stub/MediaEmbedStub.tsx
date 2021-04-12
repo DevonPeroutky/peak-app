@@ -1,14 +1,13 @@
 import React, {useState} from "react";
 import cn from "classnames";
-import {ClassName, RootStyleSet, StyledElementProps, useTSlateStatic} from "@udecode/slate-plugins";
-import {styled} from "@uifabric/utilities";
+import {StyledElementProps, useTSlateStatic} from "@udecode/slate-plugins";
 import "./media-embed-stub.scss"
 import { PeakMediaEmbedControl } from "../../constants";
 import {Input, message, Modal} from "antd";
 import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
 import {PEAK_MEDIA_EMBED} from "../../types";
 
-const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
+export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [url, setUrl] = useState<string | null>(null)
     const editor = useTSlateStatic();
@@ -59,12 +58,3 @@ const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledEleme
         </>
     );
 };
-
-export const PeakMediaStubElement = styled<
-    StyledElementProps,
-    ClassName,
-    RootStyleSet
-    >(MediaEmbedStub, {}, undefined, {
-    scope: 'PeakMediaEmbedStub',
-});
-
