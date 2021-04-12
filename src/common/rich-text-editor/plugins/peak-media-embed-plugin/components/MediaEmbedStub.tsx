@@ -10,14 +10,13 @@ import {
     ELEMENT_YOUTUBE_EMBED,
     PEAK_MEDIA_EMBED
 } from "../types";
-import {PeakEditorControlDisplay} from "../../../../peak-toolbar/toolbar-controls";
 import {
     PEAK_IMAGE_EMBED_STUB,
     PEAK_MEDIA_EMBED_STUB,
     PEAK_TWITTER_EMBED_STUB,
     PEAK_YOUTUBE_EMBED_STUB, PeakMediaEmbedControl
 } from "../constants";
-import {Input, Modal} from "antd";
+import {Input, message, Modal} from "antd";
 
 const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -26,7 +25,20 @@ const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledEleme
     const embedControl: PeakMediaEmbedControl = renderStub(props.element.embed_type)
 
     const embedMedia = () => {
+        console.log(`Submitting with `, url)
+        const embedUrl = embedControl.validation(url)
+        console.log(`Validated res `, embedUrl)
 
+        if (!embedUrl) {
+            message.error("The url doesn't look valid")
+        }
+
+
+    }
+
+    const resetContent = () => {
+        setUrl("")
+        setIsModalVisible(false)
     }
 
     return (
@@ -47,9 +59,9 @@ const MediaEmbedStub = ({attributes, children, nodeProps, ...props}: StyledEleme
                 keyboard={true}
                 title={embedControl.description}
                 okText={"Embed"}
-                onOk={() => setIsModalVisible(false)}
-                onCancel={() => setIsModalVisible(false)}>
-                <MediaEmbedInput embedControl={embedControl}/>
+                onOk={() => embedMedia()}
+                onCancel={() => resetContent()}>
+                <MediaEmbedInput embedControl={embedControl} url={url} setUrl={setUrl} submit={embedMedia}/>
             </Modal>
         </>
     );
@@ -69,11 +81,11 @@ const renderStub = (embed_type: PEAK_MEDIA_EMBED): PeakMediaEmbedControl => {
 }
 
 
-const MediaEmbedInput = (props: {embedControl: PeakMediaEmbedControl}) => {
-    const { embedControl } = props
+const MediaEmbedInput = (props: {embedControl: PeakMediaEmbedControl, url: string | undefined, setUrl, submit}) => {
+    const { embedControl, url, setUrl, submit } = props
     return (
         <div className={"peak-media-embed-input-container"}>
-            <Input placeholder={embedControl.inputPlaceholder} />
+            <Input placeholder={embedControl.inputPlaceholder} value={url} onChange={e => setUrl(e.target.value)} onPressEnter={submit}/>
         </div>
     )
 }
