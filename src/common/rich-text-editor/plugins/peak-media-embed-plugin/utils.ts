@@ -65,7 +65,7 @@ export const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA
     Transforms.removeNodes(editor, { at: path })
     const text = { text: '' };
     const image = {
-        type: ELEMENT_IMAGE,
+        type: mediaEmbedType,
         url,
         children: [text],
     };

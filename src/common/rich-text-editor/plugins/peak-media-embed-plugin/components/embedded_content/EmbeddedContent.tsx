@@ -28,3 +28,24 @@ export const EmbeddedContent = ({attributes, children, nodeProps, ...props}: Sty
 
     return <p>Something went wrong trying to embed that content. Just delete this</p>
 }
+
+export const RichLinkEmbed = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
+    return <div>STYLE ON ME</div>
+}
+
+export const TwitterEmbed = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
+    const embedUrl: string = props.element.url
+    return (
+        <div className={"embedded-tweet"} contentEditable={false}>
+            <TweetContainer url={embedUrl} className={"tweet-container media-container"}/>
+        </div>
+    )
+}
+export const YoutubeEmbed = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
+    const embedUrl: string = props.element.url
+    return (
+        <div className={"embedded-video"} contentEditable={false}>
+            <YoutubeVideoContainer url={embedUrl} className={"youtube-container media-container"}/>
+        </div>
+    )
+}

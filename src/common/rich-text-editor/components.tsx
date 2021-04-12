@@ -32,8 +32,16 @@ import {PeakCalloutElement} from "./plugins/peak-callout-plugin/component/PeakCa
 import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {PeakLearningElement} from "./plugins/peak-knowledge-plugin/components/peak-learning-node/PeakLearningNode";
 import {PeakInlineLinkElement} from "./plugins/peak-link-plugin/inline-link/PeakHyperLink";
-import {ELEMENT_EMBED_STUB} from "./plugins/peak-media-embed-plugin/types";
+import {
+    ELEMENT_EMBED_STUB,
+    ELEMENT_TWITTER_EMBED,
+    ELEMENT_YOUTUBE_EMBED
+} from "./plugins/peak-media-embed-plugin/types";
 import {PeakMediaStubElement} from "./plugins/peak-media-embed-plugin/components/stub/MediaEmbedStub";
+import {
+    TwitterEmbed,
+    YoutubeEmbed
+} from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
@@ -211,7 +219,9 @@ export let defaultComponents = createSlatePluginsComponents({
     [PEAK_CALLOUT]: PeakCalloutElement,
     [PEAK_LEARNING]: PeakLearningElement,
     [ELEMENT_LINK]: PeakInlineLinkElement,
-    [ELEMENT_EMBED_STUB]: PeakMediaStubElement
+    [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
+    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
+    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed
 })
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)

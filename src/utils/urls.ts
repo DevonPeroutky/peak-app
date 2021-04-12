@@ -36,6 +36,21 @@ export const isValidHttpUrl = (string): boolean => {
 
 // og: https://twitter.com/bgurley/status/1377674626210222082
 // id: 1377674626210222082
+export const validateTwitterUrl = (url: string): string | undefined => {
+    if (!isValidHttpUrl(url)) {
+        return undefined
+    }
+    const og_url = new URL(url)
+
+    let re = /^\/[a-zA-Z0-9]+\/status\/\d+/
+    const res = re.exec(og_url.pathname)
+    if (og_url.hostname === "twitter.com" && res ) {
+        return url
+    }
+    return undefined
+
+}
+
 export const parseTwitterId = (url: string): string | undefined => {
     if (!isValidHttpUrl(url)) {
         return undefined
@@ -67,7 +82,7 @@ export const parseYoutubeEmbedUrl = (url: string): string | undefined => {
     const embeddedUrl: string = `https://www.youtube.com/embed/${videoId}`
 
     if (og_url.hostname === "www.youtube.com" && videoId) {
-        return embeddedUrl
+        return url
     }
     return undefined
 }

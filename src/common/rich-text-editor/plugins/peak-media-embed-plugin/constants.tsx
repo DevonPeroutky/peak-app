@@ -8,7 +8,7 @@ import {
     ELEMENT_YOUTUBE_EMBED
 } from "./types";
 import {insertMediaEmbedStub} from "./utils";
-import {isValidHttpUrl, parseTwitterId, parseYoutubeEmbedUrl} from "../../../../utils/urls";
+import {isValidHttpUrl, parseTwitterId, parseYoutubeEmbedUrl, validateTwitterUrl} from "../../../../utils/urls";
 import { ELEMENT_IMAGE } from "@udecode/slate-plugins";
 
 export interface PeakMediaEmbedControl extends PeakEditorControlDisplay {
@@ -37,7 +37,7 @@ export const PEAK_TWITTER_EMBED_STUB: PeakMediaEmbedControl = {
     customFormat: (editor => insertMediaEmbedStub(editor, ELEMENT_TWITTER_EMBED)),
     inputPlaceholder: "Paste in the link to a Tweet. Ex: https//twitter.com/...",
     contextString: "Works with links to Tweets",
-    validation: (url) => parseTwitterId(url)
+    validation: (url) => validateTwitterUrl(url)
 };
 export const PEAK_YOUTUBE_EMBED_STUB: PeakMediaEmbedControl = {
     controlType: "block",
