@@ -2,15 +2,19 @@ import React, {useState} from "react";
 import cn from "classnames";
 import {StyledElementProps, useTSlateStatic} from "@udecode/slate-plugins";
 import "./media-embed-stub.scss"
-import { PeakMediaEmbedControl } from "../../constants";
+import {PeakMediaEmbedControl} from "../../constants";
 import {Input, message, Modal} from "antd";
 import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
-import {PEAK_MEDIA_EMBED} from "../../types";
+import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "../../types";
+import {fetchLinkMetadata} from "../../../../../../client/linkMetadata";
+import {useCurrentUser} from "../../../../../../utils/hooks";
 
 export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [url, setUrl] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
     const editor = useTSlateStatic();
+    const currentUser = useCurrentUser()
 
     const nodeId: number = props.element.id
     const embedType: PEAK_MEDIA_EMBED = props.element.embed_type
@@ -23,9 +27,17 @@ export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}
 
         if (!embedUrl) {
             message.error("The url doesn't look valid")
+        } else if (embedType === ELEMENT_MEDIA_EMBED) {
+            setLoading(true)
+            fetchLinkMetadata(currentUser.id, embedUrl).then(res => {
+                const linkMetadata: LinkMetaData = res.data
+                setLoading(true)
+                console.log(`LINK METADATA `, linkMetadata)
+                insertMediaEmbed(editor, nodeId, embedType, embedUrl, linkMetadata)
+                setIsModalVisible(false)
+            })
         } else {
             insertMediaEmbed(editor, nodeId, embedType, embedUrl)
-            setIsModalVisible(false)
         }
     }
 

@@ -47,7 +47,7 @@ export const mapEmbeddedTypeToControlObject = (embed_type: PEAK_MEDIA_EMBED): Pe
     }
 }
 
-export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbedType: PEAK_MEDIA_EMBED, embedded_url: string) => {
+export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbedType: PEAK_MEDIA_EMBED, embedded_url: string, additionalProps?) => {
     console.log(`Looking for node with id: ${mediaEmbedType} - ${stubNodeId}. NEW URL: ${embedded_url}`)
 
     const [stubNode] = Editor.nodes(editor, {
@@ -58,16 +58,17 @@ export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbe
     console.log(`Path `, stubNode[1])
 
     // https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/American_bison_k5680-1.jpg/1920px-American_bison_k5680-1.jpg
-    insertMediaEmbedded(editor, mediaEmbedType, embedded_url, stubNode[1])
+    insertMediaEmbedded(editor, mediaEmbedType, embedded_url, stubNode[1], additionalProps)
 }
 
-export const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED, url: string | ArrayBuffer, path: number[]) => {
+export const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED, url: string | ArrayBuffer, path: number[], additionalProps) => {
     Transforms.removeNodes(editor, { at: path })
     const text = { text: '' };
     const image = {
         type: mediaEmbedType,
         url,
         children: [text],
+        ...additionalProps
     };
     insertNodes<TElement>(editor, image, { at: path });
 };

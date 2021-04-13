@@ -39,6 +39,7 @@ import {
 } from "./plugins/peak-media-embed-plugin/types";
 import {PeakMediaStubElement} from "./plugins/peak-media-embed-plugin/components/stub/MediaEmbedStub";
 import {
+    RichLinkEmbed,
     TwitterEmbed,
     YoutubeEmbed
 } from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
@@ -224,7 +225,8 @@ export let defaultComponents = createSlatePluginsComponents({
     [ELEMENT_LINK]: PeakInlineLinkElement,
     [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
     [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
-    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed
+    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
+    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed
 })
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)
