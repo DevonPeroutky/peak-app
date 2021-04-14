@@ -54,6 +54,7 @@ import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-sel
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
 import {PEAK_LEARNING, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "../rich-text-editor/options";
+import {PEAK_MEDIA_EMBED_CONTROLS} from "../rich-text-editor/plugins/peak-media-embed-plugin/constants";
 
 export interface PeakEditorControl {
     controlType: "mark" | "block" | "list" | "img" | "code_block" | undefined
@@ -62,7 +63,7 @@ export interface PeakEditorControl {
     markupLabel?: string[]
     elementType: string
     label: string
-    customFormat?: (editor: Editor) => void
+    customFormat?: (editor: SPEditor) => void
 }
 
 export interface PeakEditorControlDisplay extends PeakEditorControl {
@@ -226,14 +227,14 @@ const DIVIDER_MARK: PeakEditorControlDisplay = {
     label: "Divider",
     elementType: DIVIDER,
 };
-const IMAGE_MARK: PeakEditorControlDisplay = {
-    controlType: ELEMENT_IMAGE,
-    description: "Add images to your page",
-    icon: <PictureOutlined className={"peak-editor-control-icon"}/>,
-    label: "Image",
-    customFormat: (editor => message.info("Just copy an image or link and paste into the editor")),
-    elementType: ELEMENT_IMAGE,
-};
+// const IMAGE_MARK: PeakEditorControlDisplay = {
+//     controlType: ELEMENT_IMAGE,
+//     description: "Add images to your page",
+//     icon: <PictureOutlined className={"peak-editor-control-icon"}/>,
+//     label: "Image",
+//     customFormat: (editor => message.info("Just copy an image or link and paste into the editor")),
+//     elementType: ELEMENT_IMAGE,
+// };
 
 const NORMAL_TEXT: PeakEditorControlDisplay = {
     icon: <PictureOutlined className={"peak-editor-control-icon"}/>,
@@ -317,14 +318,14 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     DIVIDER_MARK,
     PEAK_LEARNING_BLOCK,
     PEAK_BOOK_NOTE_SELECT_ITEM,
-    IMAGE_MARK
+    // IMAGE_MARK
 ]
-export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = NODE_CONTENT_TYPES.map(convertEditorControlDisplayToNodeSelectListItem)
+export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = [...NODE_CONTENT_TYPES, ...PEAK_MEDIA_EMBED_CONTROLS].map(convertEditorControlDisplayToNodeSelectListItem)
 
 // These three below are only used for Toolbar and are thus deprecated
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
-export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK, IMAGE_MARK];
+export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK];
 
 // Undo, Clear formatting, Code?, Redo, Emoji, Quick Insert?
 export const KEYBOARD_SHORTCUTS: PeakEditorControlDisplay[] = [

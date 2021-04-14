@@ -7,9 +7,8 @@ import {useHistory} from "react-router-dom";
 import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 import "./peak-hyperlink.scss"
 import {isExternalLink} from "../link-util";
-import {styled} from "@uifabric/utilities";
 
-const PeakHyperLink = (props: RenderElementProps) => {
+export const PeakInlineLinkElement = (props: RenderElementProps) => {
     const {
         element,
         children,
@@ -56,12 +55,4 @@ const PeakHyperLink = (props: RenderElementProps) => {
         </a>
     )
 }
-
-export const PeakInlineLinkElement = styled<
-    StyledElementProps,
-    ClassName,
-    RootStyleSet
-    >(PeakHyperLink, {}, undefined, {
-    scope: 'PeakLink',
-});
 
