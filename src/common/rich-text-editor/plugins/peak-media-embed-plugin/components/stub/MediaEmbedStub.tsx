@@ -8,6 +8,7 @@ import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
 import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "../../types";
 import {fetchLinkMetadata} from "../../../../../../client/linkMetadata";
 import {useCurrentUser} from "../../../../../../utils/hooks";
+import {sleep} from "../../../../../../chrome-extension/utils/generalUtil";
 
 export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,10 +32,16 @@ export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}
             setLoading(true)
             fetchLinkMetadata(currentUser.id, embedUrl).then(res => {
                 const linkMetadata: LinkMetaData = res.data
-                setLoading(true)
-                console.log(`LINK METADATA `, linkMetadata)
-                insertMediaEmbed(editor, nodeId, embedType, embedUrl, linkMetadata)
-                setIsModalVisible(false)
+                sleep(250).then(_ => {
+                    setLoading(true)
+                    insertMediaEmbed(editor, nodeId, embedType, embedUrl, linkMetadata)
+                    setIsModalVisible(false)
+                })
+            }).catch(_ => {
+                sleep(250).then(_ => {
+                    message.error("Recieved an error response trying to load the metadata for the webpage")
+                    setLoading(false)
+                })
             })
         } else {
             insertMediaEmbed(editor, nodeId, embedType, embedUrl)
@@ -65,6 +72,7 @@ export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}
                 title={embedControl.description}
                 okText={"Embed"}
                 onOk={() => embedMedia()}
+                confirmLoading={loading}
                 onCancel={() => resetContent()}>
                 <Input placeholder={embedControl.inputPlaceholder} value={url} onChange={e => setUrl(e.target.value)} onPressEnter={embedMedia}/>
             </Modal>

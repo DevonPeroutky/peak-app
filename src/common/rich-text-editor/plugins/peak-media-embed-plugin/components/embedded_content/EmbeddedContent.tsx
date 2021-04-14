@@ -7,7 +7,6 @@ import "./embedded-content.scss"
 import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 
 export const RichLinkEmbed = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
-    console.log(`Rich Link Preview! `, props)
     const { title, url, cover_image_url, fav_icon_url, description } = props.element
     return (
         <div contentEditable={false} className={"voidable-slate-element"}>
