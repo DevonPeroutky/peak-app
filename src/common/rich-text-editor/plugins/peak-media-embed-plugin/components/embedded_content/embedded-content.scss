@@ -34,7 +34,7 @@
       .title {
         line-height: 20px;
         white-space: nowrap;
-        overflow: hidden;
+        text-overflow: ellipsis!important;
         min-height: 24px;
         margin-bottom: 2px;
       }
