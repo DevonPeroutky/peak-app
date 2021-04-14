@@ -3,8 +3,13 @@
 .editor-rich-link-preview {
   border: 1px solid rgba(55, 53, 47, 0.16);
   border-radius: 3px;
+  display: flex;
+  max-height: 125px;
 
   .left-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     padding: 12px 14px 14px;
     flex: 4 1 180px;
     overflow: hidden;
@@ -14,7 +19,6 @@
       line-height: 20px;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
       min-height: 24px;
       margin-bottom: 2px;
     }
@@ -31,6 +35,13 @@
       display: flex;
       margin-top: 6px;
 
+      img {
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        margin-right: 6px;
+      }
+
       .hostname {
         font-size: 12px;
         line-height: 16px;
@@ -45,6 +56,13 @@
     flex: 1 1 180px;
     display: block;
     position: relative;
+
+    .cover-image {
+      display: block;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 

@@ -2,27 +2,30 @@ import React from "react";
 import {YoutubeVideoContainer} from "../../../../../media-embeds/youtube-container/YoutubeContainer";
 import {TweetContainer} from "../../../../../media-embeds/twitter-container/TwitterContainer";
 import {StyledElementProps} from "@udecode/slate-plugins";
-import {deriveBaseDomain, deriveHostname} from "../../../../../../utils/urls";
+import {deriveHostname} from "../../../../../../utils/urls";
 import "./embedded-content.scss"
+import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 
 export const RichLinkEmbed = ({attributes, children, nodeProps, ...props}: StyledElementProps) => {
     console.log(`Rich Link Preview! `, props)
     const { title, url, cover_image_url, fav_icon_url, description } = props.element
     return (
-        <div className={"voidable-slate-element editor-rich-link-preview"} {...attributes} contentEditable={false}>
-            <div className={"left-column"}>
-                {(title) ? <div className={"title"}>{title}</div> : null}
-                {(description) ? <div className={"description"}>{description}</div> : null}
-                <div className={"footer"}>
-                    {/*{(fav_icon_url) ? <img className={"favIcon"} src={fav_icon_url}/> : null}*/}
-                    <div className={"hostname"}>{deriveHostname(url)}</div>
+        <>
+            <div className={"voidable-slate-element editor-rich-link-preview"} {...attributes} contentEditable={false}>
+                <div className={"left-column"}>
+                    {(title) ? <div className={"title"}>{title}</div> : null}
+                    {(description) ? <div className={"description"}>{description}</div> : null}
+                    <div className={"footer"}>
+                        <ImageLoader url={fav_icon_url} fallbackElement={null} className={"fav-icon"}/>
+                        <div className={"hostname"}>{deriveHostname(url)}</div>
+                    </div>
+                </div>
+                <div className={"right-column"}>
+                    <ImageLoader url={cover_image_url} fallbackElement={null} className={"cover-image"}/>
                 </div>
             </div>
-            {/*<div className={"right-column"}>*/}
-            {/*    <div className={"cover-image"}></div>*/}
-            {/*</div>*/}
             {children}
-        </div>
+        </>
     )
 }
 
