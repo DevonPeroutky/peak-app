@@ -29,6 +29,7 @@ import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
 import {Peaker} from "../../types";
 import {Plugins} from "../scratchpad/playground/Playground";
+import "./../../constants/editor.scss"
 
 const { Content } = Layout;
 
