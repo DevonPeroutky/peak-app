@@ -36,3 +36,41 @@ body {
   white-space: pre;
 }
 
+$list-color: rgb(68, 51, 255);
+.peak-ul {
+  list-style-type: disc!important;
+  list-style-position: outside!important;
+
+  .peak-li {
+    list-style-type: disc!important;
+    font-size: 1.2em;
+  }
+
+  .peak-li::marker {
+    color: $list-color!important;
+  }
+}
+
+.peak-ol {
+  list-style-type: decimal!important;
+  list-style-position: outside!important;
+  //counter-reset: cupcake!important;
+  //list-style: none;
+
+  .peak-li {
+    //list-style-type: decimal!important;
+    counter-increment: cupcake;
+    padding-left: 10px;
+  }
+
+  .peak-li::marker {
+    //content: counters(cupcake, '.') ' ';
+    /* Whatever custom styles you want here */
+    color: rgb(68, 51, 255)!important;
+    font-weight: bold!important;
+    padding-right: 15px!important;
+    margin-right: 12px;
+    width: 40px;
+    line-height: 1.6!important;
+  }
+}
