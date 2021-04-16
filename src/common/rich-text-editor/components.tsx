@@ -231,5 +231,3 @@ export let defaultComponents = createSlatePluginsComponents({
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)
 
-export const basicComponent = cloneDeep(defaultComponents)
-
