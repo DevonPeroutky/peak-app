@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useCurrentNote, useDebouncePeakNoteSaver} from "../../client/notes";
+import {useDebouncePeakNoteSaver} from "../../client/notes";
 import {Link, useHistory} from "react-router-dom";
 import {PeakNoteEditor} from "../notes/note-view/note-editor/PeakNoteEditor";
 import {useLoadTags} from "../../utils/tags";

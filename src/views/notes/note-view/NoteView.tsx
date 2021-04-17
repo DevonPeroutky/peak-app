@@ -1,20 +1,21 @@
 import React, {useState} from 'react'
 import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../client/notes";
 import {PeakNote} from "../../../redux/slices/noteSlice";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import "./note-view.scss"
 import {
     ELEMENT_WEB_NOTE,
     PEAK_LEARNING
 } from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
-import {Divider, Input} from "antd";
+import {Divider} from "antd";
 import {useCurrentUser} from "../../../utils/hooks";
 import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
 import {WebNoteHeaderSection} from "./note-header/web-note-header/WebNoteHeader";
 import {BookHeaderSection} from "./note-header/book-header/BookHeader";
 import {NextGenNoteView} from "../../note-view-v2/NextGenNoteView";
+import {LearningHeaderSection} from "./note-header/learning-header/LearningHeader";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -39,10 +40,10 @@ export const PeakNoteView = (props) => {
         setAuthor(e.target.value)
         noteSaver(currentUser, currentNote.id, { author: e.target.value })
     }
-
-    if (currentNote.note_type === PEAK_LEARNING) {
-        return <NextGenNoteView note={currentNote}/>
-    }
+    //
+    // if (currentNote.note_type === PEAK_LEARNING) {
+    //     return <NextGenNoteView note={currentNote}/>
+    // }
 
     return (
         <div className={"peak-note-view-container"}>
@@ -64,6 +65,10 @@ interface NoteHeaderProps {
 }
 const renderHeader = (props: NoteHeaderProps) => {
     const { currentNote, author, onAuthorChange, selected_tags, title, onTitleChange } = props
+
+    if (currentNote.note_type === PEAK_LEARNING) {
+        return <LearningHeaderSection note={currentNote} title={title} onTitleChange={onTitleChange} selected_tags={selected_tags}/>
+    }
 
     return (currentNote.note_type === ELEMENT_WEB_NOTE) ?
         <WebNoteHeaderSection

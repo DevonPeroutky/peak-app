@@ -57,5 +57,5 @@ export const DraftLearningNoteView = (props) => {
         })
     }, [])
 
-    return <NoteSkeleton/>
+    return <div/>
 }

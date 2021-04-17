@@ -28,7 +28,6 @@ const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
 })
 
-
 export const PeakTimeline = (props: { }) => {
     const currentUser = useCurrentUser()
     const notesFromRedux: PeakNote[] = useNotes().filter(n => n.note_type === ELEMENT_WEB_NOTE || n.note_type === PEAK_LEARNING)
