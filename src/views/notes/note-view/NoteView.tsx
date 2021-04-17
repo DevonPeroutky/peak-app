@@ -40,10 +40,10 @@ export const PeakNoteView = (props) => {
         setAuthor(e.target.value)
         noteSaver(currentUser, currentNote.id, { author: e.target.value })
     }
-    //
-    // if (currentNote.note_type === PEAK_LEARNING) {
-    //     return <NextGenNoteView note={currentNote}/>
-    // }
+
+    if (currentNote.note_type === PEAK_LEARNING) {
+        return <NextGenNoteView note={currentNote} selected_tags={selected_tags}/>
+    }
 
     return (
         <div className={"peak-note-view-container"}>

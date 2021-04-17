@@ -1,29 +1,69 @@
-import React, {useState} from 'react'
-import {useDebouncePeakNoteSaver} from "../../client/notes";
-import {Link, useHistory} from "react-router-dom";
-import {PeakNoteEditor} from "../notes/note-view/note-editor/PeakNoteEditor";
-import {useLoadTags} from "../../utils/tags";
+import React, {useEffect, useState} from 'react'
+import {useCurrentNote, useDebouncePeakNoteSaver, useSpecificNote} from "../../client/notes";
 import {useCurrentUser} from "../../utils/hooks";
-import {PeakNote} from "../../redux/slices/noteSlice";
+import {PeakNote, STUB_BOOK_ID} from "../../redux/slices/noteSlice";
 import {PeakTag} from "../../types";
+import {useDispatch} from "react-redux";
+import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
+import {Node} from "slate";
+import {EMPTY_PARAGRAPH_NODE} from "../../common/rich-text-editor/editors/constants";
+import {equals} from "ramda";
+import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
+import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
+import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
+import {createPeakTitlePlugin} from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
+import {NoteTagSelect} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
+import {CaretLeftFilled} from "@ant-design/icons/lib";
 
-export const NextGenNoteView = (props: { note: PeakNote }) => {
-    const { note } = props
-    const history = useHistory()
-    const noteSaver = useDebouncePeakNoteSaver()
+export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[] }) => {
+    const { note, selected_tags } = props
+    const currentNote: PeakNote | undefined = useSpecificNote(note.id)
+    const dispatch = useDispatch()
+    const editorState = useActiveEditorState()
     const currentUser = useCurrentUser()
-    const selected_tags: PeakTag[] = useLoadTags((note) ? note.tag_ids : [])
-    const [title, setTitle] = useState((note) ? note.title : "")
-    const [author, setAuthor] = useState((note) ? note.author : "")
+    const noteSaver = useDebouncePeakNoteSaver()
+    const noteInRedux = useCurrentNote()
+    const bodyContent: Node[] = (currentNote) ? currentNote.body : [EMPTY_PARAGRAPH_NODE()]
+    const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
 
-    if (!note) {
-        history.push(`/home/notes`)
-        return null
+    const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
+
+    const updateNoteContent = (newBody: Node[]) => {
+        if (!equals(newBody, noteContent)) {
+            if (!editorState.isSaving) {
+                dispatch(beginSavingPage());
+            }
+            setNoteContent(newBody)
+            noteSaver(currentUser, currentNote.id, { body: newBody as Node[] })
+        }
     }
+
+    useEffect(() => {
+        const noteBodyInRedux: Node[] = noteInRedux.body
+
+        if (equals(noteBodyInRedux, noteContent)) {
+            console.log(`No outside updates were made to Redux`)
+        } else {
+            setNoteContent(noteBodyInRedux)
+        }
+    }, [noteInRedux.body])
+
+    const { plugin: nodeSelectPlugin, getNodeContentSelectProps } = useNodeContentSelect({
+        maxSuggestions: 10,
+        trigger: '/',
+    });
 
     return (
         <div className={"peak-note-view-container"}>
-            <PeakNoteEditor note_id={note.id}/>
+            <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
+            <PeakEditor
+                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
+                onChange={updateNoteContent}
+                getNodeContentSelectProps={getNodeContentSelectProps}
+                initialValue={noteContent}
+                currentPageId={currentPageId}
+            />
         </div>
     )
+
 }
