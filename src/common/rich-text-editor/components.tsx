@@ -65,7 +65,6 @@ const defaultComponents = createSlatePluginsComponents({
 })
 
 const withStyledPlaceHolders = (components: any, placeholders: Options<PlaceholderProps>[]) => {
-    console.log(`THE FINAL PLACEHOLDERS `, placeholders)
     return withPlaceholders(components, placeholders);
 }
 
@@ -169,7 +168,6 @@ const withStyledDraggables = (components: any) => {
 
 export const useComponents = (dnd: boolean, placeholders: Options<PlaceholderProps>[]) => {
     return useMemo(() => {
-        console.log(`RECALCULATING placeholdders! `, placeholders)
         let components = clone(defaultComponents)
 
         if (dnd) {

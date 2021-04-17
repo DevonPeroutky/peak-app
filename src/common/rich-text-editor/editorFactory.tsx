@@ -62,7 +62,6 @@ export const PeakEditor = ({
     //     })
     // }, [])
 
-    console.log(`THE PLACEHOLDERS `, nodePlaceholders)
     return (
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
             <SlatePlugins

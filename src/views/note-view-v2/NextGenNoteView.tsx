@@ -14,7 +14,7 @@ import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/conf
 import {createPeakTitlePlugin} from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 import {NoteTagSelect} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import {TITLE} from "../../common/rich-text-editor/types";
-import {DEFAULT_PLACEHOLDERS} from "../../common/rich-text-editor/constants";
+import "./next-gen-note-view.scss"
 
 export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[] }) => {
     const { note, selected_tags } = props
