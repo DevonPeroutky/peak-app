@@ -13,8 +13,6 @@ import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../const
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
 import {PageSavingAnimation} from "../page-saving-animation/PageSavingAnimation";
 import {STUB_TAG_ID} from "../../../../../../redux/slices/tags/types";
-import {PeakEditor} from "../../../../../../common/rich-text-editor/editorFactory";
-import {CHROME_EXTENSION} from "../../../../../../common/rich-text-editor/editors/chrome-extension/constants";
 import {SaveNoteEditor} from "./save-note-editor/SaveNoteEditor";
 
 interface SavePageContentProps extends SavedPageProps { };

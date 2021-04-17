@@ -14,6 +14,7 @@ import {deleteNoteRequest} from "./webNotes";
 import {AxiosResponse} from "axios";
 import {PaginationResponse} from "./types";
 import {PeakKnowledgeKeyOption} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
+import {EMPTY_BODY_WITH_TITLE} from "../common/rich-text-editor/editors/constants";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -24,6 +25,7 @@ interface UpdateNotePayload {
 interface CreateNotePayload {
     title: string,
     author?: string,
+    body?: Node[]
     coverImageUrl?: string
     note_type: PeakKnowledgeKeyOption
 }
@@ -146,7 +148,7 @@ export function usePeakBookCreator() {
 
 export function usePeakNoteCreator() {
     return (user: Peaker) => {
-        return createNewPeakBook(user.id, { title: "Untitled", note_type: PEAK_LEARNING })
+        return createNewPeakBook(user.id, { title: "Untitled", body: EMPTY_BODY_WITH_TITLE, note_type: PEAK_LEARNING })
     }
 }
 // ----------------------------------------------------

@@ -6,7 +6,7 @@ import {PeakTag} from "../../types";
 import {useDispatch} from "react-redux";
 import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {Node} from "slate";
-import {EMPTY_PARAGRAPH_NODE} from "../../common/rich-text-editor/editors/constants";
+import {EMPTY_BODY_WITH_TITLE} from "../../common/rich-text-editor/editors/constants";
 import {equals} from "ramda";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
@@ -24,7 +24,7 @@ export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[
     const currentUser = useCurrentUser()
     const noteSaver = useDebouncePeakNoteSaver()
     const noteInRedux = useCurrentNote()
-    const bodyContent: Node[] = (currentNote) ? currentNote.body : [EMPTY_PARAGRAPH_NODE()]
+    const bodyContent: Node[] = (currentNote) ? currentNote.body : EMPTY_BODY_WITH_TITLE
     const [noteContent, setNoteContent] = useState<Node[]>(bodyContent)
 
     const currentPageId = `note-${(currentNote) ? currentNote.id : STUB_BOOK_ID}`
@@ -35,7 +35,9 @@ export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[
                 dispatch(beginSavingPage());
             }
             setNoteContent(newBody)
-            noteSaver(currentUser, currentNote.id, { body: newBody as Node[] })
+
+            const currentTitle = Node.string(newBody[0]) || "untitled"
+            noteSaver(currentUser, currentNote.id, { body: newBody as Node[], title: currentTitle })
         }
     }
 

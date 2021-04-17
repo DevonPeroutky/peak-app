@@ -12,7 +12,7 @@ import cn from "classnames";
 import {PlusSquareOutlined} from "@ant-design/icons/lib";
 import "./topic-header-row.scss";
 import {capitalize_and_truncate} from "../../../../utils/strings";
-import {EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
+import {EMPTY_BODY_WITH_TITLE, EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
 import {Peaker} from "../../../../types";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import { setEditing } from "../../../../redux/slices/activeEditor/activeEditorSlice";
@@ -26,12 +26,9 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
     const { topic, user } = props;
 
     const createPageUnderTopic = () => {
-        const empty_title = { type: TITLE, children: [{ text: ''}] }
-        const dat_bodyyy: Node[] = [empty_title, EMPTY_PARAGRAPH_NODE()]
-
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
             "page": {
-                body: dat_bodyyy,
+                body: EMPTY_BODY_WITH_TITLE,
                 topic_id: props.topic.id,
                 title: "",
                 privacy_level: "private",
