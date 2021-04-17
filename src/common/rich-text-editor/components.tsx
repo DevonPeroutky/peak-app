@@ -1,4 +1,5 @@
 import {
+    createDeserializeHTMLPlugin,
     createSlatePluginsComponents,
     ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK,
     ELEMENT_H1,
@@ -12,12 +13,12 @@ import {
     ELEMENT_PARAGRAPH,
     ELEMENT_TABLE,
     ELEMENT_TODO_LI,
-    ELEMENT_UL,
+    ELEMENT_UL, SlatePlugin,
     withDraggables,
     withPlaceholders,
 } from "@udecode/slate-plugins";
 import {DragIndicator} from "@styled-icons/material/DragIndicator";
-import React from "react";
+import React, {useMemo} from "react";
 import {
     PEAK_LI_STYLE,
     PEAK_OL_STYLE,
@@ -44,6 +45,8 @@ import {
 } from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
 import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
 import {DividerElement} from "./plugins/peak-divider/element/DividerElement";
+import {defaultOptions} from "./options";
+import {clone} from "ramda";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
@@ -94,7 +97,7 @@ const withStyledPlaceHolders = (components: any) =>
         },
     ]);
 
-export let defaultComponents = createSlatePluginsComponents({
+const defaultComponents = createSlatePluginsComponents({
     [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
     [ELEMENT_LI]: PEAK_LI_STYLE,
     [ELEMENT_UL]: PEAK_UL_STYLE,
@@ -233,6 +236,17 @@ const withStyledDraggables = (components: any) => {
     ]);
 };
 
-defaultComponents = withStyledPlaceHolders(defaultComponents)
-defaultComponents = withStyledDraggables(defaultComponents)
+export const useComponents = (dnd: boolean = true, placeholders: boolean = true) => {
+    return useMemo(() => {
+        let components = clone(defaultComponents)
 
+        if (dnd) {
+            components = withStyledDraggables(components)
+        }
+
+        if (placeholders) {
+            components = withStyledPlaceHolders(components)
+        }
+        return components
+    }, [dnd, placeholders])
+}

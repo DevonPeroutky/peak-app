@@ -9,7 +9,7 @@ import { beginSavingPage, useActiveEditorState } from "../../redux/slices/active
 import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
-import {defaultEditableProps, PeakEditor, usePeakPlugins} from "../../common/rich-text-editor/editorFactory";
+import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();

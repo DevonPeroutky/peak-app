@@ -5,7 +5,7 @@ import {
     createBlockquotePlugin,
     createBoldPlugin,
     createCodeBlockPlugin,
-    createCodePlugin,
+    createCodePlugin, createDeserializeHTMLPlugin,
     createExitBreakPlugin,
     createHeadingPlugin,
     createHighlightPlugin,
@@ -40,13 +40,6 @@ import {createPeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {createPeakMediaEmbedPlugin} from "./plugins/peak-media-embed-plugin/createPeakMediaEmbedPlugin";
 import {createDividerPlugin} from "./plugins/peak-divider/createDividerPlugin";
 
-/**
- // THE OG PLUGINS
- const basePlugins = [
-     ImagePlugin,
- ];
-**/
-
 const openSourcePlugins: SlatePlugin[] = [
     createReactPlugin(),
     createHistoryPlugin(),
@@ -80,21 +73,35 @@ const openSourcePlugins: SlatePlugin[] = [
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
 ];
-
-export const basePlugins: SlatePlugin[] = [
+const basePlugins: SlatePlugin[] = [
     ...openSourcePlugins,
     createPeakCalloutPlugin(),
     // TODO: submit this as an open-source plugin
     createDividerPlugin(),
 ]
-
 const customPeakPlugins: SlatePlugin[] = [
     createPeakLinkPlugin(),
     createPeakLearningPlugin(),
     createPeakMediaEmbedPlugin(),
 ]
-
-export const peakPlugins: SlatePlugin[] = [
+const peakPlugins: SlatePlugin[] = [
     ...basePlugins,
     ...customPeakPlugins
 ]
+
+export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
+    return useMemo(() => {
+        const plugins = (additionalPlugins) ? [...peakPlugins, ...additionalPlugins] : peakPlugins
+        plugins.push(createDeserializeHTMLPlugin({ plugins }));
+
+        return plugins
+    }, [additionalPlugins, defaultOptions])
+}
+export const useBasicPlugins = (additionalPlugins?: SlatePlugin[]) => {
+    return useMemo(() => {
+        const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
+        plugins.push(createDeserializeHTMLPlugin({ plugins }));
+
+        return plugins
+    }, [additionalPlugins, defaultOptions])
+}

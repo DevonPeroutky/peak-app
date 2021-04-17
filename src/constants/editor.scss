@@ -1,5 +1,5 @@
+@import "./variables";
 
-// The styles below apply to all editors. Don't have a good place to put them yet
 .peak-blockquote {
   font-style: italic;
   font-size: 1.5em;
@@ -21,7 +21,7 @@
   white-space: pre;
 }
 
-$list-color: rgb(68, 51, 255);
+$list-color: $primary-blue;
 .peak-ul {
   list-style-type: disc!important;
   list-style-position: outside!important;
@@ -51,7 +51,7 @@ $list-color: rgb(68, 51, 255);
   .peak-li::marker {
     //content: counters(cupcake, '.') ' ';
     /* Whatever custom styles you want here */
-    color: rgb(68, 51, 255)!important;
+    color: $list-color!important;
     font-weight: bold!important;
     padding-right: 15px!important;
     margin-right: 12px;

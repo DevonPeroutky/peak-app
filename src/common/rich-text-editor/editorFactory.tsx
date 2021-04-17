@@ -1,18 +1,17 @@
 import React, {useMemo} from "react";
-import {basePlugins, peakPlugins} from "./base_plugins";
+import {usePeakPlugins} from "./base_plugins";
 import {defaultOptions} from "./options";
 import {
-    createDeserializeHTMLPlugin,
     SlatePlugin,
     SlatePlugins,
 } from "@udecode/slate-plugins";
-import {defaultComponents} from "./components";
 import MemoizedLinkMenu from "./plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect, NodeContentSelectProps} from "./utils/node-content-select/components/NodeContentSelect";
 import {TNode} from "@udecode/slate-plugins-core/dist/types/TNode";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import cn from "classnames"
 import "./peak-editor.scss"
+import {useComponents} from "./components";
 
 const editorStyle: React.CSSProperties = {
     minHeight: "100%",
@@ -26,24 +25,6 @@ export const defaultEditableProps = {
     style: editorStyle,
 };
 
-export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
-    return useMemo(() => {
-        const plugins = (additionalPlugins) ? [...peakPlugins, ...additionalPlugins] : peakPlugins
-        plugins.push(createDeserializeHTMLPlugin({ plugins }));
-
-        return plugins
-    }, [additionalPlugins, defaultOptions])
-}
-
-export const useBasicPlugins = (additionalPlugins?: SlatePlugin[]) => {
-    return useMemo(() => {
-        const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
-        plugins.push(createDeserializeHTMLPlugin({ plugins }));
-
-        return plugins
-    }, [additionalPlugins, defaultOptions])
-}
-
 export interface PeakEditorProps {
     additionalPlugins?: SlatePlugin[],
     onChange: (value: TNode[]) => void
@@ -52,7 +33,15 @@ export interface PeakEditorProps {
     initialValue: any
     currentPageId: string
 }
-export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
+export const PeakEditor = ({
+                               additionalPlugins,
+                               currentPageId,
+                               className,
+                               onChange,
+                               initialValue,
+                               getNodeContentSelectProps,
+                               ...props
+}: PeakEditorProps) => {
     const editorState = useActiveEditorState()
 
     // TODO
@@ -69,7 +58,7 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChan
             <SlatePlugins
                 id={currentPageId}
                 plugins={usePeakPlugins(additionalPlugins)}
-                components={defaultComponents}
+                components={useComponents()}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
                 onChange={onChange}
@@ -84,31 +73,6 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChan
                     { (getNodeContentSelectProps) ? <NodeContentSelect {...getNodeContentSelectProps()}/> : null }
                 </div>
             </SlatePlugins>
-        </div>
-    )
-}
-
-export const PeakExtensionEditor = ({ additionalPlugins, currentPageId, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
-    // TODO
-    // Why the fuck is this needed
-    // useEffect(() => {
-    //     sleep(100).then(() => {
-    //         Transforms.select(editor, Editor.end(editor, []));
-    //         ReactEditor.focus(editor)
-    //     })
-    // }, [])
-
-    return (
-        <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
-            <SlatePlugins
-                id={currentPageId}
-                plugins={usePeakPlugins(additionalPlugins)}
-                components={defaultComponents}
-                options={defaultOptions}
-                editableProps={defaultEditableProps}
-                onChange={onChange}
-                initialValue={initialValue}
-            />
         </div>
     )
 }
