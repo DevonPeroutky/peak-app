@@ -1,7 +1,8 @@
 import React, {useMemo} from "react";
-import {usePeakPlugins} from "./base_plugins";
+import {usePeakPlugins} from "./plugins";
 import {defaultOptions} from "./options";
 import {
+    Options, PlaceholderProps,
     SlatePlugin,
     SlatePlugins,
 } from "@udecode/slate-plugins";
@@ -12,6 +13,8 @@ import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditor
 import cn from "classnames"
 import "./peak-editor.scss"
 import {useComponents} from "./components";
+import {DEFAULT_PLACEHOLDERS} from "./constants";
+import {contains, includes} from "ramda";
 
 const editorStyle: React.CSSProperties = {
     minHeight: "100%",
@@ -31,6 +34,8 @@ export interface PeakEditorProps {
     getNodeContentSelectProps?: () => NodeContentSelectProps
     className?: string
     initialValue: any
+    enableDnD?: boolean
+    placeholderOverrides?: Options<PlaceholderProps>[]
     currentPageId: string
 }
 export const PeakEditor = ({
@@ -39,10 +44,14 @@ export const PeakEditor = ({
                                className,
                                onChange,
                                initialValue,
+                               placeholderOverrides,
+                               enableDnD,
                                getNodeContentSelectProps,
                                ...props
 }: PeakEditorProps) => {
     const editorState = useActiveEditorState()
+    const dragAndDrop: boolean = (enableDnD === undefined) ? true : enableDnD
+    const nodePlaceholders: Options<PlaceholderProps>[] = (placeholderOverrides) ? [...DEFAULT_PLACEHOLDERS.filter(p => !includes(p.key, placeholderOverrides.map(po => po.key))), ...placeholderOverrides] : DEFAULT_PLACEHOLDERS
 
     // TODO
     // Why the fuck is this needed
@@ -53,12 +62,13 @@ export const PeakEditor = ({
     //     })
     // }, [])
 
+    console.log(`THE PLACEHOLDERS `, nodePlaceholders)
     return (
         <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
             <SlatePlugins
                 id={currentPageId}
                 plugins={usePeakPlugins(additionalPlugins)}
-                components={useComponents()}
+                components={useComponents(dragAndDrop, nodePlaceholders)}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
                 onChange={onChange}

@@ -1,5 +1,4 @@
 import {
-    createDeserializeHTMLPlugin,
     createSlatePluginsComponents,
     ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK,
     ELEMENT_H1,
@@ -13,7 +12,7 @@ import {
     ELEMENT_PARAGRAPH,
     ELEMENT_TABLE,
     ELEMENT_TODO_LI,
-    ELEMENT_UL, SlatePlugin,
+    ELEMENT_UL, Options, PlaceholderProps, SlatePlugin,
     withDraggables,
     withPlaceholders,
 } from "@udecode/slate-plugins";
@@ -45,57 +44,8 @@ import {
 } from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
 import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
 import {DividerElement} from "./plugins/peak-divider/element/DividerElement";
-import {defaultOptions} from "./options";
 import {clone} from "ramda";
-
-const withStyledPlaceHolders = (components: any) =>
-    withPlaceholders(components, [
-        {
-            key: TITLE,
-            placeholder: 'Page Title',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_PARAGRAPH,
-            placeholder: 'Type \'/\' for commands',
-            hideOnBlur: true,
-        },
-        {
-            key: ELEMENT_H1,
-            placeholder: 'Heading 1',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H2,
-            placeholder: 'Heading 2',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H3,
-            placeholder: 'Heading 3',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H4,
-            placeholder: 'Heading 4',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H5,
-            placeholder: 'Heading 5',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H6,
-            placeholder: 'Heading 6',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_CODE_BLOCK,
-            placeholder: 'Type some code',
-            hideOnBlur: false,
-        },
-    ]);
+import {DRAGGABLE_ELEMENTS} from "./constants";
 
 const defaultComponents = createSlatePluginsComponents({
     [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
@@ -114,30 +64,11 @@ const defaultComponents = createSlatePluginsComponents({
     [ELEMENT_DIVIDER]: DividerElement,
 })
 
-const DRAGGABLE_ELEMENTS = [
-    ELEMENT_PARAGRAPH,
-    ELEMENT_BLOCKQUOTE,
-    ELEMENT_TODO_LI,
-    ELEMENT_H1,
-    ELEMENT_H2,
-    ELEMENT_H3,
-    ELEMENT_H4,
-    ELEMENT_H5,
-    ELEMENT_H6,
-    ELEMENT_IMAGE,
-    ELEMENT_OL,
-    ELEMENT_UL,
-    ELEMENT_TABLE,
-    ELEMENT_MEDIA_EMBED,
-    ELEMENT_CODE_BLOCK,
-    PEAK_CALLOUT,
-    PEAK_LEARNING,
-    ELEMENT_EMBED_STUB,
-    ELEMENT_YOUTUBE_EMBED,
-    ELEMENT_TWITTER_EMBED,
-    ELEMENT_MEDIA_EMBED,
-    ELEMENT_DIVIDER
-]
+const withStyledPlaceHolders = (components: any, placeholders: Options<PlaceholderProps>[]) => {
+    console.log(`THE FINAL PLACEHOLDERS `, placeholders)
+    return withPlaceholders(components, placeholders);
+}
+
 const withStyledDraggables = (components: any) => {
     return withDraggables(components, [
         {
@@ -236,8 +167,9 @@ const withStyledDraggables = (components: any) => {
     ]);
 };
 
-export const useComponents = (dnd: boolean = true, placeholders: boolean = true) => {
+export const useComponents = (dnd: boolean, placeholders: Options<PlaceholderProps>[]) => {
     return useMemo(() => {
+        console.log(`RECALCULATING placeholdders! `, placeholders)
         let components = clone(defaultComponents)
 
         if (dnd) {
@@ -245,7 +177,7 @@ export const useComponents = (dnd: boolean = true, placeholders: boolean = true)
         }
 
         if (placeholders) {
-            components = withStyledPlaceHolders(components)
+            components = withStyledPlaceHolders(components, placeholders)
         }
         return components
     }, [dnd, placeholders])
