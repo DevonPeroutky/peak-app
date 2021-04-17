@@ -18,7 +18,6 @@ import {
 } from "@udecode/slate-plugins";
 import {DragIndicator} from "@styled-icons/material/DragIndicator";
 import React from "react";
-import {cloneDeep} from "lodash";
 import {
     PEAK_LI_STYLE,
     PEAK_OL_STYLE,
@@ -43,6 +42,8 @@ import {
     TwitterEmbed,
     YoutubeEmbed
 } from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
+import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
+import {DividerElement} from "./plugins/peak-divider/element/DividerElement";
 
 const withStyledPlaceHolders = (components: any) =>
     withPlaceholders(components, [
@@ -93,33 +94,52 @@ const withStyledPlaceHolders = (components: any) =>
         },
     ]);
 
+export let defaultComponents = createSlatePluginsComponents({
+    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
+    [ELEMENT_LI]: PEAK_LI_STYLE,
+    [ELEMENT_UL]: PEAK_UL_STYLE,
+    [ELEMENT_OL]: PEAK_OL_STYLE,
+    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
+    [TITLE]: PeakTitleElement,
+    [PEAK_CALLOUT]: PeakCalloutElement,
+    [PEAK_LEARNING]: PeakLearningElement,
+    [ELEMENT_LINK]: PeakInlineLinkElement,
+    [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
+    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
+    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
+    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed,
+    [ELEMENT_DIVIDER]: DividerElement,
+})
+
+const DRAGGABLE_ELEMENTS = [
+    ELEMENT_PARAGRAPH,
+    ELEMENT_BLOCKQUOTE,
+    ELEMENT_TODO_LI,
+    ELEMENT_H1,
+    ELEMENT_H2,
+    ELEMENT_H3,
+    ELEMENT_H4,
+    ELEMENT_H5,
+    ELEMENT_H6,
+    ELEMENT_IMAGE,
+    ELEMENT_OL,
+    ELEMENT_UL,
+    ELEMENT_TABLE,
+    ELEMENT_MEDIA_EMBED,
+    ELEMENT_CODE_BLOCK,
+    PEAK_CALLOUT,
+    PEAK_LEARNING,
+    ELEMENT_EMBED_STUB,
+    ELEMENT_YOUTUBE_EMBED,
+    ELEMENT_TWITTER_EMBED,
+    ELEMENT_MEDIA_EMBED,
+    ELEMENT_DIVIDER
+]
 const withStyledDraggables = (components: any) => {
     return withDraggables(components, [
         {
             level: 0,
-            keys: [
-                ELEMENT_PARAGRAPH,
-                ELEMENT_BLOCKQUOTE,
-                ELEMENT_TODO_LI,
-                ELEMENT_H1,
-                ELEMENT_H2,
-                ELEMENT_H3,
-                ELEMENT_H4,
-                ELEMENT_H5,
-                ELEMENT_H6,
-                ELEMENT_IMAGE,
-                ELEMENT_OL,
-                ELEMENT_UL,
-                ELEMENT_TABLE,
-                ELEMENT_MEDIA_EMBED,
-                ELEMENT_CODE_BLOCK,
-                PEAK_CALLOUT,
-                PEAK_LEARNING,
-                ELEMENT_EMBED_STUB,
-                ELEMENT_YOUTUBE_EMBED,
-                ELEMENT_TWITTER_EMBED,
-                ELEMENT_MEDIA_EMBED
-            ],
+            keys: DRAGGABLE_ELEMENTS,
             dragIcon: (
                 <DragIndicator
                     style={{
@@ -213,21 +233,6 @@ const withStyledDraggables = (components: any) => {
     ]);
 };
 
-export let defaultComponents = createSlatePluginsComponents({
-    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
-    [ELEMENT_LI]: PEAK_LI_STYLE,
-    [ELEMENT_UL]: PEAK_UL_STYLE,
-    [ELEMENT_OL]: PEAK_OL_STYLE,
-    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
-    [TITLE]: PeakTitleElement,
-    [PEAK_CALLOUT]: PeakCalloutElement,
-    [PEAK_LEARNING]: PeakLearningElement,
-    [ELEMENT_LINK]: PeakInlineLinkElement,
-    [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
-    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
-    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
-    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed
-})
 defaultComponents = withStyledPlaceHolders(defaultComponents)
 defaultComponents = withStyledDraggables(defaultComponents)
 

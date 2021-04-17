@@ -38,6 +38,7 @@ import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCallout
 import { createPeakLearningPlugin } from './plugins/peak-knowledge-plugin/PeakKnowledgePlugin';
 import {createPeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
 import {createPeakMediaEmbedPlugin} from "./plugins/peak-media-embed-plugin/createPeakMediaEmbedPlugin";
+import {createDividerPlugin} from "./plugins/peak-divider/createDividerPlugin";
 
 /**
  // THE OG PLUGINS
@@ -78,6 +79,9 @@ export const basePlugins: SlatePlugin[] = [
     createPeakCalloutPlugin(),
     createPeakLearningPlugin(),
     createPeakMediaEmbedPlugin(),
+
+    // TODO: submit this as an open-source plugin
+    createDividerPlugin(),
 
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),

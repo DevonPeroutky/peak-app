@@ -104,6 +104,7 @@ export const useNodeContentSelect = (
                     }
 
                     // Insert Normally
+                    console.log(`INSERTING `, data)
                     insertNodeContent(editor, data, targetRange)
                     resetNodeMenuItem()
                     return setTargetRange(null);

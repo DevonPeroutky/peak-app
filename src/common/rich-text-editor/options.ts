@@ -15,6 +15,7 @@ import {
     SoftBreakPluginOptions,
 } from "@udecode/slate-plugins";
 import {options} from "../../views/scratchpad/playground/defaultOptions";
+import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
 
 const PEAK_STRIKETHROUGH_OPTIONS: Partial<SlatePluginOptions> = {
     hotkey: 'mod+shift+x',
@@ -34,6 +35,7 @@ export const defaultOptions = createSlatePluginsOptions({
     [ELEMENT_TODO_LI]: PEAK_TODO_LIST_OPTIONS,
     [ELEMENT_H4]: DEFAULTS_H4,
     [ELEMENT_H5]: DEFAULTS_H5,
+    [ELEMENT_DIVIDER]: {}
 })
 
 const resetBlockTypesCommonRule = {
