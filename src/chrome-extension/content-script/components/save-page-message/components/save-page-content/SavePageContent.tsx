@@ -122,7 +122,7 @@ const PageNoteBody = (props: SavePageContentBodyProps) => {
 
     if (editingState === EDITING_STATE.Editing) {
         return (
-            <div className={"peak-extension-row-container editor"}>
+            <div className={"peak-extension-row-container peak-rich-text-editor-container editor"}>
                 <SaveNoteEditor onChange={updateThatBody} initialValue={body}/>
             </div>
         )
