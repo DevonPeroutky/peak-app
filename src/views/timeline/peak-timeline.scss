@@ -88,36 +88,50 @@
     .peak-timeline-item {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding-bottom: 50px;
 
       .ant-timeline-item-content {
+        width: 100%;
         margin-left: 30px;
         text-align: left!important;
         text-transform: capitalize;
 
-        .peak-timeline-item-body {
+        .peak-timeline-item-container {
           display: flex;
-          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
 
-          .title {
-            font-size: 1.25rem;
-            color: $text-color;
-            white-space: normal;
-            word-break: normal!important;
-            overflow-wrap: break-word!important;
-
-            &:hover {
-              color: $primary-blue;
-            }
+          .space-holder {
+            width: 20px;
+            height: 20px;
           }
 
-          .subtitle {
-            text-transform: uppercase;
-            color: $text-accent-color;
-            font-size: .69rem;
+          .peak-timeline-item-body {
+            display: flex;
+            flex-direction: column;
+            // flex-grow: 1
 
-            &:hover {
-              color: $darker-text-accent-color;
+            .title {
+              font-size: 1.25rem;
+              color: $text-color;
+              white-space: normal;
+              word-break: normal!important;
+              overflow-wrap: break-word!important;
+
+              &:hover {
+                color: $primary-blue;
+              }
+            }
+
+            .subtitle {
+              text-transform: uppercase;
+              color: $text-accent-color;
+              font-size: .69rem;
+
+              &:hover {
+                color: $darker-text-accent-color;
+              }
             }
           }
         }

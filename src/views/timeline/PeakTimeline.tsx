@@ -23,6 +23,7 @@ import {formatStringAsDate} from "../../utils/time";
 import {groupBy, head} from "ramda";
 import cn from "classnames";
 import {useBottomScrollListener} from "react-bottom-scroll-listener/dist";
+import {DeleteNoteConfirm} from "../../common/delete-note-popconfirm/DeleteNoteConfirm";
 
 const groupByDate = groupBy(function (note: PeakNote) {
     return formatStringAsDate(note.inserted_at)
@@ -103,17 +104,7 @@ export const PeakTimeline = (props: { }) => {
                                     </Timeline.Item>
                                     {
                                         notes.map(n =>
-                                            <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
-                                                <div className={"peak-timeline-item-body"}>
-                                                    {(n.note_type === ELEMENT_WEB_NOTE) ? <a target="_blank" href={n.url} className={"subtitle"}>{deriveHostname(n.url)}</a> : <span className={"subtitle"}>Note</span>}
-                                                    <Link to={buildNoteUrl(n.id)}>
-                                                        <span className={"title"}>{ n.title }</span>
-                                                    </Link>
-                                                    <div className="peak-note-tag-section">
-                                                        {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
-                                                    </div>
-                                                </div>
-                                            </Timeline.Item>
+                                            <NoteTimelineItem n={n}/>
                                         )
                                     }
                                 </>
@@ -148,21 +139,29 @@ const NoteAvatar = (props: { item: PeakNote }) => {
     }
 }
 
-
-const NoteIconSection = (props: { item: PeakNote }) => {
-    const { item } = props
-    const mockOut = () => {
-        message.info("Not implemented yet")
-    }
-    return (
-        <div className={"icon-section"}>
-            <Popconfirm title="Are you sure？" icon={<DeleteOutlined style={{ color: 'red' }}/>} onConfirm={mockOut}>
-                <DeleteOutlined />
-            </Popconfirm>
-        </div>
-    )
-}
-
 const dateTimelineIcon = (isFirst: boolean) => {
     return (isFirst) ? <CalendarOutlined className={"timeline-icon"} color={"#f0f0f0"}/> : <div className={"v-bar-icon"}/>
+}
+
+const NoteTimelineItem = (props: { n: PeakNote} ) => {
+    const { n } = props
+
+    const [hovered, setHovered] = useState(false)
+
+    return (
+        <Timeline.Item key={n.id} dot={<NoteAvatar item={n} />} className={"peak-timeline-item"}>
+            <div className={"peak-timeline-item-container"} onMouseOver={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                <div className={"peak-timeline-item-body"}>
+                    {(n.note_type === ELEMENT_WEB_NOTE) ? <a target="_blank" href={n.url} className={"subtitle"}>{deriveHostname(n.url)}</a> : <span className={"subtitle"}>Note</span>}
+                    <Link to={buildNoteUrl(n.id)}>
+                        <span className={"title"}>{ n.title }</span>
+                    </Link>
+                    <div className="peak-note-tag-section">
+                        {n.tag_ids.map(id => <PeakTagDisplay key={id} tagId={id}/>)}
+                    </div>
+                </div>
+                {(hovered) ? <DeleteNoteConfirm item={n}/> : <div className={"space-holder"}/>}
+            </div>
+        </Timeline.Item>
+    )
 }

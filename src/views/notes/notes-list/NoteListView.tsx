@@ -13,6 +13,7 @@ import {PeakTagDisplay} from "../../../common/peak-tag-display/PeakTagDisplay";
 import {PeakKnowledgeKeyOption} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 import {buildNoteUrl} from "../../../utils/notes";
 import {useCurrentUser} from "../../../utils/hooks";
+import {DeleteNoteConfirm} from "../../../common/delete-note-popconfirm/DeleteNoteConfirm";
 
 /**
  * Currently used exclusively for Books
@@ -115,10 +116,7 @@ const NoteIconSection = (props: { item: PeakNote }) => {
     }
     return (
         <div className={"icon-section"}>
-            <Popconfirm title="Are you sure？" icon={<DeleteOutlined style={{ color: 'red' }}/>} onConfirm={mockOut}>
-                <DeleteOutlined />
-            </Popconfirm>
+            <DeleteNoteConfirm item={item}/>
         </div>
     )
-
 }

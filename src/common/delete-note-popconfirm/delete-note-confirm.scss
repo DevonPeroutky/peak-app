@@ -1,0 +1,7 @@
+@import "../../constants/variables";
+.confirm-delete-icon {
+
+  &:hover {
+    color: $primary-red;
+  }
+}
