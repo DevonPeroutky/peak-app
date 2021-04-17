@@ -94,7 +94,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                             <Switch>
                                 <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
-                                <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
+                                <Route path={`${match.path}/draft`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {
                                     if (props.match.params && props.match.params.id) {
                                         return <PeakNoteView key={props.match.params.id} {...props} />

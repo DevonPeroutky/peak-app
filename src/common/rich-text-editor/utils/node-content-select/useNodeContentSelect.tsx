@@ -91,7 +91,9 @@ export const useNodeContentSelect = (
                             return new Promise(function(resolve, reject) {
                                 resetNodeMenuItem()
                                 resolve(setTargetRange(null))
-                            }).then(() => history.push(`/home/draft-book?title=${data.title}&author=${data.author}&cover-id=${data.coverId}`))
+                            }).then(() =>
+                                history.push(`/home/draft?note-type=${ELEMENT_PEAK_BOOK}&title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
+                            )
 
                         // IF Referencing a book
                         } else {
@@ -99,7 +101,6 @@ export const useNodeContentSelect = (
                                 resetNodeMenuItem()
                                 resolve(setTargetRange(null))
                             }).then(() => history.push(buildNoteUrl(data.noteId)))
-
                         }
                     }
 
