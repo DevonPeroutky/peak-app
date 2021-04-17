@@ -55,7 +55,6 @@ import {defaultEditableProps, usePeakPlugins} from "../../../common/rich-text-ed
 import {optionsAutoformat} from "./playground-autoformat-rules";
 import {defaultOptions} from "../../../common/rich-text-editor/options";
 import {defaultComponents} from "../../../common/rich-text-editor/components";
-import {basePlugins} from "../../../common/rich-text-editor/base_plugins";
 
 const id = 'Examples/Playground'
 

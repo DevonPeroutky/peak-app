@@ -47,7 +47,7 @@ import {createDividerPlugin} from "./plugins/peak-divider/createDividerPlugin";
  ];
 **/
 
-export const basePlugins: SlatePlugin[] = [
+const openSourcePlugins: SlatePlugin[] = [
     createReactPlugin(),
     createHistoryPlugin(),
     createParagraphPlugin(),
@@ -75,14 +75,26 @@ export const basePlugins: SlatePlugin[] = [
     createTrailingBlockPlugin({
         type: defaultOptions[ELEMENT_PARAGRAPH].type,
     }),
-    createPeakLinkPlugin(),
-    createPeakCalloutPlugin(),
-    createPeakLearningPlugin(),
-    createPeakMediaEmbedPlugin(),
 
-    // TODO: submit this as an open-source plugin
-    createDividerPlugin(),
 
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
 ];
+
+export const basePlugins: SlatePlugin[] = [
+    ...openSourcePlugins,
+    createPeakCalloutPlugin(),
+    // TODO: submit this as an open-source plugin
+    createDividerPlugin(),
+]
+
+const customPeakPlugins: SlatePlugin[] = [
+    createPeakLinkPlugin(),
+    createPeakLearningPlugin(),
+    createPeakMediaEmbedPlugin(),
+]
+
+export const peakPlugins: SlatePlugin[] = [
+    ...basePlugins,
+    ...customPeakPlugins
+]

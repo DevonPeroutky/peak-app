@@ -1,12 +1,10 @@
 import React, {useMemo} from "react";
-import {basePlugins} from "./base_plugins";
+import {basePlugins, peakPlugins} from "./base_plugins";
 import {defaultOptions} from "./options";
 import {
     createDeserializeHTMLPlugin,
-    createNormalizeTypesPlugin,
-    ELEMENT_H1,
-    SlatePlugin, SlatePlugins,
-    WithNormalizeTypes
+    SlatePlugin,
+    SlatePlugins,
 } from "@udecode/slate-plugins";
 import {defaultComponents} from "./components";
 import MemoizedLinkMenu from "./plugins/peak-link-plugin/link-menu/LinkMenu";
@@ -15,7 +13,6 @@ import {TNode} from "@udecode/slate-plugins-core/dist/types/TNode";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import cn from "classnames"
 import "./peak-editor.scss"
-import {TITLE} from "./types";
 
 const editorStyle: React.CSSProperties = {
     minHeight: "100%",
@@ -30,6 +27,15 @@ export const defaultEditableProps = {
 };
 
 export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
+    return useMemo(() => {
+        const plugins = (additionalPlugins) ? [...peakPlugins, ...additionalPlugins] : peakPlugins
+        plugins.push(createDeserializeHTMLPlugin({ plugins }));
+
+        return plugins
+    }, [additionalPlugins, defaultOptions])
+}
+
+export const useBasicPlugins = (additionalPlugins?: SlatePlugin[]) => {
     return useMemo(() => {
         const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
         plugins.push(createDeserializeHTMLPlugin({ plugins }));
@@ -78,6 +84,31 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChan
                     { (getNodeContentSelectProps) ? <NodeContentSelect {...getNodeContentSelectProps()}/> : null }
                 </div>
             </SlatePlugins>
+        </div>
+    )
+}
+
+export const PeakExtensionEditor = ({ additionalPlugins, currentPageId, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
+    // TODO
+    // Why the fuck is this needed
+    // useEffect(() => {
+    //     sleep(100).then(() => {
+    //         Transforms.select(editor, Editor.end(editor, []));
+    //         ReactEditor.focus(editor)
+    //     })
+    // }, [])
+
+    return (
+        <div className={cn("peak-rich-text-editor-container", (className) ? className : "")}>
+            <SlatePlugins
+                id={currentPageId}
+                plugins={usePeakPlugins(additionalPlugins)}
+                components={defaultComponents}
+                options={defaultOptions}
+                editableProps={defaultEditableProps}
+                onChange={onChange}
+                initialValue={initialValue}
+            />
         </div>
     )
 }

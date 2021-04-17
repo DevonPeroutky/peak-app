@@ -6,29 +6,30 @@ import {Node} from "slate";
 import {equals} from "ramda";
 import {defaultComponents} from "../../../../../../../common/rich-text-editor/components";
 import {defaultOptions} from "../../../../../../../common/rich-text-editor/options";
-import {defaultEditableProps, usePeakPlugins} from "../../../../../../../common/rich-text-editor/editorFactory";
+import {
+    defaultEditableProps,
+    useBasicPlugins,
+    usePeakPlugins
+} from "../../../../../../../common/rich-text-editor/editorFactory";
 
-export const SaveNoteEditor = (props: { content: Node[], setContent: (newValue: Node[]) => void, editor: ReactEditor }) => {
-    const { content, setContent, editor } = props
+export const SaveNoteEditor = (props: { initialValue: Node[], onChange: (newValue: Node[]) => void }) => {
+    const { initialValue, onChange } = props
 
     const updatePageContent = (newValue: Node[]) => {
-        if (!equals(newValue, content)) {
-            setContent(newValue)
+        if (!equals(newValue, initialValue)) {
+            onChange(newValue)
         }
     }
 
     return (
         <SlatePlugins
             id={"extensionNoteEditor"}
-            plugins={usePeakPlugins()}
+            plugins={useBasicPlugins()}
             components={defaultComponents}
             onChange={updatePageContent}
             options={defaultOptions}
             editableProps={defaultEditableProps}
-            initialValue={content}
-        >
-            {/*<div className="peak-save-note-editor-container">*/}
-            {/*</div>*/}
-        </SlatePlugins>
+            initialValue={initialValue}
+        />
     )
 }
