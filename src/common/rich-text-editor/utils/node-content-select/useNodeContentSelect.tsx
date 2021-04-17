@@ -18,7 +18,7 @@ import {
     isTextAfterTrigger
 } from "./utils";
 import {useBooks} from "../../../../client/notes";
-import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM} from "../../plugins/peak-knowledge-plugin/constants";
+import {ELEMENT_PEAK_BOOK, PEAK_BOOK_SELECT_ITEM, PEAK_LEARNING} from "../../plugins/peak-knowledge-plugin/constants";
 import {isAtTopLevelOfEditor} from "../base-utils";
 import {OpenLibraryBook, useDebounceOpenLibrarySearcher} from "../../../../client/openLibrary";
 import {useHistory} from "react-router-dom";
@@ -85,6 +85,16 @@ export const useNodeContentSelect = (
                     Transforms.select(editor, targetRange);
                     Transforms.insertText(editor, '')
 
+
+                    if (data.elementType === PEAK_LEARNING) {
+                        return new Promise(function(resolve, reject) {
+                            resetNodeMenuItem()
+                            resolve(setTargetRange(null))
+                        }).then(() =>
+                            history.push(`/home/draft-note`)
+                        )
+                    }
+
                     if (data.elementType === ELEMENT_PEAK_BOOK) {
                         // IF CREATING A NEW BOOK
                         if (data.knowledgeNodeId && data.knowledgeNodeId === "-1" || data.knowledgeNodeId === "-69") {
@@ -92,7 +102,7 @@ export const useNodeContentSelect = (
                                 resetNodeMenuItem()
                                 resolve(setTargetRange(null))
                             }).then(() =>
-                                history.push(`/home/draft?note-type=${ELEMENT_PEAK_BOOK}&title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
+                                history.push(`/home/draft-book?note-type=${ELEMENT_PEAK_BOOK}&title=${data.title}&author=${data.author}&cover-id=${data.coverId}`)
                             )
 
                         // IF Referencing a book

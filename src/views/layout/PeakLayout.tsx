@@ -19,7 +19,7 @@ import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 import {establishSocketConnection, socket, subscribeToUserNoteChannel} from "../../utils/socketUtil";
 import {PeakNoteListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
-import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
+import {DraftLearningNoteView, PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
 import {
     ELEMENT_PEAK_BOOK,
     ELEMENT_WEB_NOTE
@@ -94,7 +94,8 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                             <Switch>
                                 <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
-                                <Route path={`${match.path}/draft`} render={(props) => <PeakDraftNoteView />} />
+                                <Route path={`${match.path}/draft-note`} render={(props) => <DraftLearningNoteView />} />
+                                <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {
                                     if (props.match.params && props.match.params.id) {
                                         return <PeakNoteView key={props.match.params.id} {...props} />

@@ -5,7 +5,11 @@ import {AutoComplete} from "antd";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5 } from "@udecode/slate-plugins";
 import {JOURNAL, TIMELINE, TITLE} from "../../rich-text-editor/types";
 import {PeakDisplayNode} from "../../../redux/slices/user/types";
-import {ELEMENT_PEAK_BOOK, ELEMENT_WEB_NOTE} from "../../rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {
+    ELEMENT_PEAK_BOOK,
+    ELEMENT_WEB_NOTE,
+    PEAK_LEARNING
+} from "../../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {ImageLoader} from "../../image-loader/ImageLoader";
 const bookmark = require('../../../assets/icons/bookmark.svg');
 const { Option } = AutoComplete;
@@ -22,6 +26,8 @@ const QuickSwitchItem = (props: { node: PeakDisplayNode }) => {
                 return <img src={bookmark} className={"quick-switch-item-icon"}/>
                 // return <EditOutlined className="quick-switch-item-icon"/>
                 // return <ImageLoader className={"quick-switch-item-icon"} url={node.cover_image_url} fallbackElement={<EditOutlined className="quick-switch-item-icon"/>}/>
+            case PEAK_LEARNING:
+                return <EditOutlined className="quick-switch-item-icon"/>
             case TITLE:
                 return <FileOutlined className="quick-switch-item-icon"/>
             case JOURNAL:

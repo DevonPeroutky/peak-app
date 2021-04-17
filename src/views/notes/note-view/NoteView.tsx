@@ -3,7 +3,10 @@ import {useCurrentNote, useDebouncePeakNoteSaver} from "../../../client/notes";
 import {PeakNote} from "../../../redux/slices/noteSlice";
 import {Link, useHistory} from "react-router-dom";
 import "./note-view.scss"
-import {ELEMENT_WEB_NOTE} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {
+    ELEMENT_WEB_NOTE,
+    PEAK_LEARNING
+} from "../../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {PeakNoteEditor} from "./note-editor/PeakNoteEditor";
 import {Divider, Input} from "antd";
 import {useCurrentUser} from "../../../utils/hooks";
@@ -11,6 +14,7 @@ import {useLoadTags} from "../../../utils/tags";
 import {PeakTag} from "../../../types";
 import {WebNoteHeaderSection} from "./note-header/web-note-header/WebNoteHeader";
 import {BookHeaderSection} from "./note-header/book-header/BookHeader";
+import {NextGenNoteView} from "../../note-view-v2/NextGenNoteView";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -34,6 +38,10 @@ export const PeakNoteView = (props) => {
     const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthor(e.target.value)
         noteSaver(currentUser, currentNote.id, { author: e.target.value })
+    }
+
+    if (currentNote.note_type === PEAK_LEARNING) {
+        return <NextGenNoteView note={currentNote}/>
     }
 
     return (

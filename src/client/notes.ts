@@ -2,22 +2,18 @@ import peakAxiosClient from "./axiosConfig";
 import {useSelector} from "react-redux";
 import {AppState} from "../redux";
 import {store} from "../redux/store";
-import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
-import {upsertNote, deleteNote, PeakNote, setNotes, updateNote, STUB_BOOK_ID, appendNotes} from "../redux/slices/noteSlice";
+import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {appendNotes, deleteNote, PeakNote, STUB_BOOK_ID, updateNote, upsertNote} from "../redux/slices/noteSlice";
 import {useHistory, useLocation} from "react-router-dom";
 import {Node} from "slate";
 import {useCallback} from "react";
 import {debounce} from "lodash";
-import {useBulkJournalEntrySaver, useJournal} from "../utils/hooks";
-import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
-import {ELEMENT_PARAGRAPH} from "@udecode/slate-plugins";
-import {EMPTY_PARAGRAPH_NODE} from "../common/rich-text-editor/editors/constants";
-import {getTodayEntry} from "../utils/journal";
 import {endSavingPage} from "../redux/slices/activeEditor/activeEditorSlice";
 import {deleteNoteRequest} from "./webNotes";
 import {AxiosResponse} from "axios";
 import {PaginationResponse} from "./types";
+import {PeakKnowledgeKeyOption} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 
 interface UpdateNotePayload {
     body?: Node[],
@@ -27,22 +23,18 @@ interface UpdateNotePayload {
 }
 interface CreateNotePayload {
     title: string,
-    author: string,
-    coverImageUrl: string
+    author?: string,
+    coverImageUrl?: string
+    note_type: PeakKnowledgeKeyOption
 }
 interface NoteListResponse extends PaginationResponse {
     books: PeakNote[]
 }
 
 // Requests
-function createNoteRequest(userId: string, book: {title: string, coverImageUrl: string, author: string}) {
+function createBookRequest(userId: string, book: CreateNotePayload) {
     return peakAxiosClient.post(`/api/v1/users/${userId}/books`, {
-        "book": {
-            title: book.title,
-            cover_image_url: book.coverImageUrl,
-            author: book.author,
-            note_type: ELEMENT_PEAK_BOOK
-        }
+        "book": book
     })
 }
 function updateNoteRequest(userId: string, noteId: string, book: UpdateNotePayload) {
@@ -82,14 +74,11 @@ export function loadPeakNotes(userId: string, cursor?: string): Promise<AxiosRes
     })
 }
 export function createNewPeakBook(userId: string, book: CreateNotePayload): Promise<PeakNote> {
-    function createPeakNote(userId: string, book: CreateNotePayload): Promise<PeakNote> {
-        return createNoteRequest(userId, book).then(res => {
-            const created_book = res.data.book as PeakNote
-            store.dispatch(upsertNote(created_book))
-            return created_book
-        })
-    }
-    return createPeakNote(userId, book)
+    return createBookRequest(userId, book).then(res => {
+        const created_book = res.data.book as PeakNote
+        store.dispatch(upsertNote(created_book))
+        return created_book
+    })
 }
 export function updatePeakNote(user: Peaker, noteId: string, note: UpdateNotePayload) {
     return updateNoteRequest(user.id, noteId, note ).then(res => {
@@ -140,12 +129,26 @@ export function useDebouncePeakNoteSaver() {
     return useCallback(debounce(updatePeakNote, 1500), [])
 }
 
-export function usePeakNoteCreator() {
-    return (user: Peaker, book: CreateNotePayload) => {
-        return createNewPeakBook(user.id, book)
+export function usePeakBookCreator() {
+    return (user: Peaker, title: string, author: string | undefined, coverImageUrl: string | undefined) => {
+        return createBookRequest(user.id, {
+            title: title,
+            author: author,
+            coverImageUrl: coverImageUrl,
+            note_type: ELEMENT_PEAK_BOOK
+        }).then(res => {
+            const created_book = res.data.book as PeakNote
+            store.dispatch(upsertNote(created_book))
+            return created_book
+        })
     }
 }
 
+export function usePeakNoteCreator() {
+    return (user: Peaker) => {
+        return createNewPeakBook(user.id, { title: "Untitled", note_type: PEAK_LEARNING })
+    }
+}
 // ----------------------------------------------------
 // DEPRECATED
 // ----------------------------------------------------

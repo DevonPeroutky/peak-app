@@ -27,6 +27,7 @@ export const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTi
             <div className={"note-header-row"}>
                 <TextArea
                     className={"web-title-input"}
+                    placeholder={"Title of Note"}
                     bordered={false}
                     onChange={onTitleChange}
                     autoSize={{minRows: 1, maxRows: 8}}

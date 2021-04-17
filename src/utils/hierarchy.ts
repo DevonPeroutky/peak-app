@@ -1,17 +1,28 @@
-import { Node } from "slate";
-import { keyBy, transform, isObject} from "lodash";
+import {Node} from "slate";
+import {capitalize, cloneDeep, isObject, keyBy, transform} from "lodash";
 import {PeakDisplayNode, PeakNode, PeakNodeType, PeakStructureNode, PeakTopicNode} from "../redux/slices/user/types";
-import { useSelector} from "react-redux";
-import { AppState} from "../redux";
-import { cloneDeep} from "lodash";
-import { TreeNodeNormal} from "antd/es/tree/Tree";
-import { capitalize } from "lodash";
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6, KEYS_HEADING } from "@udecode/slate-plugins";
+import {useSelector} from "react-redux";
+import {AppState} from "../redux";
+import {TreeNodeNormal} from "antd/es/tree/Tree";
+import {
+    ELEMENT_H1,
+    ELEMENT_H2,
+    ELEMENT_H3,
+    ELEMENT_H4,
+    ELEMENT_H5,
+    ELEMENT_H6,
+    KEYS_HEADING
+} from "@udecode/slate-plugins";
 import {TITLE} from "../common/rich-text-editor/types";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {buildNoteUrl} from "./notes";
-import {ELEMENT_PEAK_BOOK} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {
+    ELEMENT_PEAK_BOOK,
+    ELEMENT_WEB_NOTE,
+    PEAK_LEARNING
+} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {deriveHostname} from "./urls";
+import {PeakKnowledgeKeyOption} from "../common/rich-text-editor/plugins/peak-knowledge-plugin/types";
 
 const priority = (node: PeakStructureNode) => {
     const HIERARCHY_PRIORITIES: string[] = [TITLE, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6].map(x => x as string)
@@ -91,18 +102,31 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 // Exported Functions
 // --------------------------------------------
 export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], notes: PeakNote[]): PeakDisplayNode[] {
-    const journalNode: PeakDisplayNode = {
+
+    const choosePath = (note: PeakNote) => {
+        switch (note.note_type) {
+            case PEAK_LEARNING:
+                return "My Note"
+            case ELEMENT_PEAK_BOOK:
+                return capitalize(note.author)
+            case ELEMENT_WEB_NOTE:
+                return deriveHostname(note.url)
+        }
+    }
+    const scratchPadNode: PeakDisplayNode = {
         title: "Scratchpad",
         url: "/home/scratchpad",
         header_type: "scratchpad"
     }
+
     const noteNodes: PeakDisplayNode[] = notes.map(n => ({
         title: n.title,
         url: buildNoteUrl(n.id),
         icon_url: n.icon_url,
-        path: (n.note_type === ELEMENT_PEAK_BOOK) ? capitalize(n.author) : deriveHostname(n.url),
+        path: choosePath(n),
         header_type: n.note_type,
     }))
+
 
     function convertToDisplayNode(node: PeakStructureNode, path: string): PeakDisplayNode {
         const headerString = (node.header_id) ? `#${node.header_id}` : ""
@@ -134,7 +158,7 @@ export function convertHierarchyToSearchableList(hierarchy: PeakTopicNode[], not
             addNodes(peakNode, parentPath, theList)
         })
     })
-    return [journalNode, ...noteNodes, ...theList]
+    return [scratchPadNode, ...noteNodes, ...theList]
 }
 
 export function convertPeakNodeToTreeNode(obj: PeakNode): TreeNodeNormal {
