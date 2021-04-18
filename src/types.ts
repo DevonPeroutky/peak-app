@@ -13,7 +13,7 @@ export interface Peaker {
     peak_user_id: string,
     image_url: string,
     email: string,
-    name: string,
+    family_name: string,
     given_name: string,
     access_token: string,
     hierarchy: PeakTopicNode[]

@@ -53,7 +53,7 @@ export const ProfileDropdown = (props: {}) => {
                             <span>{deriveEmailDomain(user.email)}</span>
                             <CaretDownOutlined style={{fontSize: "10px", marginLeft: "5px"}}/>
                         </div>
-                        <div className={"name"}>{user.given_name}</div>
+                        <div className={"name"}>{user.given_name} {user.family_name}</div>
                     </div>
                 </div>
             </Dropdown>

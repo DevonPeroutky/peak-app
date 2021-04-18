@@ -18,7 +18,6 @@ import {
 
 export const insertMediaEmbedStub = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED) => {
     const nodeId = Date.now()
-    console.log(`CREATING A MEDIA EMBED STUB: ${mediaEmbedType}`)
     const mediaEmbedNode = {
         type: ELEMENT_EMBED_STUB,
         embed_type: mediaEmbedType,
@@ -26,8 +25,6 @@ export const insertMediaEmbedStub = (editor: SPEditor, mediaEmbedType: PEAK_MEDI
         children: [{text: ''}]
     }
 
-    // DOESN'T WORK in first line of JOURNAL due to normalization error
-    // Transforms.removeNodes(editor)
     Transforms.insertNodes(editor, [
         mediaEmbedNode,
         EMPTY_PARAGRAPH_NODE()
@@ -61,7 +58,7 @@ export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbe
     insertMediaEmbedded(editor, mediaEmbedType, embedded_url, stubNode[1], additionalProps)
 }
 
-export const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED, url: string | ArrayBuffer, path: number[], additionalProps) => {
+const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA_EMBED, url: string | ArrayBuffer, path: number[], additionalProps) => {
     Transforms.removeNodes(editor, { at: path })
     const text = { text: '' };
     const image = {
@@ -72,3 +69,4 @@ export const insertMediaEmbedded = (editor: SPEditor, mediaEmbedType: PEAK_MEDIA
     };
     insertNodes<TElement>(editor, image, { at: path });
 };
+
