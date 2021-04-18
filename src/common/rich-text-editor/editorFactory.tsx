@@ -1,21 +1,20 @@
 import React, {useMemo} from "react";
-import {basePlugins} from "./base_plugins";
+import {usePeakPlugins} from "./plugins";
 import {defaultOptions} from "./options";
 import {
-    createDeserializeHTMLPlugin,
-    createNormalizeTypesPlugin,
-    ELEMENT_H1,
-    SlatePlugin, SlatePlugins,
-    WithNormalizeTypes
+    Options, PlaceholderProps,
+    SlatePlugin,
+    SlatePlugins,
 } from "@udecode/slate-plugins";
-import {defaultComponents} from "./components";
 import MemoizedLinkMenu from "./plugins/peak-link-plugin/link-menu/LinkMenu";
 import {NodeContentSelect, NodeContentSelectProps} from "./utils/node-content-select/components/NodeContentSelect";
 import {TNode} from "@udecode/slate-plugins-core/dist/types/TNode";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import cn from "classnames"
-import "./peak-editor.scss"
-import {TITLE} from "./types";
+import "../../constants/peak-editor.scss"
+import {useComponents} from "./components";
+import {DEFAULT_PLACEHOLDERS} from "./constants";
+import {contains, includes} from "ramda";
 
 const editorStyle: React.CSSProperties = {
     minHeight: "100%",
@@ -29,25 +28,30 @@ export const defaultEditableProps = {
     style: editorStyle,
 };
 
-export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
-    return useMemo(() => {
-        const plugins = (additionalPlugins) ? [...basePlugins, ...additionalPlugins] : basePlugins
-        plugins.push(createDeserializeHTMLPlugin({ plugins }));
-
-        return plugins
-    }, [additionalPlugins, defaultOptions])
-}
-
 export interface PeakEditorProps {
     additionalPlugins?: SlatePlugin[],
     onChange: (value: TNode[]) => void
     getNodeContentSelectProps?: () => NodeContentSelectProps
     className?: string
     initialValue: any
+    enableDnD?: boolean
+    placeholderOverrides?: Options<PlaceholderProps>[]
     currentPageId: string
 }
-export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChange, initialValue, getNodeContentSelectProps, ...props}: PeakEditorProps) => {
+export const PeakEditor = ({
+                               additionalPlugins,
+                               currentPageId,
+                               className,
+                               onChange,
+                               initialValue,
+                               placeholderOverrides,
+                               enableDnD,
+                               getNodeContentSelectProps,
+                               ...props
+}: PeakEditorProps) => {
     const editorState = useActiveEditorState()
+    const dragAndDrop: boolean = (enableDnD === undefined) ? true : enableDnD
+    const nodePlaceholders: Options<PlaceholderProps>[] = (placeholderOverrides) ? [...DEFAULT_PLACEHOLDERS.filter(p => !includes(p.key, placeholderOverrides.map(po => po.key))), ...placeholderOverrides] : DEFAULT_PLACEHOLDERS
 
     // TODO
     // Why the fuck is this needed
@@ -63,7 +67,7 @@ export const PeakEditor = ({ additionalPlugins, currentPageId, className, onChan
             <SlatePlugins
                 id={currentPageId}
                 plugins={usePeakPlugins(additionalPlugins)}
-                components={defaultComponents}
+                components={useComponents(dragAndDrop, nodePlaceholders)}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
                 onChange={onChange}

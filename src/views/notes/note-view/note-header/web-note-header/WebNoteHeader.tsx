@@ -1,7 +1,7 @@
 import {PeakNote} from "../../../../../redux/slices/noteSlice";
 import {PeakTag} from "../../../../../types";
 import {Link} from "react-router-dom";
-import {CaretLeftFilled, CaretRightFilled} from "@ant-design/icons/lib";
+import {CaretLeftFilled, CaretRightFilled, SelectOutlined} from "@ant-design/icons/lib";
 import {capitalize_and_truncate} from "../../../../../utils/strings";
 import {deriveHostname} from "../../../../../utils/urls";
 import { YoutubeVideoContainer } from "../../../../../common/media-embeds/youtube-container/YoutubeContainer";
@@ -18,15 +18,15 @@ export const WebNoteHeaderSection = (props: {note: PeakNote, title: string, onTi
     return (
         <div className={"note-header-section web_note"}>
             <div className={"note-subheader-section"}>
-                <Link to={`/home/notes`} className={"note-link-container"}><CaretLeftFilled/> Back to notes</Link>
                 <a href={note.url} target={"_blank"} className={"note-link-container"}>
                     <img className={"note-web-icon"} src={note.icon_url}/>
-                    <span className={"note-url"}>{`${capitalize_and_truncate(deriveHostname(note.url))}`} <CaretRightFilled/></span>
+                    <span className={"note-url"}>{`${capitalize_and_truncate(deriveHostname(note.url))}`} <SelectOutlined style={{ marginLeft: "5px"}}/></span>
                 </a>
             </div>
             <div className={"note-header-row"}>
                 <TextArea
                     className={"web-title-input"}
+                    placeholder={"Title of Note"}
                     bordered={false}
                     onChange={onTitleChange}
                     autoSize={{minRows: 1, maxRows: 8}}

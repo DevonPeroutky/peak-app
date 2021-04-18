@@ -3,7 +3,7 @@ import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
 import "./saved-page-header-content.scss"
 import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {GoBackButton, UndoCloseButton} from "./undo-close-button/UndoCloseButton";
-import {LinkOutlined, LoadingOutlined} from "@ant-design/icons/lib";
+import {LoadingOutlined} from "@ant-design/icons/lib";
 import {Spin} from "antd";
 
 export const SavePageHeaderContent = (props: { saving: SUBMISSION_STATE, editing: EDITING_STATE, sendDeletePageMessage: () => void, goBack: () => void }) => {

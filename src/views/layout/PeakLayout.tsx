@@ -17,13 +17,10 @@ import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {loadEntireWorldForAllAccounts} from "../../utils/loading-util";
 import {establishSocketConnection, socket, subscribeToUserNoteChannel} from "../../utils/socketUtil";
-import {PeakNoteListView} from "../notes/notes-list/NoteListView";
+import {PeakBookListView} from "../notes/notes-list/NoteListView";
 import {PeakNoteView} from "../notes/note-view/NoteView";
-import {PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
-import {
-    ELEMENT_PEAK_BOOK,
-    ELEMENT_WEB_NOTE
-} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
+import {DraftLearningNoteView, PeakDraftNoteView} from "../notes/note-view/DraftNoteView";
+import { ELEMENT_PEAK_BOOK } from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {isElectron} from "../../utils/environment";
 import cn from "classnames"
 import {PeakScratchpad} from "../scratchpad/Scratchpad";
@@ -93,6 +90,7 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                             <Switch>
                                 <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
+                                <Route path={`${match.path}/draft-note`} render={(props) => <DraftLearningNoteView />} />
                                 <Route path={`${match.path}/draft-book`} render={(props) => <PeakDraftNoteView />} />
                                 <Route path={`${match.path}/notes/:id`} render={(props) => {
                                     if (props.match.params && props.match.params.id) {
@@ -102,10 +100,9 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                                     }
                                 }} />
                                 <Route path={`${match.path}/notes`} render={(props) => <PeakTimeline/>} />
-                                <Route path={`${match.path}/books`} render={(props) => <PeakNoteListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
+                                <Route path={`${match.path}/books`} render={(props) => <PeakBookListView page_header={"books"} note_type={ELEMENT_PEAK_BOOK}/>} />
                                 <Route path={`${match.path}/reading-list`} render={(props) => <PeakReadingList />} />
                                 <Route path={`${match.path}/timeline`} render={(props) => <PeakTimeline />} />
-                                <Route path={`${match.path}/old`} render={(props) => <PeakNoteListView page_header={"Bookmarks"} note_type={ELEMENT_WEB_NOTE}/>} />
                                 <Route path={`${match.path}/welcome`} render={(props) => <PeakWelcome />} />
                                 <Route path={`${match.path}/wiki/:id`} render={(props) => {
                                     if (currentWikiPage) {

@@ -6,7 +6,7 @@ import {
     ELEMENT_H3,
     ELEMENT_H4,
     ELEMENT_H5,
-    ELEMENT_IMAGE, ELEMENT_LI,
+    ELEMENT_LI,
     ELEMENT_LINK,
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
@@ -27,7 +27,6 @@ import {
     InfoCircleOutlined,
     ItalicOutlined,
     LinkOutlined,
-    MinusOutlined,
     OrderedListOutlined,
     PictureOutlined,
     RightOutlined,
@@ -36,7 +35,6 @@ import {
     UnderlineOutlined,
     UnorderedListOutlined,
     BookOutlined,
-    ReadOutlined,
     BulbOutlined
 } from "@ant-design/icons/lib";
 import { Icon, InlineIcon } from '@iconify/react';
@@ -46,14 +44,13 @@ import headingH3 from '@iconify/icons-gridicons/heading-h3';
 import headingH4 from '@iconify/icons-gridicons/heading-h4';
 import headingH5 from '@iconify/icons-gridicons/heading-h5';
 import {message} from "antd";
-import {Editor, Transforms} from "slate";
-import {DIVIDER} from "../rich-text-editor/types";
 import {PEAK_CALLOUT} from "../rich-text-editor/plugins/peak-callout-plugin/defaults";
 import {insertCustomBlockElement} from "../rich-text-editor/utils/base-utils";
 import {PeakNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/types";
 import {convertEditorControlDisplayToNodeSelectListItem} from "../rich-text-editor/utils/node-content-select/utils";
 import {PEAK_LEARNING, PEAK_BOOK_SELECT_ITEM} from "../rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {defaultOptions} from "../rich-text-editor/options";
+import {PEAK_DIVIDER} from "../rich-text-editor/plugins/peak-divider/constants";
 import {PEAK_MEDIA_EMBED_CONTROLS} from "../rich-text-editor/plugins/peak-media-embed-plugin/constants";
 
 export interface PeakEditorControl {
@@ -220,21 +217,6 @@ const PEAK_BOOK_NOTE_SELECT_ITEM: PeakEditorControlDisplay = {
 //     elementType: ELEMENT_PEAK_BOOK,
 //     customFormat: (editor => insertCustomBlockElement(editor, ELEMENT_PEAK_BOOK))
 // };
-const DIVIDER_MARK: PeakEditorControlDisplay = {
-    controlType: undefined,
-    description: "Separate content with a horizontal line",
-    icon: <MinusOutlined className={"peak-editor-control-icon"}/>,
-    label: "Divider",
-    elementType: DIVIDER,
-};
-// const IMAGE_MARK: PeakEditorControlDisplay = {
-//     controlType: ELEMENT_IMAGE,
-//     description: "Add images to your page",
-//     icon: <PictureOutlined className={"peak-editor-control-icon"}/>,
-//     label: "Image",
-//     customFormat: (editor => message.info("Just copy an image or link and paste into the editor")),
-//     elementType: ELEMENT_IMAGE,
-// };
 
 const NORMAL_TEXT: PeakEditorControlDisplay = {
     icon: <PictureOutlined className={"peak-editor-control-icon"}/>,
@@ -315,7 +297,7 @@ export const NODE_CONTENT_TYPES: PeakEditorControlDisplay[] = [
     PEAK_QUOTE,
     TABLE_MARK,
     PEAK_CALLOUT_BLOCK,
-    DIVIDER_MARK,
+    PEAK_DIVIDER,
     PEAK_LEARNING_BLOCK,
     PEAK_BOOK_NOTE_SELECT_ITEM,
     // IMAGE_MARK
@@ -325,7 +307,7 @@ export const NODE_CONTENT_LIST_ITEMS: PeakNodeSelectListItem[] = [...NODE_CONTEN
 // These three below are only used for Toolbar and are thus deprecated
 export const BASIC_EDITOR_CONTROLS: PeakEditorControl[] = [BOLD_MARK, ITALIC_MARK, UNDERLINE_MARK, STRIKETHROUGH_MARK];
 export const LIST_EDITOR_CONTROLS: PeakEditorControl[] = [UNORDERED_LIST, ORDERED_LIST];
-export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, DIVIDER_MARK];
+export const RICH_EDITOR_CONTROLS: PeakEditorControl[] = [PEAK_QUOTE, TABLE_MARK, PEAK_CALLOUT_BLOCK, PEAK_DIVIDER];
 
 // Undo, Clear formatting, Code?, Redo, Emoji, Quick Insert?
 export const KEYBOARD_SHORTCUTS: PeakEditorControlDisplay[] = [

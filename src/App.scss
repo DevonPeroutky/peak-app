@@ -13,26 +13,3 @@
 body {
   font-family: "Inter"!important;
 }
-
-// The styles below apply to all editors. Don't have a good place to put them yet
-.peak-blockquote {
-  font-style: italic;
-  font-size: 1.5em;
-  font-weight: 600;
-  //color: #6b7280;
-}
-
-.peak-code-block {
-  background-color: #252f3f;
-  color: #e5e7eb;
-
-  overflow-x: auto;
-  font-size: .875em;
-  line-height: 1.7142857;
-  margin-top: 1.7142857em;
-  margin-bottom: 1.7142857em;
-  border-radius: .375rem;
-  padding: .8571429em 1.1428571em;
-  white-space: pre;
-}
-

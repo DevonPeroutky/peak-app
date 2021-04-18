@@ -19,7 +19,7 @@ export interface PeakDisplayNode {
     header_type: PeakNodeType
 }
 
-export type PeakNodeType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "title" | "journal" | "timeline" | "peak_web_note" | "peak_book_note" | string
+export type PeakNodeType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "title" | "journal" | "timeline" | "peak_web_note" | "peak_book_note" | string | "learning"
 export interface PeakStructureNode extends PeakNode {
     parent: PeakStructureNode | null
     children: PeakStructureNode[]

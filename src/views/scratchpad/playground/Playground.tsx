@@ -51,11 +51,12 @@ import {
     optionsResetBlockTypePlugin,
     optionsSoftBreakPlugin,
 } from "./playground-utils";
-import {defaultEditableProps, usePeakPlugins} from "../../../common/rich-text-editor/editorFactory";
+import {defaultEditableProps} from "../../../common/rich-text-editor/editorFactory";
 import {optionsAutoformat} from "./playground-autoformat-rules";
 import {defaultOptions} from "../../../common/rich-text-editor/options";
-import {defaultComponents} from "../../../common/rich-text-editor/components";
-import {basePlugins} from "../../../common/rich-text-editor/base_plugins";
+import {usePeakPlugins} from "../../../common/rich-text-editor/plugins";
+import {useComponents} from "../../../common/rich-text-editor/components";
+import {DEFAULT_PLACEHOLDERS} from "../../../common/rich-text-editor/constants";
 
 const id = 'Examples/Playground'
 
@@ -116,7 +117,7 @@ export const Plugins = () => {
             <SlatePlugins
                 id={id}
                 plugins={usePeakPlugins()}
-                components={defaultComponents}
+                components={useComponents(true, DEFAULT_PLACEHOLDERS)}
                 options={defaultOptions}
                 editableProps={defaultEditableProps}
                 initialValue={initialValueHighlight}

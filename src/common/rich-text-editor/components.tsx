@@ -12,13 +12,12 @@ import {
     ELEMENT_PARAGRAPH,
     ELEMENT_TABLE,
     ELEMENT_TODO_LI,
-    ELEMENT_UL,
+    ELEMENT_UL, Options, PlaceholderProps, SlatePlugin,
     withDraggables,
     withPlaceholders,
 } from "@udecode/slate-plugins";
 import {DragIndicator} from "@styled-icons/material/DragIndicator";
-import React from "react";
-import {cloneDeep} from "lodash";
+import React, {useMemo} from "react";
 import {
     PEAK_LI_STYLE,
     PEAK_OL_STYLE,
@@ -43,83 +42,37 @@ import {
     TwitterEmbed,
     YoutubeEmbed
 } from "./plugins/peak-media-embed-plugin/components/embedded_content/EmbeddedContent";
+import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
+import {DividerElement} from "./plugins/peak-divider/element/DividerElement";
+import {clone} from "ramda";
+import {DRAGGABLE_ELEMENTS} from "./constants";
 
-const withStyledPlaceHolders = (components: any) =>
-    withPlaceholders(components, [
-        {
-            key: TITLE,
-            placeholder: 'Page Title',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_PARAGRAPH,
-            placeholder: 'Type \'/\' for commands',
-            hideOnBlur: true,
-        },
-        {
-            key: ELEMENT_H1,
-            placeholder: 'Heading 1',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H2,
-            placeholder: 'Heading 2',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H3,
-            placeholder: 'Heading 3',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H4,
-            placeholder: 'Heading 4',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H5,
-            placeholder: 'Heading 5',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_H6,
-            placeholder: 'Heading 6',
-            hideOnBlur: false,
-        },
-        {
-            key: ELEMENT_CODE_BLOCK,
-            placeholder: 'Type some code',
-            hideOnBlur: false,
-        },
-    ]);
+const defaultComponents = createSlatePluginsComponents({
+    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
+    [ELEMENT_LI]: PEAK_LI_STYLE,
+    [ELEMENT_UL]: PEAK_UL_STYLE,
+    [ELEMENT_OL]: PEAK_OL_STYLE,
+    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
+    [TITLE]: PeakTitleElement,
+    [PEAK_CALLOUT]: PeakCalloutElement,
+    [PEAK_LEARNING]: PeakLearningElement,
+    [ELEMENT_LINK]: PeakInlineLinkElement,
+    [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
+    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
+    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
+    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed,
+    [ELEMENT_DIVIDER]: DividerElement,
+})
+
+const withStyledPlaceHolders = (components: any, placeholders: Options<PlaceholderProps>[]) => {
+    return withPlaceholders(components, placeholders);
+}
 
 const withStyledDraggables = (components: any) => {
     return withDraggables(components, [
         {
             level: 0,
-            keys: [
-                ELEMENT_PARAGRAPH,
-                ELEMENT_BLOCKQUOTE,
-                ELEMENT_TODO_LI,
-                ELEMENT_H1,
-                ELEMENT_H2,
-                ELEMENT_H3,
-                ELEMENT_H4,
-                ELEMENT_H5,
-                ELEMENT_H6,
-                ELEMENT_IMAGE,
-                ELEMENT_OL,
-                ELEMENT_UL,
-                ELEMENT_TABLE,
-                ELEMENT_MEDIA_EMBED,
-                ELEMENT_CODE_BLOCK,
-                PEAK_CALLOUT,
-                PEAK_LEARNING,
-                ELEMENT_EMBED_STUB,
-                ELEMENT_YOUTUBE_EMBED,
-                ELEMENT_TWITTER_EMBED,
-                ELEMENT_MEDIA_EMBED
-            ],
+            keys: DRAGGABLE_ELEMENTS,
             dragIcon: (
                 <DragIndicator
                     style={{
@@ -213,23 +166,17 @@ const withStyledDraggables = (components: any) => {
     ]);
 };
 
-export let defaultComponents = createSlatePluginsComponents({
-    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
-    [ELEMENT_LI]: PEAK_LI_STYLE,
-    [ELEMENT_UL]: PEAK_UL_STYLE,
-    [ELEMENT_OL]: PEAK_OL_STYLE,
-    [ELEMENT_CODE_BLOCK]: PeakCodeBlockElement,
-    [TITLE]: PeakTitleElement,
-    [PEAK_CALLOUT]: PeakCalloutElement,
-    [PEAK_LEARNING]: PeakLearningElement,
-    [ELEMENT_LINK]: PeakInlineLinkElement,
-    [ELEMENT_EMBED_STUB]: PeakMediaStubElement,
-    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
-    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
-    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed
-})
-defaultComponents = withStyledPlaceHolders(defaultComponents)
-defaultComponents = withStyledDraggables(defaultComponents)
+export const useComponents = (dnd: boolean, placeholders: Options<PlaceholderProps>[]) => {
+    return useMemo(() => {
+        let components = clone(defaultComponents)
 
-export const basicComponent = cloneDeep(defaultComponents)
+        if (dnd) {
+            components = withStyledDraggables(components)
+        }
 
+        if (placeholders) {
+            components = withStyledPlaceHolders(components, placeholders)
+        }
+        return components
+    }, [dnd, placeholders])
+}

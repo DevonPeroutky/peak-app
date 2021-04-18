@@ -194,6 +194,4 @@ let components = createSlatePluginsComponents({
     }),
     [ELEMENT_BLOCKQUOTE]: BlockquoteElement
 })
-components = withStyledPlaceHolders(components)
-components = withStyledDraggables(components)
 

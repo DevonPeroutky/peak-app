@@ -8,7 +8,6 @@ import {PeakCalloutKeyOption} from "./plugins/peak-callout-plugin/defaults";
 import {ReactEditor} from "slate-react";
 import {HistoryEditor} from "slate-history";
 
-export const DIVIDER = "divider";
 export const JOURNAL_ENTRY = "journal_entry";
 export const JOURNAL_ENTRY_HEADER = "journal_entry_header";
 
