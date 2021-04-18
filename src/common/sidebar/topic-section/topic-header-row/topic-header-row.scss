@@ -1,3 +1,5 @@
+@import "../../../../constants/variables";
+
 .topic-group-title-row {
   display: flex;
   justify-content: space-between;
@@ -6,7 +8,11 @@
   padding-top: 8px;
   padding-bottom: 8px;
   padding-right: 16px;
-  color: rgba(0,0,0,.45);
+  cursor: pointer;
+
+  &:hover {
+    color: $sidebar-accent-text-color;
+  }
 
   .topic-group-title {
     overflow: hidden;
