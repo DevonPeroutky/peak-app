@@ -1,7 +1,14 @@
 import React, {useState} from 'react'
 import "./profile-dropdown.scss"
 import {Dropdown, Menu, message} from 'antd';
-import {CheckOutlined, LinkOutlined, LogoutOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
+import {
+    CaretDownOutlined,
+    CheckOutlined,
+    LinkOutlined,
+    LogoutOutlined,
+    SettingOutlined,
+    UserOutlined
+} from "@ant-design/icons/lib";
 import LogoutButton from "../login/logout/LogoutButton";
 import config from "../../constants/environment-vars";
 import {useCurrentUser, useIsContextElectron} from "../../utils/hooks";
@@ -11,6 +18,7 @@ import {DisplayPeaker} from "../../redux/slices/userAccountsSlice";
 import { capitalize } from "lodash";
 import {isElectron} from "../../utils/environment";
 import {useAccountSwitcher} from "../../utils/account";
+import {deriveEmailDomain} from "../../utils/strings";
 
 export const ProfileDropdown = (props: {}) => {
     const user = useCurrentUser()
@@ -33,10 +41,23 @@ export const ProfileDropdown = (props: {}) => {
         </Menu>
     );
 
+    console.log(`USER `, user)
+
     return (
-        <Dropdown overlay={menu} trigger={Array.from(["click"])}>
-            <img src={user.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
-        </Dropdown>
+        <div className={"account-section-container"}>
+            <Dropdown overlay={menu} trigger={Array.from(["click"])}>
+                <div className={"account-section"}>
+                    <img src={user.image_url} referrerPolicy={"no-referrer"} className="current-account-icon" alt="user-profile"/>
+                    <div className={"account-section-details"}>
+                        <div className={"account-domain"}>
+                            <span>{deriveEmailDomain(user.email)}</span>
+                            <CaretDownOutlined style={{fontSize: "10px", marginLeft: "5px"}}/>
+                        </div>
+                        <div className={"name"}>{user.given_name} {user.family_name}</div>
+                    </div>
+                </div>
+            </Dropdown>
+        </div>
     )
 };
 
@@ -44,24 +65,19 @@ const UserAccountRow = (props) => {
     const switchUserAccounts = useAccountSwitcher()
     const {userAccount, currentUser, accountIndex, ...other} = props;
 
-    function deriveWorkspaceName(domain: string): string {
-        return capitalize(domain.split("@").slice(-1)[0].split(".")[0])
-    }
-
     return (
         <Menu.Item className={"peak-account-setting-row"} {...other} onClick={() => switchUserAccounts(userAccount, currentUser.id)}>
             <div className={"peak-account-row"} >
-                <div className={"peak-account-row-header"}>
-                    <span>{userAccount.email}</span>
-                    <SettingOutlined />
-                </div>
-                <div className={"peak-account-row-body"}>
+                <span>{userAccount.email}</span>
+                <div className={"row"}>
                     <img src={userAccount.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
-                    <div className={"peak-account-row-body-center"}>
+                    <div className={"account-details"}>
                         <span className={"peak-account-title"}>{userAccount.given_name}'s Wiki</span>
-                        <span>{userAccount.email.endsWith("@gmail.com") ? "Personal" : deriveWorkspaceName(userAccount.email) }</span>
+                        <span>{deriveEmailDomain(userAccount.email)}</span>
                     </div>
-                    {(userAccount.id === currentUser.id) ? <CheckOutlined className={"selected-icon"}/> : <span>⌘{accountIndex}</span>}
+                    <div>
+                        {(userAccount.id === currentUser.id) ? <CheckOutlined className={"selected-icon"}/> : <span>⌘{accountIndex}</span>}
+                    </div>
                 </div>
             </div>
         </Menu.Item>

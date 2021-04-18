@@ -15,3 +15,8 @@ export const capitalize_and_truncate = (
     })
 };
 
+
+
+export function deriveEmailDomain(email: string): string {
+    return email.endsWith("@gmail.com") ? "Personal" : capitalize(email.split("@").slice(-1)[0].split(".")[0])
+}

@@ -5,7 +5,8 @@ import { ProfileDropdown } from "../profile-dropdown/ProfileDropdown";
 import {SearchOutlined} from "@ant-design/icons/lib";
 import {OfflineAlert} from "../offline-alert/OfflineAlert";
 
-const MainBar = (props: {}) => {
+// DEPRECATED
+export const MainBar = (props: {}) => {
     const [query, setQuery] = useState('');
 
     const search = () => {
@@ -28,5 +29,3 @@ const MainBar = (props: {}) => {
         </div>
     )
 };
-
-export default MainBar;

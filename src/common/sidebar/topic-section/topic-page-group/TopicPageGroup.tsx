@@ -16,6 +16,9 @@ import {clone} from "ramda";
 import {convertHierarchyToSearchableList} from "../../../../utils/hierarchy";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import {DragSourceHookSpec, FactoryOrInstance} from "react-dnd/dist/types/hooks/types";
+import Menu from "antd/lib/menu";
+import SubMenu from "antd/es/menu/SubMenu";
+import {AppstoreOutlined, MailOutlined, SettingOutlined} from "@ant-design/icons/lib";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
@@ -37,9 +40,9 @@ export const TopicSection = (props: {topics: PeakTopic[]}) => {
         </div>
     )
 }
-
 const TopicPageGroup = (props: { topic: PeakTopic }) => {
     const { topic } = props
+    const [expand, setExpand] = useState(false)
     const user = useCurrentUser()
     const currentHierarchy = useSelector<AppState, PeakTopicNode[]>(state => state.currentUser.hierarchy);
     const movePage = useMovePageToNewTopic()
@@ -60,10 +63,14 @@ const TopicPageGroup = (props: { topic: PeakTopic }) => {
         })
     }), [currentHierarchy])
 
+    const toggleExpanded = () => {
+       setExpand(!expand)
+    }
+
     return (
         <div ref={drop} key={topic.id.toLowerCase()} className={cn("topic-group", (isOver) ? "hovering" : "")}>
-            <TopicHeaderRow topic={topic} user={user}/>
-            {topic.pages.map((page, i) =>
+            <TopicHeaderRow topic={topic} user={user} toggleExpanded={toggleExpanded}/>
+            {(!expand) ? null : topic.pages.map((page, i) =>
                 <TopicPageRow key={page.id} page={page} topicId={topic.id} index={i}/>
             )}
         </div>
@@ -146,3 +153,4 @@ const TopicPageRow = (props: {page: PeakPage, topicId: string, index: number}) =
         </div>
     )
 }
+

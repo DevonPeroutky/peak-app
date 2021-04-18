@@ -7,7 +7,7 @@ export const UNAUTHED_USER: Peaker = {
     peak_user_id: "-1",
     image_url: "",
     email: "",
-    name: "",
+    family_name: "",
     given_name: "",
     access_token: "",
     hierarchy: []

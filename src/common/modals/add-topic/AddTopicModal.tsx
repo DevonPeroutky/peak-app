@@ -63,8 +63,10 @@ const AddTopicModal = (props: {}) => {
     };
 
     return (
-        <div className={"add-topic-modal-container"}>
-            <Button ghost type="primary" shape="round" icon={<PlusOutlined/>} onClick={() => setVisibility(true)}>Add Topic</Button>
+        <div className={"topic-group"}>
+            <div className="add-topic-text" onClick={() => setVisibility(true)}>
+                <PlusOutlined style={{ marginRight: "5px"}}/>Add a Topic
+            </div>
             <Modal
                 title="Create a new Topic"
                 visible={visible}

@@ -1,12 +1,18 @@
+@import "../../../../constants/variables";
+
 .topic-group-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-right: 16px;
-  color: rgba(0,0,0,.45);
+  cursor: pointer;
+
+  &:hover {
+    color: $sidebar-accent-text-color;
+  }
 
   .topic-group-title {
     overflow: hidden;
@@ -16,6 +22,8 @@
 
     justify-content: space-between;
     display: flex;
+    --animate-duration: 1s;
+    --animate-repeat: 1;
   }
 
   .icons-container {

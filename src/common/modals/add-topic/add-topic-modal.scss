@@ -1,6 +1,11 @@
 @import "../../../constants/variables";
 
-.add-topic-modal-container {
-  margin-top: 15px;
-  padding-bottom: 50px;
+.add-topic-text {
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  &:hover {
+    color: $primary-blue;
+    cursor: pointer;
+  }
 }

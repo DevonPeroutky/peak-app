@@ -2,7 +2,6 @@ import {addPageToTopic, PeakPage, PeakTopic} from "../../../../redux/slices/topi
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {batch, useDispatch} from "react-redux";
-import {TITLE} from "../../../rich-text-editor/types";
 import peakAxiosClient from "../../../../client/axiosConfig"
 import {createPage} from "../../../../redux/slices/wikiPageSlice";
 import {message} from "antd";
@@ -12,18 +11,20 @@ import cn from "classnames";
 import {PlusSquareOutlined} from "@ant-design/icons/lib";
 import "./topic-header-row.scss";
 import {capitalize_and_truncate} from "../../../../utils/strings";
-import {EMPTY_BODY_WITH_TITLE, EMPTY_PARAGRAPH_NODE} from "../../../rich-text-editor/editors/constants";
+import {EMPTY_BODY_WITH_TITLE} from "../../../rich-text-editor/editors/constants";
 import {Peaker} from "../../../../types";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import { setEditing } from "../../../../redux/slices/activeEditor/activeEditorSlice";
-import {Node} from "slate";
 
-export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
-    const [hovered, setHovering] = useState(false);
-    const [isloading, setLoading] = useState(false);
+export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker, toggleExpanded: () => void }) => {
+    const { topic, toggleExpanded } = props;
     let history = useHistory();
     const dispatch = useDispatch();
-    const { topic, user } = props;
+    const [hovered, setHovering] = useState(false);
+    const [isloading, setLoading] = useState(false);
+    const [clicked, setClicked] = useState(false)
+
+    const pagesExist: boolean = topic.pages && topic.pages.length > 0
 
     const createPageUnderTopic = () => {
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
@@ -49,9 +50,22 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker }) => {
         })
     };
 
+    const handleClick = () => {
+        if (pagesExist) {
+            toggleExpanded()
+        } else {
+            setClicked(true)
+            setTimeout(() => setClicked(false), 1500)
+        }
+    }
+
     return (
-        <div className="topic-group-title-row" onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <span className={"topic-group-title"}>{capitalize_and_truncate(props.topic.name)}</span>
+        <div className={cn("topic-group-title-row")}
+             onMouseOver={() => setHovering(true)}
+             onMouseLeave={() => setHovering(false)}
+             onClick={() => handleClick()}
+        >
+            <span className={cn("topic-group-title", (clicked && !pagesExist) ? "animate__animated animate__shakeX" : "" )}>{capitalize_and_truncate(props.topic.name)}</span>
             <div className="icons-container">
                 <DeleteTopicModal hovered={hovered} topicId={topic.id}/>
                 <UpdateTopicModal hovered={hovered} topicId={topic.id}/>

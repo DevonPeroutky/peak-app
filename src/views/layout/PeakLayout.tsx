@@ -8,7 +8,6 @@ import PeakReadingList from "../reading-list/PeakReadingList";
 import {PeakTimeline} from "../timeline/PeakTimeline";
 import {useAppLoadingAnimation} from "../loading/Loading";
 import TopicWiki from "../wiki/TopicWiki";
-import MainBar from "../../common/main-top-bar/MainBar";
 import {useCurrentPage, useIsFullscreen, useOnlineStatus} from "../../utils/hooks";
 import {useHistory} from "react-router";
 import {PeakWelcome} from "../welcome/Welcome";
@@ -84,7 +83,6 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
             <Layout className="peak-parent-layout">
                 <PeakSidebar/>
                 <Content className={cn((isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen", "peak-main-content")}>
-                    <MainBar/>
                     <Content className="peak-content-container">
                         <div className="peak-content-holder">
                             <Switch>

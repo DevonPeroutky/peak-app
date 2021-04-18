@@ -3,6 +3,7 @@
 .peak-sidebar {
   min-width: $sidebar-width!important;
   background: $sidebar-background-color;
+  color: $sidebar-text-color;
   min-height: 100vh;
   position: fixed;
   left: 0;
@@ -52,7 +53,7 @@
     width: 100%;
     align-items: center;
     padding-right: 16px;
-    padding-top: 35px;
+    padding-top: 20px;
     margin-top: 0!important;
   }
 
