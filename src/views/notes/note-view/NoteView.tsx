@@ -15,7 +15,6 @@ import {PeakTag} from "../../../types";
 import {WebNoteHeaderSection} from "./note-header/web-note-header/WebNoteHeader";
 import {BookHeaderSection} from "./note-header/book-header/BookHeader";
 import {NextGenNoteView} from "../../note-view-v2/NextGenNoteView";
-import {LearningHeaderSection} from "./note-header/learning-header/LearningHeader";
 
 export const PeakNoteView = (props) => {
     const history = useHistory()
@@ -65,10 +64,6 @@ interface NoteHeaderProps {
 }
 const renderHeader = (props: NoteHeaderProps) => {
     const { currentNote, author, onAuthorChange, selected_tags, title, onTitleChange } = props
-
-    if (currentNote.note_type === PEAK_LEARNING) {
-        return <LearningHeaderSection note={currentNote} title={title} onTitleChange={onTitleChange} selected_tags={selected_tags}/>
-    }
 
     return (currentNote.note_type === ELEMENT_WEB_NOTE) ?
         <WebNoteHeaderSection

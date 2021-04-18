@@ -56,10 +56,6 @@ export function deletePeakNote(userId: string, noteId: string): Promise<string> 
     return deleteNoteRequest(userId, noteId).then(res => {
         store.dispatch(deleteNote(noteId))
         return noteId
-    }).catch(err => {
-        console.log(`DID NOT successfully delete the tag: ${noteId}`)
-        console.log(err)
-        return noteId
     })
 }
 
