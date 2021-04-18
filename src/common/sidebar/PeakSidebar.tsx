@@ -1,6 +1,5 @@
 import React from 'react'
 import {Layout, Menu} from 'antd';
-import { PeakLogo } from "../logo/PeakLogo";
 import AddTopicModal from "../modals/add-topic/AddTopicModal";
 import {Link} from "react-router-dom";
 import cn from "classnames"
@@ -10,6 +9,8 @@ import { TopicSection } from "./topic-section/topic-page-group/TopicPageGroup";
 import {isElectron} from "../../utils/environment";
 import 'antd/dist/antd.css';
 import "./peak-sidebar.scss";
+import {ProfileDropdown} from "../profile-dropdown/ProfileDropdown";
+import {PeakLogo} from "../logo/PeakLogo";
 const { Sider } = Layout;
 
 
@@ -21,9 +22,10 @@ const PeakSidebar = (props: { }) => {
     return (
         <Sider className={cn("peak-sidebar", (isFullscreen || !isElectron) ? "fullscreen" : "not-fullscreen")} theme={"dark"}>
             {(isElectron && !isFullscreen) ? <div className={"electron-draggable-region"}/> : null }
-            <div className={cn("peak-logo-container")}>
-                <PeakLogo className={"sidebar-logo"}/>
-            </div>
+            <ProfileDropdown/>
+            {/*<div className={cn("peak-logo-container")}>*/}
+            {/*    <PeakLogo className={"sidebar-logo"}/>*/}
+            {/*</div>*/}
             <h3 className={"overview-header"}>Overview</h3>
             <Menu mode="inline" selectedKeys={[`home/${currentPageId}`]} className={"overview-menu"}>
                 <Menu.Item key="home/scratchpad" className={(currentPageId === "home") ? "ant-menu-item-selected" : ""}>

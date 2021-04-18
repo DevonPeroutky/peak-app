@@ -33,10 +33,20 @@ export const ProfileDropdown = (props: {}) => {
         </Menu>
     );
 
+    console.log(`USER `, user)
+
     return (
-        <Dropdown overlay={menu} trigger={Array.from(["click"])}>
-            <img src={user.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
-        </Dropdown>
+        <div className={"account-section-container"}>
+            <Dropdown overlay={menu} trigger={Array.from(["click"])}>
+                <div className={"account-section"}>
+                    <img src={user.image_url} referrerPolicy={"no-referrer"} className="current-account-icon" alt="user-profile"/>
+                    <div className={"account-section-details"}>
+                        <div className={"account-domain"}>{deriveEmailDomain(user.email)}</div>
+                        <div className={"name"}>{user.given_name}</div>
+                    </div>
+                </div>
+            </Dropdown>
+        </div>
     )
 };
 
@@ -44,26 +54,27 @@ const UserAccountRow = (props) => {
     const switchUserAccounts = useAccountSwitcher()
     const {userAccount, currentUser, accountIndex, ...other} = props;
 
-    function deriveWorkspaceName(domain: string): string {
-        return capitalize(domain.split("@").slice(-1)[0].split(".")[0])
-    }
-
     return (
         <Menu.Item className={"peak-account-setting-row"} {...other} onClick={() => switchUserAccounts(userAccount, currentUser.id)}>
             <div className={"peak-account-row"} >
-                <div className={"peak-account-row-header"}>
-                    <span>{userAccount.email}</span>
-                    <SettingOutlined />
-                </div>
                 <div className={"peak-account-row-body"}>
-                    <img src={userAccount.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
-                    <div className={"peak-account-row-body-center"}>
-                        <span className={"peak-account-title"}>{userAccount.given_name}'s Wiki</span>
-                        <span>{userAccount.email.endsWith("@gmail.com") ? "Personal" : deriveWorkspaceName(userAccount.email) }</span>
+                    <div>
+                        <span>{userAccount.email}</span>
+                        <div className={"peak-account-row-body-center"}>
+                            <span className={"peak-account-title"}>{userAccount.given_name}'s Wiki</span>
+                            <span>{deriveEmailDomain(userAccount.email)}</span>
+                        </div>
                     </div>
-                    {(userAccount.id === currentUser.id) ? <CheckOutlined className={"selected-icon"}/> : <span>⌘{accountIndex}</span>}
+                    <div>
+                        {(userAccount.id === currentUser.id) ? <CheckOutlined className={"selected-icon"}/> : <span>⌘{accountIndex}</span>}
+                        <img src={userAccount.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
+                    </div>
                 </div>
             </div>
         </Menu.Item>
     )
+}
+
+function deriveEmailDomain(email): string {
+    return email.endsWith("@gmail.com") ? "Personal" : capitalize(email.split("@").slice(-1)[0].split(".")[0])
 }
