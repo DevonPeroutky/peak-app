@@ -18,10 +18,13 @@ import { setEditing } from "../../../../redux/slices/activeEditor/activeEditorSl
 
 export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker, toggleExpanded: () => void }) => {
     const { topic, toggleExpanded } = props;
-    const [hovered, setHovering] = useState(false);
-    const [isloading, setLoading] = useState(false);
     let history = useHistory();
     const dispatch = useDispatch();
+    const [hovered, setHovering] = useState(false);
+    const [isloading, setLoading] = useState(false);
+    const [clicked, setClicked] = useState(false)
+
+    const pagesExist: boolean = topic.pages && topic.pages.length > 0
 
     const createPageUnderTopic = () => {
         peakAxiosClient.post(`/api/v1/users/${props.user.id}/pages`, {
@@ -47,13 +50,22 @@ export const TopicHeaderRow = (props: { topic: PeakTopic, user: Peaker, toggleEx
         })
     };
 
+    const handleClick = () => {
+        if (pagesExist) {
+            toggleExpanded()
+        } else {
+            setClicked(true)
+            setTimeout(() => setClicked(false), 1500)
+        }
+    }
+
     return (
         <div className={cn("topic-group-title-row")}
              onMouseOver={() => setHovering(true)}
              onMouseLeave={() => setHovering(false)}
-             onClick={() => toggleExpanded()}
+             onClick={() => handleClick()}
         >
-            <span className={"topic-group-title"}>{capitalize_and_truncate(props.topic.name)}</span>
+            <span className={cn("topic-group-title", (clicked && !pagesExist) ? "animate__animated animate__shakeX" : "" )}>{capitalize_and_truncate(props.topic.name)}</span>
             <div className="icons-container">
                 <DeleteTopicModal hovered={hovered} topicId={topic.id}/>
                 <UpdateTopicModal hovered={hovered} topicId={topic.id}/>
