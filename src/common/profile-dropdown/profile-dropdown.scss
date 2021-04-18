@@ -1,5 +1,6 @@
 @import "../../constants/variables";
 .account-section-container{
+  letter-spacing: normal!important;
   display: flex;
   opacity: 1;
   width: calc(100% + #{$fullscreen-sidebar-padding});
@@ -14,10 +15,8 @@
   .account-section {
     cursor: pointer;
     width: calc(100% + #{$fullscreen-sidebar-padding});
-    //margin-left: $fullscreen-sidebar-padding;
     display: flex;
     align-items: center;
-    //padding: 20px 24px;
     padding-top: 20px;
     padding-bottom: 20px;
 
@@ -69,6 +68,9 @@
 
   .peak-account-setting-row {
     //color: rgba(55, 53, 47, 0.6);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     font-size: 12px;
     color: $text-accent-color;
     border-bottom: 1px solid $gray-accent-color;
@@ -80,39 +82,39 @@
     .peak-account-row {
       display: flex;
       flex-direction: column;
+      width: 100%;
 
-      .peak-account-row-header {
+      .row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-      }
 
-      .peak-account-row-body {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
 
         .profile-icon {
           margin-right: 10px;
-          border-radius: 50%;
           width: 30px;
           height: auto;
-          position: absolute;
           right: 25px;
           cursor: pointer;
-        }
-        .selected-icon {
-          color: green;
+          border-radius: 4px;
+          background: rgb(255, 255, 255);
+          border: 1px solid rgb(218, 225, 233);
+          overflow: hidden;
+          flex-shrink: 0;
         }
 
-        .peak-account-row-body-center {
+        .account-details {
           display: flex;
+          line-height: 1.4!important;
           flex-direction: column;
           flex-grow: 2;
 
           .peak-account-title {
             color: $text-color!important;
           }
+        }
+
+        .selected-icon {
+          color: green;
         }
       }
     }

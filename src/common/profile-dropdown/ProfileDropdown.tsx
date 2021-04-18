@@ -1,7 +1,14 @@
 import React, {useState} from 'react'
 import "./profile-dropdown.scss"
 import {Dropdown, Menu, message} from 'antd';
-import {CheckOutlined, LinkOutlined, LogoutOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons/lib";
+import {
+    CaretDownOutlined,
+    CheckOutlined,
+    LinkOutlined,
+    LogoutOutlined,
+    SettingOutlined,
+    UserOutlined
+} from "@ant-design/icons/lib";
 import LogoutButton from "../login/logout/LogoutButton";
 import config from "../../constants/environment-vars";
 import {useCurrentUser, useIsContextElectron} from "../../utils/hooks";
@@ -11,6 +18,7 @@ import {DisplayPeaker} from "../../redux/slices/userAccountsSlice";
 import { capitalize } from "lodash";
 import {isElectron} from "../../utils/environment";
 import {useAccountSwitcher} from "../../utils/account";
+import {deriveEmailDomain} from "../../utils/strings";
 
 export const ProfileDropdown = (props: {}) => {
     const user = useCurrentUser()
@@ -41,7 +49,10 @@ export const ProfileDropdown = (props: {}) => {
                 <div className={"account-section"}>
                     <img src={user.image_url} referrerPolicy={"no-referrer"} className="current-account-icon" alt="user-profile"/>
                     <div className={"account-section-details"}>
-                        <div className={"account-domain"}>{deriveEmailDomain(user.email)}</div>
+                        <div className={"account-domain"}>
+                            <span>{deriveEmailDomain(user.email)}</span>
+                            <CaretDownOutlined style={{fontSize: "10px", marginLeft: "5px"}}/>
+                        </div>
                         <div className={"name"}>{user.given_name}</div>
                     </div>
                 </div>
@@ -57,24 +68,18 @@ const UserAccountRow = (props) => {
     return (
         <Menu.Item className={"peak-account-setting-row"} {...other} onClick={() => switchUserAccounts(userAccount, currentUser.id)}>
             <div className={"peak-account-row"} >
-                <div className={"peak-account-row-body"}>
-                    <div>
-                        <span>{userAccount.email}</span>
-                        <div className={"peak-account-row-body-center"}>
-                            <span className={"peak-account-title"}>{userAccount.given_name}'s Wiki</span>
-                            <span>{deriveEmailDomain(userAccount.email)}</span>
-                        </div>
+                <span>{userAccount.email}</span>
+                <div className={"row"}>
+                    <img src={userAccount.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
+                    <div className={"account-details"}>
+                        <span className={"peak-account-title"}>{userAccount.given_name}'s Wiki</span>
+                        <span>{deriveEmailDomain(userAccount.email)}</span>
                     </div>
                     <div>
                         {(userAccount.id === currentUser.id) ? <CheckOutlined className={"selected-icon"}/> : <span>⌘{accountIndex}</span>}
-                        <img src={userAccount.image_url} referrerPolicy={"no-referrer"} className="profile-icon" alt="user-profile"/>
                     </div>
                 </div>
             </div>
         </Menu.Item>
     )
-}
-
-function deriveEmailDomain(email): string {
-    return email.endsWith("@gmail.com") ? "Personal" : capitalize(email.split("@").slice(-1)[0].split(".")[0])
 }
