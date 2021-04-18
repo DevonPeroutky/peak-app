@@ -26,7 +26,12 @@ import 'antd/lib/list/style/index.css';
 import 'antd/lib/skeleton/style/index.css';
 import "./save-page-message.scss";
 import "../../../../constants/peak-editor.scss"
-import {sendDeletePageMessage, sendSubmitNoteMessage, updateMessageInPlace} from "../../utils/messageUtils";
+import {
+    buildDeletePageCalback,
+    sendDeletePageMessage,
+    sendSubmitNoteMessage,
+    updateMessageInPlace
+} from "../../utils/messageUtils";
 import {INITIAL_PAGE_STATE} from "../../../../constants/editor";
 import {NullButton} from "./components/save-page-header-content/undo-close-button/UndoCloseButton";
 import Tab = chrome.tabs.Tab;
@@ -57,8 +62,8 @@ export interface SavedPageContentProps {
 export interface SavedPageProps extends SavedPageContentProps, SavedPageStateProps { };
 export const NOTIFICATION_KEY = "saved-page-message"
 
-function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFocus: FOCUS_STATE): number {
-   if (tagFocus === FOCUS_STATE.Focus) {
+function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, focus: FOCUS_STATE): number {
+   if (focus === FOCUS_STATE.Focus) {
        return 0
    }
 
@@ -68,6 +73,7 @@ function deriveDuration(saving: SUBMISSION_STATE, editing: EDITING_STATE, tagFoc
    return 2
 }
 
+// The function that actually renders the Ant.Notification on the page
 export const openMessage = (props: SavedPageProps) => {
     const { saving, editingState, tabId, focusState, userId, noteId, tags } = props
     const duration = deriveDuration(saving, editingState, focusState)
@@ -180,11 +186,4 @@ export const closeMessage = (tabId: number) => {
     deleteItem([tabId.toString(), ACTIVE_TAB_KEY], () => {
         notification.close(NOTIFICATION_KEY)
     })
-}
-
-function buildDeletePageCalback(tabId: number, userId: string, noteId: string): () => void {
-    return () => {
-        updateMessageInPlace(tabId, { editingState: EDITING_STATE.Deleting })
-        sendDeletePageMessage(tabId, userId, noteId)
-    }
 }
