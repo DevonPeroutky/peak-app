@@ -6,9 +6,6 @@ import {STUB_TAG_ID, TEMP_HOLDER} from "../../../../../../../../redux/slices/tag
 import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import cn from "classnames";
-import {take} from "ramda";
-import { updateMessageInPlace } from "../../../../../../../../chrome-extension/content-script/utils/messageUtils";
-import {FOCUS_STATE} from "../../../../../../../../chrome-extension/constants/constants";
 const { Option } = Select;
 
 export interface ChromeExtensionTagSelectProps {
@@ -100,11 +97,9 @@ export const TagSelect = (props: ChromeExtensionTagSelectProps) => {
                         open={open}
                         onBlur={() => {
                             setDropdownState(false)
-                            updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
                         }}
                         onFocus={() => {
                             setDropdownState(true)
-                            updateMessageInPlace(tabId, { focusState: FOCUS_STATE.Focus })
                         }}
                         onSearch={(value) => {
                             setDropdownState(true)

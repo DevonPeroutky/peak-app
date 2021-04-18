@@ -9,7 +9,7 @@ import "./save-page-content.scss"
 import {Node} from "slate";
 import {INITIAL_PAGE_STATE} from "../../../../../../constants/editor";
 import {PeakLogo} from "../../../../../../common/logo/PeakLogo";
-import {EDITING_STATE, FOCUS_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
+import {EDITING_STATE, SUBMISSION_STATE} from "../../../../../constants/constants";
 import {sendSubmitNoteMessage, updateMessageInPlace} from "../../../../utils/messageUtils";
 import {PageSavingAnimation} from "../page-saving-animation/PageSavingAnimation";
 import {STUB_TAG_ID} from "../../../../../../redux/slices/tags/types";
@@ -98,12 +98,6 @@ const PageTitle = (props: { tabId: number, editedPageTitle: string, setPageTitle
         <div className={"peak-extension-row-container title"}>
             <img className={"page-peak-favicon"} src={favIconUrl || baseUrl}/>
             <Input
-                onBlur={() => {
-                    updateMessageInPlace(tabId, { focusState: FOCUS_STATE.NotFocused })
-                }}
-                onFocus={() => {
-                    updateMessageInPlace(tabId, { focusState: FOCUS_STATE.Focus })
-                }}
                 className={"page-peak-title-input"}
                 bordered={false}
                 value={editedPageTitle}

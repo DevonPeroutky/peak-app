@@ -4,7 +4,7 @@ import {DeletePageMessage, MessageType, SubmitNoteMessage} from "../../constants
 import {getItem, setItem} from "../../utils/storageUtils";
 import {
     ACTIVE_TAB_KEY,
-    ActiveTabState,
+    ActiveTabState, EDITING_STATE,
     SUBMISSION_STATE,
     TAGS_KEY
 } from "../../constants/constants";
@@ -53,3 +53,9 @@ export const updateMessageInPlace = (tabId: number, payload: {}) => {
     })
 }
 
+export function buildDeletePageCalback(tabId: number, userId: string, noteId: string): () => void {
+    return () => {
+        updateMessageInPlace(tabId, { editingState: EDITING_STATE.Deleting })
+        sendDeletePageMessage(tabId, userId, noteId)
+    }
+}
