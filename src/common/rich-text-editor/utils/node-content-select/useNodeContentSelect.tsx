@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import { Editor, Point, Range, Transforms } from 'slate';
+import {Editor, Node, Point, Range, Transforms} from 'slate';
 import {
     ELEMENT_LIC,
     ELEMENT_PARAGRAPH,
@@ -208,12 +208,26 @@ export const useNodeContentSelect = (
                     trigger,
                 });
                 const [currNode, currPath] = Editor.above(editor)
+                const text: string = Node.string(currNode)
 
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
-                const atTopLevel: boolean = isAtTopLevelOfEditor(editor.selection, editorLevel)
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
 
-                if (atEnd && beforeMatch && currentlyInParagraphNode && atTopLevel) {
+                // HOW TO ESCAPE
+                let re = /^\/[a-zA-Z]+/
+                const res = re.exec(text)
+                console.log(`RES `, res)
+                // const atBeginning: boolean =
+
+                // Default Open
+                if (atEnd && text === trigger) {
+                    setTargetRange(editor.selection);
+                    setSearch("");
+                    setValueIndex(0);
+                    return;
+                }
+
+                if (atEnd && beforeMatch && currentlyInParagraphNode) {
                 // if (atEnd && beforeMatch) {
                     setTargetRange(range as Range);
                     const [, word] = beforeMatch;
