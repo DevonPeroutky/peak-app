@@ -213,22 +213,21 @@ export const useNodeContentSelect = (
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
 
-                // HOW TO ESCAPE
-                let re = /^\/[a-zA-Z]+/
+                // CONSOLIDATE W/beforeText
+                let re = /^\/[a-zA-Z]+$/
                 const res = re.exec(text)
-                console.log(`RES `, res)
-                // const atBeginning: boolean =
 
+                console.log(editor.selection)
                 // Default Open
                 if (atEnd && text === trigger) {
-                    setTargetRange(editor.selection);
+                    setTargetRange({ anchor: {...editor.selection.anchor, offset: 0 }, focus: editor.selection.focus });
                     setSearch("");
                     setValueIndex(0);
                     return;
                 }
 
-                if (atEnd && beforeMatch && currentlyInParagraphNode) {
-                // if (atEnd && beforeMatch) {
+                console.log(`RANGE `, range)
+                if (atEnd && beforeMatch && res && currentlyInParagraphNode) {
                     setTargetRange(range as Range);
                     const [, word] = beforeMatch;
                     setSearch(word);
