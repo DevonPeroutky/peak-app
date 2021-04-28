@@ -6,8 +6,9 @@ import {DisplayPeaker} from "./slices/userAccountsSlice";
 import {PeakNote} from "./slices/noteSlice";
 import {PeakEditorState, PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
+import {HelpModalState} from "./slices/helpModal/helpModalSlice";
 
-export const GLOBAL_APP_KEYS = ["electron", "quickSwitcher", "userAccounts", "activeEditorState"]
+export const GLOBAL_APP_KEYS = ["electron", "quickSwitcher", "userAccounts", "activeEditorState", "helpModal"]
 
 export interface AppState {
     topics: PeakTopic[],
@@ -19,5 +20,6 @@ export interface AppState {
     activeEditorState: PeakEditorState,
     electron: ElectronState,
     tags: PeakTag[],
-    notes: PeakNote[]
+    notes: PeakNote[],
+    helpModal: HelpModalState
 }

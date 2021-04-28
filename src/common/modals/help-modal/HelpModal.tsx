@@ -3,17 +3,22 @@ import {QuestionCircleFilled} from "@ant-design/icons/lib";
 import {Modal} from "antd";
 import "./help-modal.scss"
 import {KEYBOARD_SHORTCUTS, MARKDOWN_SHORTCUTS} from "../../peak-toolbar/toolbar-controls";
+import {useDispatch, useSelector} from "react-redux";
+import {AppState} from "../../../redux";
+import {closeHelpModal, HelpModalState, openHelpModal} from "../../../redux/slices/helpModal/helpModalSlice";
 
 export const HelpModal = (props: {}) => {
-    const [isVisible, setVisible] = useState(false)
+    const modalState = useSelector<AppState, HelpModalState>(state => state.helpModal)
+    const dispatch = useDispatch()
+
     return (
         <>
-            <QuestionCircleFilled onClick={() => setVisible(true)} className={"help-modal-icon"}/>
+            <QuestionCircleFilled onClick={() => dispatch(openHelpModal())} className={"help-modal-icon"}/>
             <Modal
                 className={"help-modal"}
-                visible={isVisible}
-                title={<h3>Editor help</h3>}
-                onCancel={() => setVisible(false)}
+                visible={(modalState) ? modalState.isOpen : false}
+                title={<h3>Editor help ( <span className="peak-hotkey-decoration">⌘ + /</span> )</h3>}
+                onCancel={() => dispatch(closeHelpModal())}
                 footer={[
                     <div>Use <span className="hotkey-button-tag">/</span> a new line to search through the available node types.</div>
                 ]}
