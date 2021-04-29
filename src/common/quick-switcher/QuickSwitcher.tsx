@@ -27,6 +27,7 @@ const QuickSwitcher = (props: { isOpen: boolean }) => {
         if (hierarchy) {
             console.log(`rebuilding the QUICKSWITCHER hierarchy`)
             const derivedAntList = convertHierarchyToSearchableList(cloneDeep(hierarchy), notes)
+            console.log(`THE LIST `, derivedAntList)
             setAntList(derivedAntList)
             setFilteredAntList(derivedAntList)
         }
@@ -59,37 +60,35 @@ const QuickSwitcher = (props: { isOpen: boolean }) => {
         }
     }
 
-
     return (
         <PeakModal isOpen={isOpen} onClose={() => closeModal()}>
             {
                 (!isOpen) ? null :
                 <div className={"quick-switch-modal-container"}>
                     <AutoComplete
-                    autoFocus
-                    children={renderPeakDisplayNodesInList(filteredAntList)}
-                    className={"quick-switch-input"}
-                    autoClearSearchValue={true}
-                    defaultActiveFirstOption={true}
-                    showArrow={false}
-                    showSearch={false}
-                    placeholder="Jump to..."
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            e.preventDefault()
-                        }
-                        if (e.key === 'Escape') {
-                            e.preventDefault()
-                            closeModal()
-                        }
-                    }}
-                    open={true}
-                    style={{width: '100%'}}
-                    value={value}
-                    dropdownClassName={"peak-dropdown"}
-                    onSearch={handleSearch}
-                    onSelect={goTo}
-                    />
+                        autoFocus
+                        children={renderPeakDisplayNodesInList(filteredAntList)}
+                        className={"quick-switch-input"}
+                        autoClearSearchValue={true}
+                        defaultActiveFirstOption={true}
+                        showArrow={false}
+                        showSearch={false}
+                        placeholder="Jump to..."
+                        onKeyDown={(e) => {
+                                              if (e.key === 'Enter') {
+                                              e.preventDefault()
+                                              }
+                                              if (e.key === 'Escape') {
+                                              e.preventDefault()
+                                              closeModal()
+                                              }
+                                              }}
+                        open={true}
+                        style={{width: '100%'}}
+                        value={value}
+                        dropdownClassName={"peak-dropdown"}
+                        onSearch={handleSearch}
+                        onSelect={goTo}/>
                 </div>
             }
         </PeakModal>

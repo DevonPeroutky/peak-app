@@ -7,6 +7,7 @@ import {openSwitcher} from "../redux/slices/quickSwitcherSlice";
 import {useEffect} from "react";
 import {load_active_user} from "../redux/rootReducer";
 import {useAccountSwitcher} from "./account";
+import { toggleHelpModal } from "src/redux/slices/helpModal/helpModalSlice";
 
 export function loadEntireWorldForAllAccounts(ogUserId: string, peakUserId: string): Promise<void> {
     return loadAllUserAccounts(ogUserId, peakUserId).then(res => {
@@ -39,6 +40,9 @@ export const KeybindingHandlerWrapper = (props: {currentUserId: string, userAcco
     const keyBindingHandler = (event: KeyboardEvent) => {
         if (event.metaKey && event.key == 'k') {
             dispatch(openSwitcher())
+        }
+        if (event.metaKey && event.key == '/') {
+            dispatch(toggleHelpModal())
         }
 
         // Hotkey Switcher for accounts

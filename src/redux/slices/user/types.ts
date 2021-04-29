@@ -1,3 +1,5 @@
+import {Moment} from "moment";
+
 export interface PeakNode {
     children: PeakStructureNode[],
     title: string,
@@ -16,6 +18,7 @@ export interface PeakDisplayNode {
     topic_id?: string
     page_id?: string
     header_id?: string
+    updated_at?: number
     header_type: PeakNodeType
 }
 
@@ -25,6 +28,7 @@ export interface PeakStructureNode extends PeakNode {
     children: PeakStructureNode[]
     header_id: string
     header_type: PeakNodeType
+    updated_at: number
     title: string
     page_id: string
     topic_id: string
