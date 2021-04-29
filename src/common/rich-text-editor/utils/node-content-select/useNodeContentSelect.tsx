@@ -217,7 +217,6 @@ export const useNodeContentSelect = (
                 let re = /^\/[a-zA-Z]+$/
                 const res = re.exec(text)
 
-                console.log(editor.selection)
                 // Default Open
                 if (atEnd && text === trigger) {
                     setTargetRange({ anchor: {...editor.selection.anchor, offset: 0 }, focus: editor.selection.focus });
@@ -226,7 +225,6 @@ export const useNodeContentSelect = (
                     return;
                 }
 
-                console.log(`RANGE `, range)
                 if (atEnd && beforeMatch && res && currentlyInParagraphNode) {
                     setTargetRange(range as Range);
                     const [, word] = beforeMatch;

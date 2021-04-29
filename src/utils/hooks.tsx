@@ -37,6 +37,7 @@ import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/a
 import {useNotes} from "../client/notes";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
+import {now} from "moment";
 const R = require('ramda');
 
 // --------------------------------------------------

@@ -12,13 +12,6 @@ import {useSelector} from "react-redux";
 import {AppState} from "../../../../redux";
 import {PeakTopicNode} from "../../../../redux/slices/user/types";
 import {cloneDeep} from "lodash";
-import {clone} from "ramda";
-import {convertHierarchyToSearchableList} from "../../../../utils/hierarchy";
-import {sleep} from "../../../../chrome-extension/utils/generalUtil";
-import {DragSourceHookSpec, FactoryOrInstance} from "react-dnd/dist/types/hooks/types";
-import Menu from "antd/lib/menu";
-import SubMenu from "antd/es/menu/SubMenu";
-import {AppstoreOutlined, MailOutlined, SettingOutlined} from "@ant-design/icons/lib";
 
 export const DragItemTypes = {
     TOPIC_PAGE_ITEM: 'topic_page_item',
