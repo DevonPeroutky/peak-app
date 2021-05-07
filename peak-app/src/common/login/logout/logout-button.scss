@@ -1,0 +1,11 @@
+.logout-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  .logout-row-icon {
+    margin-right: 8px;
+  }
+
+  a { color: inherit; }
+}

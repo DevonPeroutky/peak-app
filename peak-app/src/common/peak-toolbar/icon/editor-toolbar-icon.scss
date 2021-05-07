@@ -1,0 +1,31 @@
+.peak-editor-icon {
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 14px;
+  margin-right: 2px;
+  margin-left: 2px;
+  border: none;
+  box-shadow: none;
+  color: rgba(0, 0, 0, .65);
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: rgba(0, 0, 0, .65);
+    background-color: rgba(9, 30, 66, 0.08);
+  }
+
+  &:focus {
+    color: rgba(0, 0, 0, .65);
+  }
+
+  &.active {
+    color: #40a9ff;
+    background-color: #e6f7ff;
+  }
+}

@@ -1,0 +1,15 @@
+@import "constants/variables";
+@import "~@fontsource/inter/index.css";
+
+.App {
+  text-align: center;
+  height: 100vh;
+
+  &.no-scroll {
+    overflow: hidden;
+  }
+}
+
+body {
+  font-family: "Inter"!important;
+}

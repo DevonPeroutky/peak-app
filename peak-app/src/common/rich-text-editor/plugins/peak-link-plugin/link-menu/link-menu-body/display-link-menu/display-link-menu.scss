@@ -1,0 +1,42 @@
+@import "../../../../../../../constants/variables";
+
+.display-link-content-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+
+  .link-menu-divider {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .edit-link-text {
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    &:hover {
+      background-color: $c-gray;
+    }
+  }
+
+  .link-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+    &:hover {
+      color: $primary-blue
+    }
+  }
+
+  .delete-icon {
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: red
+    }
+  }
+}

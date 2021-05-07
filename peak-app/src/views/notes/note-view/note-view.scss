@@ -1,0 +1,146 @@
+@import "../../../constants/variables";
+
+.peak-note-view-container {
+  width: 100%;
+  margin: 0 auto;
+
+  .note-header-section {
+    display: flex;
+    flex-direction: column;
+
+    .note-subheader-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      height: 22px!important;
+      line-height: 22px!important;
+      font-size: 14px!important;
+
+      .note-link-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: uppercase;
+        font-size: .75rem;
+
+        .note-web-icon {
+          height: 18px;
+          width: auto;
+          padding-right: 5px;
+        }
+
+        .note-url {
+          text-decoration: none!important;
+          text-shadow: none!important;
+          background: none!important;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: $text-accent-color;
+          font-size: .69rem;
+
+          &:hover {
+            color: $darker-text-accent-color;
+          }
+        }
+      }
+    }
+
+    .note-header-row {
+      display: flex;
+      padding-top: 0px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      h1 {
+        margin-bottom: 0;
+      }
+
+      .web-title-input {
+        resize: none;
+        font-size: 2.2rem!important;
+        font-weight: 600;
+        text-align: left;
+        padding-left: 0;
+        text-transform: capitalize;
+        margin-bottom: 5px;
+      }
+    }
+
+    .book-note-header-row {
+      display: flex;
+      margin-top: 0px;
+      padding-top: 20px;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 88px;
+
+      .image-section {
+        display: flex;
+        min-width: 72px;
+        max-height: 200px;
+        width: auto;
+        flex-grow: 1;
+
+        .book-note-cover-image {
+          max-width: 100%;
+          width: auto;
+          height: 100%;
+          max-height: inherit;
+
+          &.fallback {
+            display: flex;
+            height: auto;
+          }
+
+          svg {
+            width: 100px;
+            height: auto;
+          }
+        }
+      }
+
+      .note-header-section {
+        display: flex;
+        flex-grow: 4;
+
+        .note-header {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-left: 15px;
+          //flex-grow: 1;
+
+          .book-title-input {
+            display: flex;
+            flex-grow: 2;
+            resize: none;
+            margin-bottom: 0;
+            font-size: 2.2rem!important;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            padding-left: 0;
+            text-transform: capitalize;
+          }
+
+          .author-subtitle {
+            padding-left: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: $text-accent-color;
+          }
+        }
+      }
+    }
+  }
+
+  //.note-divider {
+  //  margin-top: 32px;
+  //  margin-bottom: 32px;
+  //}
+
+}

@@ -1,0 +1,122 @@
+@import "../../../../../../constants/variables";
+
+$title-row-height: 30px;
+$margin-top: 20px;
+$web-body-padding: 20px;
+.peak-knowledge-node-container {
+  margin-top: $margin-top;
+  border-radius: $peak-kn-border-radius;
+  box-shadow: $peak-kn-box-shadow;
+  //padding: $peak-kn-padding;
+  border: none;
+  padding: $peak-kn-padding;
+  color: rgba(42, 49, 53, .6);
+
+  .peak-knowledge-title-row {
+    display: flex;
+    //border-bottom: 1px solid $gray-accent-color;
+    align-items: center;
+    //padding-left: 10px;
+    //padding-right: 10px;
+    //color: $placeholder-text-color;
+    justify-content: space-between;
+
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+
+      .web-note-title {
+        max-width: 100%;
+
+        h2 {
+          color: $text-color;
+          text-overflow: ellipsis!important;
+          white-space: nowrap!important;
+          overflow: hidden;
+          margin-bottom: 0;
+        }
+      }
+
+      .main-icon {
+        margin-right: 10px;
+      }
+
+      .knowledge-label {
+        max-width: inherit;
+        color: $text-color;
+        text-overflow: ellipsis!important;
+        white-space: nowrap;
+        overflow: hidden;
+
+        .link-to-note {
+          max-width: inherit;
+        }
+      }
+    }
+
+    .icon-section {
+      display: flex;
+      align-items: center;
+      min-width: 50px;
+
+      .external-link-icon {
+        margin-left: 10px;
+      }
+    }
+
+  }
+
+  .web-body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    &.empty::after {
+      position: relative;
+      padding-top: 3px;
+      //top: calc(#{$peak-kn-padding-top} + #{$title-row-height} + #{$margin-top} + #{$web-body-padding});
+      //top: 0;
+      color: $placeholder-text-color;
+      cursor: text;
+      content: "Write down something that caught your attention...";
+      display: flex;
+      align-items: center;
+      line-height: inherit;
+      //padding-top: calc(#{$peak-kn-padding-top} + 5px);
+      pointer-events:none;
+    }
+
+  }
+
+  .space-block {
+    padding-top: 10px;
+    .nothing {
+      display: none;
+    }
+  }
+
+  .web-footer {
+    padding-top: 2px;
+    font-size: 12px;
+
+    .title-row-icon {
+      height: 16px;
+      margin-right: 10px;
+
+      &.book {
+        color: $primary-blue;
+      }
+      &.learning {
+        color: $primary-green;
+      }
+      &.web {
+        color: $primary-red;
+      }
+    }
+
+    .external-link {
+      color: inherit!important;
+    }
+  }
+}

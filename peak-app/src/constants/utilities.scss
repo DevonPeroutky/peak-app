@@ -1,0 +1,29 @@
+@import "./variables";
+
+.peak-hotkey-decoration {
+    background-color: rgb(244, 245, 247);
+    border-radius: 3px;
+    padding: 1px 3px;
+    display: inline-block;
+    vertical-align: center;
+    horiz-align: center;
+    text-align: center;
+}
+
+.peak-page-title {
+    margin-top: 0!important;
+    font-size: $title-font-size;
+    font-weight: $title-font-weight;
+    line-height: $title-line-height!important;
+    min-height: $title-line-height!important;
+    color: rgb(22, 30, 46)!important;
+    width: fit-content;
+    border-bottom: 0!important;
+}
+
+.voidable-slate-element {
+    user-select: none;
+    cursor: pointer;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}

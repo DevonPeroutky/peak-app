@@ -1,0 +1,52 @@
+@import "../../../../constants/variables";
+$transition: all .5s ease-in-out;
+$og-padding: 16px;
+$margin-top: 24px;//Also seet in the component via notification.config
+.peak-saved-page-message {
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -o-transition: $transition;
+  -ms-transition: $transition;
+  transition: $transition;
+  margin-top: $margin-top!important;
+  min-height: 150px;
+  padding: $og-padding 0px 0px!important;
+  font-family: "Inter"!important;
+  color: $text-color!important;
+  letter-spacing: normal!important;
+  font-weight: 400!important;
+
+  // Necessary for Youtube
+  background-color: white!important;
+
+  .ant-notification-notice-content {
+    height: 100% !important;
+
+    div[role=alert] {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .ant-notification-notice-message {
+        //border-bottom: 1px solid rgb(240, 240, 240);
+        padding-bottom: 10px;
+        padding-right: 24px!important;
+        padding-left: 24px!important;
+      }
+
+      .ant-notification-notice-description {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        padding-right: 0px!important;;
+      }
+    }
+  }
+}
+
+.drawer-mode {
+  height: 100vh;
+  margin-top: 0!important;
+  margin-right: -24px;
+}

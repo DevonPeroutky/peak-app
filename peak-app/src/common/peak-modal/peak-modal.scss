@@ -1,0 +1,34 @@
+.peak-modal-mask {
+  position: absolute;
+  inset: 0px;
+  background: rgba(15, 15, 15, 0.6);
+  z-index: 100!important;
+  display: flex;
+  //align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+  &.closed {
+    visibility: hidden;
+    //display: none;
+  }
+
+  .peak-modal {
+    position: relative;
+    z-index: 1;
+    height: fit-content;
+
+    width: 75%;
+    max-width: 600px;
+    min-width: 600px;
+    box-shadow: rgba(15, 15, 15, .05) 0px 0px 0px 1px, rgba(15, 15, 15, .10) 0px 5px 10px, rgba(15, 15, 15, .20) 0px 15px 40px;
+
+    border-radius: 3px;
+    background: white;
+    top: 90px;
+    overflow: hidden;
+    min-height: 50px;
+    max-height: 80vh;
+  }
+}

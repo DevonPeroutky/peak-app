@@ -1,0 +1,48 @@
+@import "../../../../constants/variables";
+
+.topic-group-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 16px;
+  cursor: pointer;
+
+  &:hover {
+    color: $sidebar-accent-text-color;
+  }
+
+  .topic-group-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+
+    justify-content: space-between;
+    display: flex;
+    --animate-duration: 1s;
+    --animate-repeat: 1;
+  }
+
+  .icons-container {
+    display: flex;
+    align-items: center;
+    z-index: 10;
+
+    .add-page-icon {
+      margin-left: 10px;
+      cursor: pointer;
+      display: none;
+
+      &.visible {
+        display: inline;
+      }
+      &:hover {
+        color: #1890ff;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,9 @@
+.peak-note-view-container {
+  .page-title.empty-title::after {
+    position: absolute;
+    color: #8993a4;
+    top: 0;
+    cursor: text;
+    content: "Title your Note";
+  }
+}

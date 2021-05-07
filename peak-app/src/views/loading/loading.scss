@@ -1,0 +1,20 @@
+@import "../../constants/variables";
+
+.main-loading-animation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90%;
+
+  .switch-account-animation {
+    display: flex;
+  }
+
+  .animation-description {
+    color: $darker-text-accent-color!important;
+  }
+
+  .recover-animation {
+    padding-bottom: 50px;
+  }
+}

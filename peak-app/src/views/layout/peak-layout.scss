@@ -1,0 +1,44 @@
+@import "../../constants/variables";
+
+.peak-parent-layout {
+  display: flex;
+  min-height: 100vh;
+
+  .peak-main-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: $sidebar-width;
+    background-color: white;
+    flex-grow: 1;
+    max-width: calc(100vw - #{$sidebar-width}) !important;
+    width: calc(100vw - #{$sidebar-width}) !important;
+
+    &.fullscreen {
+      margin-left: $fullscreen-sidebar-width;
+      max-width: calc(100vw - #{$fullscreen-sidebar-width}) !important;
+      width: calc(100vw - #{$fullscreen-sidebar-width}) !important;
+    }
+
+    .peak-content-container {
+      height: calc(100% - 55px);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1rem;
+      letter-spacing: normal;
+      line-height: 1.75;
+
+      .peak-content-holder {
+        width: 85%;
+        max-width: $max-content-width;
+        padding-top: $vertical-padding;
+        padding-bottom: $vertical-padding;
+      }
+    }
+  }
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow-x: visible!important;
+}

@@ -1,0 +1,59 @@
+@import "../../../../../../constants/variables";
+
+.peak-message-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  // Necessary for Youtube
+  background-color: white!important;
+
+  .peak-header-group {
+    display: flex;
+    align-items: center;
+
+    // Necessary for Youtube
+    background-color: white!important;
+
+    .peak-message-header {
+      font-family: "Inter"!important;
+      color: $text-color!important;
+      font-size: 20px!important;
+      font-weight: 600!important;
+      margin-bottom: 0px!important;
+      margin-top: 0px!important;
+      letter-spacing: normal!important;
+
+      // Necessary for Youtube
+      background-color: white!important;
+
+      &.instruction {
+        font-size: 16px!important;
+      }
+    }
+
+    .peak-message-header-logo {
+      margin-right: 10px;
+      height: 24px;
+      max-height: 24px;
+      width: auto;
+
+      // Necessary for Youtube
+      background-color: white!important;
+    }
+  }
+
+  .peak-link-icon-to-note {
+    margin-left: 10px;
+
+    &:hover {
+      cursor: pointer;
+      color: $primary-blue;
+    }
+  }
+
+  .view-note-instruction {
+    font-size: 10px;
+    color: rgba(42, 49, 53, .6);
+  }
+}

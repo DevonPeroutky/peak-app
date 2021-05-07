@@ -1,0 +1,79 @@
+@import "variables";
+
+.peak-rich-text-editor-container {
+
+  h1, h2, h3, h4, h5 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid $gray-accent-color;
+  }
+
+  .p {
+    line-height: 1.75!important;
+  }
+
+  .slate-Draggable {
+    button {
+      display: flex;
+      overflow: auto!important;
+    }
+  }
+
+  .peak-blockquote {
+    font-style: italic;
+    font-size: 1.5em;
+    font-weight: 600;
+    //color: #6b7280;
+  }
+
+  .peak-code-block {
+    background-color: #252f3f;
+    color: #e5e7eb;
+
+    overflow-x: auto;
+    font-size: .875em;
+    line-height: 1.7142857;
+    margin-top: 1.7142857em;
+    margin-bottom: 1.7142857em;
+    border-radius: .375rem;
+    padding: .8571429em 1.1428571em;
+    white-space: pre;
+  }
+
+  $list-color: $darker-text-accent-color;
+  .peak-ul {
+    list-style-type: disc!important;
+    list-style-position: outside!important;
+
+    .peak-li {
+      list-style-type: disc!important;
+    }
+
+    .peak-li::marker {
+      color: $list-color!important;
+    }
+  }
+
+  .peak-ol {
+    list-style-type: decimal!important;
+    list-style-position: outside!important;
+    //counter-reset: cupcake!important;
+    //list-style: none;
+
+    .peak-li {
+      //list-style-type: decimal!important;
+      counter-increment: cupcake;
+      padding-left: 10px;
+    }
+
+    .peak-li::marker {
+      //content: counters(cupcake, '.') ' ';
+      /* Whatever custom styles you want here */
+      color: $list-color!important;
+      font-weight: bold!important;
+      padding-right: 15px!important;
+      margin-right: 12px;
+      width: 40px;
+      line-height: 1.6!important;
+    }
+  }
+}

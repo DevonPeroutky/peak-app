@@ -1,0 +1,39 @@
+@import "../../constants/variables";
+
+.welcome-page-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .welcome-container {
+    z-index: 100;
+    display: flex;
+    width: 25%;
+    height: fit-content;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    //background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, .7));
+    //background: rgba(255, 255, 255, 1);
+    //box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    //opacity: 1!important;
+    //box-shadow: rgba(9, 30, 66, 0.31) 0px 0px 1px, rgba(9, 30, 66, 0.25) 0px 4px 8px -2px;
+
+    .welcome-logo {
+      height: 100px!important;
+      width: 100%;
+
+    }
+    .peak-subtitle {
+      margin-bottom: 75px;
+      color: rgba(9, 109, 217, .69)!important;
+    }
+  }
+}

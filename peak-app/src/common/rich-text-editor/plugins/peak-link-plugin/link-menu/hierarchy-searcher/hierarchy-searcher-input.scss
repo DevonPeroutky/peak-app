@@ -1,0 +1,25 @@
+@import "../../../../../../constants/variables";
+.hierarchy-searcher-input {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  border: 0;
+
+  .ant-select-selector {
+    border: 0!important;
+    outline: none!important;
+    box-shadow: none!important;
+  }
+}
+
+.hierarchy-search-dropdown {
+  width: 100%;
+  margin-top: 6px;
+  margin-left: -26px;
+  border-radius: 0px 0px 3px 3px;
+  background-color: #FFF;
+
+  //border: 1px solid $c-accent-color;
+  box-shadow: rgba(9, 30, 66, 0.31) 0px 0px 1px, rgba(9, 30, 66, 0.25) 0px 4px 8px -2px;
+  border-top: 0px;
+}
