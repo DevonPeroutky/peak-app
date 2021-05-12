@@ -3,7 +3,7 @@ import {createHistoryPlugin, createReactPlugin, SlatePlugins} from "@udecode/sla
 import {EditableProps} from "slate-react/dist/components/editable";
 import {
     createBlockquotePlugin, createBoldPlugin,
-    createCodeBlockPlugin, createCodePlugin, createHeadingPlugin, createItalicPlugin,
+    createCodeBlockPlugin, createCodePlugin, createHeadingPlugin, createItalicPlugin, createListPlugin,
     createParagraphPlugin,
     createSlatePluginsComponents,
     createSlatePluginsOptions, createStrikethroughPlugin, createUnderlinePlugin
@@ -30,6 +30,7 @@ const pluginsBasic = [
     createBlockquotePlugin(),     // blockquote element
     createCodeBlockPlugin(),      // code block element
     createHeadingPlugin(),        // heading elements
+    createListPlugin(),
 
     // marks
     createBoldPlugin(),           // bold mark

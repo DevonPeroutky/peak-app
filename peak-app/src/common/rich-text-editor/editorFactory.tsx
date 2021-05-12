@@ -12,7 +12,7 @@ import {TNode} from "@udecode/slate-plugins-core/dist/types/TNode";
 import {useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import cn from "classnames"
 import "../../constants/peak-editor.scss"
-import {useComponents} from "./components";
+import {useComponents, useReadOnlyComponents} from "./components";
 import {DEFAULT_PLACEHOLDERS} from "./constants";
 import {contains, includes} from "ramda";
 
@@ -85,3 +85,4 @@ export const PeakEditor = ({
         </div>
     )
 }
+

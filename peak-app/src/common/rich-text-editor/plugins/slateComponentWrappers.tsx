@@ -8,7 +8,6 @@ import {
     StyledElementProps, withProps
 } from "@udecode/slate-plugins";
 import {styled} from "@uifabric/utilities";
-import {SlatePluginOptions} from "@udecode/slate-plugins-core";
 
 export const PeakBlockquoteElement = styled<
     StyledElementProps,

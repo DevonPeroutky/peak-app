@@ -13,7 +13,6 @@ import {
     createImagePlugin,
     createItalicPlugin,
     createKbdPlugin,
-    createLinkPlugin,
     createListPlugin,
     createMediaEmbedPlugin,
     createNodeIdPlugin,

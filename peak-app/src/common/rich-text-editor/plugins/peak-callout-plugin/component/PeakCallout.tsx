@@ -1,4 +1,4 @@
-import {RenderElementProps, useSlate} from "slate-react";
+import {RenderElementProps} from "slate-react";
 import React from "react";
 import "./peak-callout.scss"
 

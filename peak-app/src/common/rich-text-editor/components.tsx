@@ -1,18 +1,21 @@
 import {
     createSlatePluginsComponents,
-    ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK,
+    ELEMENT_BLOCKQUOTE,
+    ELEMENT_CODE_BLOCK,
     ELEMENT_H1,
     ELEMENT_H2,
     ELEMENT_H3,
     ELEMENT_H4,
     ELEMENT_H5,
     ELEMENT_H6,
-    ELEMENT_IMAGE, ELEMENT_LI, ELEMENT_LINK, ELEMENT_MEDIA_EMBED,
+    ELEMENT_LI,
+    ELEMENT_LINK,
+    ELEMENT_MEDIA_EMBED,
     ELEMENT_OL,
     ELEMENT_PARAGRAPH,
-    ELEMENT_TABLE,
-    ELEMENT_TODO_LI,
-    ELEMENT_UL, Options, PlaceholderProps, SlatePlugin,
+    ELEMENT_UL,
+    Options,
+    PlaceholderProps,
     withDraggables,
     withPlaceholders,
 } from "@udecode/slate-plugins";
@@ -179,4 +182,10 @@ export const useComponents = (dnd: boolean, placeholders: Options<PlaceholderPro
         }
         return components
     }, [dnd, placeholders])
+}
+
+export const useReadOnlyComponents = () => {
+    return useMemo(() => {
+        return clone(defaultComponents)
+    }, [])
 }

@@ -32,6 +32,11 @@ const Post: NextPage<{ post: BlogPost }> = (props) => {
                             Speaking of it, this is still a long story. First of all, the formula rendering engine of my blog is Katex , because it is faster, much faster than Mathjax (refer to here ).
                         </p>
                     </main>
+                    <ul>
+                        <li>Coffee</li>
+                        <li>Tea</li>
+                        <li>Milk</li>
+                    </ul>
                     <div>THE FOOTER</div>
                 </div>
             </div>

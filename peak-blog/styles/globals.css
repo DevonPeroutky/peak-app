@@ -24,6 +24,11 @@
         font-size: 1.65rem;
         line-height: 1.25;
     }
+
+    ul {
+        list-style-type: disc !important;
+        list-style-position: outside !important;
+    }
 }
 
 /*html,*/
