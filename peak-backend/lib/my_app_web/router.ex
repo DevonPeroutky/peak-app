@@ -34,7 +34,7 @@ defmodule MyAppWeb.Router do
   end
 
   scope "/api/v1", MyAppWeb do
-    pipe_through [:public, :auth, :ensure_auth]
+    pipe_through [:public]
     resources "/users", UserController, only: [:update, :show] do
       get "/fetch-socket-access-token", SessionController, :generate_auth_token
       get "/list-all-accounts", UserController, :list_all_accounts
