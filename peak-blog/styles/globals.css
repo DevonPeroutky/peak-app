@@ -2,11 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/*@layer base {*/
-/*    @font-face {*/
-/*        font-family: Helvetica Neue;*/
-/*    }*/
-/*}*/
+@layer base {
+    p {
+        /*color: rgba(0, 0, 0, .85);*/
+        color: rgb(82, 86, 96);
+        letter-spacing: 0.3px;
+        line-height: 1.7;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    h1 {
+        font-size: 3rem;
+        line-height: 1;
+        font-weight: 700;
+    }
+
+    h2 {
+        font-weight: 700;
+        font-size: 1.65rem;
+        line-height: 1.25;
+    }
+}
 
 /*html,*/
 /*body {*/
