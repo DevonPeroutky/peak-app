@@ -1,7 +1,11 @@
 import { NextPage, GetStaticProps } from "next";
 import { BlogPost } from "../../types"
-import {blogAxiosClient} from "../../../../peak-app/src/client/axiosConfig";
 import styles from '../../../styles/Home.module.css'
+import {DisplayEditor} from "../../components/rich-text-editor/DisplayEditor";
+import React from "react";
+
+// TODO: Move this to shared
+import {blogAxiosClient} from "../../../../peak-app/src/client/axiosConfig";
 
 const Post: NextPage<{ post: BlogPost }> = (props) => {
     const { post } = props
@@ -9,6 +13,9 @@ const Post: NextPage<{ post: BlogPost }> = (props) => {
     return (
         <div className={styles.container}>
             <div className={styles.contentContainer}>
+                <div>
+                    <DisplayEditor value={post.body} postId={"cool-id"}/>
+                </div>
                 <div className={"flex flex-col max-w-screen-md w-3/4 flex-grow"}>
                     <div className={"header-content flex justify-center flex-col"}>
                         <h1 className="text-left leading-tight my-8">{post.title}</h1>

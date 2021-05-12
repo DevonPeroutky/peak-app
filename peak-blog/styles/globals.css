@@ -5,8 +5,9 @@
 @layer base {
     p {
         /*color: rgba(0, 0, 0, .85);*/
+        font-size: 1.125rem;
         color: rgb(82, 86, 96);
-        letter-spacing: 0.3px;
+        letter-spacing: .3px;
         line-height: 1.7;
         margin-top: 25px;
         margin-bottom: 25px;
