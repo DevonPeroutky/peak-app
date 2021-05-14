@@ -13,15 +13,17 @@
     "axios": "^0.21.1",
     "next": "10.2.0",
     "node-fetch": "^2.6.1",
+    "peak-shared": "link:../shared",
     "postcss": "^8.2.14",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "sass": "^1.32.13",
     "slate": "^0.62.1",
     "slate-history": "^0.62.0",
     "slate-hyperscript": "^0.62.0",
     "slate-react": "^0.62.1",
-    "tailwindcss": "^2.1.2"
+    "tailwindcss": "^2.1.2",
+    "component-library": "link:../component-library",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.5",

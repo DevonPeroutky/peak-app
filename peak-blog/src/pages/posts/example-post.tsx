@@ -2,18 +2,21 @@ import { NextPage, GetStaticProps } from "next";
 import { BlogPost } from "../../types"
 import styles from '../../../styles/Home.module.css'
 import {DisplayEditor} from "../../components/rich-text-editor/DisplayEditor";
-import React from "react";
+import React, {useEffect} from "react";
 
 // TODO: Move this to shared
 import {blogAxiosClient} from "../../../../peak-app/src/client/axiosConfig";
+import {ExampleComponent} from "component-library/dist";
 
 const Post: NextPage<{ post: BlogPost }> = (props) => {
     const { post } = props
     console.log(post)
+
     return (
         <div className={styles.container}>
             <div className={styles.contentContainer}>
                 <div>
+                    <ExampleComponent text={"SUP BITCHESSSSSSSS"}/>
                     <DisplayEditor value={post.body} postId={"cool-id"}/>
                 </div>
                 <div className={"flex flex-col max-w-screen-md w-3/4 flex-grow"}>
