@@ -50,6 +50,11 @@ import {DividerElement} from "./plugins/peak-divider/element/DividerElement";
 import {clone} from "ramda";
 import {DRAGGABLE_ELEMENTS} from "./constants";
 
+
+const coreComponents = createSlatePluginsComponents({
+    [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
+})
+
 const defaultComponents = createSlatePluginsComponents({
     [ELEMENT_BLOCKQUOTE]: PeakBlockquoteElement,
     [ELEMENT_LI]: PEAK_LI_STYLE,
@@ -186,6 +191,6 @@ export const useComponents = (dnd: boolean, placeholders: Options<PlaceholderPro
 
 export const useReadOnlyComponents = () => {
     return useMemo(() => {
-        return clone(defaultComponents)
+        return clone(corComponents)
     }, [])
 }
