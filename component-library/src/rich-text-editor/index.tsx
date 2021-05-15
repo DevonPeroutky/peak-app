@@ -1,4 +1,34 @@
-export * from './options'
-export * from './types'
-export * from './components'
-export * from './plugins'
+import {
+  createBlockquotePlugin,
+  createBoldPlugin,
+  createCodeBlockPlugin,
+  createCodePlugin,
+  createHeadingPlugin,
+  createHistoryPlugin,
+  createItalicPlugin,
+  createListPlugin,
+  createParagraphPlugin,
+  createReactPlugin,
+  createStrikethroughPlugin,
+  createUnderlinePlugin
+} from '@udecode/slate-plugins'
+
+export const pluginsBasic = [
+  // editor
+  createReactPlugin(),
+  createHistoryPlugin(),
+
+  // elements
+  createParagraphPlugin(),
+  createBlockquotePlugin(),
+  createCodeBlockPlugin(),
+  createHeadingPlugin(),
+  createListPlugin(),
+
+  // marks
+  createBoldPlugin(),
+  createItalicPlugin(),
+  createUnderlinePlugin(),
+  createStrikethroughPlugin(),
+  createCodePlugin()
+]
