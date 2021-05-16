@@ -6,6 +6,7 @@ import {
   createHeadingPlugin,
   createHistoryPlugin,
   createItalicPlugin,
+  createLinkPlugin,
   createListPlugin,
   createParagraphPlugin,
   createReactPlugin,
@@ -13,7 +14,8 @@ import {
   createUnderlinePlugin
 } from '@udecode/slate-plugins'
 import { createPeakTitlePlugin } from './peak-title-plugin/PeakTitlePlugin'
-import {createPeakCalloutPlugin} from "./peak-callout-plugin/PeakCalloutPlugin";
+import { createPeakCalloutPlugin } from './peak-callout-plugin/PeakCalloutPlugin'
+import { createDividerPlugin } from './peak-divider/createDividerPlugin'
 
 export const genericPlugins = [
   // editor
@@ -26,6 +28,7 @@ export const genericPlugins = [
   createCodeBlockPlugin(),
   createHeadingPlugin(),
   createListPlugin(),
+  createLinkPlugin(),
 
   // marks
   createBoldPlugin(),
@@ -37,7 +40,8 @@ export const genericPlugins = [
 
 export const customPlugins = [
   createPeakTitlePlugin(),
-  createPeakCalloutPlugin()
+  createPeakCalloutPlugin(),
+  createDividerPlugin()
 ]
 
 export const readOnlyPlugins = [...genericPlugins, ...customPlugins]
