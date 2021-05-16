@@ -1,0 +1,24 @@
+@import "../../../../variables";
+
+.peak-page-title {
+  margin-top: 0;
+  font-size: $title-font-size;
+  font-weight: $title-font-weight;
+  line-height: $title-line-height;
+  min-height: $title-line-height;
+  color: rgb(22, 30, 46);
+  width: fit-content;
+  border-bottom: 0;
+
+  position: relative;
+  margin-bottom: 30px;
+  //width: 100%;
+
+  &.empty-title::after {
+    position: absolute;
+    color: #8993a4;
+    top: 0;
+    cursor: text;
+    content: "Page Title";
+  }
+}

@@ -12,6 +12,7 @@ import {
   createStrikethroughPlugin,
   createUnderlinePlugin
 } from '@udecode/slate-plugins'
+import { createPeakTitlePlugin } from './peak-title-plugin/PeakTitlePlugin'
 
 export const genericPlugins = [
   // editor
@@ -32,3 +33,7 @@ export const genericPlugins = [
   createStrikethroughPlugin(),
   createCodePlugin()
 ]
+
+export const customPlugins = [createPeakTitlePlugin()]
+
+export const readOnlyPlugins = [...genericPlugins, ...customPlugins]
