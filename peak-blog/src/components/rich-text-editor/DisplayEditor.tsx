@@ -2,9 +2,9 @@ import React, {useEffect} from "react";
 import { SlatePlugins } from "@udecode/slate-plugins-core";
 import {
     pluginOptions,
-    genericPlugins,
     readOnlyProps,
-    useReadOnlyComponents
+    useReadOnlyComponents,
+    readOnlyPlugins
 } from "component-library/dist";
 
 export interface DisplayEditorProps {
@@ -18,7 +18,7 @@ export const DisplayEditor = ({
     return (
         <SlatePlugins
             id={postId}
-            plugins={genericPlugins}
+            plugins={readOnlyPlugins}
             options={pluginOptions}
             components={useReadOnlyComponents()}
             editableProps={readOnlyProps}
