@@ -1,12 +1,12 @@
 import * as React from 'react'
-import styles from './styles.module.css'
+import './rich-text-editor/components/index.scss'
 
 interface Props {
   text: string
 }
 
 export const ExampleComponent = ({ text }: Props) => {
-  return <div className={styles.test}>Example Component: {text}</div>
+  return <div>Example Component: {text}</div>
 }
 
 export * from './rich-text-editor'

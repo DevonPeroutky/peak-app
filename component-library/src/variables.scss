@@ -1,0 +1,63 @@
+// I know there are better ways, I'm just lazy.
+
+// --------------
+// Global
+// --------------
+$text-color: #374151;//#6b7280;//rgb(42, 49, 53);
+$text-accent-color: rgba(42, 49, 53, .4);
+$darker-text-accent-color: rgba(42, 49, 53, .6);
+$gray-accent-color: #E6ECF1;
+$c-accent-color: rgb(235, 236, 240);
+$placeholder-text-color: #bfbfbf;
+$background-color: #FFF;
+$heading-color: rgb(17, 24, 39);
+
+// ---------
+// Sidebar
+// ---------
+$sidebar-border-right: 1px solid $gray-accent-color;
+//$sidebar-background-color: #F5F7F9;
+$sidebar-text-color: rgba(0, 0, 0, .60);
+$sidebar-accent-text-color: rgba(0, 0, 0, .80);
+$sidebar-background-color: $background-color;
+$sidebar-width: 15%;
+$sidebar-padding: 15px;
+$fullscreen-sidebar-width: 20%;
+$fullscreen-sidebar-padding: 40px;
+
+// ------------------
+// Content Container
+// ------------------
+$vertical-padding: 82px;
+$horizontal-padding: 170px;
+$max-content-width: 740px;
+
+// ---------
+// Headers
+// ---------
+// Title
+$title-font-size: 3rem!important;
+$title-font-weight: 800!important;
+$title-line-height: 3.5rem;
+
+// --------------
+// Search Bar Row
+// --------------
+$main-bar-height: 55px;
+
+// -------------
+// Colors
+// -------------
+$primary-blue: #1890ff;
+$primary-green: #389e0d;
+$c-gray: #f4f5f7;
+$primary-red: #FF5A67;
+
+
+// ---------------
+// Knowledge Nodes
+// ---------------
+$peak-kn-box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+$peak-kn-padding-top: 24px;
+$peak-kn-padding: $peak-kn-padding-top 24px;
+$peak-kn-border-radius: 4px;

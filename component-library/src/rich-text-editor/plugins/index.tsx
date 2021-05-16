@@ -13,7 +13,7 @@ import {
   createUnderlinePlugin
 } from '@udecode/slate-plugins'
 
-export const pluginsBasic = [
+export const genericPlugins = [
   // editor
   createReactPlugin(),
   createHistoryPlugin(),
