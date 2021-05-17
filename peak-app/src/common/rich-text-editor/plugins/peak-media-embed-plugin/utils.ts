@@ -49,6 +49,7 @@ export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbe
 
     const [stubNode] = Editor.nodes(editor, {
         at: [],
+        // @ts-ignore
         match: n => (n.id === stubNodeId && n.embed_type === mediaEmbedType)
     })
     console.log(`Node `, stubNode[0])

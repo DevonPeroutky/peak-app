@@ -211,6 +211,7 @@ export const useNodeContentSelect = (
                 const text: string = Node.string(currNode)
 
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
+                // @ts-ignore
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
 
                 // CONSOLIDATE W/beforeText

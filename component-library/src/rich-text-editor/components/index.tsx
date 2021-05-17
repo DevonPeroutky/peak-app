@@ -16,13 +16,15 @@ import {
   ELEMENT_YOUTUBE_EMBED
 } from '../plugins/peak-media-embed-plugin'
 
+export const PEAK_SLATE_COMPONENT_OVERRIDES = {
+  [TITLE]: PeakTitleElement,
+  [PEAK_CALLOUT]: PeakCalloutElement,
+  [ELEMENT_DIVIDER]: DividerElement,
+  [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
+  [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
+  [ELEMENT_MEDIA_EMBED]: RichLinkEmbed
+}
+
 export const useReadOnlyComponents = () => {
-  return createSlatePluginsComponents({
-    [TITLE]: PeakTitleElement,
-    [PEAK_CALLOUT]: PeakCalloutElement,
-    [ELEMENT_DIVIDER]: DividerElement,
-    [ELEMENT_TWITTER_EMBED]: TwitterEmbed,
-    [ELEMENT_YOUTUBE_EMBED]: YoutubeEmbed,
-    [ELEMENT_MEDIA_EMBED]: RichLinkEmbed
-  })
+  return createSlatePluginsComponents(PEAK_SLATE_COMPONENT_OVERRIDES)
 }

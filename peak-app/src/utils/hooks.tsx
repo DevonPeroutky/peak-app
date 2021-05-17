@@ -5,10 +5,6 @@ import {AppState} from "../redux";
 import { setUserHierarchy} from "../redux/slices/user/userSlice";
 import {
     updatePageContents,
-    updateJournalEntry,
-    setJournalEntries,
-    updateJournalEntries,
-    journalOrdering,
     updatePageTitle
 } from "../redux/slices/wikiPageSlice";
 import {Node} from "slate";
@@ -29,15 +25,12 @@ import {useQuery} from "./urls";
 import {FutureRead} from "../redux/slices/readingListSlice";
 import {CHROME_EXTENSION} from "../common/rich-text-editor/editors/chrome-extension/constants";
 import {PeakWikiPage, PeakWikiState, ScratchPad} from "../constants/wiki-types";
-import {JOURNAL_PAGE_ID} from "../common/rich-text-editor/editors/journal/constants";
-import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Peaker} from "../types";
 import {PeakTopicNode} from "../redux/slices/user/types";
 import {endSavingPage, setEditing, useActiveEditorState} from "../redux/slices/activeEditor/activeEditorSlice";
 import {useNotes} from "../client/notes";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {SCRATCHPAD_ID} from "../common/rich-text-editor/editors/scratchpad/constants";
-import {now} from "moment";
 const R = require('ramda');
 
 // --------------------------------------------------
@@ -45,10 +38,6 @@ const R = require('ramda');
 // --------------------------------------------------
 export function useOnlineStatus() {
     return useSelector<AppState, boolean>(state => state.electron.isOnline);
-}
-
-export function useJournal() {
-    return useSelector<AppState, PeakWikiPage>(state => state.peakWikiState[JOURNAL_PAGE_ID]);
 }
 
 export function useScratchpad() {
@@ -270,82 +259,6 @@ function useSaveJournalEntryRequest() {
                 body: newValue,
             }
         })
-    }
-}
-
-function useBulkSaveJournalEntryRequest() {
-
-    return (entries: JournalEntry[], user: Peaker) => {
-        console.log(`The current user is ${user.email} --> ${user.id}`)
-        return peakAxiosClient.post(`/api/v1/users/${user.id}/bulk-update-journal`, {
-            "journal_entries": entries
-        })
-    }
-}
-
-export function useJournalSaver() {
-    const dispatch = useDispatch();
-    const saveJournalEntry = useSaveJournalEntryRequest()
-
-    return (date: string, newValue: Node[]) => {
-
-        return saveJournalEntry(date, newValue)
-            .then((res) => {
-                const newJournalEntry: JournalEntry = res.data.journal
-                batch(() => {
-                    dispatch(updateJournalEntry(newJournalEntry));
-                })
-            }).catch((err) => {
-                console.log(err)
-                notification.error({message: "Failed to save the page. Please try again or let Devon know it failed"})
-            })
-    }
-}
-
-export function useBulkJournalEntrySaver() {
-    const dispatch = useDispatch();
-    const bulkSaveJournalEntry = useBulkSaveJournalEntryRequest()
-    return (entries: JournalEntry[], user: Peaker) => {
-        return bulkSaveJournalEntry(entries, user)
-            .then((res) => {
-                const updatedJournalEntries: JournalEntry[] = res.data.journal_entries
-                batch(() => {
-                    dispatch(updateJournalEntries(updatedJournalEntries));
-                    dispatch(endSavingPage())
-                })
-            }).catch((err) => {
-                console.log(err)
-                notification.error({message: "Failed to save the page. Please try again or let Devon know it failed"})
-            })
-    }
-
-}
-
-export function useDebounceBulkJournalEntrySaver() {
-    const bulkSaveJournalEntries = useBulkJournalEntrySaver()
-
-    // You need useCallback otherwise it's a different function signature each render?
-    return useCallback(debounce(bulkSaveJournalEntries, 1000), [])
-}
-
-export function useFetchJournal() {
-    const dispatch = useDispatch()
-    const user: Peaker = useSelector<AppState, Peaker>(state => state.currentUser);
-
-    return (readOnly: boolean, date?: string | undefined, amount: number = 30) => {
-        const searchDate = date ?? getCurrentFormattedDate()
-        return peakAxiosClient
-            .get(`/api/v1/users/${user.id}/journal-entries?entry_date=${searchDate}&read_only=${readOnly}&amount=${amount}`)
-            .then(res => {
-                const sortedJournal: JournalEntry[] = R.sort(journalOrdering, res.data.journal_entries)
-                dispatch(setJournalEntries(sortedJournal))
-                return sortedJournal
-            }).catch(err => {
-                message.error({
-                    content: 'Failed to fetch your Journal! Tell Devon he sucks at the whole "Programming" thing',
-                    key: 1
-                })
-            })
     }
 }
 

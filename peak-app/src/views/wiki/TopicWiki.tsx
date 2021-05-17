@@ -38,6 +38,7 @@ const TopicWiki = (props: {topic_id: string}) => {
             setWikiPageContent(newValue)
 
             // If PageTitle changed. Update it in Redux immediately due to Sidebar showing the Title's
+            // @ts-ignore
             const children: Node[] = newValue[0].children as Node[]
             const currentTitle = Node.string(children[0])
             if (currentTitle !== pageTitle) {

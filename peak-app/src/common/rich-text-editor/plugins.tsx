@@ -2,31 +2,17 @@ import 'tippy.js/dist/tippy.css';
 import React, { useMemo } from 'react';
 import {
     createAutoformatPlugin,
-    createBlockquotePlugin,
-    createBoldPlugin,
-    createCodeBlockPlugin,
-    createCodePlugin, createDeserializeHTMLPlugin,
+    createDeserializeHTMLPlugin,
     createExitBreakPlugin,
-    createHeadingPlugin,
-    createHighlightPlugin,
     createHistoryPlugin,
-    createImagePlugin,
-    createItalicPlugin,
     createKbdPlugin,
     createListPlugin,
-    createMediaEmbedPlugin,
     createNodeIdPlugin,
-    createParagraphPlugin,
     createReactPlugin,
     createResetNodePlugin,
     createSelectOnBackspacePlugin,
     createSoftBreakPlugin,
-    createStrikethroughPlugin,
-    createSubscriptPlugin,
-    createSuperscriptPlugin,
-    createTodoListPlugin,
     createTrailingBlockPlugin,
-    createUnderlinePlugin,
     ELEMENT_IMAGE,
     ELEMENT_PARAGRAPH,
     SlatePlugin,
@@ -36,30 +22,15 @@ import {defaultOptions, PEAK_EXIT_BREAK_OPTIONS, PEAK_RESET_BLOCK_OPTIONS, PEAK_
 import {createPeakCalloutPlugin} from "./plugins/peak-callout-plugin/PeakCalloutPlugin";
 import { createPeakLearningPlugin } from './plugins/peak-knowledge-plugin/PeakKnowledgePlugin';
 import {createPeakLinkPlugin} from "./plugins/peak-link-plugin/PeakLinkPlugin";
-import {createPeakMediaEmbedPlugin} from "./plugins/peak-media-embed-plugin/createPeakMediaEmbedPlugin";
 import {createDividerPlugin} from "./plugins/peak-divider/createDividerPlugin";
+import {corePlugins} from "component-library/dist";
 
 const openSourcePlugins: SlatePlugin[] = [
     createReactPlugin(),
     createHistoryPlugin(),
-    createParagraphPlugin(),
-    createBlockquotePlugin(),
-    createTodoListPlugin(),
-    createHeadingPlugin(),
-    createImagePlugin(),
-    createListPlugin(),
-    createMediaEmbedPlugin(),
-    createCodeBlockPlugin(),
-    createBoldPlugin(),
-    createCodePlugin(),
-    createItalicPlugin(),
-    createHighlightPlugin(),
-    createUnderlinePlugin(),
-    createStrikethroughPlugin(),
-    createSubscriptPlugin(),
-    createSuperscriptPlugin(),
-    createKbdPlugin(),
     createNodeIdPlugin(),
+    createKbdPlugin(),
+    createListPlugin(),
     createAutoformatPlugin(PEAK_AUTOFORMAT_OPTIONS),
     createResetNodePlugin(PEAK_RESET_BLOCK_OPTIONS),
     createSoftBreakPlugin(PEAK_SOFT_BREAK_OPTIONS),
@@ -67,7 +38,6 @@ const openSourcePlugins: SlatePlugin[] = [
     createTrailingBlockPlugin({
         type: defaultOptions[ELEMENT_PARAGRAPH].type,
     }),
-
 
     // TODO: WTF is this
     createSelectOnBackspacePlugin({ allow: defaultOptions[ELEMENT_IMAGE].type }),
@@ -81,10 +51,10 @@ const basePlugins: SlatePlugin[] = [
 const customPeakPlugins: SlatePlugin[] = [
     createPeakLinkPlugin(),
     createPeakLearningPlugin(),
-    createPeakMediaEmbedPlugin(),
 ]
 const peakPlugins: SlatePlugin[] = [
-    ...basePlugins,
+    ...openSourcePlugins,
+    ...corePlugins,
     ...customPeakPlugins
 ]
 

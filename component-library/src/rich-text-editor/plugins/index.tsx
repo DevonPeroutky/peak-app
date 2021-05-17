@@ -4,26 +4,31 @@ import {
   createCodeBlockPlugin,
   createCodePlugin,
   createHeadingPlugin,
-  createHistoryPlugin,
+  createImagePlugin,
   createItalicPlugin,
   createLinkPlugin,
   createListPlugin,
   createParagraphPlugin,
-  createReactPlugin,
   createStrikethroughPlugin,
-  createUnderlinePlugin
+  createTodoListPlugin,
+  createUnderlinePlugin,
+  // eslint-disable-next-line no-unused-vars
+  SlatePlugin
 } from '@udecode/slate-plugins'
 import { createPeakTitlePlugin } from './peak-title-plugin/PeakTitlePlugin'
 import { createPeakCalloutPlugin } from './peak-callout-plugin/PeakCalloutPlugin'
 import { createDividerPlugin } from './peak-divider/createDividerPlugin'
 import { createPeakMediaEmbedPlugin } from './peak-media-embed-plugin/createPeakMediaEmbedPlugin'
 
-export const genericPlugins = [
+export const genericPlugins: SlatePlugin[] = [
   // editor
-  createReactPlugin(),
-  createHistoryPlugin(),
+  // createReactPlugin(),
+  // createHistoryPlugin(),
+  // createNodeIdPlugin(),
 
   // elements
+  createTodoListPlugin(),
+  createImagePlugin(),
   createParagraphPlugin(),
   createBlockquotePlugin(),
   createCodeBlockPlugin(),
@@ -39,11 +44,11 @@ export const genericPlugins = [
   createCodePlugin()
 ]
 
-export const customPlugins = [
+export const customPlugins: SlatePlugin[] = [
   createPeakTitlePlugin(),
   createPeakCalloutPlugin(),
   createDividerPlugin(),
   createPeakMediaEmbedPlugin()
 ]
 
-export const readOnlyPlugins = [...genericPlugins, ...customPlugins]
+export const corePlugins: SlatePlugin[] = [...genericPlugins, ...customPlugins]

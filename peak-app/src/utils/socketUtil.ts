@@ -2,8 +2,6 @@ import {Channel, Socket} from 'phoenix';
 import peakAxiosClient from "../client/axiosConfig";
 import {AxiosResponse} from "axios";
 import config from "../constants/environment-vars"
-import {PeakWikiPage} from "../constants/wiki-types";
-import {JOURNAL_CHANNEL_ID} from "../common/rich-text-editor/editors/journal/constants";
 import {store} from "../redux/store";
 import {deleteNote, PeakNote, upsertNote} from "../redux/slices/noteSlice";
 import {PeakTag} from "../types";
@@ -72,6 +70,8 @@ export function establishSocketConnection(userId: string): Promise<Socket> {
         return socketConn
     })
 }
+
+export const JOURNAL_CHANNEL_ID = (userId: string) => `journal:${userId}`
 
 export const closeUserNoteChannel = (userId: string) => {
     const userChannel = socket.channel(`journal:${userId}`)

@@ -24,6 +24,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         const newLinkId = generateIdForLink(newUrl, newLinkText)
 
         const link: Node = {
+            // @ts-ignore
             id: newLinkId,
             selectionRange: theSelection,
             type: ELEMENT_LINK,
@@ -34,9 +35,13 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         if (isCollapsed) {
             Transforms.insertNodes(editor, link, {at: theSelection });
         } else {
+            // @ts-ignore
             Transforms.wrapNodes(editor, link, { split: true, at: theSelection });
+            // @ts-ignore
             Transforms.collapse(editor, { edge: 'end' });
+            // @ts-ignore
             Transforms.setNodes(editor, {type: ELEMENT_PARAGRAPH})
+            // @ts-ignore
             Transforms.setSelection(editor, {type: ELEMENT_PARAGRAPH})
         }
         return findLink(editor, newLinkId);
@@ -54,6 +59,7 @@ export const upsertLink = (upsertLinkProps: UpsertLinkProps) => {
         const existingLink = findLink(editor, id);
 
         if (existingLink) {
+            // @ts-ignore
             Transforms.setNodes(editor, { url: url, id: id }, {
                 at: existingLink[1],
             });
@@ -77,6 +83,7 @@ export const unWrapLink = (editor: Editor, selection: Range) => {
     Transforms.setNodes(editor, { }, {
         at: selection,
     });
+    // @ts-ignore
     Transforms.unwrapNodes(editor, { match: n => n.type === ELEMENT_LINK, at: selection });
 };
 
@@ -85,6 +92,7 @@ export const unWrapLink = (editor: Editor, selection: Range) => {
 // --------------------------
 export const isLinkActiveAtSelection = (editor: Editor, selection: Range) => {
     const [link] = Editor.nodes(editor, {
+        // @ts-ignore
         match: n => n.type === ELEMENT_LINK,
         at: selection
     });
@@ -97,6 +105,7 @@ export const findLink = (editor: Editor, id: string) => {
         mode: 'all',
         at: [],
         match: n => {
+            // @ts-ignore
             return (n.type === ELEMENT_LINK && n.url && n.id == id )
         },
     });

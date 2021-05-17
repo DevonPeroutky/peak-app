@@ -16,6 +16,7 @@ import {UghEditorType} from "../../types";
 const peakLinkOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
     if (event.metaKey && event.key == 'l') {
         event.preventDefault();
+        // @ts-ignore
         const [...match] = Editor.nodes(editor, { match: n => n.type === "a" });
 
         /**
@@ -26,8 +27,11 @@ const peakLinkOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) =
             const theNode = match[0]
             const linkNode: Node = theNode[0]
             const text: string = Node.string(linkNode)
+            // @ts-ignore
             const url: string = linkNode.url as string
+            // @ts-ignore
             const linkId: string = linkNode.id as string
+            // @ts-ignore
             const linkSelection: Range = linkNode.selection_range as Range
             const currentHyperlink: PeakHyperlinkState = {
                 currentHyperLinkId: linkId,

@@ -17,4 +17,3 @@ export const TIMELINE = "timeline";
 
 export declare type PeakSlatePluginKey = SlatePluginKey | PeakKnowledgeKeyOption | PeakCalloutKeyOption
 export type UghEditorType = ReactEditor & HistoryEditor & SPEditor
-export type PeakPluginOption = Partial<Record<SlatePluginKey, Partial<SlatePluginOptions>>>

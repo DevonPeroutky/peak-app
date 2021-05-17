@@ -10,6 +10,7 @@ import {ELEMENT_CODE_BLOCK} from "@udecode/slate-plugins";
 import {UghEditorType} from "../types";
 
 export function isNodeTypeExternalEditor(n: Node) {
+    // @ts-ignore
     return [ELEMENT_CODE_BLOCK].includes(n.type as string)
 }
 
@@ -81,5 +82,6 @@ export function reEnterUp(editor: UghEditorType, matchFunc: (node: Node) => bool
 
 export function forceFocusToNode(slateNode: Node, focus: boolean = true) {
     console.log(`FORCING FOCUS TO: `, slateNode,focus)
+    // @ts-ignore
     store.dispatch(setEditorFocusToNode({ nodeId: slateNode.id as number, focused: focus}))
 }

@@ -58,6 +58,7 @@ const LinkMenu = (props: LinkMenuProps) => {
 
             const [match] = Editor.nodes(editor, {
                 at: [],
+                // @ts-ignore
                 match: n => (n.type === 'a' && n.id === linkState.currentHyperLinkId),
             })
 

@@ -60,6 +60,7 @@ export function insertCustomBlockElement(editor: Editor, nodeType: string, nodeP
         {
             id: nodeId,
             type: nodeType,
+            // @ts-ignore
             children: [{children: [{text: ''}], type: ELEMENT_PARAGRAPH }],
             ...nodeProps,
         },

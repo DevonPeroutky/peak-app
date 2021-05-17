@@ -1,5 +1,4 @@
 import {Node} from "slate";
-import {JournalEntry} from "../common/rich-text-editor/editors/journal/types";
 import {Range} from "slate/dist/interfaces/range";
 
 interface CodeEditorFocusState {
@@ -22,7 +21,7 @@ export interface PeakEditorState {
 export interface PeakWikiPage {
     id: string,
     inserted_at?: Date,
-    body: Node[] | JournalEntry[], // Should probably be Node[] or better yet --> SlateDocument
+    body: Node[], // Should probably be Node[] or better yet --> SlateDocument
     title: string,
 }
 

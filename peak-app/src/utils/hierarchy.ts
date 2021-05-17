@@ -50,10 +50,14 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 }
 
 const covertSlateNodeToPeakNode: (node: Node, topicId: string, pageId: string, updatedAt: number) => PeakStructureNode = (node, topicId, pageId, updatedAt) => {
+    // @ts-ignore
     const children: Node[] = node.children as Node[]
+    // @ts-ignore
     const text: string = children[0].text as string
+    // @ts-ignore
     const header_id: PeakNodeType = node.header_id as PeakNodeType
     const url = (header_id) ? `/topic/${topicId}/wiki/${pageId}#${header_id}` : `/topic/${topicId}/wiki/${pageId}`
+    // @ts-ignore
     const nodeType = node.type as string
 
     return {
@@ -85,6 +89,7 @@ const derivePageStructure = (pageBody: Node[], topicId: string, pageId: string, 
 
     let currentParent: PeakStructureNode | null = null
     const nodes: Node[] = pageBody//[0].children as Node[]
+    // @ts-ignore
     const headers: Node[] = nodes.filter(n => KEYS_HEADING.includes(n.type as string) || n.type === TITLE )
     const titleNode = covertSlateNodeToPeakNode(headers.shift() as Node, topicId, pageId, updatedAt)
 
