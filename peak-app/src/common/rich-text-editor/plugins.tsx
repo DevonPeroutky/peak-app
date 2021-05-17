@@ -50,7 +50,6 @@ const peakPlugins: SlatePlugin[] = [
     createPeakLearningPlugin()
 ]
 
-
 export const usePeakPlugins = (additionalPlugins?: SlatePlugin[]) => {
     return useMemo(() => {
         const plugins = (additionalPlugins) ? [...peakPlugins, ...additionalPlugins] : peakPlugins

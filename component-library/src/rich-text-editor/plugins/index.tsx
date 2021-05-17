@@ -21,9 +21,11 @@ import { createPeakMediaEmbedPlugin } from './peak-media-embed-plugin/createPeak
 
 export const genericPlugins: SlatePlugin[] = [
   // editor
+  // FOR SOME REASON SLATE BREAK IF THESE ARE DEFINED HERE.
   // createReactPlugin(),
   // createHistoryPlugin(),
   // createNodeIdPlugin(),
+  // createListPlugin(),
 
   // elements
   createTodoListPlugin(),
@@ -53,3 +55,4 @@ export const basePlugins: SlatePlugin[] = [...genericPlugins, ...customPlugins]
 export * from './peak-callout-plugin/defaults'
 export * from './peak-divider/defaults'
 export * from './peak-media-embed-plugin/types'
+export * from './peak-title-plugin/types'

@@ -9,10 +9,10 @@ import {
 import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {
     ELEMENT_EMBED_STUB,
+    ELEMENT_TITLE,
     ELEMENT_TWITTER_EMBED,
     ELEMENT_YOUTUBE_EMBED
-} from "./plugins/peak-media-embed-plugin/types";
-import {TITLE} from "./types";
+} from "component-library";
 import {ELEMENT_DIVIDER, PEAK_CALLOUT} from "component-library/dist";
 
 export const DRAGGABLE_ELEMENTS = [
@@ -42,7 +42,7 @@ export const DRAGGABLE_ELEMENTS = [
 export const NO_PLACEHOLDERS: Options<PlaceholderProps>[] = []
 export const DEFAULT_PLACEHOLDERS: Options<PlaceholderProps>[] = [
     {
-        key: TITLE,
+        key: ELEMENT_TITLE,
         placeholder: 'Page Title',
         hideOnBlur: false,
     },

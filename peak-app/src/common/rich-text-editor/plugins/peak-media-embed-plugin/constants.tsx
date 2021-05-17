@@ -6,7 +6,7 @@ import {
     ELEMENT_MEDIA_EMBED,
     ELEMENT_TWITTER_EMBED,
     ELEMENT_YOUTUBE_EMBED
-} from "./types";
+} from "component-library";
 import {insertMediaEmbedStub} from "./utils";
 import {isValidHttpUrl, parseTwitterId, parseYoutubeEmbedUrl, validateTwitterUrl} from "../../../../utils/urls";
 import { ELEMENT_IMAGE } from "@udecode/slate-plugins";

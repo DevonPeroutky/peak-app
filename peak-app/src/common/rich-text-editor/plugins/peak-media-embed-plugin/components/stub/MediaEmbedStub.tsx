@@ -5,7 +5,7 @@ import "./media-embed-stub.scss"
 import {PeakMediaEmbedControl} from "../../constants";
 import {Input, message, Modal} from "antd";
 import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
-import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "../../types";
+import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "component-library";
 import {fetchLinkMetadata} from "../../../../../../client/linkMetadata";
 import {useCurrentUser} from "../../../../../../utils/hooks";
 import {sleep} from "../../../../../../chrome-extension/utils/generalUtil";

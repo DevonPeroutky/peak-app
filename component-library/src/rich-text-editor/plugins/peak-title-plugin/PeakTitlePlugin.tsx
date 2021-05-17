@@ -4,9 +4,9 @@ import {
   // eslint-disable-next-line no-unused-vars
   SlatePlugin
 } from '@udecode/slate-plugins'
-import { TITLE } from '../../types'
+import { ELEMENT_TITLE } from './types'
 
 export const createPeakTitlePlugin = (): SlatePlugin => ({
-  pluginKeys: TITLE,
-  renderElement: getRenderElement(TITLE)
+  pluginKeys: ELEMENT_TITLE,
+  renderElement: getRenderElement(ELEMENT_TITLE)
 })
