@@ -7,7 +7,10 @@ import {
     getPreviousIndex,
     isCollapsed,
     isPointAtWordEnd,
-    isWordAfterTrigger, OnChange, OnKeyDown, SPEditor,
+    isWordAfterTrigger,
+    OnChange,
+    KeyboardHandler,
+    SPEditor,
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
@@ -125,7 +128,7 @@ export const useNodeContentSelect = (
         // [options, targetRange]
     );
 
-    const onKeyDownSelect: OnKeyDown = useCallback(
+    const onKeyDownSelect: KeyboardHandler = useCallback(
         (editor: SPEditor) => (e) => {
             const totalMax: number = Math.max(values.length, 1) + library.length - 1
             if (targetRange) {

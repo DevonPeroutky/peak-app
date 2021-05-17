@@ -2,7 +2,7 @@ import {
     ELEMENT_LINK,
     getLinkDeserialize,
     getRenderElement,
-    getSlatePluginTypes, OnKeyDown,
+    getSlatePluginTypes, KeyboardHandler,
     SlatePlugin,
     withLink,
     WithLinkOptions
@@ -13,7 +13,7 @@ import {store} from "../../../../redux/store";
 import {PeakHyperlinkState} from "../../../../constants/wiki-types";
 import {UghEditorType} from "../../types";
 
-const peakLinkOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
+const peakLinkOnKeyDownHandler: KeyboardHandler = (editor: UghEditorType) => (event) => {
     if (event.metaKey && event.key == 'l') {
         event.preventDefault();
         // @ts-ignore

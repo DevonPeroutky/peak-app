@@ -10,13 +10,13 @@ import {ImageLoader} from "../../../../../image-loader/ImageLoader";
 import {deriveHostname} from "../../../../../../utils/urls";
 import {buildNoteUrl} from "../../../../../../utils/notes";
 import {isNodeEmpty} from "../../utils";
-import { useTSlate } from "@udecode/slate-plugins";
+import { useEditorState } from "@udecode/slate-plugins";
 
 const bookmark = require('../../../../../../assets/icons/bookmark.svg');
 
 // export const PeakKnowledgeNode = (props: RenderElementProps) => {
 //     const { element } = props
-//     const editor = useTSlate()
+//     const editor = useEditorState()
 //     const path = ReactEditor.findPath(editor, props.element)
 //     // @ts-ignore
 //     const tags = element.selected_tags as PeakTag[]

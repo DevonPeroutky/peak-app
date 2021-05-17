@@ -1,14 +1,14 @@
-import {RenderElementProps, useSlate} from "slate-react";
+import {useSlate} from "slate-react";
 import {useDispatch} from "react-redux";
 import {openEditLinkMenu, useActiveEditorState} from "../../../../../redux/slices/activeEditor/activeEditorSlice";
 import React from "react";
-import {ClassName, ELEMENT_LINK, RootStyleSet, StyledElementProps} from "@udecode/slate-plugins";
+import {ELEMENT_LINK, StyledElementProps} from "@udecode/slate-plugins";
 import {useHistory} from "react-router-dom";
 import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
 import "./peak-hyperlink.scss"
 import {isExternalLink} from "../link-util";
 
-export const PeakInlineLinkElement = (props: RenderElementProps) => {
+export const PeakInlineLinkElement = (props: StyledElementProps) => {
     const {
         element,
         children,

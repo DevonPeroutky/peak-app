@@ -6,7 +6,7 @@ import {
     getMentionSelectStyles,
     getPreventDefaultHandler,
     PortalBody,
-    useTSlateStatic,
+    useEditorRef,
     MentionElementStyleProps,
     MentionElementProps,
     RootStyleSet,
@@ -74,7 +74,7 @@ const NodeContentSelectBase = ({
     });
 
     const ref: any = useRef();
-    const editor = useTSlateStatic();
+    const editor = useEditorRef();
 
     useEffect(() => {
         if (at) {

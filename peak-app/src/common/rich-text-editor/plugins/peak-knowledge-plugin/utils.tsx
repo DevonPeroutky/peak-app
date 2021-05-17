@@ -2,7 +2,7 @@ import {Editor, Node, Point, Range, Transforms} from "slate";
 import { previous } from "../../utils/base-utils";
 import { ReactEditor } from "slate-react";
 import { forceFocusToNode } from "../../utils/external-editor-utils";
-import {ELEMENT_LI, OnKeyDown, SPEditor} from "@udecode/slate-plugins";
+import {ELEMENT_LI, KeyboardHandler, SPEditor} from "@udecode/slate-plugins";
 import { PEAK_KNOWLEDGE_TYPES } from "./constants";
 import { ELEMENT_PARAGRAPH } from "@udecode/slate-plugins";
 import {UghEditorType} from "../../types";
@@ -26,7 +26,7 @@ export function isAtLastLineOfPeakKnowledgeNode(editor: Editor, nodeEntry?: any)
     return isPeakKnowledgeNoteType(currParent) && lastChildNode.id === currNode.id
 }
 
-export const knowledgeNodeOnKeyDownHandler: OnKeyDown = (editor: UghEditorType) => (event) => {
+export const knowledgeNodeOnKeyDownHandler: KeyboardHandler = (editor: UghEditorType) => (event) => {
     const currentPath = editor.selection?.anchor.path
 
     // @ts-ignore
