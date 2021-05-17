@@ -16,6 +16,7 @@ import {
 import { createPeakTitlePlugin } from './peak-title-plugin/PeakTitlePlugin'
 import { createPeakCalloutPlugin } from './peak-callout-plugin/PeakCalloutPlugin'
 import { createDividerPlugin } from './peak-divider/createDividerPlugin'
+import { createPeakMediaEmbedPlugin } from './peak-media-embed-plugin/createPeakMediaEmbedPlugin'
 
 export const genericPlugins = [
   // editor
@@ -41,7 +42,8 @@ export const genericPlugins = [
 export const customPlugins = [
   createPeakTitlePlugin(),
   createPeakCalloutPlugin(),
-  createDividerPlugin()
+  createDividerPlugin(),
+  createPeakMediaEmbedPlugin()
 ]
 
 export const readOnlyPlugins = [...genericPlugins, ...customPlugins]
