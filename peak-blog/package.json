@@ -13,7 +13,6 @@
     "axios": "^0.21.1",
     "next": "10.2.0",
     "node-fetch": "^2.6.1",
-    "peak-shared": "link:../shared",
     "postcss": "^8.2.14",
     "sass": "^1.32.13",
     "slate": "^0.62.1",
