@@ -9,7 +9,6 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
 import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
-import { createPeakTitlePlugin } from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -54,7 +53,7 @@ const TopicWiki = (props: {topic_id: string}) => {
         <div className={"wiki-container"}>
             {/*<PageContextBar topicId={topic_id}/>*/}
             <PeakEditor
-                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
+                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer]}
                 onChange={updatePageContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={wikiPageContent}
