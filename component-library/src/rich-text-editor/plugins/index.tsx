@@ -7,7 +7,6 @@ import {
   createImagePlugin,
   createItalicPlugin,
   createLinkPlugin,
-  createListPlugin,
   createParagraphPlugin,
   createStrikethroughPlugin,
   createTodoListPlugin,
@@ -33,7 +32,6 @@ export const genericPlugins: SlatePlugin[] = [
   createBlockquotePlugin(),
   createCodeBlockPlugin(),
   createHeadingPlugin(),
-  createListPlugin(),
   createLinkPlugin(),
 
   // marks
@@ -51,4 +49,4 @@ export const customPlugins: SlatePlugin[] = [
   createPeakMediaEmbedPlugin()
 ]
 
-export const corePlugins: SlatePlugin[] = [...genericPlugins, ...customPlugins]
+export const basePlugins: SlatePlugin[] = [...genericPlugins, ...customPlugins]
