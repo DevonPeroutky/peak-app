@@ -46,7 +46,7 @@ const withStyledDraggables = (components: any) => {
         {
             level: 0,
             keys: DRAGGABLE_ELEMENTS,
-            dragIcon: (
+            onRenderDragHandle: ({ ...otherProps }) => (
                 <DragIndicator
                     style={{
                         width: 18,
