@@ -1,7 +1,6 @@
 import { createSlatePluginsComponents } from '@udecode/slate-plugins'
 import { PeakTitleElement } from '../plugins/peak-title-plugin/peak-title/PeakTitle'
-import { ELEMENT_TITLE } from '../plugins/peak-title-plugin/types'
-import { PEAK_CALLOUT } from '../plugins/peak-callout-plugin/defaults'
+import { PEAK_CALLOUT, ELEMENT_TITLE } from '../plugins'
 import { PeakCalloutElement } from '../plugins/peak-callout-plugin/component/PeakCallout'
 import { DividerElement } from '../plugins/peak-divider/element/DividerElement'
 import { ELEMENT_DIVIDER } from '../plugins/peak-divider'
