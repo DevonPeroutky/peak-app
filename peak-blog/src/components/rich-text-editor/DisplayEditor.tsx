@@ -5,7 +5,7 @@ import {
     pluginOptions,
     readOnlyProps,
     useReadOnlyComponents,
-} from "component-library/dist";
+} from "component-library";
 
 export interface DisplayEditorProps {
     value: any

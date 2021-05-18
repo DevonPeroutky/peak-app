@@ -15,3 +15,5 @@ declare module '*.svg' {
   export default svgUrl;
   export { svgComponent as ReactComponent }
 }
+
+export const SOMETHING_FOR_BARRELSBY = 4

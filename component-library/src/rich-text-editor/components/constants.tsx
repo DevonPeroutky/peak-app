@@ -1,8 +1,8 @@
 import { createSlatePluginsComponents } from '@udecode/slate-plugins'
-import { PeakTitleElement } from '../plugins/peak-title-plugin/peak-title/PeakTitle'
+import { PeakTitleElement } from '../plugins/peak-title-plugin/peak-title'
 import { PEAK_CALLOUT, ELEMENT_TITLE } from '../plugins'
-import { PeakCalloutElement } from '../plugins/peak-callout-plugin/component/PeakCallout'
-import { DividerElement } from '../plugins/peak-divider/element/DividerElement'
+import { PeakCalloutElement } from '../plugins/peak-callout-plugin/component'
+import { DividerElement } from '../plugins/peak-divider/element'
 import { ELEMENT_DIVIDER } from '../plugins/peak-divider'
 import {
   RichLinkEmbed,

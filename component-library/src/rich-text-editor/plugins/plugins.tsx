@@ -52,7 +52,3 @@ export const customPlugins: SlatePlugin[] = [
 ]
 
 export const basePlugins: SlatePlugin[] = [...genericPlugins, ...customPlugins]
-export * from './peak-callout-plugin/defaults'
-export * from './peak-divider/defaults'
-export * from './peak-media-embed-plugin/types'
-export * from './peak-title-plugin/types'

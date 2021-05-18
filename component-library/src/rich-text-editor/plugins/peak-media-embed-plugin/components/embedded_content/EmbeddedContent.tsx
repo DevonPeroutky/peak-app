@@ -2,9 +2,10 @@ import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { StyledElementProps } from '@udecode/slate-plugins'
 import './embedded-content.scss'
-import { deriveHostname } from '../../../../../utils/urls'
-import { ImageLoader } from '../../../../../common/image-loader/ImageLoader'
-import { TweetContainer, YoutubeVideoContainer } from '..'
+import { deriveHostname } from '../../../../../utils'
+import { ImageLoader } from '../../../../../common/image-loader'
+import {TweetContainer} from "../../../../../common/media-embeds/twitter-container";
+import {YoutubeVideoContainer} from "../../../../../common/media-embeds/youtube-container";
 
 export const RichLinkEmbed = ({
   attributes,
