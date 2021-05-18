@@ -9,6 +9,7 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
 import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
+import {PublishModal} from "../../common/modals/publish/PublishModal";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -52,6 +53,7 @@ const TopicWiki = (props: {topic_id: string}) => {
     return (
         <div className={"wiki-container"}>
             {/*<PageContextBar topicId={topic_id}/>*/}
+            <PublishModal className={"publish-modal-button"}/>
             <PeakEditor
                 additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer]}
                 onChange={updatePageContent}

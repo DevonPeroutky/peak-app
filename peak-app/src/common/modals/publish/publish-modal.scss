@@ -1,0 +1,20 @@
+@import "../../../constants/variables";
+
+.peak-publish-modal {
+  width: 50%!important;
+
+  .ant-modal-content {
+    box-shadow: none;
+
+    .ant-modal-body {
+      padding-left: 0px;
+      padding-right: 0px;
+      padding-bottom: 50px;
+    }
+
+  }
+}
+
+.publish-button {
+  //background-color: $primary-green;
+}
