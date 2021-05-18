@@ -34,6 +34,7 @@ defmodule MyAppWeb.Router do
   end
 
   scope "/api/v1", MyAppWeb do
+    # TODO: READ :auth and :ensure_auth
     pipe_through [:public]
     resources "/users", UserController, only: [:update, :show] do
       get "/fetch-socket-access-token", SessionController, :generate_auth_token
@@ -54,6 +55,13 @@ defmodule MyAppWeb.Router do
       resources "/scratchpad", ScratchpadController, only: [:index, :update]
       resources "/next-reading-list-item", ReadingListController, only: [:index]
       get "/load-user-for-extension", SessionController, :load_user_for_chrome_extension
+    end
+  end
+
+  ## Blog endpoints
+  scope "/", MyAppWeb do
+    pipe_through [:public, :auth]
+    resources "/posts", PostsController, only: [:index, :show] do
     end
   end
 
