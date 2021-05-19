@@ -13,13 +13,4 @@
 
 .publish-text-input {
   min-height: 50px;
-  border-bottom: 1px solid $gray-accent-color!important;
-
-  &.ant-input {
-    padding-left: 0px;
-  }
-
-  &:hover {
-    border-bottom: 1px solid $gray-accent-color!important;
-  }
 }

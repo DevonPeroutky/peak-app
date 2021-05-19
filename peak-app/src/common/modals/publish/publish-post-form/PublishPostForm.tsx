@@ -9,8 +9,8 @@ export const PublishPostForm = (props: {}) => {
         <div className={"publish-post-container"}>
             <div className={"col"}>
                 <h3>Story Preview</h3>
-                <Input className={"publish-text-input"} placeholder="Write a preview title" bordered={false}/>
-                <Input className={"publish-text-input"} placeholder="Write a preview snippet we'll use a subtitle" bordered={false}/>
+                <Input className={"minimal-text-input publish-text-input"} placeholder="Write a preview title" bordered={false}/>
+                <Input className={"minimal-text-input publish-text-input"} placeholder="Write a preview snippet we'll use a subtitle" bordered={false}/>
             </div>
             <div className={"col"}>
                 <h3>Publishing to: <b>TBD</b></h3>
