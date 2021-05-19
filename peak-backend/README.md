@@ -22,7 +22,7 @@ mix phx.gen.json Library Book books user_id:references:users title:string author
 mix phx.gen.json Notes Scratchpad scratchpad user_id:references:users body:map
 mix phx.gen.json WebpageMetadata LinkMetadata link_metadata user_id:references:users url:string title:string url description:string cover_image_url:string fav_icon_url:string --no-context --no-schema
 mix phx.gen.json Blog Subdomain subdomains user_id:references:users title:string subdomain:string
-mix phx.gen.json Blog Post subdomain:references:subdomains title:string subtitle:text cover_image:string logo:string snippet:text user_id:references:users body:map tag_ids:array visibility:string post_type:string
+mix phx.gen.json Blog Post posts subdomain:references:subdomains title:string subtitle:text cover_image:string logo:string snippet:text user_id:references:users body:map tag_ids:array:binary_id visibility:string post_type:string
 ```
 
 ### Seeds
