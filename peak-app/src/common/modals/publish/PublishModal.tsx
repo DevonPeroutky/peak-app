@@ -30,17 +30,7 @@ export const PublishModal = (props: { className?: string }) => {
                 maskStyle={{
                     backgroundColor: '#FFF'
                 }}
-                cancelButtonProps={{
-                    shape: "round",
-                    size: "large",
-                }}
-                okText={"Publish"}
-                okButtonProps={{
-                    shape: "round",
-                    size: "large",
-                    icon: <ShareAltOutlined/>,
-                    loading: loading,
-                }}
+                footer={null}
             >
                 <PublishPostForm/>
             </Modal>

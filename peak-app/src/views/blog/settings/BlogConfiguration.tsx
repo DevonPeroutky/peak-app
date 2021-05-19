@@ -53,7 +53,7 @@ export const BlogSettings = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?"/>
+                    <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?" defaultValue={blog && blog.description}/>
                 </Form.Item>
                 <h3>Subdomain</h3>
                 <Form.Item
@@ -66,7 +66,7 @@ export const BlogSettings = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input placeholder="Subdomain" suffix={".cur8.dev"}/>
+                    <Input placeholder="Subdomain" suffix={".cur8.dev"} defaultValue={blog && blog.subdomain}/>
                 </Form.Item>
                 <h3>Tags</h3>
                 <div>TBD</div>
