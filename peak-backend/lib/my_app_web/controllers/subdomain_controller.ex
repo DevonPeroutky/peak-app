@@ -6,18 +6,23 @@ defmodule MyAppWeb.SubdomainController do
 
   action_fallback MyAppWeb.FallbackController
 
-  def index(conn, _params) do
+  def index(conn, %{"subdomain" => subdomain}) do
     subdomains = Blog.list_subdomains()
     render(conn, "index.json", subdomains: subdomains)
   end
 
-  def create(conn, %{"subdomain" => subdomain_params}) do
-    with {:ok, %Subdomain{} = subdomain} <- Blog.create_subdomain(subdomain_params) do
+  def create(conn, %{"user_id" => user_id, "subdomain" => subdomain_params}) do
+    new_subdomain = Map.put(subdomain_params, "user_id", user_id)
+    with {:ok, %Subdomain{} = subdomain} <- Blog.create_subdomain(new_subdomain) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.subdomain_path(conn, :show, subdomain))
       |> render("show.json", subdomain: subdomain)
     end
+  end
+
+  def fetch_subdomain(conn, %{"user_id" => user_id, "subdomain" => subdomain}) do
+    subdomain = Blog.get_subdomain!(user_id, subdomain)
+    render(conn, "show.json", subdomain: subdomain)
   end
 
   def show(conn, %{"id" => id}) do

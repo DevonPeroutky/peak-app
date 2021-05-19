@@ -43,6 +43,9 @@ defmodule MyAppWeb.Router do
       get "/fetch-latest-note", BookController, :fetch_latest_webnote
       post "/fetch-link-metadata", LinkMetadataController, :fetch_link_metadata
       post "/bulk-update-journal", JournalEntryController, :bulk_update_journal
+      resources "/blog", SubdomainController, only: [:update, :show, :index, :create, :delete] do
+        resources "/post", PostController, only: [:update, :show, :index, :create, :delete]
+      end
       resources "/topics", TopicController, only: [:update, :show, :index, :create, :delete]
       resources "/tags", TagController, only: [:new, :index, :edit, :delete, :create]
       resources "/books", BookController, only: [:index, :delete, :create, :update]

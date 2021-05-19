@@ -7,7 +7,8 @@ defmodule MyApp.Blog.Subdomain do
   schema "subdomains" do
     field :subdomain, :string
     field :title, :string
-    field :user_id, :binary_id
+    field :description, :string
+    field :user_id, :string
 
     timestamps()
   end
@@ -15,7 +16,9 @@ defmodule MyApp.Blog.Subdomain do
   @doc false
   def changeset(subdomain, attrs) do
     subdomain
-    |> cast(attrs, [:title, :subdomain])
-    |> validate_required([:title, :subdomain])
+    |> cast(attrs, [:title, :subdomain, :description, :user_id])
+    |> validate_required([:title, :subdomain, :description, :user_id])
+    |> update_change(:subdomain, &String.downcase/1)
+    |> unique_constraint(:subdomain_unique_constraint, name: :unique_subdomain)
   end
 end

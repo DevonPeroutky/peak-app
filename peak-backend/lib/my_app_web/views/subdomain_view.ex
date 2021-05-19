@@ -13,6 +13,7 @@ defmodule MyAppWeb.SubdomainView do
   def render("subdomain.json", %{subdomain: subdomain}) do
     %{id: subdomain.id,
       title: subdomain.title,
+      description: subdomain.description,
       subdomain: subdomain.subdomain}
   end
 end

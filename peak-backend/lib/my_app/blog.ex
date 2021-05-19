@@ -37,6 +37,11 @@ defmodule MyApp.Blog do
   """
   def get_subdomain!(id), do: Repo.get!(Subdomain, id)
 
+  def get_subdomain!(user_id, subdomain) do
+    from(s in Subdomain, where: s.user_id == ^user_id and s.subdomain == ^subdomain)
+    |> Repo.one()
+  end
+
   @doc """
   Creates a subdomain.
 
