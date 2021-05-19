@@ -12,6 +12,5 @@ defmodule MyApp.Repo.Migrations.CreateSubdomains do
     end
 
     create index(:subdomains, [:user_id])
-    create unique_index(:subdomains, [:subdomain], name: :unique_subdomains)
   end
 end
