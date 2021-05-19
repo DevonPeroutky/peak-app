@@ -7,7 +7,7 @@ defmodule MyAppWeb.SubdomainView do
   end
 
   def render("show.json", %{subdomain: subdomain}) do
-    %{data: render_one(subdomain, SubdomainView, "subdomain.json")}
+    render_one(subdomain, SubdomainView, "subdomain.json")
   end
 
   def render("subdomain.json", %{subdomain: subdomain}) do

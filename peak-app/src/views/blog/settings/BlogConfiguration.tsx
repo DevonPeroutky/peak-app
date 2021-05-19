@@ -1,41 +1,33 @@
 import React, { useState } from 'react';
 import {Button, Divider, Form, Input} from "antd";
 import {CommentOutlined, CompassOutlined, RocketOutlined} from "@ant-design/icons/lib";
-import "./blog-setup.scss"
-import {createBlog} from "../../../redux/slices/blog/blogSlice";
-import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useCurrentUser} from "../../../utils/hooks";
+import {useHistory} from "react-router-dom";
 import {subdomain_regex} from "../../../utils/blog";
+import {useBlog} from "../../../redux/slices/blog/hooks";
 
-/**
- * Creation:
- * 1. Blog Name
- * 2. Blog Description
- * 3. Subdomain
- * ----------------
- * - Import Mailing List
- * @param props
- * @constructor
- */
-export const BlogSetup = (props: {}) => {
+export const BlogSettings = (props: {}) => {
     const user = useCurrentUser()
+    const history = useHistory();
+    const blog = useBlog()
+
     const [loading, setLoading] = useState(false)
 
-    const onFinish = (values: BlogConfiguration) => {
-        setLoading(true)
-        createBlog(user.id, values).then(_ => {
-            setLoading(false)
-        })
+    const updateBlogConfiguration = (values) => {
+       console.log('Fuck yeah ', values)
     }
 
+    console.log(`Blog `, blog)
+
     return (
-        <div className={"blog-setup-container"}>
-            <h1>Create your Blog</h1>
+        <div className={"blog-settings-container"}>
+            <h1>Setup your Blog</h1>
             <Divider/>
             <Form
                 name="normal_login"
-                onFinish={onFinish}
+                onFinish={updateBlogConfiguration}
             >
+                <h3>Publish Name</h3>
                 <Form.Item
                     name="title"
                     rules={[
@@ -47,8 +39,9 @@ export const BlogSetup = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input prefix={<CompassOutlined className="input-icon"/>} placeholder="Publication Name"/>
+                    <Input prefix={<CompassOutlined className="input-icon"/>} placeholder="Publication Name" defaultValue={blog && blog.title}/>
                 </Form.Item>
+                <h3>One-line description</h3>
                 <Form.Item
                     name="description"
                     rules={[
@@ -62,6 +55,7 @@ export const BlogSetup = (props: {}) => {
                 >
                     <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?"/>
                 </Form.Item>
+                <h3>Subdomain</h3>
                 <Form.Item
                     name="subdomain"
                     rules={[
@@ -74,6 +68,14 @@ export const BlogSetup = (props: {}) => {
                 >
                     <Input placeholder="Subdomain" suffix={".cur8.dev"}/>
                 </Form.Item>
+                <h3>Tags</h3>
+                <div>TBD</div>
+                <h3>About page</h3>
+                <div>TBD</div>
+                <h3>Blog logo</h3>
+                <div>TBD</div>
+                <h3>Cover Image</h3>
+                <div>TBD</div>
                 <Form.Item hasFeedback>
                     <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
                         Create my Blog
