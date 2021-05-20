@@ -5,7 +5,7 @@ import {store} from "../../store";
 import {sleep} from "../../../chrome-extension/utils/generalUtil";
 
 export const blogSlice = createSlice({
-    name: 'tags',
+    name: 'blog',
     initialState: null,
     reducers: {
         addBlog(state, action: PayloadAction<BlogConfiguration>) {

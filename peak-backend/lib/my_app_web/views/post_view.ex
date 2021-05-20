@@ -15,7 +15,6 @@ defmodule MyAppWeb.PostView do
       title: post.title,
       subtitle: post.subtitle,
       cover_image: post.cover_image,
-      logo: post.logo,
       snippet: post.snippet,
       body: post.body,
       tag_ids: post.tag_ids,

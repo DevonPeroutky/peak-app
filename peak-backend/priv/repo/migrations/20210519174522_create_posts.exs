@@ -7,9 +7,8 @@ defmodule MyApp.Repo.Migrations.CreatePosts do
       add :title, :string
       add :subtitle, :text
       add :cover_image, :string
-      add :logo, :string
       add :snippet, :text
-      add :body, :map
+      add :body, {:array, :map}, null: false
       add :tag_ids, {:array, :binary_id}
       add :visibility, :string
       add :post_type, :string
