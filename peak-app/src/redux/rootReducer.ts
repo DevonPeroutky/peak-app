@@ -16,7 +16,7 @@ import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
 import {BlogConfiguration} from "./slices/blog/types";
 import posts from "./slices/posts/postsSlice"
-import {PeakPost} from "./slices/posts/types";
+import {PeakPost} from "component-library";
 
 export interface UserSpecificAppState {
     currentUser: Peaker

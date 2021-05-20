@@ -6,6 +6,7 @@ import React, {useEffect} from "react";
 
 // TODO: Move this to shared
 import {blogAxiosClient} from "../../../../peak-app/src/client/axiosConfig";
+import {fetch_posts_for_subdomain} from "../../data/posts";
 
 const Post: NextPage<{ post: BlogPost }> = (props) => {
     const { post } = props
@@ -47,6 +48,7 @@ const Post: NextPage<{ post: BlogPost }> = (props) => {
 
 // TODO: move to getStaticProps?
 export const getServerSideProps: GetStaticProps = async () => {
+    fetch_posts_for_subdomain("swag")
 
     console.log(`Fetching static Props`)
     const blog_posts: BlogPost[] = await blogAxiosClient.get(`http://localhost:4000/api/v1/users/108703174669232421421/pages`).then(res => {

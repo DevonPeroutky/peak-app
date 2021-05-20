@@ -1,10 +1,12 @@
 import {BlogPost, HydratedSubdomain} from "../types";
-import authedAxiosClient from "../../../peak-app/src/client/axiosConfig";
+import { blogAxiosClient } from "../../../peak-app/src/client/axiosConfig";
+import { PeakPost } from "component-library";
 
 
-export function temp_fetch_pages(user_id: string): BlogPost[] {
-    authedAxiosClient.get(`/api/v1/users/${user_id}/pages`).then(res => {
-        console.log(res)
+export function fetch_posts_for_subdomain(subdomain: string): PeakPost[] {
+    blogAxiosClient.get<PeakPost>(`http://localhost:4000/blog/v1/posts?subdomain=${subdomain}`).then(res => {
+        console.log("BRO")
+        console.log(res.data)
     })
 
     return []

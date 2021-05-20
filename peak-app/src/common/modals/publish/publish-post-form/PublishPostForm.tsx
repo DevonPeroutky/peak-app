@@ -6,8 +6,8 @@ import {ShareAltOutlined} from "@ant-design/icons/lib";
 import {createPeakPost} from "../../../../redux/slices/posts/postsSlice";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import {BlogConfiguration} from "../../../../redux/slices/blog/types";
-import {PeakPost, POST_TYPE, POST_VISIBILITY} from "../../../../redux/slices/posts/types";
 import {PeakTag} from "../../../../types";
+import {PeakPost, POST_TYPE, POST_VISIBILITY} from "component-library";
 
 export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: BlogConfiguration, userId: string }) => {
     const { page, userId, blogConfiguration } = props

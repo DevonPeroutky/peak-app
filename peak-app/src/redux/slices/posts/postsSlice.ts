@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {store} from "../../store";
 import {sleep} from "../../../chrome-extension/utils/generalUtil";
-import {PeakPost} from "./types";
 import {createPeakPostRequest} from "../../../client/posts";
+import {PeakPost} from "component-library";
 
 export const postSlice = createSlice({
     name: 'posts',
