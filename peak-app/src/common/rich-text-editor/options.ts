@@ -5,9 +5,8 @@ import { ELEMENT_BLOCKQUOTE } from '@udecode/slate-plugins-block-quote';
 import { ELEMENT_CODE_BLOCK } from '@udecode/slate-plugins-code-block';
 import { SlatePluginOptions } from '@udecode/slate-plugins-core';
 import { ELEMENT_PARAGRAPH } from '@udecode/slate-plugins-paragraph';
-import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {ELEMENT_PEAK_BOOK, PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
-import {JOURNAL_ENTRY, TITLE} from "./types";
+import {JOURNAL_ENTRY} from "./types";
 import {
     createSlatePluginsOptions, ELEMENT_H4, ELEMENT_H5, ELEMENT_TD, ELEMENT_TODO_LI, ExitBreakPluginOptions,
     isBlockAboveEmpty,
@@ -15,7 +14,8 @@ import {
     SoftBreakPluginOptions,
 } from "@udecode/slate-plugins";
 import {options} from "../../views/scratchpad/playground/defaultOptions";
-import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
+import {PEAK_CALLOUT, ELEMENT_DIVIDER } from "component-library/dist";
+import {ELEMENT_TITLE} from "component-library";
 
 const PEAK_STRIKETHROUGH_OPTIONS: Partial<SlatePluginOptions> = {
     hotkey: 'mod+shift+x',
@@ -78,7 +78,7 @@ export const PEAK_EXIT_BREAK_OPTIONS: ExitBreakPluginOptions = {
             query: {
                 start: true,
                 end: true,
-                allow: [...KEYS_HEADING, TITLE],
+                allow: [...KEYS_HEADING, ELEMENT_TITLE],
             },
         },
     ],

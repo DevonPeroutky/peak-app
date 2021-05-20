@@ -33,8 +33,13 @@ defmodule MyAppWeb.Router do
     resources "/users", UserController, only: [:index]
   end
 
+  scope "/blog/v1/", MyAppWeb do
+    pipe_through [:public]
+    get "/posts", PostController, :index
+  end
+
   scope "/api/v1", MyAppWeb do
-    pipe_through [:public, :auth, :ensure_auth]
+    pipe_through [:public]
     resources "/users", UserController, only: [:update, :show] do
       get "/fetch-socket-access-token", SessionController, :generate_auth_token
       get "/list-all-accounts", UserController, :list_all_accounts
@@ -43,6 +48,9 @@ defmodule MyAppWeb.Router do
       get "/fetch-latest-note", BookController, :fetch_latest_webnote
       post "/fetch-link-metadata", LinkMetadataController, :fetch_link_metadata
       post "/bulk-update-journal", JournalEntryController, :bulk_update_journal
+      resources "/blog", SubdomainController, only: [:update, :show, :index, :create, :delete] do
+        resources "/post", PostController, only: [:update, :show, :create, :delete]
+      end
       resources "/topics", TopicController, only: [:update, :show, :index, :create, :delete]
       resources "/tags", TagController, only: [:new, :index, :edit, :delete, :create]
       resources "/books", BookController, only: [:index, :delete, :create, :update]

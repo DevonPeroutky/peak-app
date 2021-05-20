@@ -7,7 +7,10 @@ import {
     getPreviousIndex,
     isCollapsed,
     isPointAtWordEnd,
-    isWordAfterTrigger, OnChange, OnKeyDown, SPEditor,
+    isWordAfterTrigger,
+    OnChange,
+    KeyboardHandler,
+    SPEditor,
 } from "@udecode/slate-plugins";
 import {PeakNodeSelectListItem} from "./types";
 import {NODE_CONTENT_LIST_ITEMS} from "../../../peak-toolbar/toolbar-controls";
@@ -125,7 +128,7 @@ export const useNodeContentSelect = (
         // [options, targetRange]
     );
 
-    const onKeyDownSelect: OnKeyDown = useCallback(
+    const onKeyDownSelect: KeyboardHandler = useCallback(
         (editor: SPEditor) => (e) => {
             const totalMax: number = Math.max(values.length, 1) + library.length - 1
             if (targetRange) {
@@ -211,6 +214,7 @@ export const useNodeContentSelect = (
                 const text: string = Node.string(currNode)
 
                 // Restrict NodeSelectMenu to paragraph nodes at (exclusively the top-leve) for sanity reasons
+                // @ts-ignore
                 const currentlyInParagraphNode: boolean = currNode.type === ELEMENT_PARAGRAPH || currNode.type === ELEMENT_LIC
 
                 // CONSOLIDATE W/beforeText

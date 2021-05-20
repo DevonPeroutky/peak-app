@@ -12,7 +12,6 @@ import {
     ELEMENT_H6,
     KEYS_HEADING
 } from "@udecode/slate-plugins";
-import {TITLE} from "../common/rich-text-editor/types";
 import {PeakNote} from "../redux/slices/noteSlice";
 import {buildNoteUrl} from "./notes";
 import {
@@ -22,13 +21,14 @@ import {
 } from "../common/rich-text-editor/plugins/peak-knowledge-plugin/constants";
 import {deriveHostname} from "./urls";
 import {sort} from "ramda";
+import { ELEMENT_TITLE } from "component-library";
 
 const orderByUpdated = (a: PeakDisplayNode, b: PeakDisplayNode) => {
     return (a.updated_at <= b.updated_at) ? 1 : -1
 };
 const priority = (node: PeakStructureNode) => {
-    const HIERARCHY_PRIORITIES: string[] = [TITLE, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6].map(x => x as string)
-    return (node.header_type === TITLE) ? 0 : HIERARCHY_PRIORITIES.indexOf(node.header_type as string)
+    const HIERARCHY_PRIORITIES: string[] = [ELEMENT_TITLE, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6].map(x => x as string)
+    return (node.header_type === ELEMENT_TITLE) ? 0 : HIERARCHY_PRIORITIES.indexOf(node.header_type as string)
 }
 function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode {
     var keysToOmitIndex =  keyBy(Array.isArray(keysToOmit) ? keysToOmit : [keysToOmit] ); // create an index object of the keys that should be omitted
@@ -50,16 +50,20 @@ function deepOmit(obj: PeakStructureNode, keysToOmit: string): PeakStructureNode
 }
 
 const covertSlateNodeToPeakNode: (node: Node, topicId: string, pageId: string, updatedAt: number) => PeakStructureNode = (node, topicId, pageId, updatedAt) => {
+    // @ts-ignore
     const children: Node[] = node.children as Node[]
+    // @ts-ignore
     const text: string = children[0].text as string
+    // @ts-ignore
     const header_id: PeakNodeType = node.header_id as PeakNodeType
     const url = (header_id) ? `/topic/${topicId}/wiki/${pageId}#${header_id}` : `/topic/${topicId}/wiki/${pageId}`
+    // @ts-ignore
     const nodeType = node.type as string
 
     return {
         parent: null,
         children: [],
-        header_type: (nodeType === TITLE) ? TITLE : nodeType,
+        header_type: (nodeType === ELEMENT_TITLE) ? ELEMENT_TITLE : nodeType,
         header_id: header_id,
         title: (text === "") ? "Untitled Page" : text,
         topic_id: topicId,
@@ -85,7 +89,8 @@ const derivePageStructure = (pageBody: Node[], topicId: string, pageId: string, 
 
     let currentParent: PeakStructureNode | null = null
     const nodes: Node[] = pageBody//[0].children as Node[]
-    const headers: Node[] = nodes.filter(n => KEYS_HEADING.includes(n.type as string) || n.type === TITLE )
+    // @ts-ignore
+    const headers: Node[] = nodes.filter(n => KEYS_HEADING.includes(n.type as string) || n.type === ELEMENT_TITLE )
     const titleNode = covertSlateNodeToPeakNode(headers.shift() as Node, topicId, pageId, updatedAt)
 
     headers.forEach(currNode => {

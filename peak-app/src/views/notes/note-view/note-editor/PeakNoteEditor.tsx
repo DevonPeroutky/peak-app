@@ -9,7 +9,7 @@ import {
 import {beginSavingPage, useActiveEditorState} from "../../../../redux/slices/activeEditor/activeEditorSlice";
 import {useNodeContentSelect} from "../../../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import "./peak-note-editor.scss"
-import {useCurrentUser, useJournal} from "../../../../utils/hooks";
+import {useCurrentUser} from "../../../../utils/hooks";
 import {EMPTY_PARAGRAPH_NODE} from "../../../../common/rich-text-editor/editors/constants";
 import {drop, equals, sort} from "ramda";
 import {useDispatch} from "react-redux";

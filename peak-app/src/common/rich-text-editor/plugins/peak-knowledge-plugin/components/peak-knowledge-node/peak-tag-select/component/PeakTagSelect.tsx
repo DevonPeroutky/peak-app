@@ -7,7 +7,7 @@ import {LabeledValue} from "antd/es/select";
 import {calculateNextColor} from "../utils";
 import {Editor, Node, Transforms} from "slate";
 import {forceFocusToNode, reEnterDown} from "../../../../../../utils/external-editor-utils";
-import {ELEMENT_CODE_BLOCK, useTSlate} from "@udecode/slate-plugins";
+import {ELEMENT_CODE_BLOCK, useEditorState} from "@udecode/slate-plugins";
 import {
     setEditorFocusToNode,
     useActiveEditorState
@@ -24,7 +24,7 @@ const { Option } = Select;
 export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selected_tags: PeakTag[], disabled?: boolean, hideIcon?: boolean }) => {
     const { nodeId, nodePath, selected_tags, disabled, hideIcon } = props
     const dispatch = useDispatch()
-    const editor = useTSlate()
+    const editor = useEditorState()
     const existingTags = useTags()
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
     const currentUser = useCurrentUser()
@@ -55,6 +55,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
         const newTagList: PeakTag[] = displaySelectedTags.filter(tag => tag.title !== displayLabel.value as string)
         // User clicked on the X of the tag, without ever focusing
         if (!shouldFocus) {
+            // @ts-ignore
             Transforms.setNodes(editor, {selected_tags: newTagList}, { at: nodePath })
         }
         setSelectedTags(newTagList)
@@ -79,14 +80,18 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
     }
 
     const leaveDown = () => {
+        // @ts-ignore
         reEnterDown(editor, (n: Node) => isPeakKnowledgeNoteType(n) && n.id === nodeId)
     }
 
     // TODO: Why can't this be re-enter up?
     const leaveUp = () => {
+        // @ts-ignore
         const [theNode, path] = Editor.nodes(editor, { match: n => isPeakKnowledgeNoteType(n) && n.id === nodeId, at: []});
+        // @ts-ignore
         const [lastChildNode, wtf] = (theNode[0].children as Node[]).slice(-1)
 
+        // @ts-ignore
         if (lastChildNode.type === ELEMENT_CODE_BLOCK) {
             forceFocusToNode(lastChildNode)
         } else {
@@ -112,6 +117,7 @@ export const PeakTagSelect = (props: { nodeId: number, nodePath: number[], selec
             const newSelected: PeakTag[] = hotSwap(displaySelectedTags, createdTags)
             setTags([...tags, ...createdTags])
             setSelectedTags(newSelected)
+            // @ts-ignore
             Transforms.setNodes(editor, {selected_tags: newSelected}, { at: nodePath })
         }).finally(() => {
             setCurrentSearch("")

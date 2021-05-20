@@ -6,15 +6,14 @@ import {
     ELEMENT_PARAGRAPH, ELEMENT_TABLE,
     ELEMENT_TODO_LI, ELEMENT_UL, Options, PlaceholderProps
 } from "@udecode/slate-plugins";
-import {PEAK_CALLOUT} from "./plugins/peak-callout-plugin/defaults";
 import {PEAK_LEARNING} from "./plugins/peak-knowledge-plugin/constants";
 import {
     ELEMENT_EMBED_STUB,
+    ELEMENT_TITLE,
     ELEMENT_TWITTER_EMBED,
     ELEMENT_YOUTUBE_EMBED
-} from "./plugins/peak-media-embed-plugin/types";
-import {ELEMENT_DIVIDER} from "./plugins/peak-divider";
-import {TITLE} from "./types";
+} from "component-library";
+import {ELEMENT_DIVIDER, PEAK_CALLOUT} from "component-library/dist";
 
 export const DRAGGABLE_ELEMENTS = [
     ELEMENT_PARAGRAPH,
@@ -43,7 +42,7 @@ export const DRAGGABLE_ELEMENTS = [
 export const NO_PLACEHOLDERS: Options<PlaceholderProps>[] = []
 export const DEFAULT_PLACEHOLDERS: Options<PlaceholderProps>[] = [
     {
-        key: TITLE,
+        key: ELEMENT_TITLE,
         placeholder: 'Page Title',
         hideOnBlur: false,
     },

@@ -1,4 +1,13 @@
 @import "../../constants/variables";
 
 .wiki-container {
+  position: relative;
+
+  .publish-modal-button {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 120px;
+  }
 }

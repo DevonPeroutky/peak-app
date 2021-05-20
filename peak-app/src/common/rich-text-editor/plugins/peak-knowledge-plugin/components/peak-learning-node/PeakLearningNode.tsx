@@ -6,12 +6,13 @@ import "./peak-learning-node.scss"
 import {PeakTag} from "../../../../../../types";
 import {PeakTagSelect} from "../peak-knowledge-node/peak-tag-select/component/PeakTagSelect";
 import {isNodeEmpty} from "../../utils";
-import {ClassName, RootStyleSet, StyledElementProps, useTSlate} from "@udecode/slate-plugins";
+import {ClassName, RootStyleSet, StyledElementProps, useEditorState} from "@udecode/slate-plugins";
 
 export const PeakLearningElement = (props: RenderElementProps) => {
     const { element } = props
-    const editor = useTSlate()
+    const editor = useEditorState()
     const path = ReactEditor.findPath(editor, props.element)
+    // @ts-ignore
     const tags = element.selected_tags as PeakTag[]
     const isEmpty: boolean = isNodeEmpty(element)
 
@@ -24,6 +25,7 @@ export const PeakLearningElement = (props: RenderElementProps) => {
             <div className="learning-body">
                 {props.children}
             </div>
+            {/* @ts-ignore */}
             <PeakTagSelect nodeId={element.id as number} nodePath={path} selected_tags={(tags) ? tags : []}/>
         </div>
     )

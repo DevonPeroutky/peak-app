@@ -11,7 +11,7 @@ import {DisplayLinkMenu} from "./link-menu-body/display-link-menu/DisplayLinkMen
 import HierarchySearcherInput from "./hierarchy-searcher/HierarchySearcherInput";
 import {closeLinkMenu} from "../../../../../redux/slices/activeEditor/activeEditorSlice";
 import {PeakHyperlinkState} from "../../../../../constants/wiki-types";
-import { useTSlate } from '@udecode/slate-plugins';
+import { useEditorState } from '@udecode/slate-plugins';
 
 interface LinkMenuProps {
     showLinkMenu: boolean
@@ -25,7 +25,7 @@ const LinkMenu = (props: LinkMenuProps) => {
     const [isEditing, setEditing] = useState(true)
 
     const ref = useRef<HTMLInputElement>(null);
-    const editor = useTSlate();
+    const editor = useEditorState();
     const [savedSelection, setSavedSelection] = useState<Range | null>(null);
     const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false)
 
@@ -58,6 +58,7 @@ const LinkMenu = (props: LinkMenuProps) => {
 
             const [match] = Editor.nodes(editor, {
                 at: [],
+                // @ts-ignore
                 match: n => (n.type === 'a' && n.id === linkState.currentHyperLinkId),
             })
 

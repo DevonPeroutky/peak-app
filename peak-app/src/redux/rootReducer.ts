@@ -9,10 +9,14 @@ import quickSwitcher from "./slices/quickSwitcherSlice";
 import helpModal from "./slices/helpModal/helpModalSlice";
 import electron from "./slices/electronSlice";
 import tags from "./slices/tags/tagSlice";
+import blogConfiguration from "./slices/blog/blogSlice";
 import notes, {PeakNote} from "./slices/noteSlice";
 import userAccounts, {DisplayPeaker} from "./slices/userAccountsSlice";
 import {PeakWikiPage, PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
+import {BlogConfiguration} from "./slices/blog/types";
+import posts from "./slices/posts/postsSlice"
+import {PeakPost} from "./slices/posts/types";
 
 export interface UserSpecificAppState {
     currentUser: Peaker
@@ -20,7 +24,9 @@ export interface UserSpecificAppState {
     tags: PeakTag[]
     topics: PeakTopic[]
     peakWikiState: PeakWikiState
-    notes: PeakNote[]
+    notes: PeakNote[],
+    blog: BlogConfiguration,
+    posts: PeakPost[]
 }
 
 export interface UserSpecificAppStateResponse {
@@ -30,12 +36,14 @@ export interface UserSpecificAppStateResponse {
     notes: PeakNote[]
     pages: PeakWikiPage[]
     scratchpad: PeakWikiPage
+    blog: BlogConfiguration
+    posts: PeakPost[]
 }
 
 export const switch_user_accounts = createAction<DisplayPeaker>("switch_user_accounts")
 export const load_active_user = createAction<UserSpecificAppState>("load_active_user")
 
-const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, electron, tags, userAccounts, notes, activeEditorState, helpModal});
+const appReducer = combineReducers({ topics, currentUser, futureReads, peakWikiState, quickSwitcher, electron, tags, userAccounts, notes, activeEditorState, helpModal, blogConfiguration, posts});
 export const rootReducer = (state, action) => {
     if (action.type === "switch_user_accounts") {
         const desired_user_account_id: string = action.payload.id

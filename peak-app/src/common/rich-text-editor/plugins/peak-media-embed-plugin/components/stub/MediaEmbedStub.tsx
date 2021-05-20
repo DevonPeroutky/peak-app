@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import cn from "classnames";
-import {StyledElementProps, useTSlateStatic} from "@udecode/slate-plugins";
+import {StyledElementProps, useEditorRef} from "@udecode/slate-plugins";
 import "./media-embed-stub.scss"
 import {PeakMediaEmbedControl} from "../../constants";
 import {Input, message, Modal} from "antd";
 import {insertMediaEmbed, mapEmbeddedTypeToControlObject} from "../../utils";
-import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "../../types";
+import {ELEMENT_MEDIA_EMBED, LinkMetaData, PEAK_MEDIA_EMBED} from "component-library";
 import {fetchLinkMetadata} from "../../../../../../client/linkMetadata";
 import {useCurrentUser} from "../../../../../../utils/hooks";
 import {sleep} from "../../../../../../chrome-extension/utils/generalUtil";
@@ -14,7 +14,7 @@ export const PeakMediaStubElement = ({attributes, children, nodeProps, ...props}
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [url, setUrl] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
-    const editor = useTSlateStatic();
+    const editor = useEditorRef();
     const currentUser = useCurrentUser()
 
     const nodeId: number = props.element.id

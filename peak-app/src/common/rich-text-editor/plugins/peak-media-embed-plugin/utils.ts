@@ -6,7 +6,7 @@ import {
     ELEMENT_TWITTER_EMBED,
     ELEMENT_YOUTUBE_EMBED,
     PEAK_MEDIA_EMBED
-} from "./types";
+} from "component-library/dist";
 import {EMPTY_PARAGRAPH_NODE} from "../../editors/constants";
 import {
     PEAK_IMAGE_EMBED_STUB,
@@ -49,6 +49,7 @@ export const insertMediaEmbed = (editor: SPEditor, stubNodeId: number, mediaEmbe
 
     const [stubNode] = Editor.nodes(editor, {
         at: [],
+        // @ts-ignore
         match: n => (n.id === stubNodeId && n.embed_type === mediaEmbedType)
     })
     console.log(`Node `, stubNode[0])

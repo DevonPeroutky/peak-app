@@ -10,20 +10,22 @@
     text-align: center;
 }
 
-.peak-page-title {
-    margin-top: 0!important;
-    font-size: $title-font-size;
-    font-weight: $title-font-weight;
-    line-height: $title-line-height!important;
-    min-height: $title-line-height!important;
-    color: rgb(22, 30, 46)!important;
-    width: fit-content;
-    border-bottom: 0!important;
-}
-
 .voidable-slate-element {
     user-select: none;
     cursor: pointer;
     margin-top: 25px;
     margin-bottom: 25px;
+}
+
+.minimal-text-input {
+    min-height: 25px;
+    border-bottom: 1px solid $gray-accent-color!important;
+
+    &.ant-input {
+        padding-left: 0;
+    }
+
+    &:hover {
+        border-bottom: 1px solid $gray-accent-color!important;
+    }
 }

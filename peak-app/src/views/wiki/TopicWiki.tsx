@@ -9,7 +9,7 @@ import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-con
 import {beginSavingPage, useActiveEditorState} from "../../redux/slices/activeEditor/activeEditorSlice";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
 import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
-import { createPeakTitlePlugin } from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
+import {PublishModal} from "../../common/modals/publish/PublishModal";
 
 const TopicWiki = (props: {topic_id: string}) => {
     const { topic_id } = props;
@@ -38,6 +38,7 @@ const TopicWiki = (props: {topic_id: string}) => {
             setWikiPageContent(newValue)
 
             // If PageTitle changed. Update it in Redux immediately due to Sidebar showing the Title's
+            // @ts-ignore
             const children: Node[] = newValue[0].children as Node[]
             const currentTitle = Node.string(children[0])
             if (currentTitle !== pageTitle) {
@@ -52,8 +53,9 @@ const TopicWiki = (props: {topic_id: string}) => {
     return (
         <div className={"wiki-container"}>
             {/*<PageContextBar topicId={topic_id}/>*/}
+            <PublishModal className={"publish-modal-button"}/>
             <PeakEditor
-                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
+                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer]}
                 onChange={updatePageContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={wikiPageContent}

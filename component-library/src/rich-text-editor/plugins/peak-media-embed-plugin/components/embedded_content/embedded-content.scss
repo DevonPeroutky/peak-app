@@ -1,0 +1,95 @@
+@import "../../../../../variables";
+
+.rich-link-preview-container {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  flex-grow: 1;
+  min-width: 0px;
+  cursor: pointer;
+  margin-top: 25px;
+  margin-bottom: 25px;
+
+  &:hover {
+    background: rgba(55, 53, 47, 0.08);
+    text-decoration: none!important;
+    color: inherit;
+  }
+
+  .editor-rich-link-preview {
+    border: 1px solid rgba(55, 53, 47, 0.16);
+    border-radius: 3px;
+    display: flex;
+    max-height: 125px;
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 12px 14px 14px;
+      flex: 4 1 180px;
+      overflow: hidden;
+      text-align: left;
+
+      .title {
+        line-height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis!important;
+        overflow: hidden;
+        min-height: 24px;
+        margin-bottom: 2px;
+      }
+
+      .description {
+        color: $text-accent-color;
+        line-height: 16px;
+        text-overflow: ellipsis!important;
+        overflow: hidden;
+        height: 32px;
+        font-size: 12px;
+      }
+
+      .footer {
+        display: flex;
+        margin-top: 6px;
+
+        img {
+          width: 16px;
+          height: 16px;
+          min-width: 16px;
+          margin-right: 6px;
+        }
+
+        .hostname {
+          font-size: 12px;
+          line-height: 16px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .right-column {
+      flex: 1 1 180px;
+      display: block;
+      position: relative;
+
+      .cover-image {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+
+}
+
+.youtube-container {
+  width: 100%;
+  height: 400px;
+  border: 0;
+  border-radius: .3em;
+}

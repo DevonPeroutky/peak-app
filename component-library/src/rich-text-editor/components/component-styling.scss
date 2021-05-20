@@ -1,0 +1,77 @@
+@import "../../variables";
+
+.slate-h1, .slate-h2, .slate-h3, .slate-h4, .slate-h5 {
+  padding-bottom: 5px;
+  border-bottom: 1px solid $gray-accent-color;
+}
+
+.slate-p {
+  line-height: 1.75!important;
+}
+
+// TODO: MOVE THIS TO WHERE THIS IS DEFINED
+.slate-Draggable {
+  button {
+    display: flex;
+    overflow: auto!important;
+  }
+}
+
+.slate-blockquote {
+  font-style: italic;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.slate-code_block {
+  background-color: #252f3f;
+  color: #e5e7eb;
+
+  overflow-x: auto;
+  font-size: .875em;
+  line-height: 1.7142857;
+  margin-top: 1.7142857em;
+  margin-bottom: 1.7142857em;
+  border-radius: .375rem;
+  padding: .8571429em 1.1428571em;
+  white-space: pre;
+}
+
+$list-color: $darker-text-accent-color;
+.slate-ul {
+  list-style-type: disc!important;
+  list-style-position: outside!important;
+
+  .slate-li {
+    list-style-type: disc!important;
+  }
+
+  .slate-li::marker {
+    color: $list-color!important;
+  }
+}
+
+.slate-ol {
+  list-style-type: decimal!important;
+  list-style-position: outside!important;
+  //counter-reset: cupcake!important;
+  //list-style: none;
+
+  .slate-li {
+    //list-style-type: decimal!important;
+    counter-increment: cupcake;
+    padding-left: 10px;
+  }
+
+  .slate-li::marker {
+    //content: counters(cupcake, '.') ' ';
+    /* Whatever custom styles you want here */
+    color: $list-color!important;
+    font-weight: bold!important;
+    padding-right: 15px!important;
+    margin-right: 12px;
+    width: 40px;
+    line-height: 1.6!important;
+  }
+}

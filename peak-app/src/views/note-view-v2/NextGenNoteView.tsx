@@ -11,10 +11,9 @@ import {equals} from "ramda";
 import {useNodeContentSelect} from "../../common/rich-text-editor/utils/node-content-select/useNodeContentSelect";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
 import {wikiTitleEnforcer} from "../../common/rich-text-editor/editors/wiki/config";
-import {createPeakTitlePlugin} from "../../common/rich-text-editor/plugins/peak-title-plugin/PeakTitlePlugin";
 import {NoteTagSelect} from "../../common/rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
-import {TITLE} from "../../common/rich-text-editor/types";
 import "./next-gen-note-view.scss"
+import {ELEMENT_TITLE} from "component-library";
 
 export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[] }) => {
     const { note, selected_tags } = props
@@ -60,13 +59,13 @@ export const NextGenNoteView = (props: { note: PeakNote, selected_tags: PeakTag[
         <div className={"peak-note-view-container"}>
             <NoteTagSelect selected_tags={selected_tags} note_id={note.id}/>
             <PeakEditor
-                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer, createPeakTitlePlugin()]}
+                additionalPlugins={[nodeSelectPlugin, wikiTitleEnforcer]}
                 onChange={updateNoteContent}
                 getNodeContentSelectProps={getNodeContentSelectProps}
                 initialValue={noteContent}
                 currentPageId={currentPageId}
                 placeholderOverrides={[{
-                    key: TITLE,
+                    key: ELEMENT_TITLE,
                     placeholder: 'Give your note a Title',
                     hideOnBlur: false,
                 }]}

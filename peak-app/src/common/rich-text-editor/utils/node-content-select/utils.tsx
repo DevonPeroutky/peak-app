@@ -135,6 +135,7 @@ const peakAutoformatBlock = (
     if (!format) {
         Transforms.setNodes(
             editor,
+            // @ts-ignore
             { type },
             { match: (n) => Editor.isBlock(editor, n) }
         );
