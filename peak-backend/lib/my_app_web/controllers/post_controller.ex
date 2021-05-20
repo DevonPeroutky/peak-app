@@ -6,8 +6,8 @@ defmodule MyAppWeb.PostController do
 
   action_fallback MyAppWeb.FallbackController
 
-  def index(conn, _params) do
-    posts = Blog.list_posts()
+  def index(conn, %{"subdomain" => subdomain}) do
+    posts = Blog.list_posts(subdomain)
     render(conn, "index.json", posts: posts)
   end
 

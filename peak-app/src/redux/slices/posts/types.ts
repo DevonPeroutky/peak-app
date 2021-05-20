@@ -16,7 +16,7 @@ export interface PeakPost {
     snippet?: string
     body: Node[]
     tag_ids: string[]
-    subdomain: string
+    subdomain_id: string
     user_id: string
 
     // TODO: Enum

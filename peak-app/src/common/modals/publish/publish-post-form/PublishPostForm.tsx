@@ -23,7 +23,7 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
             snippet: snippet,
             body: page.body,
             tag_ids: selectedTags.map(t => t.id),
-            subdomain: blogConfiguration.subdomain,
+            subdomain_id: blogConfiguration.subdomain,
             post_type: POST_TYPE.blog_post.toString(),
             visibility: POST_VISIBILITY.public.toString(),
             user_id: userId
@@ -35,7 +35,9 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
         createPeakPost(userId, blogConfiguration.subdomain, createPublishPost()).then(res => {
             console.log(`Res ` , res)
             setLoading(false)
-        }).then()
+        }).catch(res => {
+            setLoading(false)
+        })
     }
 
     return (

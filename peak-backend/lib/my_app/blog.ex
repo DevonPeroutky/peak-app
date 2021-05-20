@@ -114,12 +114,13 @@ defmodule MyApp.Blog do
 
   ## Examples
 
-      iex> list_posts()
+      iex> list_posts(subdomain)
       [%Post{}, ...]
 
   """
-  def list_posts do
-    Repo.all(Post)
+  def list_posts(subdomain) do
+    from(p in Post, where: p.subdomain_id == ^subdomain, order_by: [desc: p.inserted_at])
+    |> Repo.all()
   end
 
   @doc """

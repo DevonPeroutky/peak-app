@@ -13,16 +13,18 @@ defmodule MyApp.Blog.Post do
     field :tag_ids, {:array, :binary_id}
     field :title, :string
     field :visibility, :string
-    field :subdomain, :binary_id
-    field :user_id, :binary_id
+    belongs_to :user, MyApp.Auth.User, [foreign_key: :user_id, type: :string]
+    belongs_to :subdomain, MyApp.Blog.Subdomain, [foreign_key: :subdomain_id, type: :string]
 
     timestamps()
   end
 
   @doc false
   def changeset(post, attrs) do
+    attrs |> IO.inspect
     post
-    |> cast(attrs, [:title, :subtitle, :cover_image, :snippet, :body, :tag_ids, :visibility, :post_type])
-    |> validate_required([:title, :body, :tag_ids, :visibility, :post_type])
+    |> cast(attrs, [:title, :subtitle, :cover_image, :snippet, :body, :tag_ids, :visibility, :post_type, :user_id, :subdomain_id])
+    |> validate_required([:title, :body, :tag_ids, :visibility, :post_type, :user_id, :subdomain_id])
+    |> IO.inspect
   end
 end
