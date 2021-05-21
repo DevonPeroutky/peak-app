@@ -15,6 +15,15 @@ const baseQueryClient = new QueryClient({
 )
 
 function MyApp({ Component, pageProps }) {
+    // TODO: Keep this in a global state
+    const [subdomain, setSubdomain] = useState<string>(null)
+
+    useEffect(() => {
+        const subdomain = parseSubdomain(window.location.origin)
+        console.log(`THE SUBDOMAIN `, subdomain)
+        setSubdomain(subdomain)
+    }, [])
+
     return (
         <QueryClientProvider client={baseQueryClient}>
             <Component {...pageProps} />

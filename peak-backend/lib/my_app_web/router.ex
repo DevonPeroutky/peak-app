@@ -35,7 +35,7 @@ defmodule MyAppWeb.Router do
 
   scope "/blog/v1/", MyAppWeb do
     pipe_through [:public]
-    get "/posts", PostController, :index
+    resources "/posts", PostController, only: [:index, :show]
   end
 
   scope "/api/v1", MyAppWeb do

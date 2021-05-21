@@ -5,14 +5,13 @@ import {InitialLoader} from "../components/initial-loader/InitialLoader";
 import styles from "../../styles/Home.module.css";
 
 const App = () => {
+    // TODO: Keep this in a global state
     const [subdomain, setSubdomain] = useState<string>(null)
 
     useEffect(() => {
         const subdomain = parseSubdomain(window.location.origin)
         setSubdomain(subdomain)
     }, [])
-
-    console.log(`RE RENDERING THE APP?!??!?!`)
 
     return (
         <div className={styles.container}>
