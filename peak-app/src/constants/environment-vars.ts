@@ -5,6 +5,7 @@ interface PeakAppConfig {
     web_socket_protocol: string
     web_protocol: string
     backend_domain: string
+    blog_domain: string
     electron_protocol: string
     env: string
     dist: string
@@ -14,6 +15,7 @@ const dev: PeakAppConfig = {
     web_socket_protocol: "ws",
     web_protocol: "http",
     app_server_domain: "localhost:3001",
+    blog_domain: "localhost:3000",
     backend_domain: "localhost:4000",
     env: "dev",
     electron_protocol: "peak-dev-app",
@@ -25,6 +27,7 @@ const prod: PeakAppConfig = {
     web_protocol: "https",
     app_server_domain: process.env.REACT_APP_APP_SERVER_ADDRESS || "you-need-to-set-this.com",
     backend_domain: process.env.REACT_APP_BACKEND_SERVER_ADDRESS || "you-need-to-set-this.com",
+    blog_domain: process.env.REACT_APP_BLOG_ADDRESS || "you-need-to-set-this.com",
     env: "prod",
     electron_protocol: "peak-app",
     dist: process.env.REACT_APP_DIST || ELECTRON

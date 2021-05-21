@@ -12,6 +12,7 @@
     "autoprefixer": "^10.2.5",
     "axios": "^0.21.1",
     "component-library": "link:../component-library",
+    "moment": "^2.29.1",
     "next": "10.2.0",
     "node-fetch": "^2.6.1",
     "postcss": "^8.2.14",
