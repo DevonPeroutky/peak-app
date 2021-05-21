@@ -29,6 +29,11 @@
         list-style-type: disc !important;
         list-style-position: outside !important;
     }
+
+    ::selection {
+        background-color: hsla(221, 89%, 96%, 1);
+        color: hsla(222, 88%, 55%, 1)
+    }
 }
 
 /*html,*/

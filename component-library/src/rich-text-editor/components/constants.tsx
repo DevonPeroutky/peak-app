@@ -14,6 +14,7 @@ import {
   ELEMENT_TWITTER_EMBED,
   ELEMENT_YOUTUBE_EMBED
 } from '../plugins/peak-media-embed-plugin'
+import "./component-styling.scss"
 
 export const PEAK_SLATE_COMPONENT_OVERRIDES = {
   [ELEMENT_TITLE]: PeakTitleElement,
