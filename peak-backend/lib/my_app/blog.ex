@@ -35,10 +35,10 @@ defmodule MyApp.Blog do
       ** (Ecto.NoResultsError)
 
   """
-  def get_subdomain!(id), do: Repo.get!(Subdomain, id)
+  def get_subdomain_by_id!(id), do: Repo.get!(Subdomain, id)
 
-  def get_subdomain!(user_id, subdomain) do
-    from(s in Subdomain, where: s.user_id == ^user_id and s.subdomain == ^subdomain)
+  def get_subdomain!(subdomain) do
+    from(s in Subdomain, where: s.subdomain == ^subdomain)
     |> Repo.one()
   end
 

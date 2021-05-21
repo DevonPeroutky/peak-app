@@ -1,6 +1,7 @@
 defmodule MyAppWeb.SubdomainController do
   use MyAppWeb, :controller
 
+  alias MyApp.Auth
   alias MyApp.Blog
   alias MyApp.Blog.Subdomain
 
@@ -20,18 +21,20 @@ defmodule MyAppWeb.SubdomainController do
     end
   end
 
-  def fetch_subdomain(conn, %{"user_id" => user_id, "subdomain" => subdomain}) do
-    subdomain = Blog.get_subdomain!(user_id, subdomain)
-    render(conn, "show.json", subdomain: subdomain)
+  def fetch_subdomain(conn, %{"subdomain" => subdomain}) do
+    subdomain = Blog.get_subdomain!(subdomain)
+    user = Auth.get_user!(subdomain.user_id)
+
+    render(conn, "subdomain_with_author.json", %{subdomain: subdomain, user: user})
   end
 
   def show(conn, %{"id" => id}) do
-    subdomain = Blog.get_subdomain!(id)
+    subdomain = Blog.get_subdomain_by_id!(id)
     render(conn, "show.json", subdomain: subdomain)
   end
 
   def update(conn, %{"id" => id, "subdomain" => subdomain_params}) do
-    subdomain = Blog.get_subdomain!(id)
+    subdomain = Blog.get_subdomain_by_id!(id)
 
     with {:ok, %Subdomain{} = subdomain} <- Blog.update_subdomain(subdomain, subdomain_params) do
       render(conn, "show.json", subdomain: subdomain)
@@ -39,7 +42,7 @@ defmodule MyAppWeb.SubdomainController do
   end
 
   def delete(conn, %{"id" => id}) do
-    subdomain = Blog.get_subdomain!(id)
+    subdomain = Blog.get_subdomain_by_id!(id)
 
     with {:ok, %Subdomain{}} <- Blog.delete_subdomain(subdomain) do
       send_resp(conn, :no_content, "")

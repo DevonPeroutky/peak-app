@@ -33,8 +33,9 @@ defmodule MyAppWeb.Router do
     resources "/users", UserController, only: [:index]
   end
 
-  scope "/blog/v1/", MyAppWeb do
+  scope "/blog/v1", MyAppWeb do
     pipe_through [:public]
+    get "/", SubdomainController, :fetch_subdomain
     resources "/posts", PostController, only: [:index, :show]
   end
 

@@ -1,7 +1,5 @@
 import { NextPage } from "next";
 import React from "react";
-
-// TODO: Move this to shared
 import {useRouter} from "next/router";
 import {useQuery, useQueryClient} from "react-query";
 import {PeakPost} from "component-library";

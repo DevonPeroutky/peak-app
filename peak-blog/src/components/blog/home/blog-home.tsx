@@ -7,6 +7,8 @@ import {POSTS_KEY} from "../../../data/posts/types";
 
 export const BlogHome = (props: { subdomain: string }) => {
     const { subdomain } = props
+
+    // Move this to satke more advantage of SSR?
     const { isLoading, isError, status, data, error } = useQuery<PeakPost[], Error>(
         [POSTS_KEY],
         () => fetch_posts_for_subdomain(subdomain),
@@ -14,6 +16,9 @@ export const BlogHome = (props: { subdomain: string }) => {
             staleTime: 600000
         }
     )
+
+
+    console.log(`THE SUBDOMAIN `, subdomain)
 
     if (isLoading) {
         return <div/>;

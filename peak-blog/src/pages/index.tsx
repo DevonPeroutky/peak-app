@@ -1,22 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {BlogHome} from "../components/blog/home/blog-home";
-import {parseSubdomain} from "../utils/subdomains";
 import {InitialLoader} from "../components/initial-loader/InitialLoader";
 import styles from "../../styles/Home.module.css";
+import {useAppContext} from "../data/context";
 
 const App = () => {
-    // TODO: Keep this in a global state
-    const [subdomain, setSubdomain] = useState<string>(null)
-
-    useEffect(() => {
-        const subdomain = parseSubdomain(window.location.origin)
-        setSubdomain(subdomain)
-    }, [])
+    const { subdomain } = useAppContext()
 
     return (
         <div className={styles.container}>
             {/* @ts-ignore */}
-            {(subdomain) ? <BlogHome subdomain={subdomain}/> : <InitialLoader/>}
+            {(subdomain) ? <BlogHome subdomain={subdomain.subdomain}/> : <InitialLoader/>}
         </div>
     )
 }

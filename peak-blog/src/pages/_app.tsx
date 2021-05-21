@@ -1,8 +1,11 @@
 import '../../styles/globals.css'
 import 'component-library/dist/index.css'
-import {QueryClient, QueryClientProvider} from "react-query";
+import {QueryClient, QueryClientProvider, useQuery} from "react-query";
 import React, {useEffect, useState} from "react";
 import {parseSubdomain} from "../utils/subdomains";
+import {AppWrapper} from "../data/context";
+import {SubdomainResponse} from "../data/subdomain/types";
+import {fetch_subdomain} from "../data/subdomain/subdomain";
 
 // Create a client
 const baseQueryClient = new QueryClient({
@@ -15,19 +18,22 @@ const baseQueryClient = new QueryClient({
 )
 
 function MyApp({ Component, pageProps }) {
-    // TODO: Keep this in a global state
-    const [subdomain, setSubdomain] = useState<string>(null)
+    const [subdomainData, setSubdomain] = useState<SubdomainResponse>(null)
 
     useEffect(() => {
         const subdomain = parseSubdomain(window.location.origin)
-        console.log(`THE SUBDOMAIN `, subdomain)
-        setSubdomain(subdomain)
+        if (subdomain) {
+            fetch_subdomain(subdomain).then(setSubdomain)
+        }
+
     }, [])
 
     return (
-        <QueryClientProvider client={baseQueryClient}>
-            <Component {...pageProps} />
-        </QueryClientProvider>
+        <AppWrapper value={subdomainData}>
+            <QueryClientProvider client={baseQueryClient}>
+                <Component {...pageProps} />
+            </QueryClientProvider>
+        </AppWrapper>
     )
 }
 
