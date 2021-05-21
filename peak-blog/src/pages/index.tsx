@@ -1,36 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {QueryClient, QueryClientProvider} from "react-query";
-import {Example} from "../components/example/Example";
 import {BlogHome} from "../components/blog/home/blog-home";
 import {parseSubdomain} from "../utils/subdomains";
 import {InitialLoader} from "../components/initial-loader/InitialLoader";
-
-// Create a client
-const baseQueryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: true,
-            },
-        }
-    }
-)
+import styles from "../../styles/Home.module.css";
 
 const App = () => {
     const [subdomain, setSubdomain] = useState<string>(null)
 
     useEffect(() => {
-        console.log(`The window.location `, window.location)
         const subdomain = parseSubdomain(window.location.origin)
         setSubdomain(subdomain)
-        console.log(`Subdomain ${subdomain}`)
     }, [])
 
+    console.log(`RE RENDERING THE APP?!??!?!`)
+
     return (
-          <>
-              <QueryClientProvider client={baseQueryClient}>
-                  { (subdomain) ? <BlogHome subdomain={subdomain}/> : <InitialLoader/> }
-              </QueryClientProvider>
-          </>
-      )
+        <div className={styles.container}>
+            {/* @ts-ignore */}
+            {(subdomain) ? <BlogHome subdomain={subdomain}/> : <InitialLoader/>}
+        </div>
+    )
 }
 export default App

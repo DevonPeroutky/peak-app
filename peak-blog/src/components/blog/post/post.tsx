@@ -4,8 +4,9 @@ import styles from "../../../../styles/Home.module.css";
 import {DisplayEditor} from "../../rich-text-editor/DisplayEditor";
 import { Node } from "slate";
 import moment from "moment";
+import Link from "next/link";
 
-export const Post = (props: { post: PeakPost }) => {
+export const BlogPost = (props: { post: PeakPost }) => {
     const { post } = props
 
     const titleNode = post.body[0]
@@ -14,7 +15,9 @@ export const Post = (props: { post: PeakPost }) => {
 
     return (
         <div className={styles.contentContainer}>
-            <h1 className={"mb-6"}>{title}</h1>
+            <Link href={`post/${post.id}`}>
+                <h1 className={"mb-6 cursor-pointer"}>{title}</h1>
+            </Link>
             <div className={"text-gray-500 font-medium text-sm mb-4"}>
                 <span>{post.user_id}</span> / <span>{moment(post.created_at).format('LL') }</span>
             </div>
