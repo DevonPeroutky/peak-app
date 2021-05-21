@@ -1,16 +1,11 @@
 defmodule MyApp.CORS do
   use Corsica.Router,
       origins: [
-        "http://localhost:3001",
-        "http://localhost:3000",
-        "http://sup.localhost:3000",
-        "http://localhost:5000",
-#        "https://peak-webapp.onrender.com",
         "https://peak-app-server.onrender.com",
         "file://peak-electron-app",
         "chrome-extension://jdenmafkllgoggagbbbcahkdjhdednpf",
-        "https://cur8.dev",
-        "https://*.cur8.dev",
+        ~r{^https?://(.*\.)?localhost\:(3|5)00(1|0)$},
+        ~r{^https?://(.*\.)?cur8\.dev$},
       ],
       allow_credentials: true,
       ## TODO REmove: x-requested-with
