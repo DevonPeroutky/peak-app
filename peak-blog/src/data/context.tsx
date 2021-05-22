@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
-import {SubdomainResponse} from "./subdomain/types";
+import {INITIAL_SUBDOMAIN_PAYLOAD, SubdomainResponse} from "./subdomain/types";
 
-const AppContext = createContext(null)
+const AppContext = createContext<SubdomainResponse>(INITIAL_SUBDOMAIN_PAYLOAD)
 export function AppWrapper(props) {
     const {value, children} = props
 

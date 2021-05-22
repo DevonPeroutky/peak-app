@@ -8,6 +8,7 @@ import {BlogPost} from "../../components/blog/post/post";
 import styles from "../../../styles/Home.module.css";
 import {POST_KEY_PREFIX} from "../../data/posts/types";
 
+// TODO: Load the subdomain / author / posts if not done already?
 const Post: NextPage<{}> = (props) => {
     const router = useRouter()
     const post_id: string = router.query["pid"] as string

@@ -17,9 +17,6 @@ export const BlogHome = (props: { subdomain: string }) => {
         }
     )
 
-
-    console.log(`THE SUBDOMAIN `, subdomain)
-
     if (isLoading) {
         return <div/>;
     }

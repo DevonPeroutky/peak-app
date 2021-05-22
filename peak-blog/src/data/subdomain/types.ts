@@ -18,8 +18,11 @@ export interface Subdomain {
 }
 
 export interface SubdomainResponse {
-    author: SubdomainAuthor
-    subdomain: Subdomain
+    author: SubdomainAuthor | string
+    subdomain: Subdomain | string
 }
 
-export const SUBDOMAIN_KEY = 'subdomain'
+export const INITIAL_SUBDOMAIN_PAYLOAD = {
+    author: null,
+    subdomain: null
+}
