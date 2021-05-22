@@ -9,7 +9,7 @@ export default function BlogHeader() {
     return (
         <Link href={"/"}>
             <header className={cn(styles.contentContainer, "cursor-pointer mb-16")}>
-                <h1 className={"leading-tight text-center text-blue-500 text-6xl"}>{subdomain.title}</h1>
+                <h1 className={"leading-tight text-center text-blue-500 text-6xl hover:text-blue-400"}>{subdomain.title}</h1>
                 <span className={"leading-tight text-center text-base text-gray-400 font-normal"}>{subdomain.description}</span>
             </header>
         </Link>

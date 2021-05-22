@@ -4,7 +4,6 @@ import {useAppContext} from "../../../data/context";
 import {Node} from "slate";
 import Link from "next/link";
 import moment from "moment";
-import {DisplayEditor} from "../../rich-text-editor/DisplayEditor";
 
 export const BlogPostPreview = (props: { post: PeakPost }) => {
     const { post } = props
