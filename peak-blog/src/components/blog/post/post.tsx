@@ -1,6 +1,5 @@
 import React from "react";
 import {PeakPost} from "component-library";
-import styles from "../../../../styles/Home.module.css";
 import {DisplayEditor} from "../../rich-text-editor/DisplayEditor";
 import { Node } from "slate";
 import moment from "moment";
@@ -16,7 +15,7 @@ export const BlogPost = (props: { post: PeakPost }) => {
     const title = Node.string(titleNode)
 
     return (
-        <div className={styles.contentContainer}>
+        <>
             <Link href={`post/${post.id}`}>
                 <h1 className={"mb-6 cursor-pointer"}>{title}</h1>
             </Link>
@@ -24,6 +23,6 @@ export const BlogPost = (props: { post: PeakPost }) => {
                 <span>{author.given_name} {author.family_name}</span> / <span>{moment(post.created_at).format('LL') }</span>
             </div>
             <DisplayEditor value={bodySanTitle} postId={post.id}/>
-        </div>
+        </>
     )
 }

@@ -2,8 +2,8 @@ import {fetch_posts_for_subdomain} from "../../../data/posts/posts";
 import {useQuery} from "react-query";
 import {PeakPost} from "component-library";
 import React from "react";
-import {BlogPost} from "../post/post";
 import {POSTS_KEY} from "../../../data/posts/types";
+import {BlogPostPreview} from "../post/post-preview";
 
 export const BlogHome = (props: { subdomain: string }) => {
     const { subdomain } = props
@@ -28,5 +28,5 @@ export const BlogHome = (props: { subdomain: string }) => {
         return <div>Coming Soon!</div>
     }
 
-    return (data.map(post => <BlogPost key={post.id} post={post}/>))
+    return (data.map(post => <BlogPostPreview key={post.id} post={post}/>))
 }

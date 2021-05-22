@@ -9,6 +9,8 @@ import {fetch_subdomain} from "../data/subdomain/subdomain";
 import styles from "../../styles/Home.module.css";
 import {PeakLogo} from "../components/logo/peak-logo";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {MainLayout} from "../components/layout/layout";
 
 // Create a client
 const baseQueryClient = new QueryClient({
@@ -22,29 +24,35 @@ const baseQueryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }) {
     const [subdomainData, setSubdomain] = useState<SubdomainResponse>(INITIAL_SUBDOMAIN_PAYLOAD)
+    const router = useRouter()
 
     useEffect(() => {
         const subdomain = parseSubdomain(window.location.origin)
         if (subdomain) {
-            fetch_subdomain(subdomain).then(setSubdomain)
+            fetch_subdomain(subdomain).then(res => setSubdomain(res.data)).catch(err => {
+                console.log(err)
+                console.log(err.response)
+                if (err && err.response && err.response.status == 404) {
+                    router.push("/404")
+                } else {
+                    router.push("/500")
+                }
+            })
         }
 
     }, [])
 
+    if (subdomainData === INITIAL_SUBDOMAIN_PAYLOAD) return <div>LOAD THIS HO</div>
+
     return (
         <AppWrapper value={subdomainData}>
             <QueryClientProvider client={baseQueryClient}>
-                <header className={"flex justify-center w-full leading-normal py-10"}>
-                    <div className={"flex max-w-3xl w-2/5 justify-between items-center"}>
-                        <PeakLogo/>
-                        <Link href={"/"}>
-                            <span className={"flex items-center justify-center hover:bg-blue-50 cursor-pointer p-4 h-10 rounded"}>Home</span>
-                        </Link>
-                    </div>
-                </header>
-                <div className={styles.container}>
+                {/*<div className={styles.container}>*/}
+                {/*    <Component {...pageProps} />*/}
+                {/*</div>*/}
+                <MainLayout>
                     <Component {...pageProps} />
-                </div>
+                </MainLayout>
             </QueryClientProvider>
         </AppWrapper>
     )
