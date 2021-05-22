@@ -39,9 +39,7 @@ const Post: NextPage<{}> = (props) => {
 
     // @ts-ignore
     return (
-        <div className={styles.container}>
-            <BlogPost post={data}/>)
-        </div>
+        <BlogPost post={data}/>
     )
 }
 export default Post

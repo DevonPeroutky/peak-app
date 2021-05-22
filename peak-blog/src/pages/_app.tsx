@@ -6,6 +6,7 @@ import {parseSubdomain} from "../utils/subdomains";
 import {AppWrapper} from "../data/context";
 import {INITIAL_SUBDOMAIN_PAYLOAD, SubdomainResponse} from "../data/subdomain/types";
 import {fetch_subdomain} from "../data/subdomain/subdomain";
+import styles from "../../styles/Home.module.css";
 
 // Create a client
 const baseQueryClient = new QueryClient({
@@ -31,7 +32,9 @@ function MyApp({ Component, pageProps }) {
     return (
         <AppWrapper value={subdomainData}>
             <QueryClientProvider client={baseQueryClient}>
-                <Component {...pageProps} />
+                <div className={styles.container}>
+                    <Component {...pageProps} />
+                </div>
             </QueryClientProvider>
         </AppWrapper>
     )

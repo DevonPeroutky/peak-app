@@ -1,17 +1,22 @@
 import React from "react";
 import {BlogHome} from "../components/blog/home/blog-home";
 import {InitialLoader} from "../components/initial-loader/InitialLoader";
-import styles from "../../styles/Home.module.css";
 import {useAppContext} from "../data/context";
 
 const App = () => {
     const { subdomain } = useAppContext()
 
     return (
-        <div className={styles.container}>
+        <>
+            <header className={"flex justify-center w-full leading-normal"}>
+                <div className={"flex max-w-3xl w-2/5 justify-between"}>
+                    <div>Logo Here</div>
+                    <div>Sign in here?</div>
+                </div>
+            </header>
             {/* @ts-ignore */}
             {(subdomain) ? <BlogHome subdomain={subdomain.subdomain}/> : <InitialLoader/>}
-        </div>
+        </>
     )
 }
 export default App

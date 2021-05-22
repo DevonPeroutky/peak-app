@@ -18,8 +18,8 @@ export interface Subdomain {
 }
 
 export interface SubdomainResponse {
-    author: SubdomainAuthor | string
-    subdomain: Subdomain | string
+    author: SubdomainAuthor
+    subdomain: Subdomain
 }
 
 export const INITIAL_SUBDOMAIN_PAYLOAD = {
