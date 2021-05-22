@@ -31,8 +31,8 @@
     }
 
     ::selection {
-        background-color: hsla(221, 89%, 96%, 1);
-        color: hsla(222, 88%, 55%, 1)
+        background-color: rgb(181 236 253);
+        /*color: hsla(222, 88%, 55%, 1)*/
     }
 }
 
