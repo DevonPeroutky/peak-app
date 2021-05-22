@@ -37,6 +37,14 @@ defmodule MyApp.Blog do
   """
   def get_subdomain_by_id!(id), do: Repo.get!(Subdomain, id)
 
+  def get_subdomain(subdomain_title) do
+    subdomain = from(s in Subdomain, where: s.subdomain == ^subdomain_title) |> Repo.one()
+    case subdomain do
+      %Subdomain{}  -> {:ok, subdomain}
+      _             -> {:error, :not_found}
+    end
+  end
+
   def get_subdomain!(subdomain) do
     from(s in Subdomain, where: s.subdomain == ^subdomain)
     |> Repo.one()

@@ -42,7 +42,7 @@ defmodule MyApp.Auth do
     user = Repo.get(User, id)
     case user do
       %User{} -> {:ok, user}
-      _       -> {:error, "Unable to query user with id: #{id}"}
+      _       -> {:error, :not_found}
     end
   end
 
