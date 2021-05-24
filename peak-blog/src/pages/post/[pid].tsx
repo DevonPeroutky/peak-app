@@ -5,8 +5,8 @@ import {useQuery, useQueryClient} from "react-query";
 import {PeakPost} from "component-library";
 import {fetch_post} from "../../data/posts/posts";
 import {BlogPost} from "../../components/blog/post/post";
-import styles from "../../../styles/Home.module.css";
 import {POST_KEY_PREFIX} from "../../data/posts/types";
+import Error from "next/error";
 
 // TODO: Load the subdomain / author / posts if not done already?
 const Post: NextPage<{}> = (props) => {
@@ -33,8 +33,17 @@ const Post: NextPage<{}> = (props) => {
         }
     )
 
-    if (!data) {
-        return <div/>
+    console.log(`WTFFFF `, status)
+    console.log(`Hello `, isError)
+
+    if (isError) {
+        console.log(`THe error: `, error)
+        return <Error statusCode={500}/>
+    }
+
+
+    if (isLoading) {
+        return <div>Load THIS HO!</div>
     }
 
     // @ts-ignore

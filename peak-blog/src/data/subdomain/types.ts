@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export interface SubdomainAuthor {
     email: string
     given_name: string
@@ -25,4 +23,12 @@ export interface SubdomainResponse {
 export const INITIAL_SUBDOMAIN_PAYLOAD = {
     author: null,
     subdomain: null
+}
+
+export enum SUBDOMAIN_LOADING_STATE {
+    TBD,
+    LOADING,
+    FAILED_TO_DERIVE,
+    FAILED_TO_LOAD,
+    LOADED
 }

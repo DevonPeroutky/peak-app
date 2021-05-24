@@ -4,7 +4,7 @@ import BlogHeader from "../blog/header";
 
 export const MainLayout = ({children}) => (
     <div className={styles.container}>
-        <BlogHeader/>
+        {/*<BlogHeader/>*/}
         <div className={styles.contentContainer}>
             {children}
         </div>
