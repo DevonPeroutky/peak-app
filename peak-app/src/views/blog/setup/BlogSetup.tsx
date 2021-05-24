@@ -7,6 +7,8 @@ import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useCurrentUser} from "../../../utils/hooks";
 import {subdomain_regex} from "../../../utils/blog";
 import {SubdomainInput} from "../../../common/inputs/subdomain/SubdomainInput";
+import {BlogLiveButton} from "../../../common/buttons/BlogLiveButton";
+import {sleep} from "../../../chrome-extension/utils/generalUtil";
 
 /**
  * Creation:
@@ -25,7 +27,9 @@ export const BlogSetup = (props: {}) => {
     const onFinish = (values: BlogConfiguration) => {
         setLoading(true)
         createBlog(user.id, values).then(_ => {
-            setLoading(false)
+            sleep(1000).then(_ => {
+                setLoading(false)
+            })
         })
     }
 
@@ -79,6 +83,7 @@ export const BlogSetup = (props: {}) => {
                     <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
                         Create my Blog
                     </Button>
+                    <BlogLiveButton/>
                 </Form.Item>
             </Form>
         </div>

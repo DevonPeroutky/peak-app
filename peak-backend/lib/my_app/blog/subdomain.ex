@@ -3,12 +3,11 @@ defmodule MyApp.Blog.Subdomain do
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
   schema "subdomains" do
     field :subdomain, :string
     field :title, :string
     field :description, :string
-    field :user_id, :string
+    belongs_to :user, MyApp.Auth.User, [foreign_key: :user_id, type: :string]
 
     timestamps()
   end

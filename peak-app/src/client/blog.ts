@@ -10,6 +10,6 @@ export const createBlogRequest = (userId: string, blog_payload: BlogConfiguratio
     return peakAxiosClient.post<BlogConfiguration>(`/api/v1/users/${userId}/blog`, { subdomain: blog_payload })
 }
 
-export const updateBlogConfiguration = (userId: string, blog_payload: BlogConfiguration): Promise<AxiosResponse<BlogConfiguration>> => {
-    return peakAxiosClient.post<BlogConfiguration>(`/api/v1/users/${userId}/blog/${blog_payload.id}`, { subdomain: blog_payload })
+export const updateBlogConfigurationRequest = (userId: string, blog_payload: BlogConfiguration): Promise<AxiosResponse<BlogConfiguration>> => {
+    return peakAxiosClient.put<BlogConfiguration>(`/api/v1/users/${userId}/blog/${blog_payload.id}`, { subdomain: blog_payload })
 }

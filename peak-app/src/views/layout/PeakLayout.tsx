@@ -89,9 +89,9 @@ const PeakLayout = (props: { currentUser: Peaker }) => {
                     <Content className="peak-content-container">
                         <div className="peak-content-holder">
                             <Switch>
-                                <Route path={`${match.path}/blog`} render={(props) => <BlogHome />} />
                                 {/* DELETE THIS NEXT LINE */}
                                 <Route path={`${match.path}/blog/setup`} render={(props) => <BlogSetup />} />
+                                <Route path={`${match.path}/blog`} render={(props) => <BlogHome />} />
                                 <Route path={`${match.path}/playground`} render={(props) => <Plugins />} />
                                 <Route path={`${match.path}/scratchpad`} render={(props) => <PeakScratchpad />} />
                                 <Route path={`${match.path}/draft-note`} render={(props) => <DraftLearningNoteView />} />

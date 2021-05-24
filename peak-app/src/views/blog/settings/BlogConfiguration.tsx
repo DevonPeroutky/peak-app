@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import {Button, Divider, Form, Input, message} from "antd";
+import {Button, Divider, Form, Input, message, notification} from "antd";
 import {CommentOutlined, CompassOutlined, RocketOutlined} from "@ant-design/icons/lib";
 import {subdomain_regex} from "../../../utils/blog";
 import {useBlog} from "../../../redux/slices/blog/hooks";
 import { SubdomainInput } from 'src/common/inputs/subdomain/SubdomainInput';
 import "./blog-configuration.scss"
+import {BlogConfiguration} from "../../../redux/slices/blog/types";
+import {useCurrentUser} from "../../../utils/hooks";
+import {updateBlogConfiguration} from "../../../redux/slices/blog/blogSlice";
+import {sleep} from "../../../chrome-extension/utils/generalUtil";
 
 export const BlogSettings = (props: {}) => {
     const blog = useBlog()
-
+    const user = useCurrentUser()
     const [loading, setLoading] = useState(false)
 
-    const updateBlogConfiguration = (values) => {
-        console.log('Fuck yeah ', values)
-        message.success("Updated your configuration")
+    const updateBlog = (values: BlogConfiguration) => {
+        setLoading(true)
+        updateBlogConfiguration(user.id, {...values, id: blog.id}).then(_ => {
+            sleep(1000).then(_ => {
+                setLoading(false)
+                notification.success({message: "Updated your configuration"} )
+            })
+        }).catch(_ => {
+            notification.error({message: "Failed to update your blog settings. Tell Devon"} )
+            setLoading(false)
+        })
     }
 
     return (
@@ -23,7 +35,7 @@ export const BlogSettings = (props: {}) => {
             <Form
                 name="normal_login"
                 initialValues={blog}
-                onFinish={updateBlogConfiguration}
+                onFinish={updateBlog}
             >
                 <h3>Publish Name</h3>
                 <Form.Item
@@ -69,15 +81,15 @@ export const BlogSettings = (props: {}) => {
                 >
                     <SubdomainInput/>
                 </Form.Item>
-                <h3>About page</h3>
-                <div>TBD</div>
-                <h3>Blog logo</h3>
-                <div>TBD</div>
-                <h3>Cover Image</h3>
-                <div>TBD</div>
+                {/*<h3>About page</h3>*/}
+                {/*<div>TBD</div>*/}
+                {/*<h3>Blog logo</h3>*/}
+                {/*<div>TBD</div>*/}
+                {/*<h3>Cover Image</h3>*/}
+                {/*<div>TBD</div>*/}
                 <Form.Item hasFeedback>
                     <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
-                        Save Changes
+                        {(loading) ? "Saving" : "Save Changes"}
                     </Button>
                 </Form.Item>
             </Form>
