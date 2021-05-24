@@ -9,3 +9,7 @@ export const fetchBlogConfiguration = (userId: string): Promise<AxiosResponse<Bl
 export const createBlogRequest = (userId: string, blog_payload: BlogConfiguration): Promise<AxiosResponse<BlogConfiguration>> => {
     return peakAxiosClient.post<BlogConfiguration>(`/api/v1/users/${userId}/blog`, { subdomain: blog_payload })
 }
+
+export const updateBlogConfiguration = (userId: string, blog_payload: BlogConfiguration): Promise<AxiosResponse<BlogConfiguration>> => {
+    return peakAxiosClient.post<BlogConfiguration>(`/api/v1/users/${userId}/blog/${blog_payload.id}`, { subdomain: blog_payload })
+}

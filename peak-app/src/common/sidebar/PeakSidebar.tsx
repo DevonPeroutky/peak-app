@@ -39,6 +39,11 @@ const PeakSidebar = (props: { }) => {
                         <ReadOutlined/>Books
                     </Link>
                 </Menu.Item>
+                <Menu.Item key="home/blog">
+                    <Link to="/home/blog">
+                        <ReadOutlined/>Blog
+                    </Link>
+                </Menu.Item>
             </Menu>
             <h4 className="topics-header">Wiki</h4>
             <TopicSection topics={topics}/>

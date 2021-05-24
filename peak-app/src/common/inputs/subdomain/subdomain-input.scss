@@ -1,0 +1,10 @@
+@import "../../../constants/variables";
+
+.subdomain-input {
+  .ant-input-prefix {
+    color: $placeholder-text-color
+  }
+  .ant-input-suffix {
+    color: $placeholder-text-color
+  }
+}

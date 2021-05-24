@@ -7,8 +7,6 @@ import {useBlog} from "../../redux/slices/blog/hooks";
 export const BlogHome = (props: {}) => {
     const isBlogSetup: BlogConfiguration | null = useBlog()
 
-    console.log(`IS BLOG SEETUP `, isBlogSetup)
-
     if (isBlogSetup) {
         return <BlogSettings/>
     } else {

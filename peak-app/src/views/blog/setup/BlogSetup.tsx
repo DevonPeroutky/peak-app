@@ -6,6 +6,7 @@ import {createBlog} from "../../../redux/slices/blog/blogSlice";
 import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useCurrentUser} from "../../../utils/hooks";
 import {subdomain_regex} from "../../../utils/blog";
+import {SubdomainInput} from "../../../common/inputs/subdomain/SubdomainInput";
 
 /**
  * Creation:
@@ -30,8 +31,8 @@ export const BlogSetup = (props: {}) => {
 
     return (
         <div className={"blog-setup-container"}>
-            <h1>Create your Blog</h1>
-            <Divider/>
+            <h1 style={{marginBottom: "0px!important"}}>Create your Blog</h1>
+            <Divider style={{marginTop: "0px"}}/>
             <Form
                 name="normal_login"
                 onFinish={onFinish}
@@ -43,7 +44,7 @@ export const BlogSetup = (props: {}) => {
                             required: true,
                             type: "string",
                             max: 255,
-                            message: 'Please enter your desired name for your blog. Max Length ',
+                            message: 'Please enter your desired name for your blog. Keep it under 255 characters',
                         },
                     ]}
                 >
@@ -56,7 +57,7 @@ export const BlogSetup = (props: {}) => {
                             required: true,
                             type: "string",
                             max: 255,
-                            message: 'Please enter a description for your blog',
+                            message: 'Please enter a description for your blog. Keep it under 255 characters (for now)',
                         },
                     ]}
                 >
@@ -72,7 +73,7 @@ export const BlogSetup = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input placeholder="Subdomain" suffix={".cur8.dev"}/>
+                    <SubdomainInput/>
                 </Form.Item>
                 <Form.Item hasFeedback>
                     <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
