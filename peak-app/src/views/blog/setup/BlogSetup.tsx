@@ -61,7 +61,7 @@ export const BlogSetup = (props: {}) => {
                             required: true,
                             type: "string",
                             max: 255,
-                            message: 'Please enter a description for your blog. Keep it under 255 characters (for now)',
+                            message: 'Please enter a description for your blog. Try to keep it under 255 characters like a Tweet',
                         },
                     ]}
                 >

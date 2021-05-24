@@ -42,26 +42,25 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
 
     return (
         <div className={"publish-post-container"}>
-            <div className={"col"}>
+            <div className={"row"}>
                 <h3>Story Preview</h3>
-                <Input className={"minimal-text-input publish-text-input"} placeholder="Write a preview title" bordered={false} onChange={e => setTitle(e.target.value)}/>
-                <Input className={"minimal-text-input publish-text-input"} placeholder="Write a preview snippet we'll use a subtitle" bordered={false}/>
+                <Input className={"minimal-text-input publish-text-input"} required={true} placeholder="Write a preview title" bordered={false} onChange={e => setTitle(e.target.value)}/>
+                <Input className={"minimal-text-input publish-text-input"} required={true} placeholder="Write a preview snippet we'll use a subtitle" bordered={false}/>
             </div>
-            <div className={"col"}>
+            <div className={"row"}>
                 <h3>Publishing to: <b>TBD</b></h3>
                 <NoteTagSelect selected_tags={[]} note_id={"TBD"}/>
-                <div className={"row"}>
-                    <Button
-                        shape="round"
-                        size={"large"}
-                        icon={<ShareAltOutlined/>}
-                        type={"primary"}
-                        loading={loading}
-                        onClick={() => publishPost()}
-                    >
-                        Publish
-                    </Button>
-                </div>
+                <Button
+                    shape="round"
+                    size={"large"}
+                    style={{marginTop: "25px", maxWidth: "fit-content"}}
+                    icon={<ShareAltOutlined/>}
+                    type={"primary"}
+                    loading={loading}
+                    onClick={() => publishPost()}
+                >
+                    Publish
+                </Button>
             </div>
         </div>
     )

@@ -62,7 +62,7 @@ const WebappGoogleLogin = (props: { isDesktopLogin: boolean, addAccountFlow: boo
         console.log(`Error Response from Google`)
         console.log(responseGoogle)
         message.error("Error trying authenticate with Google. Please try again from the Desktop App. Definitely let Devon know as well");
-        history.push(`/login`);
+        history.push(`/welcome`);
     }
 
     return (

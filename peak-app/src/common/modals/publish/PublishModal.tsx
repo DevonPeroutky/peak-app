@@ -8,8 +8,10 @@ import {useCurrentPage, useCurrentUser} from "../../../utils/hooks";
 import {PeakWikiPage} from "../../../constants/wiki-types";
 import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useBlog} from "../../../redux/slices/blog/hooks";
+import {useActiveEditorState} from "../../../redux/slices/activeEditor/activeEditorSlice";
 
 export const PublishModal = (props: { className?: string }) => {
+    const editorState = useActiveEditorState()
     const [visible, setVisible] = useState(false);
     const wikiPage: PeakWikiPage = useCurrentPage()
     const user = useCurrentUser()
@@ -21,6 +23,7 @@ export const PublishModal = (props: { className?: string }) => {
                 className={cn("publish-button", props.className)}
                 type="primary"
                 shape="round"
+                disabled={editorState.isSaving}
                 icon={<ShareAltOutlined />}
                 onClick={() => setVisible(true)}
                 size={"large"}>

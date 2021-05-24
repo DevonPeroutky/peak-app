@@ -29,13 +29,20 @@ export const BlogLiveButton = () => {
                     elem.classList.remove('animated');
                 }, 2400);
             });
-
         });
 
     }, [])
 
+    const [animating, setAnimating] = useState<boolean>(false)
+    const [live, setLive] = useState<boolean>(false)
+
+    const onClick = (e) => {
+        e.preventDefault();
+
+    }
+
     return (
-        <div className="rocket-button">
+        <div className="rocket-button" onClick={onClick}>
             <div className="default">Launch Site</div>
             <div className="success">
                 {/*SVG for button here*/}
