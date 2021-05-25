@@ -26,6 +26,7 @@ const LogoutButton = (props: { }) => {
         message.info('Logged Out!');
         peakAxiosClient.post(`/api/v1/session/logout`)
         dispatch(setUser(UNAUTHED_USER))
+        history.push(`/welcome`)
         if (isElectron) {
             // http://localhost:3000/main_window#/welcome
             history.push(`/main_window#/welcome`)

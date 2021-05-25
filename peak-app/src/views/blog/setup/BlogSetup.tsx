@@ -38,7 +38,7 @@ export const BlogSetup = (props: {}) => {
             <h1 style={{marginBottom: "0px!important"}}>Create your Blog</h1>
             <Divider style={{marginTop: "0px"}}/>
             <Form
-                name="normal_login"
+                name="blog_setup"
                 onFinish={onFinish}
             >
                 <Form.Item
@@ -60,7 +60,7 @@ export const BlogSetup = (props: {}) => {
                         {
                             required: true,
                             type: "string",
-                            max: 255,
+                            max: 500,
                             message: 'Please enter a description for your blog. Try to keep it under 255 characters like a Tweet',
                         },
                     ]}

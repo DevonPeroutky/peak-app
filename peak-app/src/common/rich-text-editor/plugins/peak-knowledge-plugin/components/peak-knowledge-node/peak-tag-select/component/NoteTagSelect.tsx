@@ -19,8 +19,8 @@ const { Option } = Select;
  * @param props
  * @constructor
  */
-export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string }) => {
-    const { selected_tags, note_id } = props
+export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string, input_className?: string }) => {
+    const { selected_tags, note_id, input_className } = props
     const existingTags = useTags()
     const currentUser = useCurrentUser()
     const [tags, setTags] = useState<PeakTag[]>(existingTags)
@@ -111,6 +111,7 @@ export const NoteTagSelect = (props: { selected_tags: PeakTag[], note_id: string
                     return { value: t.title, label: t.color } as LabeledValue
                 })}
                 labelInValue={true}
+                className={input_className}
                 bordered={false}
                 onInputKeyDown={onKeyDown}
                 placeholder="Add tags"

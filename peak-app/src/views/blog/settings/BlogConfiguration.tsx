@@ -33,7 +33,7 @@ export const BlogSettings = (props: {}) => {
             <h1 style={{marginBottom: "0px!important"}}>Configure your Blog</h1>
             <Divider style={{marginTop: "0px"}}/>
             <Form
-                name="normal_login"
+                name="blog_configuration"
                 initialValues={blog}
                 onFinish={updateBlog}
             >
@@ -45,7 +45,7 @@ export const BlogSettings = (props: {}) => {
                             required: true,
                             type: "string",
                             max: 255,
-                            message: 'Please enter your desired name for your blog. Max Length ',
+                            message: 'Please enter your desired name for your blog. Max Length is 255 characters',
                         },
                     ]}
                 >
@@ -61,7 +61,7 @@ export const BlogSettings = (props: {}) => {
                         {
                             required: true,
                             type: "string",
-                            max: 255,
+                            max: 500,
                             message: 'Please enter a description for your blog',
                         },
                     ]}

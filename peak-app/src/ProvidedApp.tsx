@@ -48,7 +48,7 @@ const ProvidedApp = (props: {}) => {
                     <Route path="/temp-desktop-login">
                         <TempDesktopLogin/>
                     </Route>
-                    <AuthedRoute>
+                    {/*<AuthedRoute>*/}
                         <Switch>
                             <Route path={"/home"} render={(props) => <PeakLayout currentUser={user}/>} />
                             <Route path={"/topic/:topic_id"} render={(props) => <PeakLayout currentUser={user}/>}/>
@@ -56,7 +56,7 @@ const ProvidedApp = (props: {}) => {
                                 <Redirect to="/home/scratchpad" />
                             </Route>
                         </Switch>
-                    </AuthedRoute>
+                    {/*</AuthedRoute>*/}
                     <Route path="*">
                         <NoMatch />
                     </Route>

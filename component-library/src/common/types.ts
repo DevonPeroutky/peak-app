@@ -13,7 +13,6 @@ export interface PeakPost {
   title: string
   subtitle?: string
   cover_image?: string
-  snippet?: string
   body: Node[]
   tag_ids: string[]
   subdomain_id: string

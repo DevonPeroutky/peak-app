@@ -1,17 +1,21 @@
 @import "../../../constants/variables";
 
 .peak-publish-modal {
-  width: 50%!important;
+  display: flex;
+  justify-content: center;
+  width: 60% !important;
 
   .ant-modal-content {
     box-shadow: none;
+    width: 100%;
 
     .ant-modal-body {
+      display: flex;
+      justify-content: center;
       padding-left: 0px;
       padding-right: 0px;
       padding-bottom: 50px;
     }
-
   }
 }
 
