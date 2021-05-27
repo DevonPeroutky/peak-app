@@ -6,16 +6,26 @@
   justify-content: flex-start;
   align-items: flex-start;
 
+  .subdomain-link {
+    text-decoration: underline;
+    color: $primary-blue;
+  }
+
   .publish-form {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+
+    h3 {
+      margin-top: 1rem;
+    }
 
     .form-row {
       display: flex;
       flex-direction: column;
-      margin-bottom: 1.5rem;
-      min-height: 75px;
-
+      margin-bottom: 1rem;
+      min-height: 60px;
     }
   }
-
 }

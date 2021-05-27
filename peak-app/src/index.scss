@@ -31,35 +31,34 @@ h1, h2, h3, h4, h5 {
   color: $heading-color!important;
   font-variant: normal!important;
   letter-spacing: -.025rem!important;
-  margin-top: 1.2em!important;
   margin-bottom: .5em!important;
   //margin-top: 1.5em!important;
 }
 
 h1 {
-  font-size: 2.0rem!important;
-  font-weight: 800!important;
+  font-size: 2.0rem;
+  font-weight: 800;
 }
 
 h2 {
-  font-size: 1.65rem!important; // 1.5?
-  font-weight: 700!important;
+  font-size: 1.65rem; // 1.5?
+  font-weight: 700;
   line-height: 1.3333;
 }
 
 h3 {
-  font-size: 1.35em!important; // 1.25?
-  font-weight: 600!important;
+  font-size: 1.35em; // 1.25?
+  font-weight: 600;
 }
 
 h4 {
-  font-size: 1.1rem!important;
-  font-weight: 600!important;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 h5 {
-  font-size: 1.0rem!important;
-  font-weight: 600!important;
+  font-size: 1.0rem;
+  font-weight: 600;
 }
 
 body::placeholder {

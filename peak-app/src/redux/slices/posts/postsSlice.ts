@@ -19,10 +19,8 @@ export const postSlice = createSlice({
 
 export const createPeakPost = (userId: string, subdomain: string, post_payload: PeakPost): Promise<PeakPost> => {
     return createPeakPostRequest(userId, subdomain, post_payload).then(res => {
-        return sleep(1000).then(_ => {
-            store.dispatch(addPeakPost(res.data))
-            return res.data
-        })
+        store.dispatch(addPeakPost(res.data))
+        return res.data
     })
 }
 

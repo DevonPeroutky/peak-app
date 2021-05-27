@@ -34,7 +34,8 @@ const TopicWiki = (props: {topic_id: string}) => {
             if (!editorState.isSaving) {
                 dispatch(beginSavingPage());
             }
-            // updateComponentPageContent
+
+            // updateComponent Content immediate
             setWikiPageContent(newValue)
 
             // If PageTitle changed. Update it in Redux immediately due to Sidebar showing the Title's

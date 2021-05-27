@@ -30,7 +30,7 @@ export const BlogSettings = (props: {}) => {
 
     return (
         <div className={"blog-configuration-container"}>
-            <h1 style={{marginBottom: "0px!important"}}>Configure your Blog</h1>
+            <h1 style={{marginBottom: "0px!important"}} className={"peak-page-title"}>Configure your Blog</h1>
             <Divider style={{marginTop: "0px"}}/>
             <Form
                 name="blog_configuration"
