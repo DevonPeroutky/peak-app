@@ -23,7 +23,7 @@ export const BlogSettings = (props: {}) => {
                 notification.success({message: "Updated your configuration"} )
             })
         }).catch(_ => {
-            notification.error({message: "Failed to update your blog settings. Tell Devon"} )
+            notification.error({message: "Failed to update your blog settings."} )
             setLoading(false)
         })
     }
@@ -31,7 +31,6 @@ export const BlogSettings = (props: {}) => {
     return (
         <div className={"blog-configuration-container"}>
             <h1 style={{marginBottom: "0px!important"}} className={"peak-page-title"}>Configure your Blog</h1>
-            <Divider style={{marginTop: "0px"}}/>
             <Form
                 name="blog_configuration"
                 initialValues={blog}
@@ -81,12 +80,6 @@ export const BlogSettings = (props: {}) => {
                 >
                     <SubdomainInput/>
                 </Form.Item>
-                {/*<h3>About page</h3>*/}
-                {/*<div>TBD</div>*/}
-                {/*<h3>Blog logo</h3>*/}
-                {/*<div>TBD</div>*/}
-                {/*<h3>Cover Image</h3>*/}
-                {/*<div>TBD</div>*/}
                 <Form.Item hasFeedback>
                     <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
                         {(loading) ? "Saving" : "Save Changes"}

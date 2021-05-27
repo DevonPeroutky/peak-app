@@ -48,7 +48,7 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                 setLoading("published")
             })
         }).catch(res => {
-            sleep(5000).then(_ => {
+            sleep(1000).then(_ => {
                 notification.error({message: "Failed to publish your post!"})
                 setLoading("publish")
             })
@@ -90,7 +90,6 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                             className={"form-row"}>
                             <Input
                                 className={"minimal-text-input publish-text-input"}
-                                required={true}
                                 placeholder="Write a preview title"
                                 bordered={false}
                             />
@@ -102,13 +101,12 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                                     required: true,
                                     type: "string",
                                     max: 1000,
-                                    message: "Give people a quick overview of what you will be covering",
+                                    message: "Required. Give people a quick overview of what you will be covering! ",
                                 },
                             ]}
                             className={"form-row"}>
                             <Input
                                 className={"minimal-text-input publish-text-input"}
-                                required={true}
                                 placeholder="Write a preview snippet we'll use a subtitle"
                                 bordered={false}
                             />
