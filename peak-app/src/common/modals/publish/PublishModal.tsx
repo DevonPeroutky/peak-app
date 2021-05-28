@@ -47,7 +47,9 @@ export const PublishModal = (props: { className?: string }) => {
                 footer={null}
             >
                 <div className="publish-post-container">
-                    <PublishFormBody loadingState={loadingState} setLoading={setLoading}/>
+                    <Spin spinning={loadingState === "publishing"}>
+                        <PublishFormBody loadingState={loadingState} setLoading={setLoading}/>
+                    </Spin>
                 </div>
             </Modal>
         </>
@@ -62,14 +64,13 @@ const PublishFormBody = (props: { loadingState: PUBLISHING_STATE, setLoading: an
     const blog: BlogConfiguration = useBlog()
     const [postUrl, setPostUrl] = useState<string>(null)
 
-    console.log(`Post URL: ${postUrl}`)
+    console.log(`Post URL (${loadingState}): ${postUrl}`)
 
     switch (loadingState) {
         case "publish":
+        case "publishing":
             // @ts-ignore
             return <PublishPostForm page={wikiPage} userId={user.id} blogConfiguration={blog} setLoading={setLoading} setUrl={setPostUrl}/>
-        case "publishing":
-            return <Spin className={"animate__animated animate__zoomIn"} style={{ display: "flex", flexGrow: 1, justifyContent: "center", alignItems: "center" }}/>
         case "published":
             return <PublishSuccess postUrl={postUrl}/>
     }
