@@ -101,6 +101,10 @@ defmodule MyApp.Wiki do
     Repo.delete(page)
   end
 
+  def delete_page_by_id(page_id) do
+    %Page{id: page_id} |> Repo.delete
+  end
+
   @doc """
   Deletes all the pages for a topic.
 

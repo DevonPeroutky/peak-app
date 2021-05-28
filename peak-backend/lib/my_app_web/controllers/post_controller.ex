@@ -1,7 +1,9 @@
 defmodule MyAppWeb.PostController do
   use MyAppWeb, :controller
 
+  alias MyApp.Repo
   alias MyApp.Blog
+  alias MyApp.Wiki
   alias MyApp.Blog.Post
 
   action_fallback MyAppWeb.FallbackController
@@ -11,8 +13,15 @@ defmodule MyAppWeb.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, %{"post" => post_params}) do
-    with {:ok, %Post{} = post} <- Blog.create_post(post_params) do
+  defp create_post_from_page(post_params) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.run(:post, fn _repo, _changes_thus_far -> Blog.create_post(post_params) end)
+    |> Ecto.Multi.run(:deleted_page, fn _repo, _changes_thus_far -> Wiki.delete_page_by_id(post_params["id"]) end)
+    |> Repo.transaction
+  end
+
+  def create(conn, %{"post" => post_params, "user_id" => user_id}) do
+    with {:ok, %{ post: %Post{} = post } } <- create_post_from_page(post_params) do
       conn
       |> put_status(:created)
       |> render("show.json", post: post)

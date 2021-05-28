@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {store} from "../../store";
-import {sleep} from "../../../chrome-extension/utils/generalUtil";
 import {createPeakPostRequest} from "../../../client/posts";
 import {PeakPost} from "component-library";
 
@@ -19,8 +18,8 @@ export const postSlice = createSlice({
 
 export const createPeakPost = (userId: string, subdomain: string, post_payload: PeakPost): Promise<PeakPost> => {
     return createPeakPostRequest(userId, subdomain, post_payload).then(res => {
-        store.dispatch(addPeakPost(res.data.post))
-        return res.data.post
+        store.dispatch(addPeakPost(res))
+        return res
     })
 }
 

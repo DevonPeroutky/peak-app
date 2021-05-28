@@ -11,7 +11,7 @@ defmodule MyAppWeb.PageController do
 
   defp delete_page_and_remove_from_hierarchy(user_id, topic_id, page_id) do
     Ecto.Multi.new()
-    |> Ecto.Multi.run(:page, fn _repo, _changes_thus_far -> Wiki.get_page(page_id)  end)
+    |> Ecto.Multi.run(:page, fn _repo, _changes_thus_far -> Wiki.get_page(page_id) end)
     |> Ecto.Multi.run(:delete_result, fn _repo, %{page: page} -> Wiki.delete_page(page) end)
     |> Ecto.Multi.run(:user, fn _repo, _changes_thus_far -> Auth.get_user(user_id)  end)
     |> Ecto.Multi.run(:hierarchy, fn _repo, %{user: user} ->

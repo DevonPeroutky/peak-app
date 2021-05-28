@@ -2,7 +2,7 @@ defmodule MyApp.Blog.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, :binary_id, autogenerate: false}
   @foreign_key_type :binary_id
   schema "posts" do
     field :body, {:array, :map}
@@ -23,8 +23,7 @@ defmodule MyApp.Blog.Post do
   def changeset(post, attrs) do
     attrs |> IO.inspect
     post
-    |> cast(attrs, [:title, :subtitle, :cover_image, :snippet, :body, :tag_ids, :visibility, :post_type, :user_id, :subdomain_id])
+    |> cast(attrs, [:id, :title, :subtitle, :cover_image, :snippet, :body, :tag_ids, :visibility, :post_type, :user_id, :subdomain_id])
     |> validate_required([:title, :body, :tag_ids, :visibility, :post_type, :user_id, :subdomain_id])
-    |> IO.inspect
   end
 end
