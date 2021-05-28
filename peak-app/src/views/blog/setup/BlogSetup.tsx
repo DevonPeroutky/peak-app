@@ -9,6 +9,11 @@ import {subdomain_regex} from "../../../utils/blog";
 import {SubdomainInput} from "../../../common/inputs/subdomain/SubdomainInput";
 import {BlogLiveButton} from "../../../common/buttons/BlogLiveButton";
 import {sleep} from "../../../chrome-extension/utils/generalUtil";
+import {BlogCreateSuccess} from "./result/BlogSuccess";
+import {blogUrlFromSubdomain} from "../../../utils/urls";
+import {checkForSubdomainRequest} from "../../../client/blog";
+import {useBlog} from "../../../redux/slices/blog/hooks";
+import {useHistory} from "react-router-dom";
 
 /**
  * Creation:
@@ -22,21 +27,36 @@ import {sleep} from "../../../chrome-extension/utils/generalUtil";
  */
 export const BlogSetup = (props: {}) => {
     const user = useCurrentUser()
+    const history = useHistory()
+    const isBlogSetup: BlogConfiguration | null = useBlog()
     const [loading, setLoading] = useState(false)
+
+    // if (isBlogSetup) {
+    //     history.push(`/home/blog`)
+    // }
 
     const onFinish = (values: BlogConfiguration) => {
         setLoading(true)
-        createBlog(user.id, values).then(_ => {
+        createBlog(user.id, values).then(res => {
             sleep(1000).then(_ => {
                 setLoading(false)
+                history.push(`/home/blog/setup/success?subdomain=${res.subdomain}`)
             })
+        })
+    }
+
+    const checkForSubdomain = async (rule, value) => {
+        return checkForSubdomainRequest(value).catch(err => {
+            if (err.response && err.response.status === 404) {
+                return Promise.resolve('Subdomain is available')
+            }
+            return Promise.reject('Subdomain is taken')
         })
     }
 
     return (
         <div className={"blog-setup-container"}>
-            <h1 style={{marginBottom: "0px!important"}}>Create your Blog</h1>
-            <Divider style={{marginTop: "0px"}}/>
+            <h1 style={{marginBottom: "0px!important"}}>Create your Blog!</h1>
             <Form
                 name="blog_setup"
                 onFinish={onFinish}
@@ -52,7 +72,7 @@ export const BlogSetup = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input prefix={<CompassOutlined className="input-icon"/>} placeholder="Publication Name"/>
+                    <Input prefix={<CompassOutlined className="input-icon"/>} placeholder="Publication Name" className={"minimal-text-input"} bordered={false}/>
                 </Form.Item>
                 <Form.Item
                     name="description"
@@ -65,7 +85,7 @@ export const BlogSetup = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?"/>
+                    <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?" className={"minimal-text-input"} bordered={false}/>
                 </Form.Item>
                 <Form.Item
                     name="subdomain"
@@ -75,6 +95,10 @@ export const BlogSetup = (props: {}) => {
                             pattern: subdomain_regex,
                             message: 'Subdomain must be less than 63 characters, only contain letters/numbers/hyphens, but must begin and end with a alphanumeric'
                         },
+                        {
+                            validator: checkForSubdomain,
+                            validateTrigger: "onSubmit"
+                        }
                     ]}
                 >
                     <SubdomainInput/>

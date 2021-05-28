@@ -9,6 +9,7 @@ import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useCurrentUser} from "../../../utils/hooks";
 import {updateBlogConfiguration} from "../../../redux/slices/blog/blogSlice";
 import {sleep} from "../../../chrome-extension/utils/generalUtil";
+import {blogUrlFromSubdomain} from "../../../utils/urls";
 
 export const BlogSettings = (props: {}) => {
     const blog = useBlog()
@@ -50,8 +51,10 @@ export const BlogSettings = (props: {}) => {
                         ]}
                     >
                         <Input
-                            prefix={<CompassOutlined className="input-icon"/>}
+                            prefix={<CompassOutlined className="input-icon" style={{ marginRight: "5px" }}/>}
                             placeholder="Publication Name"
+                            className={"minimal-text-input"}
+                            bordered={false}
                             disabled={loading}
                         />
                     </Form.Item>
@@ -68,7 +71,9 @@ export const BlogSettings = (props: {}) => {
                         ]}
                     >
                         <Input
-                            prefix={<CommentOutlined className="input-icon"/>}
+                            prefix={<CommentOutlined className="input-icon" style={{ marginRight: "5px" }}/>}
+                            className={"minimal-text-input"}
+                            bordered={false}
                             disabled={loading}
                             placeholder="What is your blog about?"/>
                     </Form.Item>
@@ -97,6 +102,14 @@ export const BlogSettings = (props: {}) => {
                 <Form.Item hasFeedback>
                     <Button size={"large"} type="primary" htmlType="submit" style={{marginTop: "10px"}} loading={loading}>
                         {(loading) ? "Saving Changes" : "Save Changes"}
+                    </Button>
+                    <Button
+                        size={"large"}
+                        href={blogUrlFromSubdomain(blog.subdomain)}
+                        style={{marginTop: "10px", marginLeft: "10px"}}
+                        type={"link"}
+                        loading={loading}>
+                        View it live
                     </Button>
                 </Form.Item>
             </Form>

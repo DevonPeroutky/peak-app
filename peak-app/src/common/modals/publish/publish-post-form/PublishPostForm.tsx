@@ -10,7 +10,7 @@ import {PeakTag} from "../../../../types";
 import {PeakPost, POST_TYPE, POST_VISIBILITY} from "component-library";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import cn from "classnames"
-import config from "../../../../constants/environment-vars"
+import {blogUrlFromSubdomain} from "../../../../utils/urls";
 
 export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: BlogConfiguration, userId: string, setLoading: any, setUrl: any }) => {
     const { page, userId, blogConfiguration, setLoading, setUrl } = props
@@ -43,7 +43,8 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
         createPeakPost(userId, blogConfiguration.subdomain, blog_post_payload).then(res => {
             sleep(1000).then(_ => {
                 setLoading("published")
-                setUrl(`https://${blogConfiguration.subdomain}.${config.blog_domain}/posts/${res.id}`)
+                const baseBlogUrl = blogUrlFromSubdomain(blogConfiguration.subdomain)
+                setUrl(`${baseBlogUrl}/posts/${res.id}`)
             })
         }).catch(res => {
             sleep(1000).then(_ => {

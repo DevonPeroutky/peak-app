@@ -13,3 +13,9 @@ export const createBlogRequest = (userId: string, blog_payload: BlogConfiguratio
 export const updateBlogConfigurationRequest = (userId: string, blog_payload: BlogConfiguration): Promise<AxiosResponse<BlogConfiguration>> => {
     return peakAxiosClient.put<BlogConfiguration>(`/api/v1/users/${userId}/blog/${blog_payload.id}`, { subdomain: blog_payload })
 }
+
+export const checkForSubdomainRequest = (subdomain: string): Promise<AxiosResponse<BlogConfiguration>> => {
+    return peakAxiosClient.get<BlogConfiguration>(`/api/v1/subdomains?subdomain=${subdomain}`).then(res => {
+        return Promise.reject(new Error('Subdomain already taken'))
+    })
+}

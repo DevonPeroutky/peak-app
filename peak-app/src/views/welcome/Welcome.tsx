@@ -4,12 +4,8 @@ import config from "../../constants/environment-vars"
 import DesktopGoogleLogin from "../../common/login/signin-button/desktop-google-login/DesktopGoogleLogin";
 import {ELECTRON} from "../../constants/constants";
 import WebappGoogleLogin from "../../common/login/signin-button/webapp-google-signin/WebappGoogleLogin";
-import { useLocation } from 'react-router-dom';
 import {PeakLogo} from "../../common/logo/PeakLogo";
-
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
+import { useQuery } from 'src/utils/urls';
 
 export const PeakWelcome = (props: {}) => {
     const query = useQuery();

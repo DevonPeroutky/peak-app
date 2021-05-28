@@ -21,16 +21,12 @@ defmodule MyAppWeb.SubdomainController do
     end
   end
 
+  # THIS IS USED BY BOTH THE APP & THE BLOG.
   def fetch_subdomain(conn, %{"subdomain" => subdomain}) do
-    # subdomain = Blog.get_subdomain!(subdomain)
-    # user = Auth.get_user!(subdomain.user_id)
-
-
     with {:ok, %Subdomain{} = subdomain} <- Blog.get_subdomain(subdomain) |> IO.inspect do
         user = Auth.get_user!(subdomain.user_id)
         render(conn, "subdomain_with_author.json", %{subdomain: subdomain, user: user})
     end
-
   end
 
   def show(conn, %{"id" => id}) do

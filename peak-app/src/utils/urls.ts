@@ -1,19 +1,8 @@
-import { capitalize } from "lodash";
 import { useLocation } from "react-router-dom";
-import {TweetContainer} from "../common/media-embeds/twitter-container/TwitterContainer";
-import React from "react";
+import config from '../constants/environment-vars'
 
 export const useQuery = () => {
     return new URLSearchParams(useLocation().search);
-}
-
-export const deriveBaseDomain = (urlStr: string) => {
-    const url = new URL(urlStr);
-    const urlDomain: string = url.hostname.split('.').slice(0, -1).join(" ");
-    console.log(`URL`, urlStr)
-    console.log(`HOST`, url.hostname)
-    console.log(`DOMAIN`, urlDomain)
-    return urlDomain
 }
 
 export const deriveHostname = (urlStr: string) => {
@@ -85,4 +74,8 @@ export const parseYoutubeEmbedUrl = (url: string): string | undefined => {
         return url
     }
     return undefined
+}
+
+export const blogUrlFromSubdomain = (subdomain: string): string => {
+    return `${config.web_protocol}://${subdomain}.${config.blog_domain}`
 }
