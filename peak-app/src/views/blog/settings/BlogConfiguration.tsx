@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Button, Divider, Form, Input, message, notification} from "antd";
+import {Button, Divider, Form, Input, message, notification, Spin} from "antd";
 import {CommentOutlined, CompassOutlined, RocketOutlined} from "@ant-design/icons/lib";
 import {subdomain_regex} from "../../../utils/blog";
 import {useBlog} from "../../../redux/slices/blog/hooks";
@@ -36,54 +36,56 @@ export const BlogSettings = (props: {}) => {
                 initialValues={blog}
                 onFinish={updateBlog}
             >
-                <h5>Publish Name</h5>
-                <Form.Item
-                    name="title"
-                    rules={[
-                        {
-                            required: true,
-                            type: "string",
-                            max: 255,
-                            message: 'Please enter your desired name for your blog. Max Length is 255 characters',
-                        },
-                    ]}
-                >
-                    <Input
-                        prefix={<CompassOutlined className="input-icon"/>}
-                        placeholder="Publication Name"
-                        disabled={loading}
+                <Spin spinning={loading}>
+                    <h5>Publish Name</h5>
+                    <Form.Item
+                        name="title"
+                        rules={[
+                            {
+                                required: true,
+                                type: "string",
+                                max: 255,
+                                message: 'Please enter your desired name for your blog. Max Length is 255 characters',
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={<CompassOutlined className="input-icon"/>}
+                            placeholder="Publication Name"
+                            disabled={loading}
                         />
-                </Form.Item>
-                <h5>One-line description</h5>
-                <Form.Item
-                    name="description"
-                    rules={[
-                        {
-                            required: true,
-                            type: "string",
-                            max: 500,
-                            message: 'Please enter a description for your blog',
-                        },
-                    ]}
-                >
-                    <Input
-                        prefix={<CommentOutlined className="input-icon"/>}
-                        disabled={loading}
-                        placeholder="What is your blog about?"/>
-                </Form.Item>
-                <h5>Subdomain</h5>
-                <Form.Item
-                    name="subdomain"
-                    rules={[
-                        {
-                            required: true,
-                            pattern: subdomain_regex,
-                            message: 'Subdomain must be less than 63 characters, only contain letters/numbers/hyphens, but must begin and end with a alphanumeric'
-                        },
-                    ]}
-                >
-                    <SubdomainInput disabled={loading}/>
-                </Form.Item>
+                    </Form.Item>
+                    <h5>One-line description</h5>
+                    <Form.Item
+                        name="description"
+                        rules={[
+                            {
+                                required: true,
+                                type: "string",
+                                max: 500,
+                                message: 'Please enter a description for your blog',
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={<CommentOutlined className="input-icon"/>}
+                            disabled={loading}
+                            placeholder="What is your blog about?"/>
+                    </Form.Item>
+                    <h5>Subdomain</h5>
+                    <Form.Item
+                        name="subdomain"
+                        rules={[
+                            {
+                                required: true,
+                                pattern: subdomain_regex,
+                                message: 'Subdomain must be less than 63 characters, only contain letters/numbers/hyphens, but must begin and end with a alphanumeric'
+                            },
+                        ]}
+                    >
+                        <SubdomainInput disabled={loading}/>
+                    </Form.Item>
+                </Spin>
                 <Form.Item hasFeedback>
                     <Button size={"large"} type="primary" htmlType="submit" style={{marginTop: "10px"}} loading={loading}>
                         {(loading) ? "Saving Changes" : "Save Changes"}
