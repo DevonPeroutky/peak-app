@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Button, Modal} from "antd";
+import {Button, Modal, Spin} from "antd";
 import {ShareAltOutlined} from "@ant-design/icons/lib";
 import cn from 'classnames';
 import {PublishPostForm} from "./publish-post-form/PublishPostForm";
@@ -9,13 +9,13 @@ import {PeakWikiPage} from "../../../constants/wiki-types";
 import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useBlog} from "../../../redux/slices/blog/hooks";
 import {useActiveEditorState} from "../../../redux/slices/activeEditor/activeEditorSlice";
+import {PublishSuccess} from "./publish-result/PublishSuccess";
 
+type PUBLISHING_STATE = "publishing" | "publish" | "published"
 export const PublishModal = (props: { className?: string }) => {
     const editorState = useActiveEditorState()
     const [visible, setVisible] = useState(false);
-    const wikiPage: PeakWikiPage = useCurrentPage()
-    const user = useCurrentUser()
-    const blog: BlogConfiguration = useBlog()
+    const [loadingState, setLoading] = useState<PUBLISHING_STATE>("publish")
 
     return (
         <>
@@ -32,8 +32,13 @@ export const PublishModal = (props: { className?: string }) => {
             <Modal
                 visible={visible}
                 onOk={() => setVisible(false)}
-                onCancel={() => setVisible(false)}
+                onCancel={() => {
+                    setVisible(false)
+                    setLoading("publish")
+                }}
                 maskClosable={false}
+                destroyOnClose={true}
+                closable={loadingState !== "publishing"}
                 keyboard={true}
                 className="peak-publish-modal"
                 maskStyle={{
@@ -41,8 +46,31 @@ export const PublishModal = (props: { className?: string }) => {
                 }}
                 footer={null}
             >
-                <PublishPostForm page={wikiPage} userId={user.id} blogConfiguration={blog}/>
+                <div className="publish-post-container">
+                    <PublishFormBody loadingState={loadingState} setLoading={setLoading}/>
+                </div>
             </Modal>
         </>
     )
+}
+
+
+const PublishFormBody = (props: { loadingState: PUBLISHING_STATE, setLoading: any }) => {
+    const { loadingState, setLoading } = props
+    const wikiPage: PeakWikiPage = useCurrentPage()
+    const user = useCurrentUser()
+    const blog: BlogConfiguration = useBlog()
+    const [postUrl, setPostUrl] = useState<string>(null)
+
+    console.log(`Post URL: ${postUrl}`)
+
+    switch (loadingState) {
+        case "publish":
+            // @ts-ignore
+            return <PublishPostForm page={wikiPage} userId={user.id} blogConfiguration={blog} setLoading={setLoading} setUrl={setPostUrl}/>
+        case "publishing":
+            return <Spin className={"animate__animated animate__zoomIn"} style={{ display: "flex", flexGrow: 1, justifyContent: "center", alignItems: "center" }}/>
+        case "published":
+            return <PublishSuccess postUrl={postUrl}/>
+    }
 }

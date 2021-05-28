@@ -8,15 +8,13 @@ import {PeakWikiPage} from "../../../../constants/wiki-types";
 import {BlogConfiguration} from "../../../../redux/slices/blog/types";
 import {PeakTag} from "../../../../types";
 import {PeakPost, POST_TYPE, POST_VISIBILITY} from "component-library";
-import { capitalize } from "lodash";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
+import cn from "classnames"
+import config from "../../../../constants/environment-vars"
 
-export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: BlogConfiguration, userId: string }) => {
-    const { page, userId, blogConfiguration } = props
+export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: BlogConfiguration, userId: string, setLoading: any, setUrl: any }) => {
+    const { page, userId, blogConfiguration, setLoading, setUrl } = props
 
-    type PUBLISHING_STATE = "publishing" | "publish" | "published"
-
-    const [loadingState, setLoading] = useState<PUBLISHING_STATE>("publish")
     const [selectedTags, setTags] = useState<PeakTag[]>([])
 
     const createPublishPost = (title: string, subtitle: string): PeakPost => {
@@ -40,23 +38,23 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
     }
 
     const publishPost = (values: { title: string, subtitle: string }) => {
-        console.log(`values!, `, values)
         setLoading("publishing")
         const blog_post_payload: PeakPost = createPublishPost(values.title, values.subtitle)
         createPeakPost(userId, blogConfiguration.subdomain, blog_post_payload).then(res => {
             sleep(1000).then(_ => {
                 setLoading("published")
+                setUrl(`https://${blogConfiguration.subdomain}.${config.blog_domain}/posts/${res.id}`)
             })
         }).catch(res => {
             sleep(1000).then(_ => {
-                notification.error({message: "Failed to publish your post!"})
+                notification.error({key: "1", message: "Failed to publish your post!"})
                 setLoading("publish")
             })
         })
     }
 
     return (
-        <div className={"publish-post-container"}>
+        <div className={cn("publish-post-form-container animate__animated")}>
             <h1 style={{
                 wordBreak: "normal",
                 overflowWrap: "break-word",
@@ -74,49 +72,47 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                 className={"publish-form"}
                 initialValues={initialPostValues}
                 onFinish={publishPost}>
-                {(loadingState === "publishing") ? <Spin style={{ display: "flex", flexGrow: 1, justifyContent: "center", alignItems: "center" }}/> :
-                    <>
-                        <h3>Story Preview</h3>
-                        <Form.Item
-                            name={"title"}
-                            rules={[
-                                {
-                                    required: true,
-                                    type: "string",
-                                    max: 255,
-                                    message: 'We need a title for your post! Keep it under 255',
-                                },
-                            ]}
-                            className={"form-row"}>
-                            <Input
-                                className={"minimal-text-input publish-text-input"}
-                                placeholder="Write a preview title"
-                                bordered={false}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name={"subtitle"}
-                            rules={[
-                                {
-                                    required: true,
-                                    type: "string",
-                                    max: 1000,
-                                    message: "Required. Give people a quick overview of what you will be covering! ",
-                                },
-                            ]}
-                            className={"form-row"}>
-                            <Input
-                                className={"minimal-text-input publish-text-input"}
-                                placeholder="Write a preview snippet we'll use a subtitle"
-                                bordered={false}
-                            />
-                        </Form.Item>
-                        <div className={"form-row"}>
-                            <h3>Post Organization</h3>
-                            <NoteTagSelect selected_tags={[]} note_id={"TBD"} input_className={"minimal-text-input"}/>
-                        </div>
-                    </>
-                }
+                <>
+                    <h3>Story Preview</h3>
+                    <Form.Item
+                        name={"title"}
+                        rules={[
+                            {
+                                required: true,
+                                type: "string",
+                                max: 255,
+                                message: 'We need a title for your post! Keep it under 255',
+                            },
+                        ]}
+                        className={"form-row"}>
+                        <Input
+                            className={"minimal-text-input publish-text-input"}
+                            placeholder="Write a preview title"
+                            bordered={false}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        name={"subtitle"}
+                        rules={[
+                            {
+                                required: true,
+                                type: "string",
+                                max: 1000,
+                                message: "Required. Give people a quick overview of what you will be covering! ",
+                            },
+                        ]}
+                        className={"form-row"}>
+                        <Input
+                            className={"minimal-text-input publish-text-input"}
+                            placeholder="Write a preview snippet we'll use a subtitle"
+                            bordered={false}
+                        />
+                    </Form.Item>
+                    <div className={"form-row"}>
+                        <h3>Post Organization</h3>
+                        <NoteTagSelect selected_tags={[]} note_id={"TBD"} input_className={"minimal-text-input"}/>
+                    </div>
+                </>
                 <Form.Item hasFeedback className={"form-row"}>
                     <Button
                         shape="round"
@@ -124,9 +120,8 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                         size={"large"}
                         style={{marginTop: "25px", maxWidth: "fit-content"}}
                         icon={<ShareAltOutlined/>}
-                        type={"primary"}
-                        loading={loadingState === "publishing"}>
-                        {capitalize(loadingState)}
+                        type={"primary"}>
+                        Publish
                     </Button>
                 </Form.Item>
             </Form>

@@ -36,7 +36,7 @@ export const BlogSettings = (props: {}) => {
                 initialValues={blog}
                 onFinish={updateBlog}
             >
-                <h3>Publish Name</h3>
+                <h5>Publish Name</h5>
                 <Form.Item
                     name="title"
                     rules={[
@@ -51,9 +51,10 @@ export const BlogSettings = (props: {}) => {
                     <Input
                         prefix={<CompassOutlined className="input-icon"/>}
                         placeholder="Publication Name"
+                        disabled={loading}
                         />
                 </Form.Item>
-                <h3>One-line description</h3>
+                <h5>One-line description</h5>
                 <Form.Item
                     name="description"
                     rules={[
@@ -65,9 +66,12 @@ export const BlogSettings = (props: {}) => {
                         },
                     ]}
                 >
-                    <Input prefix={<CommentOutlined className="input-icon"/>} placeholder="What is your blog about?"/>
+                    <Input
+                        prefix={<CommentOutlined className="input-icon"/>}
+                        disabled={loading}
+                        placeholder="What is your blog about?"/>
                 </Form.Item>
-                <h3>Subdomain</h3>
+                <h5>Subdomain</h5>
                 <Form.Item
                     name="subdomain"
                     rules={[
@@ -78,11 +82,11 @@ export const BlogSettings = (props: {}) => {
                         },
                     ]}
                 >
-                    <SubdomainInput/>
+                    <SubdomainInput disabled={loading}/>
                 </Form.Item>
                 <Form.Item hasFeedback>
-                    <Button icon={<RocketOutlined />} type="primary" htmlType="submit" className="login-form-button" loading={loading}>
-                        {(loading) ? "Saving" : "Save Changes"}
+                    <Button size={"large"} type="primary" htmlType="submit" style={{marginTop: "10px"}} loading={loading}>
+                        {(loading) ? "Saving Changes" : "Save Changes"}
                     </Button>
                 </Form.Item>
             </Form>

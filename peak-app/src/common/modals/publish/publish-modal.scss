@@ -4,6 +4,12 @@
   display: flex;
   justify-content: center;
   width: 60% !important;
+  min-height: 750px;
+
+  .publish-post-container {
+    display: flex;
+    align-items: center;
+  }
 
   .ant-modal-content {
     box-shadow: none;
@@ -15,6 +21,8 @@
       padding-left: 0px;
       padding-right: 0px;
       padding-bottom: 50px;
+      height: 100%;
+      width: 100%;
     }
   }
 }
