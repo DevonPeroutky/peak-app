@@ -85,6 +85,14 @@ export const BlogSettings = (props: {}) => {
                     >
                         <SubdomainInput disabled={loading}/>
                     </Form.Item>
+                <h3 style={{marginTop: "10px"}}>Coming Soon...</h3>
+                <ul>
+                    <li>Cover images and logos!</li>
+                    <li>Ability for readers to subscribe your blog and receive your newsletter</li>
+                    <li>Output RSS feeds</li>
+                    <li>'About Me' pages</li>
+                    <li>Social Integrations</li>
+                </ul>
                 </Spin>
                 <Form.Item hasFeedback>
                     <Button size={"large"} type="primary" htmlType="submit" style={{marginTop: "10px"}} loading={loading}>
