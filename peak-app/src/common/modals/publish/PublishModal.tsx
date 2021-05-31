@@ -17,6 +17,8 @@ import { removePageFromTopic } from 'src/redux/slices/topicSlice';
 
 type PUBLISHING_STATE = "publishing" | "publish" | "published"
 export const PublishModal = (props: { className?: string }) => {
+    const history = useHistory()
+    const dispatch = useDispatch()
     const currentPage = useCurrentPage()
     const editorState = useActiveEditorState()
     const [visible, setVisible] = useState(false);
@@ -38,6 +40,13 @@ export const PublishModal = (props: { className?: string }) => {
                 visible={visible}
                 onOk={() => setVisible(false)}
                 onCancel={() => {
+
+                    if (loadingState === "published") {
+                        dispatch(deletePage({ pageId: currentPage.id }))
+                        dispatch(removePageFromTopic({ pageId: currentPage.id }))
+                        history.push("/home/scratchpad")
+                    }
+
                     setVisible(false)
                     setLoading("publish")
                 }}
@@ -45,7 +54,6 @@ export const PublishModal = (props: { className?: string }) => {
                 destroyOnClose={true}
                 closable={loadingState !== "publishing"}
                 keyboard={true}
-                closeIcon={(loadingState === "published") ? <CustomCloseIcon currentPageId={currentPage.id}/> : <CloseOutlined/> }
                 className="peak-publish-modal"
                 maskStyle={{
                     backgroundColor: '#FFF'
@@ -59,19 +67,6 @@ export const PublishModal = (props: { className?: string }) => {
                 </div>
             </Modal>
         </>
-    )
-}
-
-const CustomCloseIcon = (props: { currentPageId: string }) => {
-    const history = useHistory()
-    const dispatch = useDispatch()
-
-    return (
-        <CloseOutlined onClick={() => {
-            dispatch(deletePage({ pageId: props.currentPageId }))
-            dispatch(removePageFromTopic({ pageId: props.currentPageId }))
-            history.push("/home/scratchpad")
-        }}/>
     )
 }
 
