@@ -21,7 +21,7 @@ export const defaultEditableProps = {
     // placeholder: 'Enter some rich text…',
     spellCheck: true,
     autoFocus: true,
-    style: editorStyle,
+    style: editorStyle
 };
 
 export interface PeakEditorProps {
