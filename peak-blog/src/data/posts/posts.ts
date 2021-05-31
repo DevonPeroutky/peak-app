@@ -2,7 +2,7 @@ import { blogAxiosClient } from "../../../../peak-app/src/client/axiosConfig";
 import {PeakPost, PeakPostListResponse} from "component-library";
 
 export function fetch_posts_for_subdomain(subdomain: string, cursor?: string): Promise<PeakPostListResponse> {
-    const cursorQueryParam = (cursor) ? `?cursor=${cursor}` : ``
+    const cursorQueryParam = (cursor) ? `&cursor=${cursor}` : ``
     return blogAxiosClient
         .get<PeakPostListResponse>(`http://localhost:4000/blog/v1/posts?subdomain=${subdomain}${cursorQueryParam}`)
         .then(res => res.data)
