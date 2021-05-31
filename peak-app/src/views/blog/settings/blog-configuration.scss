@@ -1,3 +1,12 @@
 .blog-configuration-container {
   text-align: left;
+
+  .view-blog-button {
+    margin-top: 10px;
+    margin-left: 10px;
+
+    &:hover {
+      background-color: #e6f7ff;
+    }
+  }
 }

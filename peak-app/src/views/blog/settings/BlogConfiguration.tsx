@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {Button, Divider, Form, Input, message, notification, Spin} from "antd";
+import {Button, Divider, Form, Input, message, notification, Spin, Tooltip} from "antd";
 import {CommentOutlined, CompassOutlined, RocketOutlined} from "@ant-design/icons/lib";
-import {subdomain_regex} from "../../../utils/blog";
 import {useBlog} from "../../../redux/slices/blog/hooks";
-import { SubdomainInput } from 'src/common/inputs/subdomain/SubdomainInput';
+import {SUBDOMAIN_RULES, SubdomainInput} from 'src/common/inputs/subdomain/SubdomainInput';
 import "./blog-configuration.scss"
 import {BlogConfiguration} from "../../../redux/slices/blog/types";
 import {useCurrentUser} from "../../../utils/hooks";
@@ -80,15 +79,9 @@ export const BlogSettings = (props: {}) => {
                     <h5>Subdomain</h5>
                     <Form.Item
                         name="subdomain"
-                        rules={[
-                            {
-                                required: true,
-                                pattern: subdomain_regex,
-                                message: 'Subdomain must be less than 63 characters, only contain letters/numbers/hyphens, but must begin and end with a alphanumeric'
-                            },
-                        ]}
+                        tooltip={"Changing subdomains is coming!"}
                     >
-                        <SubdomainInput disabled={loading}/>
+                        <SubdomainInput disabled={true}/>
                     </Form.Item>
                 <h3 style={{marginTop: "10px"}}>Coming Soon...</h3>
                 <ul>
@@ -97,6 +90,7 @@ export const BlogSettings = (props: {}) => {
                     <li>Output RSS feeds</li>
                     <li>'About Me' pages</li>
                     <li>Social Integrations</li>
+                    <li>Changing your subdomain</li>
                 </ul>
                 </Spin>
                 <Form.Item hasFeedback>
@@ -106,10 +100,11 @@ export const BlogSettings = (props: {}) => {
                     <Button
                         size={"large"}
                         href={blogUrlFromSubdomain(blog.subdomain)}
-                        style={{marginTop: "10px", marginLeft: "10px"}}
+                        target={"_blank"}
+                        className={"view-blog-button"}
                         type={"link"}
                         loading={loading}>
-                        View it live
+                        View it live →
                     </Button>
                 </Form.Item>
             </Form>

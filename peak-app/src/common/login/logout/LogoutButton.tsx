@@ -3,7 +3,7 @@ import config from "../../../../src/constants/environment-vars"
 import {ELECTRON} from "../../../constants/constants";
 import {GoogleLogout} from "react-google-login";
 import {LogoutOutlined} from "@ant-design/icons/lib";
-import {Menu, message} from "antd";
+import {Menu, message, notification} from "antd";
 import {UNAUTHED_USER} from "../../../redux/slices/user/userSlice";
 import { setUser } from "../../../redux/slices/user/userSlice";
 import peakAxiosClient from "../../../client/axiosConfig"
@@ -18,12 +18,12 @@ const LogoutButton = (props: { }) => {
     const history = useHistory()
 
     const handleLogoutFailure = () => {
-        message.info('Failed to logout! Let Devon know');
+        notification.error({message: 'Failed to logout! '});
         dispatch(setUser(UNAUTHED_USER))
     };
 
     const logout = () => {
-        message.info('Logged Out!');
+        notification.info({ message: 'Logged Out!' });
         peakAxiosClient.post(`/api/v1/session/logout`)
         dispatch(setUser(UNAUTHED_USER))
         history.push(`/welcome`)

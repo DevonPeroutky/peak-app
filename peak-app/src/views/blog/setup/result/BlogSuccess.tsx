@@ -10,7 +10,7 @@ export const BlogCreateSuccess = (props) => {
     const subdomainParam: string | null = query.get("subdomain")
 
     if (!subdomainParam) {
-       history.push(`/home/scratchpad`)
+       history.push(`/home/blog`)
     }
 
     return (
