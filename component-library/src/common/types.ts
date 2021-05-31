@@ -26,3 +26,14 @@ export interface PeakPost {
   created_at?: string
   updated_at?: string
 }
+
+interface PaginationMetadata {
+  cursor: string | null
+  cursorBefore: string | null
+  limit: number
+}
+
+export interface PeakPostListResponse {
+  posts: PeakPost[],
+  pagination_metadata: PaginationMetadata
+}
