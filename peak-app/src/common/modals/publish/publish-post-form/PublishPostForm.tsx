@@ -44,7 +44,7 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
             sleep(1000).then(_ => {
                 setLoading("published")
                 const baseBlogUrl = blogUrlFromSubdomain(blogConfiguration.subdomain)
-                setUrl(`${baseBlogUrl}/posts/${res.id}`)
+                setUrl(`${baseBlogUrl}/post/${res.id}`)
             })
         }).catch(res => {
             sleep(1000).then(_ => {
