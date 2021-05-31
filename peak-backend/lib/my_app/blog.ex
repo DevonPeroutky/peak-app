@@ -8,6 +8,8 @@ defmodule MyApp.Blog do
 
   alias MyApp.Blog.Subdomain
 
+  @page_size 2
+
   @doc """
   Returns the list of subdomains.
 
@@ -126,9 +128,17 @@ defmodule MyApp.Blog do
       [%Post{}, ...]
 
   """
-  def list_posts(subdomain) do
-    from(p in Post, where: p.subdomain_id == ^subdomain, order_by: [desc: p.inserted_at])
-    |> Repo.all()
+  def list_posts(subdomain, cursor) do
+    query = from(p in Post, where: p.subdomain_id == ^subdomain, order_by: [desc: p.inserted_at])
+    fetch_post_page(query, cursor)
+  end
+
+  defp fetch_post_page(query, cursor) when is_nil(cursor) do
+    Repo.paginate(query, cursor_fields: [{:inserted_at, :desc}, {:id, :desc}], limit: @page_size)
+  end
+
+  defp fetch_post_page(query, cursor) do
+    Repo.paginate(query, after: cursor, cursor_fields: [{:inserted_at, :desc}, {:id, :desc}], limit: @page_size)
   end
 
   @doc """

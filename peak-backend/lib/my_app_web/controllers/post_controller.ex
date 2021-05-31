@@ -8,9 +8,14 @@ defmodule MyAppWeb.PostController do
 
   action_fallback MyAppWeb.FallbackController
 
-  def index(conn, %{"subdomain" => subdomain}) do
-    posts = Blog.list_posts(subdomain)
-    render(conn, "index.json", posts: posts)
+  def index(conn, %{"subdomain" => subdomain, "cursor" => cursor }) do
+    %{entries: posts, metadata: cursor_metadata} = Blog.list_posts(subdomain, cursor)
+    render(conn, "paginated_index.json", %{posts: posts, cursor_metadata: cursor_metadata })
+  end
+
+  def index(conn, %{"subdomain" => subdomain }) do
+    %{entries: posts, metadata: cursor_metadata} = Blog.list_posts(subdomain, nil)
+    render(conn, "paginated_index.json", %{posts: posts, cursor_metadata: cursor_metadata })
   end
 
   defp create_post_from_page(post_params) do
