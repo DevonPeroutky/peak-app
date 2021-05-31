@@ -22,7 +22,7 @@ export const BlogPost = (props: { post: PeakPost }) => {
                 <h1 className={"mb-8 cursor-pointer"}>{title}</h1>
             </Link>
             <div className={"text-gray-500 font-medium text-sm mb-14"}>
-                <span>{author.given_name} {author.family_name}</span> · <span>{moment(post.created_at).format('LL') }</span> · <EstimateReadTime body={post.body}/>
+                <span className={"mr-1"}>{author.given_name} {author.family_name}</span> • <span className={"mx-1"}>{moment(post.created_at).format('LL') }</span> • <EstimateReadTime className={"mx-1"} body={post.body}/>
             </div>
             <DisplayEditor value={bodySanTitle} postId={post.id}/>
         </div>

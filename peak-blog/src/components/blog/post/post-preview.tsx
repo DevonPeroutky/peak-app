@@ -23,7 +23,7 @@ export const BlogPostPreview = (props: { post: PeakPost }) => {
                 {post.subtitle}
             </div>
             <div className={"text-base text-gray-400 font-light text-sm mb-6"}>
-                <span>{author.given_name} {author.family_name}</span> · <span>{moment(post.created_at).format('LL') }</span> · <EstimateReadTime body={post.body}/>
+                <span className={"mr-1"}>{author.given_name} {author.family_name}</span> • <span className={"mx-1"}>{moment(post.created_at).format('LL') }</span> • <EstimateReadTime className={"mx-1"} body={post.body}/>
             </div>
         </div>
     )

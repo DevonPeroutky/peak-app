@@ -37,7 +37,7 @@ export const BlogHome = (props: { subdomain: Subdomain }) => {
     const posts: PeakPost[] = data.pages.flatMap(page => page.posts)
     return (
         <div>
-            <div className={"flex justify-center items-center flex-col divide-gray-50 border-b py-12"}>
+            <div className={"flex justify-center items-center flex-col divide-gray-50 border-b pt-12 pb-24"}>
                 <h1 className={"mb-4"}>{subdomain.title}</h1>
                 <h2 className={"text-gray-500 font-light text-center leading-normal"}>{subdomain.description}</h2>
             </div>
