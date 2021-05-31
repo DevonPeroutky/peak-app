@@ -5,6 +5,7 @@ import React from "react";
 import {POSTS_KEY} from "../../../data/posts/types";
 import {BlogPostPreview} from "../post/post-preview";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
+import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 
 export const BlogHome = (props: { subdomain: string }) => {
     const { subdomain } = props
@@ -20,17 +21,7 @@ export const BlogHome = (props: { subdomain: string }) => {
         }
     )
 
-
-    console.log(`THE DATA `, data)
-
-    const loadMoreButtonRef = React.useRef()
-    // @ts-ignore
-    useIntersectionObserver({
-        target: loadMoreButtonRef,
-        onIntersect: fetchNextPage,
-        enabled: hasNextPage,
-    })
-
+    useInfiniteScroll({ enabled: hasNextPage, fetchMore: fetchNextPage })
 
     if (isLoading) {
         return <div/>;
@@ -43,21 +34,9 @@ export const BlogHome = (props: { subdomain: string }) => {
     }
 
     const posts: PeakPost[] = data.pages.flatMap(page => page.posts)
-    console.log(`Posts`, posts)
     return (
         <div>
             { posts.map(post => <BlogPostPreview key={post.id} post={post}/>) }
-            <button
-                ref={loadMoreButtonRef}
-                onClick={() => fetchNextPage()}
-                disabled={!hasNextPage || isFetchingNextPage}
-            >
-                {isFetchingNextPage
-                    ? 'Loading more...'
-                    : hasNextPage
-                        ? 'Load Newer'
-                        : 'Nothing more to load'}
-            </button>
         </div>
     )
 }
