@@ -21,7 +21,7 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
         return {
             id: page.id,
             title: title,
-            snippet: subtitle,
+            subtitle: subtitle,
             body: page.body,
             tag_ids: selectedTags.map(t => t.id),
             subdomain_id: blogConfiguration.subdomain,
