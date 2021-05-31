@@ -44,9 +44,9 @@ export const BlogHome = (props) => {
                 <div className={"w-full flex items-center pb-4 text-gray-600 font-light justify-between"}>
                     <div className={"flex items-center"}>
                         <button className={"mr-5 cursor-pointer rounded-full px-4 py-2 border text-sm border-gray-400 hover:border-blue-400 hover:text-blue-400"}>Follow</button>
-                        <span className={"mr-5 cursor-pointer"}>255 Followers</span>
+                        <span className={"mr-5 cursor-pointer hover:text-blue-400"}>255 Followers</span>
                         <Link href={"/about"}>
-                            <span className={"mr-5 cursor-pointer"}>About Me</span>
+                            <span className={"mr-5 cursor-pointer hover:text-blue-400"}>About Me</span>
                         </Link>
                     </div>
                     <div className={"flex"}>
