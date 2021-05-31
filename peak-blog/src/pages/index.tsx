@@ -9,7 +9,7 @@ const App = () => {
     return (
         <>
             {/* @ts-ignore */}
-            {(subdomain) ? <BlogHome subdomain={subdomain}/> : <InitialLoader/>}
+            {(subdomain) ? <BlogHome/> : <InitialLoader/>}
         </>
     )
 }
