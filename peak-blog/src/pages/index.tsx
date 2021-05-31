@@ -6,12 +6,10 @@ import {useAppContext} from "../data/context";
 const App = () => {
     const { subdomain } = useAppContext()
 
-    console.log(`"WTF`)
-
     return (
         <>
             {/* @ts-ignore */}
-            {(subdomain) ? <BlogHome subdomain={subdomain.subdomain}/> : <InitialLoader/>}
+            {(subdomain) ? <BlogHome subdomain={subdomain}/> : <InitialLoader/>}
         </>
     )
 }

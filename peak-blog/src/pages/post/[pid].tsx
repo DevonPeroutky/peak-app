@@ -26,9 +26,6 @@ const Post: NextPage<{}> = (props) => {
         }
     )
 
-    console.log(`THE ERROR: `, error)
-    console.log(`Status `, status)
-
     if (isError) {
         console.log(`THe error: `, error)
         return <Error statusCode={500}/>
