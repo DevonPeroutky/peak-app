@@ -5,6 +5,7 @@ import { Node } from "slate";
 import moment from "moment";
 import Link from "next/link";
 import {useAppContext} from "../../../data/context";
+import styles from "../../../../styles/Home.module.css";
 
 export const BlogPost = (props: { post: PeakPost }) => {
     const { post } = props
@@ -15,14 +16,14 @@ export const BlogPost = (props: { post: PeakPost }) => {
     const title = Node.string(titleNode)
 
     return (
-        <>
+        <div className={styles.postContainer}>
             <Link href={`post/${post.id}`}>
                 <h1 className={"mb-6 cursor-pointer"}>{title}</h1>
             </Link>
-            <div className={"text-gray-500 font-medium text-sm mb-4"}>
+            <div className={"text-gray-500 font-medium text-sm mb-14"}>
                 <span>{author.given_name} {author.family_name}</span> / <span>{moment(post.created_at).format('LL') }</span>
             </div>
             <DisplayEditor value={bodySanTitle} postId={post.id}/>
-        </>
+        </div>
     )
 }

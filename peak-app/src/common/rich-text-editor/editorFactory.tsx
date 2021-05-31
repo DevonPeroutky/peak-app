@@ -15,12 +15,8 @@ import "../../constants/peak-editor.scss"
 import {useComponents} from "./components";
 import {DEFAULT_PLACEHOLDERS} from "./constants";
 import {contains, includes} from "ramda";
+import {editorStyle} from "component-library";
 
-const editorStyle: React.CSSProperties = {
-    minHeight: "100%",
-    textAlign: "left",
-    flex: "1 1 auto",
-}
 export const defaultEditableProps = {
     // placeholder: 'Enter some rich text…',
     spellCheck: true,

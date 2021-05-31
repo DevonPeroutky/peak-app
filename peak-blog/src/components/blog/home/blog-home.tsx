@@ -37,11 +37,11 @@ export const BlogHome = (props: { subdomain: Subdomain }) => {
     const posts: PeakPost[] = data.pages.flatMap(page => page.posts)
     return (
         <div>
-            <div className={"flex justify-center items-center flex-col divide-gray-50 border-b py-6"}>
+            <div className={"flex justify-center items-center flex-col divide-gray-50 border-b py-12"}>
                 <h1 className={"mb-4"}>{subdomain.title}</h1>
                 <h2 className={"text-gray-500 font-light text-center leading-normal"}>{subdomain.description}</h2>
             </div>
-            <div className={"py-6"}>
+            <div className={"py-24"}>
                 { posts.map(post => <BlogPostPreview key={post.id} post={post}/>) }
             </div>
         </div>

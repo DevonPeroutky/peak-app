@@ -3,7 +3,6 @@ import React, {useEffect} from "react";
 import "nprogress/nprogress.css";
 import nprogress from 'nprogress/nprogress.js'
 import {useRouter} from "next/router";
-import {sleep} from "../../../../peak-app/src/chrome-extension/utils/generalUtil";
 
 export const MainLayout = ({children}) => {
     const router = useRouter()

@@ -10,9 +10,15 @@
   display: flex;
   flex-direction: column;
   width: 50%;
-  max-width: 850px;
+  max-width: 800px;
   padding-top: 3rem;
   justify-content: center;
+  align-items: center;
+}
+
+.postContainer {
+  max-width: 600px;
+  width: 100%;
 }
 
 
