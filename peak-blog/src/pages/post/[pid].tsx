@@ -2,10 +2,10 @@ import { NextPage } from "next";
 import React from "react";
 import {useRouter} from "next/router";
 import {useQuery, useQueryClient} from "react-query";
-import {PeakPost} from "component-library";
+import {PeakPost, PeakPostListResponse} from "component-library";
 import {fetch_post} from "../../data/posts/posts";
 import {BlogPost} from "../../components/blog/post/post";
-import {POST_KEY_PREFIX} from "../../data/posts/types";
+import {POST_KEY_PREFIX, POSTS_KEY} from "../../data/posts/types";
 import Error from "next/error";
 
 // TODO: Load the subdomain / author / posts if not done already?
@@ -28,7 +28,8 @@ const Post: NextPage<{}> = (props) => {
         {
             initialData: () => {
                 if (!post_id) return undefined
-                return queryClient.getQueryData<PeakPost[]>('posts')?.find(p => p.id === post_id)
+                const posts: PeakPost[] = queryClient.getQueryData<PeakPostListResponse>(POSTS_KEY)?.pages.flatMap(page => page.posts)
+                return (posts) ? posts.find(p => p.id === post_id) : undefined
             }
         }
     )
