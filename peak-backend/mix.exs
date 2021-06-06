@@ -49,6 +49,7 @@ defmodule MyApp.MixProject do
       {:paginator, "~> 1.0.4"},
       {:floki, "~> 0.30.0"},
       {:tesla, "~> 1.4.0"},
+      {:goth, "~> 1.3-rc"},
 
       # optional, but recommended adapter for telsa
       {:hackney, "~> 1.17.0"},

@@ -7,12 +7,18 @@ defmodule MyApp.Application do
   alias GoogleCerts.CertificateCache
 
   def start(_type, _args) do
+    credentials = "GOOGLE_APPLICATION_CREDENTIALS_JSON" |> System.fetch_env!() |> Jason.decode!()
+    source = {:service_account, credentials, []}
+
+
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
       MyApp.Repo,
+
       # Start the endpoint when the application starts
       MyAppWeb.Endpoint,
+
       # Starts a worker by calling: MyApp.Worker.start_link(arg)
       # {MyApp.Worker, arg},
 
@@ -21,6 +27,9 @@ defmodule MyApp.Application do
 
       # After upgrade to Phoenix 1.5.7, I was told to do this
       {Phoenix.PubSub, [name: MyApp.PubSub, adapter: Phoenix.PubSub.PG2]},
+
+      # Add Goth
+      {Goth, name: MyApp.Goth, source: source},
 
       MyAppWeb.JournalPresence
     ]
