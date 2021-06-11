@@ -30,3 +30,5 @@ my_app-*.tar
 .idea
 .env
 priv/google.oauth2.certificates.json
+
+secrets/
