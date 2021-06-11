@@ -88,6 +88,12 @@ defmodule MyAppWeb.SessionController do
     end
   end
 
+  def fetch_object_upload_token(conn, %{"user_id" => userId}) do
+    with {:ok, token} <- Goth.fetch(MyApp.Goth) do
+      render(conn, "upload_token.json", token: token)
+    end
+  end
+
   def logout(conn, params) do
     IO.puts "Logging you out"
     conn

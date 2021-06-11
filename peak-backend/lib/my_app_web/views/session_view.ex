@@ -2,7 +2,6 @@ defmodule MyAppWeb.SessionView do
   use MyAppWeb, :view
   alias MyAppWeb.SessionView
 
-
   def render("show.json", %{user: user}) do
     %{data: render_one(user, SessionView, "user.json")}
   end
@@ -21,5 +20,11 @@ defmodule MyAppWeb.SessionView do
       hierarchy: user.hierarchy,
       family_name: user.family_name,
       access_token: user.access_token}
+  end
+
+  def render("upload_token.json", %{token: token}) do
+    %{upload_token: token.token,
+      expires: token.expires
+    }
   end
 end

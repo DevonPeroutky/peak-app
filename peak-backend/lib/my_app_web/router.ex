@@ -43,6 +43,7 @@ defmodule MyAppWeb.Router do
     pipe_through [:public, :auth, :ensure_auth]
     get "/subdomains", SubdomainController, :fetch_subdomain
     resources "/users", UserController, only: [:update, :show] do
+      get "/fetch-image-upload-access-token", SessionController, :fetch_object_upload_token
       get "/fetch-socket-access-token", SessionController, :generate_auth_token
       get "/list-all-accounts", UserController, :list_all_accounts
       get "/load-entire-state", FatUserController, :load_entire_state
