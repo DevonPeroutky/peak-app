@@ -10,6 +10,7 @@ import {useDebouncePeakScratchpadSaver} from "../../client/scratchpad";
 import {Peaker} from "../../types";
 import {SCRATCHPAD_ID} from "../../common/rich-text-editor/editors/scratchpad/constants";
 import {PeakEditor} from "../../common/rich-text-editor/editorFactory";
+import {ImageUpload} from "../../common/image-upload/ImageUpload";
 
 export const PeakScratchpad = (props: {}) => {
     const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export const PeakScratchpad = (props: {}) => {
 
     return (
         <div className={"scratchpad-container"}>
+            <ImageUpload/>
             <h1 className={"peak-page-title"}>Scratchpad</h1>
             <PeakEditor
                 additionalPlugins={[nodeSelectPlugin]}
