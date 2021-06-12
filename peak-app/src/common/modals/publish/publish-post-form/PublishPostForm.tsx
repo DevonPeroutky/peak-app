@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Divider, Form, Input, notification, Spin} from "antd";
+import {Button, Divider, Form, Input, notification, Spin, Upload} from "antd";
 import {NoteTagSelect} from "../../../rich-text-editor/plugins/peak-knowledge-plugin/components/peak-knowledge-node/peak-tag-select/component/NoteTagSelect";
 import "./publish-post-form.scss"
-import {ShareAltOutlined} from "@ant-design/icons/lib";
+import {ShareAltOutlined, UploadOutlined} from "@ant-design/icons/lib";
 import {createPeakPost} from "../../../../redux/slices/posts/postsSlice";
 import {PeakWikiPage} from "../../../../constants/wiki-types";
 import {BlogConfiguration} from "../../../../redux/slices/blog/types";
@@ -11,6 +11,7 @@ import {PeakPost, POST_TYPE, POST_VISIBILITY} from "component-library";
 import {sleep} from "../../../../chrome-extension/utils/generalUtil";
 import cn from "classnames"
 import {blogUrlFromSubdomain} from "../../../../utils/urls";
+import {ImageUpload} from "../../../image-upload/ImageUpload";
 
 export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: BlogConfiguration, userId: string, setLoading: any, setUrl: any }) => {
     const { page, userId, blogConfiguration, setLoading, setUrl } = props
@@ -109,6 +110,10 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                             bordered={false}
                         />
                     </Form.Item>
+                    <div>
+                        <ImageUpload/>
+                    </div>
+
                     <div className={"form-row"}>
                         <h3>Post Organization</h3>
                         <NoteTagSelect selected_tags={[]} note_id={"TBD"} input_className={"minimal-text-input"}/>

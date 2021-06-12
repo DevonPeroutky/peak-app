@@ -7,7 +7,7 @@ defmodule MyAppWeb.TokenView do
   end
 
   def render("token.json", %{token: token}) do
-    %{upload_token: token.token,
+    %{token: token.token,
       expires: token.expires,
       token_type: token.token_type
     }

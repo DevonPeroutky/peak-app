@@ -40,7 +40,7 @@ defmodule MyAppWeb.Router do
   end
 
   scope "/api/v1", MyAppWeb do
-    pipe_through [:public, :auth, :ensure_auth]
+    pipe_through [:public, :auth]
     get "/subdomains", SubdomainController, :fetch_subdomain
     resources "/users", UserController, only: [:update, :show] do
       get "/fetch-image-upload-access-token", SessionController, :fetch_object_upload_token

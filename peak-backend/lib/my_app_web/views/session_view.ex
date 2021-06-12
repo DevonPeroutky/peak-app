@@ -21,15 +21,4 @@ defmodule MyAppWeb.SessionView do
       family_name: user.family_name,
       access_token: user.access_token}
   end
-
-  def render("index.json", %{tokens: tokens}) do
-    %{tokens: render_many(tokens, SessionView, "token.json")}
-  end
-
-  def render("token.json", %{token: token}) do
-    %{upload_token: token.token,
-      expires: token.expires,
-      token_type: token.token_type
-    }
-  end
 end
