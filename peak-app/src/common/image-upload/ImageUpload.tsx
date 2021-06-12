@@ -4,44 +4,29 @@ import {LoadingOutlined, PlusOutlined, UploadOutlined} from "@ant-design/icons/l
 import {PeakAccessToken, useUploadToken} from "../../client/tokens";
 import {useCurrentUser} from "../../utils/hooks";
 import peakAxiosClient from "../../client/axiosConfig";
+import {useUploadFile} from "../../client/file-upload";
 
 export const ImageUpload = (props: {}) => {
     const currentUser = useCurrentUser()
-    const [accessToken, setAccessToken] = useState<PeakAccessToken>()
     const [loading, setLoading] = useState<boolean>(false)
     const [entropy, setEntropy] = useState<number>(Date.now())
     const [imageUrl, setImageUrl] = useState<string | undefined>()
-
-    useUploadToken().then(token => setAccessToken(token))
+    const uploadRequest = useUploadFile()
 
     const bucketName = "peak_user_images"
     const baseUrl = "https://storage.googleapis.com"
 
-    const uploadButton = (
-        <div>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
-    
-    const uploadProps = (!accessToken) ? { disabled: true } : {
+    const uploadProps = {
         action: (file) => {
             setEntropy(Date.now())
             return Promise.resolve(`${baseUrl}/upload/storage/v1/b/${bucketName}/o?uploadType=media&name=${currentUser.id}/${entropy}-${file.name}`)
-        },
-        headers: {
-            'Authorization': `Bearer ${accessToken.token}`
         },
         accept: "image/*",
         customRequest: (fileWrapper) => {
             const file = fileWrapper.file
             setLoading(true)
-            peakAxiosClient.post(fileWrapper.action, file, {
-                headers: {
-                    'content-type': file.type,
-                    'Authorization': `Bearer ${accessToken.token}`
-                }
-            }).then(res => {
+
+            uploadRequest(fileWrapper.action, file).then(res => {
                 console.log(`Res `, res.data)
                 console.log(`THE ENTROPY NOW `, entropy)
                 setImageUrl(`${baseUrl}/${bucketName}/${currentUser.id}/${entropy}-${file.name}`)
@@ -65,10 +50,13 @@ export const ImageUpload = (props: {}) => {
     };
 
     return (
-        <>
-            <Upload {...uploadProps} listType={'picture-card'} showUploadList={false}>
-                { (imageUrl) ? <img src={imageUrl} alt="avatar" style={{ maxWidth: '100%', maxHeight: 256, width: "auto" }} /> : uploadButton }
-            </Upload>
-        </>
+        <Upload {...uploadProps} listType={'picture-card'} showUploadList={false}>
+            { (imageUrl) ? <img src={imageUrl} alt="avatar" style={{ maxWidth: '100%', maxHeight: 256, width: "auto" }} /> :
+                <div>
+                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+            }
+        </Upload>
     )
 }
