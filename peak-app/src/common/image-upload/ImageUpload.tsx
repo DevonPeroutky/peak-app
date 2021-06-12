@@ -10,8 +10,7 @@ export const ImageUpload = (props: {}) => {
     const currentUser = useCurrentUser()
     const [contentType, setContentType] = useState<string>("")
     const [accessToken, setAccessToken] = useState<PeakAccessToken>()
-    const [imageData, setImageData] = useState()
-    const [fileObj, setFileObj] = useState()
+    const [imageDataUrl, setImageData] = useState()
     useUploadToken().then(token => setAccessToken(token))
 
     const bucketName = "peak_user_images"
@@ -46,40 +45,49 @@ export const ImageUpload = (props: {}) => {
             'Authorization': `Bearer ${accessToken.token}`
         },
         customRequest: (fileWrapper) => {
-            console.log(`THE FILE `, fileWrapper)
             const file = fileWrapper.file
-            getBinaryString(file, imageUrl => {
-                console.log(`BitchyBoyyyy - BINARY`, imageUrl)
-                console.log(`The BINARY`, imageUrl)
-                peakAxiosClient
-                    .post(
-                        `${baseUrl}${bucketName}/o?uploadType=media&name=${currentUser.id}/Binary/${file.name}`,
-                        {
-                            data: Buffer.from(imageUrl)
-                        },
-                        {
-                            headers: {
-                                'content-type': file.type,
-                                'Authorization': `Bearer ${accessToken.token}`
-                            }
-                        })
-            })
-            getBase64(file, imageUrl => {
-                console.log(`BitchyBoyyyy - BASE64`, imageUrl)
-                console.log(`The BASE - 64`, imageUrl)
-                peakAxiosClient
-                    .post(
-                        `${baseUrl}${bucketName}/o?uploadType=media&name=${currentUser.id}/base64/${file.name}`,
-                        {
-                            data: Buffer.from(imageUrl)
-                        },
-                        {
-                            headers: {
-                                'content-type': file.type,
-                                'Authorization': `Bearer ${accessToken.token}`
-                            }
-                        })
-            })
+            peakAxiosClient
+                .post(
+                    `${baseUrl}${bucketName}/o?uploadType=media&name=${currentUser.id}/${file.name}`,
+                   file,
+                    {
+                        headers: {
+                            'content-type': file.type,
+                            'Authorization': `Bearer ${accessToken.token}`
+                        }
+                    })
+            // getBase64(file, imageUrl => {
+            //     console.log(`Base64: `, imageUrl)
+            //     const stripped = imageUrl.substring(23)
+            //     console.log(`Base64 - stripped: `, stripped)
+            //     peakAxiosClient
+            //         .post(
+            //             `${baseUrl}${bucketName}/o?uploadType=media&name=${currentUser.id}/${file.name}`,
+            //             {
+            //                 data: stripped
+            //             },
+            //             {
+            //                 headers: {
+            //                     'content-type': file.type,
+            //                     'Authorization': `Bearer ${accessToken.token}`
+            //                 }
+            //             })
+            // })
+            // getBinaryString(file, imageUrl => {
+            //     console.log(`BitchyBoyyyy - BINARY: `, imageUrl)
+            //     peakAxiosClient
+            //         .post(
+            //             `${baseUrl}${bucketName}/o?uploadType=media&name=${currentUser.id}/binary-${file.name}`,
+            //             {
+            //                 data: imageUrl
+            //             },
+            //             {
+            //                 headers: {
+            //                     'content-type': file.type,
+            //                     'Authorization': `Bearer ${accessToken.token}`
+            //                 }
+            //             })
+            // })
         },
     };
 
