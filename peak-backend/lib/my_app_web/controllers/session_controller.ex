@@ -90,7 +90,7 @@ defmodule MyAppWeb.SessionController do
 
   def fetch_object_upload_token(conn, %{"user_id" => userId}) do
     with {:ok, token} <- Goth.fetch(MyApp.Goth) do
-      render(conn, "upload_token.json", token: token)
+      render(conn, MyAppWeb.TokenView, "token.json", token: Map.put(token, :token_type, "file_upload"))
     end
   end
 

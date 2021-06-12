@@ -8,6 +8,7 @@ import {PeakEditorState, PeakWikiState} from "../constants/wiki-types";
 import {Peaker, PeakTag} from "../types";
 import {HelpModalState} from "./slices/helpModal/helpModalSlice";
 import {BlogConfiguration} from "./slices/blog/types";
+import {PeakAccessToken} from "../client/tokens";
 
 export const GLOBAL_APP_KEYS = ["electron", "quickSwitcher", "userAccounts", "activeEditorState", "helpModal"]
 
@@ -23,5 +24,6 @@ export interface AppState {
     tags: PeakTag[],
     notes: PeakNote[],
     helpModal: HelpModalState,
-    blogConfiguration: BlogConfiguration
+    blogConfiguration: BlogConfiguration,
+    tokens: PeakAccessToken[]
 }

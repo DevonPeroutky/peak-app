@@ -25,6 +25,11 @@ defmodule MyAppWeb.FatUserController do
       {:ok, scratchpad} -> scratchpad
     end
 
+    upload_token = case Goth.fetch(MyApp.Goth) do
+      {:ok, token} -> Map.put(token, :token_type, "file_upload")
+    end
+
+    IO.inspect(upload_token)
 
     render(conn, "fat_user.json", %{
       user: user,
@@ -33,7 +38,8 @@ defmodule MyAppWeb.FatUserController do
       pages: pages,
       tags: tags,
       books: books,
-      scratchpad: scratchpad
+      scratchpad: scratchpad,
+      tokens: [upload_token]
     })
   end
 end

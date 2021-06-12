@@ -17,6 +17,7 @@ import {Peaker, PeakTag} from "../types";
 import {BlogConfiguration} from "./slices/blog/types";
 import posts from "./slices/posts/postsSlice"
 import {PeakPost} from "component-library";
+import {PeakAccessToken} from "../client/tokens";
 
 export interface UserSpecificAppState {
     currentUser: Peaker
@@ -26,7 +27,8 @@ export interface UserSpecificAppState {
     peakWikiState: PeakWikiState
     notes: PeakNote[],
     blog: BlogConfiguration,
-    posts: PeakPost[]
+    posts: PeakPost[],
+    tokens: PeakAccessToken[]
 }
 
 export interface UserSpecificAppStateResponse {
@@ -38,6 +40,7 @@ export interface UserSpecificAppStateResponse {
     scratchpad: PeakWikiPage
     blog: BlogConfiguration
     posts: PeakPost[]
+    tokens: PeakAccessToken[]
 }
 
 export const switch_user_accounts = createAction<DisplayPeaker>("switch_user_accounts")
