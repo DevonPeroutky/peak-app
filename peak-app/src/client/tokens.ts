@@ -28,16 +28,18 @@ const useToken = (tokenName: string): PeakAccessToken => {
     return useSelector<AppState, PeakAccessToken>(state => state.tokens.find(t => t.token_type === tokenName));
 }
 
-export const useUploadToken = (): Promise<PeakAccessToken> => {
+export const useUploadToken = (): () => Promise<PeakAccessToken> => {
     const token = useToken("file_upload")
     const user = useCurrentUser()
     const currentTimeInSeconds = Math.floor(Date.now() / 1000)
 
-    if (currentTimeInSeconds > token.expires) {
-        console.log(`Token has expired`)
-        return refresh_upload_token(user.id)
-    } else {
-        console.log(`Token still valid`)
-        return Promise.resolve(token)
+    return () => {
+        if (currentTimeInSeconds > token.expires) {
+            console.log(`Token has expired`)
+            return refresh_upload_token(user.id)
+        } else {
+            console.log(`Token still valid`)
+            return Promise.resolve(token)
+        }
     }
 }

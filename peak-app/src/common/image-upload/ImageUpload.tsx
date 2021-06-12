@@ -1,10 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, notification, Upload} from "antd";
-import {LoadingOutlined, PlusOutlined, UploadOutlined} from "@ant-design/icons/lib";
-import {PeakAccessToken, useUploadToken} from "../../client/tokens";
+import {notification, Upload} from "antd";
+import {EditOutlined, LoadingOutlined, PlusOutlined, UploadOutlined} from "@ant-design/icons/lib";
 import {useCurrentUser} from "../../utils/hooks";
-import peakAxiosClient from "../../client/axiosConfig";
 import {useUploadFile} from "../../client/file-upload";
+import "./image-upload.scss"
 
 export const ImageUpload = (props: {}) => {
     const currentUser = useCurrentUser()
@@ -27,8 +26,6 @@ export const ImageUpload = (props: {}) => {
             setLoading(true)
 
             uploadRequest(fileWrapper.action, file).then(res => {
-                console.log(`Res `, res.data)
-                console.log(`THE ENTROPY NOW `, entropy)
                 setImageUrl(`${baseUrl}/${bucketName}/${currentUser.id}/${entropy}-${file.name}`)
             })
             .catch(_ => {
@@ -36,8 +33,8 @@ export const ImageUpload = (props: {}) => {
             }).finally(() => setLoading(false))
         },
         onChange(info) {
-            console.log(`CHANGING `, info)
             if (info.file.status !== 'uploading') {
+                console.log(`Uploading `, info)
             }
             if (info.file.status === 'done') {
                 notification.success({message: `File uploaded successfully`});
@@ -49,14 +46,26 @@ export const ImageUpload = (props: {}) => {
         },
     };
 
-    return (
+    const imagePreview = (
+        <>
+            <img src={imageUrl} alt="avatar" style={{ maxWidth: '100%', maxHeight: 256, width: "auto" }} />
+            <EditOutlined style={{ position: "relative", top: 0, right: 0}}/>
+        </>
+    )
+
+    const upload = (
         <Upload {...uploadProps} listType={'picture-card'} showUploadList={false}>
-            { (imageUrl) ? <img src={imageUrl} alt="avatar" style={{ maxWidth: '100%', maxHeight: 256, width: "auto" }} /> :
-                <div>
-                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                </div>
-            }
+            <div>
+                {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                <div style={{ marginTop: 8 }}>{ loading ? "Uploading" : "Upload" }</div>
+            </div>
         </Upload>
+
+    )
+
+    return (
+        <div className={"upload-container"}>
+            { (imageUrl) ? imagePreview : upload }
+        </div>
     )
 }

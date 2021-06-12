@@ -110,10 +110,6 @@ export const PublishPostForm = (props: { page: PeakWikiPage, blogConfiguration: 
                             bordered={false}
                         />
                     </Form.Item>
-                    <div>
-                        <ImageUpload/>
-                    </div>
-
                     <div className={"form-row"}>
                         <h3>Post Organization</h3>
                         <NoteTagSelect selected_tags={[]} note_id={"TBD"} input_className={"minimal-text-input"}/>
